@@ -1,11 +1,11 @@
-package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.geckolayer.v2;
+package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.geckolayer;
 
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.capability.GeckoMaidEntityCapabilityProvider;
 import com.github.tartaricacid.touhoulittlemaid.client.entity.GeckoMaidEntity;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.GeoLayerRenderer;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.IGeoEntity2;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.IGeoEntityRenderer2;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.IGeoEntity;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.IGeoEntityRenderer;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated.AnimatedGeoModel;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated.IAnimatedModel;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -16,14 +16,15 @@ import net.minecraft.world.entity.Mob;
 
 import java.util.function.Function;
 
-public abstract class GeoLayerMaidRender2<T extends Entity, R extends IGeoEntityRenderer2<T>> extends GeoLayerRenderer<T, R> {
+public abstract class GeoLayerMaidRender<T extends Entity, R extends IGeoEntityRenderer<T>> extends GeoLayerRenderer<T, R> {
     //@Final
-    private static Function<Mob, IGeoEntity2> YSM_GEO_MOB_GET;
+    private static Function<Mob, IGeoEntity> YSM_GEO_MOB_GET;
 
-    public GeoLayerMaidRender2(R entityRendererIn) {
+    public GeoLayerMaidRender(R entityRendererIn) {
         super(entityRendererIn);
     }
 
+    // 本模组的
     @SuppressWarnings("unchecked")
     protected static GeckoMaidEntity<Mob> getGeoMob(Mob mob) {
         return mob.getCapability(GeckoMaidEntityCapabilityProvider.CAP)
@@ -35,7 +36,8 @@ public abstract class GeoLayerMaidRender2<T extends Entity, R extends IGeoEntity
         return getGeoMob(mob).getCurrentModel();
     }
 
-    protected static IGeoEntity2 getYsmGeoMob(Mob mob) {
+    // ysm的
+    protected static IGeoEntity getYsmGeoMob(Mob mob) {
         return YSM_GEO_MOB_GET.apply(mob);
     }
 
@@ -43,7 +45,7 @@ public abstract class GeoLayerMaidRender2<T extends Entity, R extends IGeoEntity
         return getYsmGeoMob(mob).getGeoModel();
     }
 
-    protected static void initYsmGeoMobGet(Function<Mob, IGeoEntity2> ysmGeoMobGet) {
+    protected static void initYsmGeoMobGet(Function<Mob, IGeoEntity> ysmGeoMobGet) {
         if (YSM_GEO_MOB_GET == null) {
             YSM_GEO_MOB_GET = ysmGeoMobGet;
         }
@@ -53,12 +55,14 @@ public abstract class GeoLayerMaidRender2<T extends Entity, R extends IGeoEntity
                                 T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks,
                                 float netHeadYaw, float headPitch);
 
+    // 给ysm的渲染调用的
     public abstract void ysmRender(PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn,
                                    T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks,
                                    float netHeadYaw, float headPitch);
 
-    public abstract GeoLayerMaidRender2<T, R> create(R geckoEntityMaidRenderer,
-                                                     EntityRendererProvider.Context renderManager,
-                                                     Function<Mob, IGeoEntity2> ysmGeoMob);
+    // 生成对应的YsmGeoLayerRenderer
+    public abstract GeoLayerMaidRender<T, R> create(R geckoEntityMaidRenderer,
+                                                    EntityRendererProvider.Context renderManager,
+                                                    Function<Mob, IGeoEntity> ysmGeoMob);
 
 }

@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.entity.Entity;
 
-public abstract class GeoLayerRenderer<T extends Entity, R extends IGeoEntityRenderer2<T>> {
+public abstract class GeoLayerRenderer<T extends Entity, R extends IGeoEntityRenderer<T>> {
     protected final R entityRenderer;
 
     public GeoLayerRenderer(R entityRendererIn) {

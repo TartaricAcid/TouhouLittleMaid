@@ -1,6 +1,5 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.cache;
 
-import com.github.tartaricacid.touhoulittlemaid.api.event.client.InitYsmMaidModelsEvent;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.block.ModelSwitcherGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.block.ModelSwitcherModelGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.model.AbstractModelGui;
@@ -9,40 +8,31 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.model.MaidMode
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.ChairModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.CustomModelPack;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
+import com.github.tartaricacid.touhoulittlemaid.compat.ysm.data.YsmModelData;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MiscConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityModelSwitcher;
-import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
 
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static com.github.tartaricacid.touhoulittlemaid.client.event.SpecialMaidRenderEvent.EASTER_EGG_MODEL;
 import static com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil.clearMaidDataResidue;
-import static net.minecraft.resources.ResourceLocation.isValidNamespace;
 
 @OnlyIn(Dist.CLIENT)
 public final class CacheIconManager {
     private static final LinkedList<MaidModelInfo> MAID_CACHE_QUEUE = new LinkedList<>();
     private static final LinkedList<ChairModelInfo> CHAIR_CACHE_QUEUE = new LinkedList<>();
-    private static final LinkedList<MaidModelGui.YsmMaidInfo> YSM_MAID_INFOS_QUEUE = new LinkedList<>();
 
     public static void clearCache() {
         MAID_CACHE_QUEUE.clear();
         CHAIR_CACHE_QUEUE.clear();
-        YSM_MAID_INFOS_QUEUE.clear();
+        YsmModelData.clear();
     }
 
     public static void addMaidPack(CustomModelPack<MaidModelInfo> customModelPack) {
@@ -110,36 +100,5 @@ public final class CacheIconManager {
                     (int) (scale * modelInfo.getRenderItemScale() * 0.9),
                     -25, -20, chair);
         });
-    }
-
-    public static void buildYsmMaidInfos() {
-        YSM_MAID_INFOS_QUEUE.clear();
-
-        InitYsmMaidModelsEvent initYsmMaidModelsEvent = new InitYsmMaidModelsEvent();
-        MinecraftForge.EVENT_BUS.post(initYsmMaidModelsEvent);
-
-        List<MaidModelGui.YsmMaidInfo> ysmMaidInfos = Lists.newArrayList();
-        for (MaidModelGui.YsmMaidBaseInfo model : initYsmMaidModelsEvent.getYsmModels()) {
-            String modelIdString = translate(model.modelId());
-            String textureNameString = translate(model.textureId());
-
-            ResourceLocation cacheIconId = !isValidNamespace(modelIdString) || !isValidNamespace(textureNameString) ? null : createCacheIconId(modelIdString, textureNameString);
-
-            ysmMaidInfos.add(new MaidModelGui.YsmMaidInfo(modelIdString, textureNameString, model.tooltips(), model.needAuth(), cacheIconId));
-        }
-
-        YSM_MAID_INFOS_QUEUE.addAll(ysmMaidInfos);
-    }
-
-    public static List<MaidModelGui.YsmMaidInfo> getYsmMaidInfos() {
-        return YSM_MAID_INFOS_QUEUE;
-    }
-
-    public static String translate(String key) {
-        return key;
-    }
-
-    static ResourceLocation createCacheIconId(String modeId, String textureName) {
-        return new ResourceLocation("yes_steve_model", modeId + "/" + textureName + "/cache");
     }
 }

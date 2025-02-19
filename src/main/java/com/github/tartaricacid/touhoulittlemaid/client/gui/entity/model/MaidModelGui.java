@@ -1,10 +1,13 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.model;
 
-import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.cache.CacheIconManager;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.detail.MaidModelDetailsGui;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.YsmModelButton;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
+import com.github.tartaricacid.touhoulittlemaid.compat.ysm.YsmCompat;
+import com.github.tartaricacid.touhoulittlemaid.compat.ysm.client.gui.entity.model.YsmMaidModelDetailsGui;
+import com.github.tartaricacid.touhoulittlemaid.compat.ysm.client.gui.widget.button.YsmModelButton;
+import com.github.tartaricacid.touhoulittlemaid.compat.ysm.data.YsmMaidInfo;
+import com.github.tartaricacid.touhoulittlemaid.compat.ysm.data.YsmModelData;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MiscConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.ServerCustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -21,12 +24,10 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
@@ -45,19 +46,14 @@ public class MaidModelGui extends AbstractModelGui<EntityMaid, MaidModelInfo> {
 
     public MaidModelGui(EntityMaid maid) {
         super(maid, CustomPackLoader.MAID_MODELS.getPackList());
-
-//        CacheIconManager.clearCache();
-
-        // 构建YsmMaid信息
-//        CacheIconManager.buildYsmMaidInfos();
+        // 初始化 Ysm 信息,暂时先这样
+        YsmCompat.initYsmModelData();
     }
 
     @Override
     public void init() {
         super.init();
-        ysmModelButtons.clear();
-        this.addYsmModelTabButton();
-        this.addYsmModelButtons();
+        this.initYsmInfo();
     }
 
     @Override
@@ -149,25 +145,40 @@ public class MaidModelGui extends AbstractModelGui<EntityMaid, MaidModelInfo> {
         ROW_INDEX = rowIndex;
     }
 
-    public void addYsmModelTabButton() {
-        List<YsmMaidInfo> ysmModels = CacheIconManager.getYsmMaidInfos();
-        if (ysmModels.isEmpty()) {
+    private void initYsmInfo() {
+        if (!YsmCompat.isInstalled()) {
             return;
-        } else {
-            this.ysmModels.clear();
-            this.ysmModels.addAll(ysmModels);
+        }
+
+        this.initYsmModelInfos();
+        this.addYsmModelTabButton();
+        this.addYsmModelButtons();
+    }
+
+    public void addYsmModelTabButton() {
+        if (this.ysmModels.isEmpty()) {
+            return;
         }
 
         int startX = this.width / 2 + 50;
         int startY = this.height / 2 + 5;
 
+        // 暂定用-1来表示为ysm模型的Tab
         Button ysmTabButton = Button.builder(Component.literal("Y"), b -> {
             setRowIndex(0);
-            setPageIndex(Mth.clamp(getPageIndex() - 1, 0, guiNumber.getPageSize() - 1));
             setPackIndex(-1);
             this.init();
         }).pos(startX - 119 - 20, startY - 101).size(20, 20).build();
         this.addRenderableWidget(ysmTabButton);
+    }
+
+    private void initYsmModelInfos() {
+        this.ysmModels.clear();
+
+        List<YsmMaidInfo> ysmModels = YsmModelData.getYsmMaidInfos();
+        if (!ysmModels.isEmpty()) {
+            this.ysmModels.addAll(ysmModels);
+        }
     }
 
     private void addYsmModelButtons() {
@@ -175,15 +186,17 @@ public class MaidModelGui extends AbstractModelGui<EntityMaid, MaidModelInfo> {
             return;
         }
 
-        int startX = (this.width / 2) + 50;
-        int startY = (this.height / 2) + 5;
+        final int row = 5, col = 11, maxCount = row * col;
 
-        // 起始坐标 -100, -38
-        int offsetX = -100 - 20 + 10;
-        int offsetY = -38 - 30 + 10;
+        final int startX = this.width / 2 + 50;
+        final int startY = this.height / 2 + 5;
 
-        for (YsmMaidInfo ysmModel : this.ysmModels) {
-            YsmModelButton ysmModelButton = new YsmModelButton(ysmModel, startX + offsetX, startY + offsetY, 15, 24, Component.empty(), this.onModelButtonClick(ysmModel.modelId(), ysmModel.textureId()));
+        // 起始坐标
+        int offsetX = -100;
+        int offsetY = -35;
+
+        for (YsmMaidInfo ysmModel : this.ysmModels.subList((ysmModels.size() / maxCount) * maxCount, ysmModels.size())) {
+            YsmModelButton ysmModelButton = new YsmModelButton(ysmModel, startX + offsetX - 8, startY + offsetY - 26, 15, 24, Component.empty(), this.onYsmModelButtonClick(ysmModel.modelId(), ysmModel.textureId()));
             ysmModelButtons.add(ysmModelButton);
             this.addRenderableWidget(ysmModelButton);
 
@@ -198,7 +211,7 @@ public class MaidModelGui extends AbstractModelGui<EntityMaid, MaidModelInfo> {
         }
     }
 
-    private Button.OnPress onModelButtonClick(String modelId, String modelTexture) {
+    private Button.OnPress onYsmModelButtonClick(String modelId, String modelTexture) {
         final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
         Optional<MaidModelInfo> modelInfo = ServerCustomPackLoader.SERVER_MAID_MODELS.getInfo(DEFAULT_MODEL_ID);
 
@@ -244,58 +257,5 @@ public class MaidModelGui extends AbstractModelGui<EntityMaid, MaidModelInfo> {
             maid.setModelId(modelItem.getModelId().toString());
         }
         InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, posX, posY, (int) (12 * modelItem.getRenderItemScale()), -25, -20, maid);
-    }
-
-    private static class YsmMaidModelDetailsGui extends MaidModelDetailsGui {
-        public YsmMaidModelDetailsGui(EntityMaid sourceEntity, MaidModelInfo modelInfo, String modeId, String texture) {
-            super(sourceEntity, modelInfo);
-            this.guiEntity.setIsYsmModel(true);
-            this.guiEntity.setYsmModel(modeId, texture);
-        }
-    }
-
-    public static class YsmMaidBaseInfo {
-        private final String modelId;
-        private final String textureId;
-        private final List<Component> tooltips;
-        private final boolean needAuth;
-
-        public YsmMaidBaseInfo(String modelId, String textureId, List<Component> tooltips, boolean needAuth) {
-            this.modelId = modelId;
-            this.textureId = textureId;
-            this.tooltips = tooltips;
-            this.needAuth = needAuth;
-        }
-
-        public String modelId() {
-            return modelId;
-        }
-
-        public String textureId() {
-            return textureId;
-        }
-
-        public List<Component> tooltips() {
-            return tooltips;
-        }
-
-        public boolean needAuth() {
-            return needAuth;
-        }
-    }
-
-    public static class YsmMaidInfo extends YsmMaidBaseInfo {
-        @Nullable
-        private final ResourceLocation cacheIconId;
-
-        public YsmMaidInfo(String modelId, String textureId, List<Component> tooltips, boolean needAuth, @Nullable ResourceLocation cacheIconId) {
-            super(modelId, textureId, tooltips, needAuth);
-            this.cacheIconId = cacheIconId;
-        }
-
-        @Nullable
-        public ResourceLocation cacheIconId() {
-            return cacheIconId;
-        }
     }
 }

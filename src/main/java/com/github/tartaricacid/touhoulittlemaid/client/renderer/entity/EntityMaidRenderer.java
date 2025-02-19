@@ -4,19 +4,20 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.event.client.RenderMaidEvent;
-import com.github.tartaricacid.touhoulittlemaid.api.event.client.InitYsmMaidRendererEvent;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.HardcodedAnimationManger;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.GlWrapper;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
-import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.geckolayer.v2.GeoLayerMaidRender2;
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.geckolayer.GeoLayerMaidRender;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layer.*;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.models.MaidModels;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
+import com.github.tartaricacid.touhoulittlemaid.compat.ysm.YsmCompat;
+import com.github.tartaricacid.touhoulittlemaid.compat.ysm.client.event.InitYsmMaidRendererEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.GeoLayerRenderer;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.IGeoEntity2;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.IGeoEntityRenderer2;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.IGeoEntity;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.IGeoEntityRenderer;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -45,7 +46,12 @@ public class EntityMaidRenderer extends MobRenderer<Mob, BedrockModel<Mob>> {
     private MaidModelInfo mainInfo;
     private List<Object> mainAnimations = Lists.newArrayList();
     @Nullable
-    private IGeoEntityRenderer2<Mob> ysmMaidRenderer2;
+    private IGeoEntityRenderer<Mob> ysmMaidRenderer;
+
+    @Nullable
+    public static Function<EntityRendererProvider.Context, IGeoEntityRenderer<Mob>> YSM_ENTITY_MAID_RENDERER;
+    @Nullable
+    public static Function<Mob, IGeoEntity> YSM_ENTITY_MAID_GET;
 
     public EntityMaidRenderer(EntityRendererProvider.Context manager) {
         super(manager, new BedrockModel<>(), 0.5f);
@@ -56,21 +62,49 @@ public class EntityMaidRenderer extends MobRenderer<Mob, BedrockModel<Mob>> {
         this.addLayer(new LayerMaidBanner(this, manager.getModelSet()));
         this.addAdditionMaidLayer(manager);
         this.geckoEntityMaidRenderer = new GeckoEntityMaidRenderer<>(manager);
-        this.parseYsmModelRenderer(manager);
+
+        // 自动捕捉初始化ysm模型的渲染
+        this.parseYsmModelRendererFromStatic(manager);
+//        this.parseYsmModelRenderer(manager);
+    }
+
+    // 使用事件的话，会受到先后顺序的影响，ysm 的 FMLClientSetupEvent 在 TLM 之后加载，故暂且这么用着
+    private void parseYsmModelRendererFromStatic(EntityRendererProvider.Context manager) {
+        if (!YsmCompat.isInstalled() || YSM_ENTITY_MAID_RENDERER == null || YSM_ENTITY_MAID_GET == null) {
+            return;
+        }
+
+        IGeoEntityRenderer<Mob> geoEntityRenderer = YSM_ENTITY_MAID_RENDERER.apply(manager);
+        Function<Mob, IGeoEntity> ysmGeoEntityGet = YSM_ENTITY_MAID_GET;
+        if (geoEntityRenderer != null && ysmGeoEntityGet != null) {
+            this.ysmMaidRenderer = geoEntityRenderer;
+
+            // 将 TlmGecko 模型下的所有 Layer 转化添加到 YsmGecko 模型的 Layer 中
+            List<GeoLayerRenderer> layerRenderers = this.geckoEntityMaidRenderer.getLayerRenderers();
+            for (GeoLayerRenderer layerRenderer : layerRenderers) {
+                GeoLayerMaidRender<Mob, IGeoEntityRenderer<Mob>> mobGeoLayerMaidRender2 = ((GeoLayerMaidRender<Mob, IGeoEntityRenderer<Mob>>) layerRenderer).create(geoEntityRenderer, manager, ysmGeoEntityGet);
+                this.ysmMaidRenderer.addGeoMobLayer(mobGeoLayerMaidRender2);
+            }
+        }
     }
 
     private void parseYsmModelRenderer(EntityRendererProvider.Context manager) {
+        if (!YsmCompat.isInstalled()) {
+            return;
+        }
+
         InitYsmMaidRendererEvent ysmMaidRenderer = new InitYsmMaidRendererEvent(manager);
         ModLoader.get().postEvent(ysmMaidRenderer);
-        IGeoEntityRenderer2<Mob> geoEntityRenderer2 = ysmMaidRenderer.getGeoEntityRenderer2();
-        Function<Mob, IGeoEntity2> ysmGeoEntityGet = ysmMaidRenderer.getYsmGeoEntityGet();
-        if (geoEntityRenderer2 != null && ysmGeoEntityGet != null) {
-            this.ysmMaidRenderer2 = geoEntityRenderer2;
+        IGeoEntityRenderer<Mob> geoEntityRenderer = ysmMaidRenderer.getGeoEntityRenderer();
+        Function<Mob, IGeoEntity> ysmGeoEntityGet = ysmMaidRenderer.getYsmGeoEntityGet();
+        if (geoEntityRenderer != null && ysmGeoEntityGet != null) {
+            this.ysmMaidRenderer = geoEntityRenderer;
 
+            // 将 TlmGecko 模型下的所有 Layer 转化添加到 YsmGecko 模型的 Layer 中
             List<GeoLayerRenderer> layerRenderers = this.geckoEntityMaidRenderer.getLayerRenderers();
             for (GeoLayerRenderer layerRenderer : layerRenderers) {
-                GeoLayerMaidRender2<Mob, IGeoEntityRenderer2<Mob>> mobGeoLayerMaidRender2 = ((GeoLayerMaidRender2<Mob, IGeoEntityRenderer2<Mob>>) layerRenderer).create(geoEntityRenderer2, manager, ysmGeoEntityGet);
-                ysmMaidRenderer2.addGeoMobLayer(mobGeoLayerMaidRender2);
+                GeoLayerMaidRender<Mob, IGeoEntityRenderer<Mob>> mobGeoLayerMaidRender2 = ((GeoLayerMaidRender<Mob, IGeoEntityRenderer<Mob>>) layerRenderer).create(geoEntityRenderer, manager, ysmGeoEntityGet);
+                this.ysmMaidRenderer.addGeoMobLayer(mobGeoLayerMaidRender2);
             }
         }
     }
@@ -109,10 +143,10 @@ public class EntityMaidRenderer extends MobRenderer<Mob, BedrockModel<Mob>> {
         }
 
         // YsmGeckoLib 接管渲染
-        if (maid.isYsmModel() && this.ysmMaidRenderer2 != null) {
-            this.ysmMaidRenderer2.getGeoEntityRender(entity).setMaidInfo(this.mainInfo);
-            this.ysmMaidRenderer2.getGeoEntityRender(entity).setYsmModel(maid.getYsmModelId(), maid.getYsmModelTexture());
-            this.ysmMaidRenderer2.geoRender(entity, entityYaw, partialTicks, poseStack, bufferIn, packedLightIn);
+        if (maid.isYsmModel() && this.ysmMaidRenderer != null) {
+            this.ysmMaidRenderer.getGeoEntityRender(entity).setMaidInfo(this.mainInfo);
+            this.ysmMaidRenderer.getGeoEntityRender(entity).setYsmModel(maid.getYsmModelId(), maid.getYsmModelTexture());
+            this.ysmMaidRenderer.geoRender(entity, entityYaw, partialTicks, poseStack, bufferIn, packedLightIn);
             return;
         }
         // GeckoLib 接管渲染

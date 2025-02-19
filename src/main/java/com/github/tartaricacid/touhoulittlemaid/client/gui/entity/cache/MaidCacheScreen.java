@@ -1,9 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.cache;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.model.MaidModelGui;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.texture.CacheIconTexture;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
+import com.github.tartaricacid.touhoulittlemaid.compat.ysm.data.YsmMaidInfo;
+import com.github.tartaricacid.touhoulittlemaid.compat.ysm.data.YsmModelData;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.ServerCustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.util.IconCache;
@@ -25,7 +26,6 @@ import java.util.Optional;
 import java.util.Queue;
 import java.util.concurrent.TimeUnit;
 
-import static com.github.tartaricacid.touhoulittlemaid.client.gui.entity.cache.CacheIconManager.translate;
 import static com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil.clearMaidDataResidue;
 
 @SuppressWarnings("all")
@@ -33,16 +33,14 @@ import static com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil.clea
 public class MaidCacheScreen extends CacheScreen<EntityMaid, MaidModelInfo> {
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
     private static final Optional<MaidModelInfo> DEFAULT_MODEL_INFO = ServerCustomPackLoader.SERVER_MAID_MODELS.getInfo(DEFAULT_MODEL_ID);
-    private final Queue<MaidModelGui.YsmMaidInfo> ysmMaidInfos;
+    private final Queue<YsmMaidInfo> ysmMaidInfos;
     private final int ysmModelTotalCount;
 
     public MaidCacheScreen(Screen parent, EntityType<EntityMaid> entityType, Queue<MaidModelInfo> modelInfos, EntityRender<EntityMaid, MaidModelInfo> entityRender) {
         super(parent, entityType, modelInfos, entityRender);
 
-        // 构建YsmMaid信息
-        CacheIconManager.buildYsmMaidInfos();
-        this.ysmMaidInfos = new LinkedList<>(CacheIconManager.getYsmMaidInfos());
-        this.ysmModelTotalCount = CacheIconManager.getYsmMaidInfos().size();
+        this.ysmMaidInfos = new LinkedList<>(YsmModelData.getYsmMaidInfos());
+        this.ysmModelTotalCount = YsmModelData.getYsmMaidInfos().size();
     }
 
     @Override
@@ -90,7 +88,7 @@ public class MaidCacheScreen extends CacheScreen<EntityMaid, MaidModelInfo> {
     }
 
     @SuppressWarnings("all")
-    private void drawYsmMaid(GuiGraphics graphics, int posX, int posY, MaidModelGui.YsmMaidInfo ysmMaidInfo, int scaleModified) {
+    private void drawYsmMaid(GuiGraphics graphics, int posX, int posY, YsmMaidInfo ysmMaidInfo, int scaleModified) {
         Level world = getMinecraft().level;
         if (world == null) {
             return;
@@ -108,7 +106,7 @@ public class MaidCacheScreen extends CacheScreen<EntityMaid, MaidModelInfo> {
     }
 
     private void doCacheIconFromYsmMaid(GuiGraphics graphics) {
-        MaidModelGui.YsmMaidInfo ysmMaidInfo = ysmMaidInfos.poll();
+        YsmMaidInfo ysmMaidInfo = ysmMaidInfos.poll();
         if (ysmMaidInfo != null) {
             if (ysmMaidInfo.cacheIconId() == null) {
                 return;
@@ -121,8 +119,8 @@ public class MaidCacheScreen extends CacheScreen<EntityMaid, MaidModelInfo> {
             this.drawYsmMaid(graphics, 0, 0, ysmMaidInfo, scaleModified);
             NativeImage nativeImage = IconCache.exportImageFromScreenshot(256, IconCache.BACKGROUND_COLOR_SHIFTED);
 
-            String modelIdString = translate(ysmMaidInfo.modelId());
-            String textrueIdString = translate(ysmMaidInfo.textureId());
+            String modelIdString = ysmMaidInfo.modelId();
+            String textrueIdString = ysmMaidInfo.textureId();
             ResourceLocation modelId = new ResourceLocation(modelIdString, textrueIdString);
             CacheIconTexture cacheIconTexture = new CacheIconTexture(modelId, nativeImage);
             Minecraft.getInstance().textureManager.register(ysmMaidInfo.cacheIconId(), cacheIconTexture);

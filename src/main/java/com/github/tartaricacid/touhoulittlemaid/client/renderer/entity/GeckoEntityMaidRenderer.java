@@ -6,30 +6,23 @@ import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.capability.GeckoMaidEntityCapabilityProvider;
 import com.github.tartaricacid.touhoulittlemaid.client.entity.GeckoMaidEntity;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.geckolayer.*;
-import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.geckolayer.v2.*;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.GeoLayerRenderer;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.GeoReplacedEntityRenderer;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.IGeoEntity2;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.IGeoEntityRenderer2;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.IGeoEntity;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.IGeoEntityRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.world.entity.Mob;
 
-public class GeckoEntityMaidRenderer<T extends Mob> extends GeoReplacedEntityRenderer<T, GeckoMaidEntity<T>> implements IGeoEntityRenderer2<T> {
+public class GeckoEntityMaidRenderer<T extends Mob> extends GeoReplacedEntityRenderer<T, GeckoMaidEntity<T>> implements IGeoEntityRenderer<T> {
     public GeckoEntityMaidRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager);
-//        addLayer(new GeckoLayerMaidHeld<>(this, renderManager.getItemInHandRenderer()));
-//        addLayer(new GeckoLayerMaidBipedHead<>(this, renderManager.getModelSet()));
-//        addLayer(new GeckoLayerMaidBackpack<>(this, renderManager.getModelSet()));
-//        addLayer(new GeckoLayerMaidBackItem<>(this));
-//        addLayer(new GeckoLayerMaidBanner<>(this, renderManager.getModelSet()));
-
-        addLayer(new GeckoLayerMaidHeld2<>(this, renderManager.getItemInHandRenderer()));
-        addLayer(new GeckoLayerMaidBipedHead2<>(this, renderManager.getModelSet()));
-        addLayer(new GeckoLayerMaidBackpack2<>(this, renderManager.getModelSet()));
-        addLayer(new GeckoLayerMaidBackItem2<>(this));
-        addLayer(new GeckoLayerMaidBanner2<>(this, renderManager.getModelSet()));
+        addLayer(new GeckoLayerMaidHeld<>(this, renderManager.getItemInHandRenderer()));
+        addLayer(new GeckoLayerMaidBipedHead<>(this, renderManager.getModelSet()));
+        addLayer(new GeckoLayerMaidBackpack<>(this, renderManager.getModelSet()));
+        addLayer(new GeckoLayerMaidBackItem<>(this));
+        addLayer(new GeckoLayerMaidBanner<>(this, renderManager.getModelSet()));
         addAdditionGeckoEntityMaidRenderer(renderManager);
     }
 
@@ -64,13 +57,13 @@ public class GeckoEntityMaidRenderer<T extends Mob> extends GeoReplacedEntityRen
     }
 
     @Override
-    public IGeoEntity2 getGeoEntityRender(T entity) {
+    public IGeoEntity getGeoEntityRender(T entity) {
         return this.getAnimatableEntity(entity);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public void addGeoMobLayer(GeoLayerMaidRender2<?, ?> geoLayerMaidRender2) {
+    public void addGeoMobLayer(GeoLayerMaidRender<?, ?> geoLayerMaidRender2) {
         this.addLayer((GeoLayerRenderer<T, ?>) geoLayerMaidRender2);
     }
 

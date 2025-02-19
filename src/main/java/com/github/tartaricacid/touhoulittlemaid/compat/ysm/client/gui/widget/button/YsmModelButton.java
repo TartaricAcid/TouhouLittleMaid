@@ -1,11 +1,10 @@
-package com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button;
+package com.github.tartaricacid.touhoulittlemaid.compat.ysm.client.gui.widget.button;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.model.MaidModelGui;
+import com.github.tartaricacid.touhoulittlemaid.compat.ysm.data.YsmMaidInfo;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MiscConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -23,16 +22,17 @@ import static com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil.clea
 
 public class YsmModelButton extends Button {
     private static final ResourceLocation BG = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/skin_select.png");
-    @Nullable
-    private final EntityMaid maid;
-    private final MaidModelGui.YsmMaidInfo ysmMaidInfo;
+    private final YsmMaidInfo ysmMaidInfo;
     private final boolean needAuth;
     private final String modelId;
     private final String modelTexture;
     private final List<Component> tooltips;
     private final ResourceLocation cacheIconId;
+    @Nullable
+    private EntityMaid maid;
+    private boolean createdMaid = false;
 
-    public YsmModelButton(MaidModelGui.YsmMaidInfo ysmModel, int pX, int pY, int pWidth, int pHeight, Component pMessage, OnPress pOnPress) {
+    public YsmModelButton(YsmMaidInfo ysmModel, int pX, int pY, int pWidth, int pHeight, Component pMessage, OnPress pOnPress) {
         super(pX, pY, pWidth, pHeight, pMessage, pOnPress, Supplier::get);
         this.ysmMaidInfo = ysmModel;
         this.needAuth = ysmModel.needAuth();
@@ -40,7 +40,6 @@ public class YsmModelButton extends Button {
         this.modelTexture = ysmModel.textureId();
         this.tooltips = buildTooltips(ysmModel.tooltips());
         this.cacheIconId = ysmModel.cacheIconId();
-        this.maid = createEntityMaid();
     }
 
     private List<Component> buildTooltips(List<Component> tooltips) {
@@ -57,10 +56,7 @@ public class YsmModelButton extends Button {
         if (isHovered) {
             pGuiGraphics.blit(BG, getX(), getY(), 42, 225, 15, 24);
         }
-        {
-            RenderSystem.enableDepthTest();
-            drawYsmEntity(pGuiGraphics, getX() + (width / 2), getY() + this.height);
-        }
+        drawYsmEntity(pGuiGraphics, getX() + (width / 2), getY() + this.height);
     }
 
     public void renderTooltip(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
@@ -75,7 +71,14 @@ public class YsmModelButton extends Button {
             int textureSize = 24;
             graphics.blit(cacheIconId, posX - textureSize / 2, posY - textureSize, textureSize, textureSize, 0, 0, textureSize, textureSize, textureSize, textureSize);
         } else {
-            if (maid == null) return;
+            if (!createdMaid) {
+                this.createEntityMaid();
+                createdMaid = true;
+            }
+
+            if (maid == null) {
+                return;
+            }
             InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, posX, posY, (int) (12 * 1.0f), -25, -20, maid);
         }
     }
@@ -85,17 +88,17 @@ public class YsmModelButton extends Button {
         return !needAuth && super.clicked(pMouseX, pMouseY);
     }
 
-    @Nullable
-    private EntityMaid createEntityMaid() {
+    private void createEntityMaid() {
         Level world = Minecraft.getInstance().level;
         if (world == null) {
-            return null;
+            return;
         }
 
         EntityMaid maid = new EntityMaid(world);
         clearMaidDataResidue(maid, false);
         maid.setIsYsmModel(true);
         maid.setYsmModel(this.modelId, this.modelTexture);
-        return maid;
+
+        this.maid = maid;
     }
 }

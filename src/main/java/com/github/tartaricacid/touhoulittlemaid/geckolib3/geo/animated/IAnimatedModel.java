@@ -3,27 +3,69 @@ package com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.processor.IBaseBone;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 public interface IAnimatedModel<AB extends IBaseBone> {
-    Map<String, ? extends IBaseBone> bones();
-    List<? extends IBaseBone> topLevelBones();
-    List<? extends IBaseBone> leftHandBones();
-    List<? extends IBaseBone> rightHandBones();
-    List<? extends IBaseBone> leftWaistBones();
-    List<? extends IBaseBone> rightWaistBones();
-    List<? extends IBaseBone> backpackBones();
-    List<? extends IBaseBone> tacPistolBones();
-    List<? extends IBaseBone> tacRifleBones();
-    List<? extends IBaseBone> headBones();
+    default Map<String, ? extends IBaseBone> bones() {
+        return Collections.emptyMap();
+    }
+
+    default List<? extends IBaseBone> topLevelBones() {
+        return Collections.emptyList();
+    }
+
+    default List<? extends IBaseBone> leftHandBones() {
+        return Collections.emptyList();
+    }
+
+    default List<? extends IBaseBone> rightHandBones() {
+        return Collections.emptyList();
+    }
+
+    default List<? extends IBaseBone> leftWaistBones() {
+        return Collections.emptyList();
+    }
+
+    default List<? extends IBaseBone> rightWaistBones() {
+        return Collections.emptyList();
+    }
+
+    default List<? extends IBaseBone> backpackBones() {
+        return Collections.emptyList();
+    }
+
+    default List<? extends IBaseBone> tacPistolBones() {
+        return Collections.emptyList();
+    }
+
+    default List<? extends IBaseBone> tacRifleBones() {
+        return Collections.emptyList();
+    }
+
+    default List<? extends IBaseBone> headBones() {
+        return Collections.emptyList();
+    }
+
     @Nullable
-    AB head();
+    default AB head() {
+        return null;
+    }
+
     @Nullable
-    AB hat();
+    default AB hat() {
+        return null;
+    }
+
     @Nullable
-    AB leftArm();
+    default AB leftArm() {
+        return null;
+    }
+
     @Nullable
-    AB rightArm();
+    default AB rightArm() {
+        return null;
+    }
 
 }
