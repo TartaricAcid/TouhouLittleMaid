@@ -11,7 +11,6 @@ import java.util.List;
 import static net.minecraft.resources.ResourceLocation.isValidNamespace;
 
 public final class YsmModelData {
-
     private static final List<YsmMaidInfo> YSM_MAID_INFOS = new ArrayList<>();
 
     public static void buildYsmMaidInfos() {
@@ -44,5 +43,4 @@ public final class YsmModelData {
     static ResourceLocation createCacheIconId(String modeId, String textureName) {
         return new ResourceLocation("yes_steve_model", modeId + "/" + textureName + "/cache");
     }
-
 }

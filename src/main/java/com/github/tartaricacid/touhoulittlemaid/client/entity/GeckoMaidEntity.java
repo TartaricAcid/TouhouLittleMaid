@@ -140,19 +140,22 @@ public class GeckoMaidEntity<T extends Mob> extends AnimatableEntity<T> implemen
         return false;
     }
 
+    @Override
     public IMaid getMaid() {
         return maid;
     }
 
+    @Override
     public MaidModelInfo getMaidInfo() {
         return maidInfo;
     }
 
     @Override
-    public IAnimatedModel<?> getGeoModel() {
+    public IAnimatedModel getGeoModel() {
         return this.getCurrentModel();
     }
 
+    @Override
     public void setMaidInfo(MaidModelInfo info) {
         if (this.maidInfo != info) {
             this.maidInfo = info;
@@ -162,7 +165,6 @@ public class GeckoMaidEntity<T extends Mob> extends AnimatableEntity<T> implemen
 
     @Override
     public void setYsmModel(String modelId, String texture) {
-
     }
 
     private static class MaidState<T extends Mob> {

@@ -3,7 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.geckolib3.core.processor;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.snapshot.BoneSnapshot;
 
 
-public interface IBone extends IBaseBone{
+public interface IBone extends IBaseBone {
     float getRotationX();
 
     void setRotationX(float value);

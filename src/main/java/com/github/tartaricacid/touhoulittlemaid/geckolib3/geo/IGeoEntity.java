@@ -5,12 +5,11 @@ import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelIn
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated.IAnimatedModel;
 
 public interface IGeoEntity {
-
     IMaid getMaid();
 
     MaidModelInfo getMaidInfo();
 
-    IAnimatedModel<?> getGeoModel();
+    IAnimatedModel getGeoModel();
 
     void setMaidInfo(MaidModelInfo info);
 

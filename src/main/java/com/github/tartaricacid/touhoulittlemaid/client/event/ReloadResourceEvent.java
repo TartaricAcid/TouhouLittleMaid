@@ -44,7 +44,7 @@ public final class ReloadResourceEvent extends SimplePreparableReloadListener<Vo
             CustomPackLoader.reloadPacks();
             PlayerMaidModels.reload();
 
-            //@todo 还是会受到模组的重载先后顺序的影响
+            //TODO: 还是会受到模组的重载先后顺序的影响
             YsmCompat.initYsmModelData();
         }
         watch.stop();

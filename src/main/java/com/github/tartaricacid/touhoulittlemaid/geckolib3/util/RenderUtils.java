@@ -51,6 +51,9 @@ public final class RenderUtils {
     }
 
     public static void prepMatrixForLocator(PoseStack poseStack, List<? extends IBaseBone> locatorHierarchy) {
+        if (locatorHierarchy == null || locatorHierarchy.isEmpty()) {
+            return;
+        }
         for (int i = 0; i < locatorHierarchy.size() - 1; i++) {
             RenderUtils.prepMatrixForBone(poseStack, locatorHierarchy.get(i));
         }

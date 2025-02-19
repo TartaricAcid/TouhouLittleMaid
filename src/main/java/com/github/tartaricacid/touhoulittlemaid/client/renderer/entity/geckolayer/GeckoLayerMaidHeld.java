@@ -31,7 +31,7 @@ public class GeckoLayerMaidHeld<T extends Mob, R extends IGeoEntityRenderer<T>> 
     public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         ItemStack offhandItem = entity.getOffhandItem();
         ItemStack mainHandItem = entity.getMainHandItem();
-        IAnimatedModel<?> geoModel = getGeoMobModel(entity);
+        IAnimatedModel geoModel = getGeoMobModel(entity);
         if (geoModel == null) {
             return;
         }
@@ -55,7 +55,7 @@ public class GeckoLayerMaidHeld<T extends Mob, R extends IGeoEntityRenderer<T>> 
         }
     }
 
-    protected void renderArmWithItem(T livingEntity, ItemStack itemStack, IAnimatedModel<?> geoModel, ItemDisplayContext displayContext, HumanoidArm arm, PoseStack poseStack, MultiBufferSource bufferSource, int light) {
+    protected void renderArmWithItem(T livingEntity, ItemStack itemStack, IAnimatedModel geoModel, ItemDisplayContext displayContext, HumanoidArm arm, PoseStack poseStack, MultiBufferSource bufferSource, int light) {
         if (!itemStack.isEmpty() && geoModel != null) {
             poseStack.pushPose();
             translateToHand(arm, poseStack, geoModel);
@@ -67,7 +67,7 @@ public class GeckoLayerMaidHeld<T extends Mob, R extends IGeoEntityRenderer<T>> 
         }
     }
 
-    protected void translateToHand(HumanoidArm arm, PoseStack poseStack, IAnimatedModel<?> geoModel) {
+    protected void translateToHand(HumanoidArm arm, PoseStack poseStack, IAnimatedModel geoModel) {
         if (arm == HumanoidArm.LEFT) {
             RenderUtils.prepMatrixForLocator(poseStack, geoModel.leftHandBones());
         } else {
@@ -79,7 +79,7 @@ public class GeckoLayerMaidHeld<T extends Mob, R extends IGeoEntityRenderer<T>> 
     public void ysmRender(PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         ItemStack offhandItem = entity.getOffhandItem();
         ItemStack mainHandItem = entity.getMainHandItem();
-        IAnimatedModel<?> geoModel = getYsmGeoMobModel(entity);
+        IAnimatedModel geoModel = getYsmGeoMobModel(entity);
         if (geoModel == null) {
             return;
         }

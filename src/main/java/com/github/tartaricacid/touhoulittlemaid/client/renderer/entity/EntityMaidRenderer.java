@@ -13,7 +13,6 @@ import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader
 import com.github.tartaricacid.touhoulittlemaid.client.resource.models.MaidModels;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.compat.ysm.YsmCompat;
-import com.github.tartaricacid.touhoulittlemaid.compat.ysm.client.event.InitYsmMaidRendererEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.GeoLayerRenderer;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.IGeoEntity;
@@ -31,7 +30,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.ModLoader;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -88,27 +86,6 @@ public class EntityMaidRenderer extends MobRenderer<Mob, BedrockModel<Mob>> {
         }
     }
 
-    private void parseYsmModelRenderer(EntityRendererProvider.Context manager) {
-        if (!YsmCompat.isInstalled()) {
-            return;
-        }
-
-        InitYsmMaidRendererEvent ysmMaidRenderer = new InitYsmMaidRendererEvent(manager);
-        ModLoader.get().postEvent(ysmMaidRenderer);
-        IGeoEntityRenderer<Mob> geoEntityRenderer = ysmMaidRenderer.getGeoEntityRenderer();
-        Function<Mob, IGeoEntity> ysmGeoEntityGet = ysmMaidRenderer.getYsmGeoEntityGet();
-        if (geoEntityRenderer != null && ysmGeoEntityGet != null) {
-            this.ysmMaidRenderer = geoEntityRenderer;
-
-            // 将 TlmGecko 模型下的所有 Layer 转化添加到 YsmGecko 模型的 Layer 中
-            List<GeoLayerRenderer> layerRenderers = this.geckoEntityMaidRenderer.getLayerRenderers();
-            for (GeoLayerRenderer layerRenderer : layerRenderers) {
-                GeoLayerMaidRender<Mob, IGeoEntityRenderer<Mob>> mobGeoLayerMaidRender2 = ((GeoLayerMaidRender<Mob, IGeoEntityRenderer<Mob>>) layerRenderer).create(geoEntityRenderer, manager, ysmGeoEntityGet);
-                this.ysmMaidRenderer.addGeoMobLayer(mobGeoLayerMaidRender2);
-            }
-        }
-    }
-
     @Override
     public void render(Mob entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn) {
         IMaid maid = IMaid.convert(entity);
@@ -144,7 +121,6 @@ public class EntityMaidRenderer extends MobRenderer<Mob, BedrockModel<Mob>> {
 
         // YsmGeckoLib 接管渲染
         if (maid.isYsmModel() && this.ysmMaidRenderer != null) {
-            this.ysmMaidRenderer.getGeoEntityRender(entity).setMaidInfo(this.mainInfo);
             this.ysmMaidRenderer.getGeoEntityRender(entity).setYsmModel(maid.getYsmModelId(), maid.getYsmModelTexture());
             this.ysmMaidRenderer.geoRender(entity, entityYaw, partialTicks, poseStack, bufferIn, packedLightIn);
             return;

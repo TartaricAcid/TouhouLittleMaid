@@ -100,7 +100,7 @@ public class SlashBladeRender {
         }
     }
 
-    public static void renderMaidMainhandSlashBlade(LivingEntity maid, IAnimatedModel<? extends IBaseBone> model, PoseStack matrixStack, MultiBufferSource bufferIn, int lightIn, ItemStack stack, float partialTicks) {
+    public static void renderMaidMainhandSlashBlade(LivingEntity maid, IAnimatedModel model, PoseStack matrixStack, MultiBufferSource bufferIn, int lightIn, ItemStack stack, float partialTicks) {
         if (stack.getItem() instanceof ItemSlashBlade) {
             matrixStack.pushPose();
             // 主手的刀渲染在左边
@@ -160,7 +160,7 @@ public class SlashBladeRender {
         }
     }
 
-    public static void renderMaidOffhandSlashBlade(IAnimatedModel<? extends IBaseBone> model, PoseStack matrixStack, MultiBufferSource bufferIn, int lightIn, ItemStack stack) {
+    public static void renderMaidOffhandSlashBlade(IAnimatedModel model, PoseStack matrixStack, MultiBufferSource bufferIn, int lightIn, ItemStack stack) {
         if (stack.getItem() instanceof ItemSlashBlade) {
             matrixStack.pushPose();
             // 副手的刀渲染在右边
@@ -179,7 +179,7 @@ public class SlashBladeRender {
         }
     }
 
-    private static void translateToWaist(HumanoidArm arm, PoseStack poseStack, IAnimatedModel<? extends IBaseBone> geoModel) {
+    private static void translateToWaist(HumanoidArm arm, PoseStack poseStack, IAnimatedModel geoModel) {
         if (arm == HumanoidArm.LEFT) {
             RenderUtils.prepMatrixForLocator(poseStack, geoModel.leftWaistBones());
         } else {

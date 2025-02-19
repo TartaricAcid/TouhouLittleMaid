@@ -41,7 +41,7 @@ public abstract class GeoLayerMaidRender<T extends Entity, R extends IGeoEntityR
         return YSM_GEO_MOB_GET.apply(mob);
     }
 
-    protected static IAnimatedModel<?> getYsmGeoMobModel(Mob mob) {
+    protected static IAnimatedModel getYsmGeoMobModel(Mob mob) {
         return getYsmGeoMob(mob).getGeoModel();
     }
 
@@ -51,14 +51,10 @@ public abstract class GeoLayerMaidRender<T extends Entity, R extends IGeoEntityR
         }
     }
 
+    @Override
     public abstract void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight,
                                 T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks,
                                 float netHeadYaw, float headPitch);
-
-    // 给ysm的渲染调用的
-    public abstract void ysmRender(PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn,
-                                   T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks,
-                                   float netHeadYaw, float headPitch);
 
     // 生成对应的YsmGeoLayerRenderer
     public abstract GeoLayerMaidRender<T, R> create(R geckoEntityMaidRenderer,

@@ -57,7 +57,7 @@ public class GunMaidRender {
         matrixStack.popPose();
     }
 
-    public static void renderBackGun(ItemStack heldItem, IAnimatedModel<? extends IBaseBone> geoModel, IMaid maid, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
+    public static void renderBackGun(ItemStack heldItem, IAnimatedModel geoModel, IMaid maid, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
         IGun gun = IGun.getIGunOrNull(heldItem);
         if (gun == null) {
             return;

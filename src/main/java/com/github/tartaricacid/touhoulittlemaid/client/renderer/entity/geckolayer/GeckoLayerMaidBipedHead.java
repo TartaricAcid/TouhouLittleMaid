@@ -118,7 +118,7 @@ public class GeckoLayerMaidBipedHead<T extends Mob, R extends IGeoEntityRenderer
         var animatableEntity = getYsmGeoMob(entity);
         if (animatableEntity.getGeoModel() != null) {
             ItemStack head = entity.getItemBySlot(EquipmentSlot.HEAD);
-            IAnimatedModel<?> geoModel = animatableEntity.getGeoModel();
+            IAnimatedModel geoModel = animatableEntity.getGeoModel();
             boolean allowRenderHead = animatableEntity.getMaidInfo().isShowCustomHead() && !geoModel.headBones().isEmpty();
             if (!allowRenderHead) {
                 return;

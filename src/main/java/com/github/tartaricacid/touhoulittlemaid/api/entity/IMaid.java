@@ -13,6 +13,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -67,19 +68,19 @@ public interface IMaid {
      */
     String getModelId();
 
-    default boolean isYsmModel(){
+    default boolean isYsmModel() {
         return false;
     }
 
-    default void setIsYsmModel(boolean isYsmModel){
+    default void setIsYsmModel(boolean isYsmModel) {
     }
 
     default String getYsmModelId() {
-        return "";
+        return StringUtils.EMPTY;
     }
 
     default String getYsmModelTexture() {
-        return "";
+        return StringUtils.EMPTY;
     }
 
     default void setYsmModel(String modelId, String texture) {

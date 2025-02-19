@@ -51,7 +51,7 @@ public class GeckoLayerMaidBanner<T extends Mob, R extends IGeoEntityRenderer<T>
         if (!maid.getConfigManager().isShowBackItem()) {
             return;
         }
-        IAnimatedModel<?> geoModel = getGeoMobModel(maid);
+        IAnimatedModel geoModel = getGeoMobModel(maid);
         if (geoModel != null && !geoModel.backpackBones().isEmpty()) {
             poseStack.pushPose();
             RenderUtils.prepMatrixForLocator(poseStack, geoModel.backpackBones());
@@ -79,7 +79,7 @@ public class GeckoLayerMaidBanner<T extends Mob, R extends IGeoEntityRenderer<T>
         if (!maid.getConfigManager().isShowBackItem()) {
             return;
         }
-        IAnimatedModel<?> geoModel = getYsmGeoMobModel(maid);
+        IAnimatedModel geoModel = getYsmGeoMobModel(maid);
         if (geoModel != null && !geoModel.backpackBones().isEmpty()) {
             poseStack.pushPose();
             RenderUtils.prepMatrixForLocator(poseStack, geoModel.backpackBones());

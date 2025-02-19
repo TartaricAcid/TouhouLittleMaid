@@ -40,7 +40,7 @@ public class GeckoLayerMaidBackpack<T extends Mob, R extends IGeoEntityRenderer<
         if (maid == null) {
             return;
         }
-        IAnimatedModel<?> model = getGeoMobModel(maid);
+        IAnimatedModel model = getGeoMobModel(maid);
         if (model != null) {
             if (!getGeoMob(maid).getMaidInfo().isShowBackpack() || entity.isSleeping() || entity.isInvisible()) {
                 return;
@@ -63,21 +63,19 @@ public class GeckoLayerMaidBackpack<T extends Mob, R extends IGeoEntityRenderer<
         if (maid == null) {
             return;
         }
-        IAnimatedModel<?> model = getYsmGeoMobModel(maid);
+        IAnimatedModel model = getYsmGeoMobModel(maid);
         if (model != null) {
             if (!getYsmGeoMob(maid).getMaidInfo().isShowBackpack() || entity.isSleeping() || entity.isInvisible()) {
                 return;
             }
-            if (!model.bones().isEmpty()) {
-                poseStack.pushPose();
-                RenderUtils.prepMatrixForLocator(poseStack, model.backpackBones());
-                poseStack.translate(0, 1, 0.25);
-                poseStack.mulPose(Axis.ZP.rotationDegrees(180));
-                boolean showBackpack = entity instanceof EntityMaid entityMaid && entityMaid.getConfigManager().isShowBackpack();
-                IMaidBackpack backpack = showBackpack ? maid.getMaidBackpackType() : BackpackManager.getEmptyBackpack();
-                BackpackManager.findBackpackModel(backpack.getId()).ifPresent(pair -> renderColoredCutoutModel(pair.getLeft(), pair.getRight(), poseStack, bufferIn, packedLightIn, maid, 1.0f, 1.0f, 1.0f));
-                poseStack.popPose();
-            }
+            poseStack.pushPose();
+            RenderUtils.prepMatrixForLocator(poseStack, model.backpackBones());
+            poseStack.translate(0, 1, 0.25);
+            poseStack.mulPose(Axis.ZP.rotationDegrees(180));
+            boolean showBackpack = entity instanceof EntityMaid entityMaid && entityMaid.getConfigManager().isShowBackpack();
+            IMaidBackpack backpack = showBackpack ? maid.getMaidBackpackType() : BackpackManager.getEmptyBackpack();
+            BackpackManager.findBackpackModel(backpack.getId()).ifPresent(pair -> renderColoredCutoutModel(pair.getLeft(), pair.getRight(), poseStack, bufferIn, packedLightIn, maid, 1.0f, 1.0f, 1.0f));
+            poseStack.popPose();
         }
     }
 
