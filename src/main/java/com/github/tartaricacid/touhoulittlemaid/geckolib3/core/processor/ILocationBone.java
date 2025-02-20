@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.geckolib3.core.processor;
 
-public interface IBaseBone {
+public interface ILocationBone {
     float getRotationX();
 
     float getRotationY();

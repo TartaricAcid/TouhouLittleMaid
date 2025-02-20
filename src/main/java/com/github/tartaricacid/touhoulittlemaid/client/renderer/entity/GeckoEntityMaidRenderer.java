@@ -20,7 +20,7 @@ public class GeckoEntityMaidRenderer<T extends Mob> extends GeoReplacedEntityRen
         super(renderManager);
         addLayer(new GeckoLayerMaidHeld<>(this, renderManager.getItemInHandRenderer()));
         addLayer(new GeckoLayerMaidBipedHead<>(this, renderManager.getModelSet()));
-        addLayer(new GeckoLayerMaidBackpack<>(this, renderManager.getModelSet()));
+        addLayer(new GeckoLayerMaidBackpack<>(this));
         addLayer(new GeckoLayerMaidBackItem<>(this));
         addLayer(new GeckoLayerMaidBanner<>(this, renderManager.getModelSet()));
         addAdditionGeckoEntityMaidRenderer(renderManager);
@@ -57,13 +57,13 @@ public class GeckoEntityMaidRenderer<T extends Mob> extends GeoReplacedEntityRen
     }
 
     @Override
-    public IGeoEntity getGeoEntityRender(T entity) {
+    public IGeoEntity getGeoEntity(T entity) {
         return this.getAnimatableEntity(entity);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public void addGeoMobLayer(GeoLayerMaidRender<?, ?> geoLayerMaidRender2) {
+    public void addGeoLayerRenderer(GeoLayerRenderer<?, ?> geoLayerMaidRender2) {
         this.addLayer((GeoLayerRenderer<T, ?>) geoLayerMaidRender2);
     }
 

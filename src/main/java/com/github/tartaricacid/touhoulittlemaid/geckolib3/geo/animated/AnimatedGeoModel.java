@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class AnimatedGeoModel implements IAnimatedModel {
+public class AnimatedGeoModel implements ILocationModel {
     private final GeoModel geoModel;
     private final List<AnimatedGeoBone> topLevelBones;
     private final Map<String, AnimatedGeoBone> bones;

@@ -4,8 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.processor.IBaseBone;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated.IAnimatedModel;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated.ILocationModel;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.RenderUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -57,7 +56,7 @@ public class GunMaidRender {
         matrixStack.popPose();
     }
 
-    public static void renderBackGun(ItemStack heldItem, IAnimatedModel geoModel, IMaid maid, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
+    public static void renderBackGun(ItemStack heldItem, ILocationModel geoModel, IMaid maid, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
         IGun gun = IGun.getIGunOrNull(heldItem);
         if (gun == null) {
             return;

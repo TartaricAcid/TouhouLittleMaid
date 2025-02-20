@@ -7,7 +7,6 @@ import com.github.tartaricacid.touhoulittlemaid.api.event.client.RenderMaidEvent
 import com.github.tartaricacid.touhoulittlemaid.client.animation.HardcodedAnimationManger;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.GlWrapper;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
-import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.geckolayer.GeoLayerMaidRender;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layer.*;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.models.MaidModels;
@@ -15,7 +14,6 @@ import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelIn
 import com.github.tartaricacid.touhoulittlemaid.compat.ysm.YsmCompat;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.GeoLayerRenderer;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.IGeoEntity;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.IGeoEntityRenderer;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -40,16 +38,20 @@ import java.util.function.Function;
 public class EntityMaidRenderer extends MobRenderer<Mob, BedrockModel<Mob>> {
     private static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/empty.png");
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
+    /**
+     * YSM 到时候会把渲染器加入其中
+     */
+    public static @Nullable Function<EntityRendererProvider.Context, IGeoEntityRenderer<Mob>> YSM_ENTITY_MAID_RENDERER;
+    /**
+     * 女仆模组自带的 GeckoLib 模型渲染
+     */
     private final GeckoEntityMaidRenderer geckoEntityMaidRenderer;
+    /**
+     * YSM 借用的渲染类型，和上述互斥
+     */
+    private @Nullable IGeoEntityRenderer<Mob> ysmMaidRenderer;
     private MaidModelInfo mainInfo;
     private List<Object> mainAnimations = Lists.newArrayList();
-    @Nullable
-    private IGeoEntityRenderer<Mob> ysmMaidRenderer;
-
-    @Nullable
-    public static Function<EntityRendererProvider.Context, IGeoEntityRenderer<Mob>> YSM_ENTITY_MAID_RENDERER;
-    @Nullable
-    public static Function<Mob, IGeoEntity> YSM_ENTITY_MAID_GET;
 
     public EntityMaidRenderer(EntityRendererProvider.Context manager) {
         super(manager, new BedrockModel<>(), 0.5f);
@@ -60,28 +62,25 @@ public class EntityMaidRenderer extends MobRenderer<Mob, BedrockModel<Mob>> {
         this.addLayer(new LayerMaidBanner(this, manager.getModelSet()));
         this.addAdditionMaidLayer(manager);
         this.geckoEntityMaidRenderer = new GeckoEntityMaidRenderer<>(manager);
-
-        // 自动捕捉初始化ysm模型的渲染
-        this.parseYsmModelRendererFromStatic(manager);
-//        this.parseYsmModelRenderer(manager);
+        this.initYsmModelRenderer(manager);
     }
 
-    // 使用事件的话，会受到先后顺序的影响，ysm 的 FMLClientSetupEvent 在 TLM 之后加载，故暂且这么用着
-    private void parseYsmModelRendererFromStatic(EntityRendererProvider.Context manager) {
-        if (!YsmCompat.isInstalled() || YSM_ENTITY_MAID_RENDERER == null || YSM_ENTITY_MAID_GET == null) {
+    /**
+     * 不能使用事件来初始化 YSM 渲染器
+     * <p>
+     * 使用事件的话，会受到先后顺序的影响
+     */
+    private void initYsmModelRenderer(EntityRendererProvider.Context manager) {
+        if (!YsmCompat.isInstalled() || YSM_ENTITY_MAID_RENDERER == null) {
             return;
         }
-
         IGeoEntityRenderer<Mob> geoEntityRenderer = YSM_ENTITY_MAID_RENDERER.apply(manager);
-        Function<Mob, IGeoEntity> ysmGeoEntityGet = YSM_ENTITY_MAID_GET;
-        if (geoEntityRenderer != null && ysmGeoEntityGet != null) {
+        if (geoEntityRenderer != null) {
             this.ysmMaidRenderer = geoEntityRenderer;
-
-            // 将 TlmGecko 模型下的所有 Layer 转化添加到 YsmGecko 模型的 Layer 中
+            // 将女仆模组自带的 GeckoLib 模型的 Layer 渲染复制到 YSM 的 Layer 里去
             List<GeoLayerRenderer> layerRenderers = this.geckoEntityMaidRenderer.getLayerRenderers();
             for (GeoLayerRenderer layerRenderer : layerRenderers) {
-                GeoLayerMaidRender<Mob, IGeoEntityRenderer<Mob>> mobGeoLayerMaidRender2 = ((GeoLayerMaidRender<Mob, IGeoEntityRenderer<Mob>>) layerRenderer).create(geoEntityRenderer, manager, ysmGeoEntityGet);
-                this.ysmMaidRenderer.addGeoMobLayer(mobGeoLayerMaidRender2);
+                this.ysmMaidRenderer.addGeoLayerRenderer(layerRenderer.copy(this.ysmMaidRenderer));
             }
         }
     }
@@ -92,6 +91,7 @@ public class EntityMaidRenderer extends MobRenderer<Mob, BedrockModel<Mob>> {
         if (maid == null) {
             return;
         }
+
         // 读取默认模型，用于清除不存在模型的缓存残留
         CustomPackLoader.MAID_MODELS.getModel(DEFAULT_MODEL_ID).ifPresent(model -> this.model = model);
         CustomPackLoader.MAID_MODELS.getInfo(DEFAULT_MODEL_ID).ifPresent(info -> this.mainInfo = info);
@@ -119,18 +119,20 @@ public class EntityMaidRenderer extends MobRenderer<Mob, BedrockModel<Mob>> {
             ChatBubbleRenderer.renderChatBubble(this, maidEntity, poseStack, bufferIn, packedLightIn);
         }
 
-        // YsmGeckoLib 接管渲染
+        // YSM 接管渲染
         if (maid.isYsmModel() && this.ysmMaidRenderer != null) {
-            this.ysmMaidRenderer.getGeoEntityRender(entity).setYsmModel(maid.getYsmModelId(), maid.getYsmModelTexture());
+            this.ysmMaidRenderer.getGeoEntity(entity).setYsmModel(maid.getYsmModelId(), maid.getYsmModelTexture());
             this.ysmMaidRenderer.geoRender(entity, entityYaw, partialTicks, poseStack, bufferIn, packedLightIn);
             return;
         }
+
         // GeckoLib 接管渲染
         if (this.mainInfo.isGeckoModel()) {
             this.geckoEntityMaidRenderer.getAnimatableEntity(entity).setMaidInfo(this.mainInfo);
             this.geckoEntityMaidRenderer.render(entity, entityYaw, partialTicks, poseStack, bufferIn, packedLightIn);
             return;
         }
+
         // 模型动画设置
         this.model.setAnimations(this.mainAnimations);
         // 渲染女仆模型本体

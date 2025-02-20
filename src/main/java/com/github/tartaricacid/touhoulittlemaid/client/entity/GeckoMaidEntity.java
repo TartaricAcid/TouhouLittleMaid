@@ -13,7 +13,7 @@ import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.molang.context.An
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.processor.IBone;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.IGeoEntity;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated.AnimatedGeoModel;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated.IAnimatedModel;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated.ILocationModel;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.model.provider.data.EntityModelData;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.resource.GeckoLibCache;
 import net.minecraft.client.Minecraft;
@@ -151,7 +151,7 @@ public class GeckoMaidEntity<T extends Mob> extends AnimatableEntity<T> implemen
     }
 
     @Override
-    public IAnimatedModel getGeoModel() {
+    public ILocationModel getGeoModel() {
         return this.getCurrentModel();
     }
 

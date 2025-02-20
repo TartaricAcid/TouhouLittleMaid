@@ -303,6 +303,7 @@
   "gui.touhou_little_maid.activity.idle": "休息",
   "gui.touhou_little_maid.activity.rest": "睡觉",
   "gui.touhou_little_maid.button.skin": "更改皮肤",
+  "gui.touhou_little_maid.button.ysm_skin": "使用 YSM 皮肤",
   "gui.touhou_little_maid.button.sound": "设置声音包",
   "gui.touhou_little_maid.task.next_page": "下一页",
   "gui.touhou_little_maid.task.previous_page": "上一页",

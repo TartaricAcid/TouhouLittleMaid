@@ -5,7 +5,6 @@ import com.github.tartaricacid.touhoulittlemaid.client.animation.inner.InnerAnim
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.GeckoModelLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.models.PlayerMaidModels;
-import com.github.tartaricacid.touhoulittlemaid.compat.ysm.YsmCompat;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -43,9 +42,6 @@ public final class ReloadResourceEvent extends SimplePreparableReloadListener<Vo
             InnerAnimation.init();
             CustomPackLoader.reloadPacks();
             PlayerMaidModels.reload();
-
-            //TODO: 还是会受到模组的重载先后顺序的影响
-            YsmCompat.initYsmModelData();
         }
         watch.stop();
         double time = watch.getTime(TimeUnit.MICROSECONDS) / 1000.0;

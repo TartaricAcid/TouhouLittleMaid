@@ -303,6 +303,7 @@
   "gui.touhou_little_maid.activity.idle": "Idle",
   "gui.touhou_little_maid.activity.rest": "Rest",
   "gui.touhou_little_maid.button.skin": "Change Skin",
+  "gui.touhou_little_maid.button.ysm_skin": "Use YSM Skin",
   "gui.touhou_little_maid.button.sound": "Set Sound Pack",
   "gui.touhou_little_maid.task.next_page": "Next Page",
   "gui.touhou_little_maid.task.previous_page": "Previous Page",

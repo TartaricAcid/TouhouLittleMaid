@@ -8,7 +8,6 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.model.MaidMode
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.ChairModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.CustomModelPack;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
-import com.github.tartaricacid.touhoulittlemaid.compat.ysm.data.YsmModelData;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MiscConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -32,7 +31,6 @@ public final class CacheIconManager {
     public static void clearCache() {
         MAID_CACHE_QUEUE.clear();
         CHAIR_CACHE_QUEUE.clear();
-        YsmModelData.clear();
     }
 
     public static void addMaidPack(CustomModelPack<MaidModelInfo> customModelPack) {
@@ -74,7 +72,7 @@ public final class CacheIconManager {
     }
 
     private static CacheScreen<EntityMaid, MaidModelInfo> getMaidCacheScreen(AbstractModelGui<EntityMaid, MaidModelInfo> maidModelGui) {
-        return new MaidCacheScreen(maidModelGui, InitEntities.MAID.get(), MAID_CACHE_QUEUE, (graphics, posX, posY, modelInfo, scaleModified, maid) -> {
+        return new CacheScreen<>(maidModelGui, InitEntities.MAID.get(), MAID_CACHE_QUEUE, (graphics, posX, posY, modelInfo, scaleModified, maid) -> {
             clearMaidDataResidue(maid, false);
             if (modelInfo.getEasterEgg() != null) {
                 maid.setModelId(EASTER_EGG_MODEL);

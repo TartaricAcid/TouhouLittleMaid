@@ -301,8 +301,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         super.defineSynchedData();
         this.entityData.define(DATA_MODEL_ID, DEFAULT_MODEL_ID);
         this.entityData.define(DATA_IS_YSM_MODEL, false);
-        this.entityData.define(DATA_YSM_MODEL_ID, "");
-        this.entityData.define(DATA_YSM_MODEL_TEXTURE, "");
+        this.entityData.define(DATA_YSM_MODEL_ID, StringUtils.EMPTY);
+        this.entityData.define(DATA_YSM_MODEL_TEXTURE, StringUtils.EMPTY);
         this.entityData.define(DATA_SOUND_PACK_ID, DefaultMaidSoundPack.getInitSoundPackId());
         this.entityData.define(DATA_TASK, TaskIdle.UID.toString());
         this.entityData.define(DATA_BEGGING, false);
@@ -1671,13 +1671,14 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         this.entityData.set(DATA_MODEL_ID, modelId);
     }
 
-    public boolean isYsmModel(){
+    public boolean isYsmModel() {
         return this.entityData.get(DATA_IS_YSM_MODEL);
     }
 
-    public void setIsYsmModel(boolean isYsmModel){
+    public void setIsYsmModel(boolean isYsmModel) {
         this.entityData.set(DATA_IS_YSM_MODEL, isYsmModel);
     }
+
     public String getYsmModelId() {
         return this.entityData.get(DATA_YSM_MODEL_ID);
     }

@@ -68,21 +68,42 @@ public interface IMaid {
      */
     String getModelId();
 
+    /**
+     * 女仆可以调用 YSM 渲染
+     *
+     * @return 是否当前使用的是 YSM 渲染模型
+     */
     default boolean isYsmModel() {
         return false;
     }
 
+    /**
+     * 设置是否使用 YSM 渲染模型
+     */
     default void setIsYsmModel(boolean isYsmModel) {
     }
 
+    /**
+     * 获取 YSM 模型 ID
+     *
+     * @return 模型 ID 可能是任意字符
+     */
     default String getYsmModelId() {
         return StringUtils.EMPTY;
     }
 
+    /**
+     * 获取 YSM 模型材质名称
+     *
+     * @return 材质名称可能是任意字符
+     */
     default String getYsmModelTexture() {
         return StringUtils.EMPTY;
     }
 
+    /**
+     * 设置 YSM 模型 ID 和材质名称
+     */
     default void setYsmModel(String modelId, String texture) {
     }
 
@@ -223,5 +244,4 @@ public interface IMaid {
         }
         return 0;
     }
-
 }

@@ -42,7 +42,7 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
     private static final ResourceLocation EMPTY_ICON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/gui/empty_model_pack_icon.png");
     private static final SimpleTexture EMPTY_ICON_TEXTURE = new SimpleTexture(EMPTY_ICON);
     protected final T entity;
-    protected final SkinGuiNumber<E> guiNumber;
+    private final SkinGuiNumber<E> guiNumber;
     private final List<CustomModelPack<E>> modelPackList;
 
     public AbstractModelGui(T entity, List<CustomModelPack<E>> listPack) {
@@ -113,30 +113,24 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
         int startY = this.height / 2 + 5;
 
         // 模型包的分栏按钮
-        addTabButtons(startX, startY);
+        for (int index = 0; index < 7; index++) {
+            addTabButton(startX, startY, index);
+        }
 
         // 关闭当前界面的按键
-        addCloseButton(startX, startY);
-
-        // 添加切换页面的按钮
-        addPageButtons(startX, startY);
-
-        // 添加切换模型的按钮
-        addModelButtons(startX, startY);
-
-        // 模型包翻页
-        addScrollButtons(startX, startY);
-
-        // 添加开启、关闭模型包图标缓存的按钮
-        addCacheButton(startX, startY);
-    }
-
-    protected void addCloseButton(int startX, int startY) {
         this.addRenderableWidget(new ImageButton(startX + 122, startY - 97, 21, 17, 58, 201, 18, BG,
                 (b) -> getMinecraft().submit(() -> getMinecraft().setScreen(null))));
-    }
 
-    protected void addCacheButton(int startX, int startY) {
+        // 添加切换页面的按钮
+        addPageButton(startX, startY);
+
+        // 添加切换模型的按钮
+        addModelButton(startX, startY);
+
+        // 模型包翻页
+        addScrollButton(startX, startY);
+
+        // 添加开启、关闭模型包图标缓存的按钮
         MutableComponent enableCache = Component.translatable("gui.touhou_little_maid.skin.enable_cache");
         int checkBoxWidth = font.width(enableCache) + 20;
         int xOffset = (startX - 256 / 2) / 2 - checkBoxWidth / 2;
@@ -149,17 +143,7 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
         });
     }
 
-    protected void addTabButtons(int startX, int startY) {
-        for (int index = 0; index < 7; index++) {
-            addTabButton(startX, startY, index);
-        }
-    }
-
-    private void addModelButtons(int startX, int startY) {
-        if (getPackIndex() < 0) {
-            return;
-        }
-
+    private void addModelButton(int startX, int startY) {
         // 添加按键，顺便装填按键对应模型的索引
         CustomModelPack<E> pack = modelPackList.get(getPackIndex());
 
@@ -186,7 +170,7 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
         }
     }
 
-    private void addScrollButtons(int startX, int startY) {
+    private void addScrollButton(int startX, int startY) {
         ImageButton upButton = new ImageButton(startX - 256 / 2 + 253, startY - 73, 14, 10, 24, 15, 10, SIDE, b -> {
             int row = Mth.clamp(getRowIndex() - 1, 0, guiNumber.getRowSize(getPackIndex()));
             if (row != getRowIndex()) {
@@ -215,7 +199,7 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
         };
     }
 
-    private void addPageButtons(int startX, int startY) {
+    private void addPageButton(int startX, int startY) {
         Button prePage = Button.builder(Component.literal("<"), b -> {
             setRowIndex(0);
             setPageIndex(Mth.clamp(getPageIndex() - 1, 0, guiNumber.getPageSize() - 1));
@@ -365,10 +349,6 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
      * 绘制所有的模型实体图案
      */
     private void drawEntity(GuiGraphics graphics, int middleX, int middleY) {
-        if (getPackIndex() < 0) {
-            return;
-        }
-
         // 获取当前包索引得到的模型列表
         CustomModelPack<E> pack = modelPackList.get(getPackIndex());
 
@@ -455,28 +435,6 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
      * 应该不会存在性能问题<br>
      */
     private void drawTooltips(GuiGraphics graphics, int mouseX, int mouseY, int middleX, int middleY) {
-        // 绘制标签页的文本提示
-        int size = guiNumber.getTabSize(getPackIndex());
-        for (int index = 0; index < size; index++) {
-            boolean isxInRange = middleX - 98 + 28 * index < mouseX && mouseX < middleX - 98 + 28 * index + 28;
-            boolean isyInRange = middleY - 108 < mouseY && mouseY < middleY - 108 + 31;
-            if (isxInRange && isyInRange) {
-                CustomModelPack<E> hoverPack = modelPackList.get(guiNumber.tabToPackIndex(index, getPageIndex()));
-                graphics.renderTooltip(font, ParseI18n.parse(hoverPack.getPackName()), mouseX, mouseY);
-            }
-        }
-
-        // 绘制关闭按钮的文本提示
-        boolean xInRange = (middleX + 122) < mouseX && mouseX < (middleX + 143);
-        boolean yInRange = (middleY - 97) < mouseY && mouseY < (middleY - 80);
-        if (xInRange && yInRange) {
-            graphics.renderTooltip(font, Component.translatable("gui.touhou_little_maid.skin.button.close"), mouseX, mouseY);
-        }
-
-        if (getPackIndex() < 0) {
-            return;
-        }
-
         // 获取当前包索引得到的模型列表
         CustomModelPack<E> pack = modelPackList.get(getPackIndex());
 
@@ -523,6 +481,24 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
                 offsetX = -100;
                 offsetY = offsetY + 30;
             }
+        }
+
+        // 绘制标签页的文本提示
+        int size = guiNumber.getTabSize(getPackIndex());
+        for (int index = 0; index < size; index++) {
+            boolean isxInRange = middleX - 98 + 28 * index < mouseX && mouseX < middleX - 98 + 28 * index + 28;
+            boolean isyInRange = middleY - 108 < mouseY && mouseY < middleY - 108 + 31;
+            if (isxInRange && isyInRange) {
+                CustomModelPack<E> hoverPack = modelPackList.get(guiNumber.tabToPackIndex(index, getPageIndex()));
+                graphics.renderTooltip(font, ParseI18n.parse(hoverPack.getPackName()), mouseX, mouseY);
+            }
+        }
+
+        // 绘制关闭按钮的文本提示
+        boolean xInRange = (middleX + 122) < mouseX && mouseX < (middleX + 143);
+        boolean yInRange = (middleY - 97) < mouseY && mouseY < (middleY - 80);
+        if (xInRange && yInRange) {
+            graphics.renderTooltip(font, Component.translatable("gui.touhou_little_maid.skin.button.close"), mouseX, mouseY);
         }
     }
 
