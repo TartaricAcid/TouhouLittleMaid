@@ -17,8 +17,6 @@
   "tooltips.touhou_little_maid.info.model_name": "Model ismi",
   "tooltips.touhou_little_maid.info.experience": "Tecrübe",
   "tooltips.touhou_little_maid.info.favorability": "Tercih Edilebilirlik",
-  "tooltips.touhou_little_maid.bauble.usage": "Hizmetçinin Değerli Eşya Envanterine Yerleştirilmeli",
-  "tooltips.touhou_little_maid.substitute_jizo.desc": "Hizmetçiye Sağ Tıkla Zarar Görmemesi için, yaratıcı sadece",
   "gui.touhou_little_maid.schedule.all": "Tüm Gün",
   "gui.touhou_little_maid.activity.work": "Çalış",
   "gui.touhou_little_maid.activity.idle": "Boşta",
