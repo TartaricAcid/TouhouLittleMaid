@@ -118,6 +118,18 @@ public interface IMaid {
     }
 
     /**
+     * 播放轮盘动画
+     */
+    default void playRouletteAnim(String rouletteAnim) {
+    }
+
+    /**
+     * 停止轮盘动画
+     */
+    default void stopRouletteAnim() {
+    }
+
+    /**
      * 转成原实体对象
      */
     Mob asEntity();

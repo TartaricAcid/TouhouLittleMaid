@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.client.render.MaidRenderState;
 import com.github.tartaricacid.touhoulittlemaid.client.model.StatueBaseModel;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
@@ -75,9 +76,9 @@ public class TileEntityStatueRenderer implements BlockEntityRenderer<TileEntityS
         }
 
         entity.load(data);
-        if (entity instanceof EntityMaid) {
-            EntityMaid maid = (EntityMaid) entity;
+        if (entity instanceof EntityMaid maid) {
             clearMaidDataResidue(maid, true);
+            maid.renderState = MaidRenderState.STATUE;
         }
 
         float size = te.getSize().getScale();
@@ -113,7 +114,6 @@ public class TileEntityStatueRenderer implements BlockEntityRenderer<TileEntityS
         render.setRenderHitBoxes(isShowHitBox);
         poseStack.popPose();
     }
-
 
     private void setTranslateAndPose(TileEntityStatue te, PoseStack poseStack) {
         float size = te.getSize().getScale();

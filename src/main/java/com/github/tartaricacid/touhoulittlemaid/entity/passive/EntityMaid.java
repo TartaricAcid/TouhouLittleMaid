@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.MaidAIChatManager;
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IBackpackData;
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
+import com.github.tartaricacid.touhoulittlemaid.api.client.render.MaidRenderState;
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.entity.data.TaskDataKey;
 import com.github.tartaricacid.touhoulittlemaid.api.event.*;
@@ -19,6 +20,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelIn
 import com.github.tartaricacid.touhoulittlemaid.compat.domesticationinnovation.PetBedDrop;
 import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.ysm.YsmCompat;
+import com.github.tartaricacid.touhoulittlemaid.compat.ysm.event.YsmMaidClientTickEvent;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.datagen.tag.TagItem;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidBrain;
@@ -52,12 +54,14 @@ import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.ItemBreakMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.message.PlayMaidSoundMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.message.SendEffectMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.SyncYsmMaidDataMessage;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.github.tartaricacid.touhoulittlemaid.util.TeleportHelper;
 import com.github.tartaricacid.touhoulittlemaid.world.data.MaidWorldData;
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Dynamic;
+import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -154,21 +158,34 @@ import static com.github.tartaricacid.touhoulittlemaid.config.ServerConfig.MAID_
 public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMaid {
     public static final EntityType<EntityMaid> TYPE = EntityType.Builder.<EntityMaid>of(EntityMaid::new, MobCategory.CREATURE)
             .sized(0.6f, 1.5f).clientTrackingRange(10).build("maid");
-    public static final String MODEL_ID_TAG = "ModelId";
+
+    // YSM 女仆兼容内容
     public static final String IS_YSM_MODEL_TAG = "IsYsmModel";
     public static final String YSM_MODEL_ID_TAG = "YsmModelId";
     public static final String YSM_MODEL_TEXTURE_TAG = "YsmModelTexture";
     public static final String YSM_MODEL_NAME_TAG = "YsmModelName";
+    public static final String YSM_ROULETTE_ANIM_TAG = "YsmRouletteAnim";
+    public static final String YSM_ROAMING_VARS_TAG = "YsmRoamingVars";
+
+    // 女仆默认属性
+    public static final String MODEL_ID_TAG = "ModelId";
     public static final String SOUND_PACK_ID_TAG = "SoundPackId";
     public static final String MAID_BACKPACK_TYPE = "MaidBackpackType";
     public static final String MAID_INVENTORY_TAG = "MaidInventory";
     public static final String MAID_BAUBLE_INVENTORY_TAG = "MaidBaubleInventory";
     public static final String EXPERIENCE_TAG = "MaidExperience";
-    private static final EntityDataAccessor<String> DATA_MODEL_ID = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.STRING);
+
+    // AI 超时检测
+    private static final long WARNING_TIME_NANOS = Duration.ofMillis(50L).toNanos();
+
+    // YSM 女仆兼容同步数据
     private static final EntityDataAccessor<Boolean> DATA_IS_YSM_MODEL = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<String> DATA_YSM_MODEL_ID = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<String> DATA_YSM_MODEL_TEXTURE = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Component> DATA_YSM_MODEL_NAME = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.COMPONENT);
+
+    // 女仆默认同步数据
+    private static final EntityDataAccessor<String> DATA_MODEL_ID = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<String> DATA_SOUND_PACK_ID = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<String> DATA_TASK = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Boolean> DATA_BEGGING = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.BOOLEAN);
@@ -186,8 +203,6 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     private static final EntityDataAccessor<String> BACKPACK_TYPE = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<ItemStack> BACKPACK_ITEM_SHOW = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.ITEM_STACK);
     private static final EntityDataAccessor<String> BACKPACK_FLUID = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.STRING);
-
-    private static final long WARNING_TIME_NANOS = Duration.ofMillis(50L).toNanos();
 
     // 游戏数据记录，包括赢棋次数和赢棋状态
     static final EntityDataAccessor<CompoundTag> GAME_SKILL = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.COMPOUND_TAG);
@@ -218,12 +233,13 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     private static final String SCHEDULE_MODE_TAG = "MaidScheduleMode";
     private static final String BACKPACK_DATA_TAG = "MaidBackpackData";
     private static final String STRUCTURE_SPAWN_TAG = "StructureSpawn";
-    @Deprecated
-    private static final String BACKPACK_LEVEL_TAG = "MaidBackpackLevel";
-    @Deprecated
-    private static final String RESTRICT_CENTER_TAG = "MaidRestrictCenter";
-
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
+
+    // 启用数据，仅用于旧版存档的迁移
+    private static final @Deprecated String BACKPACK_LEVEL_TAG = "MaidBackpackLevel";
+    private static final @Deprecated String RESTRICT_CENTER_TAG = "MaidRestrictCenter";
+
+    public final ItemStack[] handItemsForAnimation = new ItemStack[]{ItemStack.EMPTY, ItemStack.EMPTY};
 
     private final EntityArmorInvWrapper armorInvWrapper = new EntityArmorInvWrapper(this);
     private final EntityHandsInvWrapper handsInvWrapper = new MaidHandsInvWrapper(this);
@@ -238,9 +254,14 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     private final SchedulePos schedulePos;
     private final ItemCooldowns cooldowns;
 
-    public final ItemStack[] handItemsForAnimation = new ItemStack[]{ItemStack.EMPTY, ItemStack.EMPTY};
     public boolean guiOpening = false;
     public MaidFishingHook fishing = null;
+
+    public MaidRenderState renderState = MaidRenderState.ENTITY;
+    public boolean rouletteAnimPlaying = false;
+    public String rouletteAnim = "empty";
+    public boolean rouletteAnimDirty = false;
+    public Object2FloatOpenHashMap<String> roamingVars = new Object2FloatOpenHashMap<>();
 
     private List<SendEffectMessage.EffectData> effects = Lists.newArrayList();
     private IMaidTask task = TaskManager.getIdleTask();
@@ -302,11 +323,13 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(DATA_MODEL_ID, DEFAULT_MODEL_ID);
+
         this.entityData.define(DATA_IS_YSM_MODEL, false);
         this.entityData.define(DATA_YSM_MODEL_ID, StringUtils.EMPTY);
         this.entityData.define(DATA_YSM_MODEL_TEXTURE, StringUtils.EMPTY);
         this.entityData.define(DATA_YSM_MODEL_NAME, Component.empty());
+
+        this.entityData.define(DATA_MODEL_ID, DEFAULT_MODEL_ID);
         this.entityData.define(DATA_SOUND_PACK_ID, DefaultMaidSoundPack.getInitSoundPackId());
         this.entityData.define(DATA_TASK, TaskIdle.UID.toString());
         this.entityData.define(DATA_BEGGING, false);
@@ -435,6 +458,18 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
                 return false;
             });
         }
+        if (YsmCompat.isInstalled() && this.isYsmModel()) {
+            if (level.isClientSide) {
+                // 触发 ysm 模型的客户端事件
+                MinecraftForge.EVENT_BUS.post(new YsmMaidClientTickEvent(this));
+            }
+            // 同步 ysm 轮盘数据
+            if (!level.isClientSide && this.rouletteAnimDirty) {
+                this.rouletteAnimDirty = false;
+                SyncYsmMaidDataMessage message = new SyncYsmMaidDataMessage(this.getId(), this.rouletteAnim, this.rouletteAnimPlaying, this.roamingVars);
+                NetworkHandler.sendToTrackingEntity(message, this);
+            }
+        }
     }
 
     @Override
@@ -456,10 +491,10 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     @Override
     public void rideTick() {
         super.rideTick();
-        // 当玩家抱起女仆时，能够同步朝向
-        if (this.getVehicle() instanceof Player player) {
-            this.setYHeadRot(player.getYRot());
-            this.setYBodyRot(player.getYRot());
+        if (this.getVehicle() != null) {
+            Entity vehicle = this.getVehicle();
+            this.setYHeadRot(vehicle.getYRot());
+            this.setYBodyRot(vehicle.getYRot());
         }
     }
 
@@ -1154,10 +1189,17 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putString(MODEL_ID_TAG, getModelId());
+
         compound.putBoolean(IS_YSM_MODEL_TAG, isYsmModel());
         compound.putString(YSM_MODEL_ID_TAG, getYsmModelId());
         compound.putString(YSM_MODEL_TEXTURE_TAG, getYsmModelTexture());
         compound.putString(YSM_MODEL_NAME_TAG, Component.Serializer.toJson(getYsmModelName()));
+        compound.putString(YSM_ROULETTE_ANIM_TAG, rouletteAnim);
+
+        CompoundTag roamingVarsTag = new CompoundTag();
+        roamingVars.forEach(roamingVarsTag::putFloat);
+        compound.put(YSM_ROAMING_VARS_TAG, roamingVarsTag);
+
         compound.putString(SOUND_PACK_ID_TAG, getSoundPackId());
         compound.putString(TASK_TAG, getTask().getUid().toString());
         compound.put(MAID_INVENTORY_TAG, maidInv.serializeNBT());
@@ -1207,6 +1249,13 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         if (compound.contains(YSM_MODEL_NAME_TAG, Tag.TAG_STRING)) {
             MutableComponent component = Component.Serializer.fromJson(compound.getString(YSM_MODEL_NAME_TAG));
             setYsmModelName(Objects.requireNonNullElse(component, Component.empty()));
+        }
+        if (compound.contains(YSM_ROULETTE_ANIM_TAG, Tag.TAG_STRING)) {
+            rouletteAnim = compound.getString(YSM_ROULETTE_ANIM_TAG);
+        }
+        if (compound.contains(YSM_ROAMING_VARS_TAG, Tag.TAG_COMPOUND)) {
+            CompoundTag roamingVarsTag = compound.getCompound(YSM_ROAMING_VARS_TAG);
+            roamingVarsTag.getAllKeys().forEach(key -> roamingVars.put(key, roamingVarsTag.getFloat(key)));
         }
         if (compound.contains(SOUND_PACK_ID_TAG, Tag.TAG_STRING)) {
             setSoundPackId(compound.getString(SOUND_PACK_ID_TAG));
@@ -1731,9 +1780,26 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     @Override
     public void setYsmModel(String modelId, String texture, Component name) {
+        if (!modelId.equals(this.getYsmModelId())) {
+            this.roamingVars = new Object2FloatOpenHashMap<>();
+            this.stopRouletteAnim();
+        }
         this.setYsmModelId(modelId);
         this.setYsmModelTexture(texture);
         this.setYsmModelName(name);
+    }
+
+    @Override
+    public void playRouletteAnim(String rouletteAnim) {
+        this.rouletteAnimPlaying = true;
+        this.rouletteAnim = rouletteAnim;
+        this.rouletteAnimDirty = true;
+    }
+
+    @Override
+    public void stopRouletteAnim() {
+        this.rouletteAnimPlaying = false;
+        this.rouletteAnimDirty = true;
     }
 
     public String getSoundPackId() {

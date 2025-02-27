@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.util;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
 import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.List;
@@ -40,6 +41,23 @@ public final class ByteBufUtils {
             list.add(buf.readUtf());
         }
         return list;
+    }
+
+    public static void writeObject2FloatOpenHashMap(Object2FloatOpenHashMap<String> map, FriendlyByteBuf buf) {
+        buf.writeVarInt(map.size());
+        map.forEach((key, value) -> {
+            buf.writeUtf(key);
+            buf.writeFloat(value);
+        });
+    }
+
+    public static Object2FloatOpenHashMap<String> readObject2FloatOpenHashMap(FriendlyByteBuf buf) {
+        int size = buf.readVarInt();
+        Object2FloatOpenHashMap<String> map = new Object2FloatOpenHashMap<>();
+        for (int i = 0; i < size; i++) {
+            map.put(buf.readUtf(), buf.readFloat());
+        }
+        return map;
     }
 
     public static void writeSites(Map<String, List<String>> sites, FriendlyByteBuf buf) {

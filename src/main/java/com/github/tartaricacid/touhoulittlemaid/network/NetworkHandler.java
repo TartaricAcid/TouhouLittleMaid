@@ -113,10 +113,17 @@ public final class NetworkHandler {
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
         CHANNEL.registerMessage(43, OpenMaidAIDataScreenMessage.class, OpenMaidAIDataScreenMessage::encode, OpenMaidAIDataScreenMessage::decode, OpenMaidAIDataScreenMessage::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        // 仅安装 YSM 后才会发送此包
+        CHANNEL.registerMessage(44, SyncYsmMaidDataMessage.class, SyncYsmMaidDataMessage::encode, SyncYsmMaidDataMessage::decode, SyncYsmMaidDataMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 
     public static void sendToClientPlayer(Object message, Player player) {
         CHANNEL.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), message);
+    }
+
+    public static void sendToTrackingEntity(Object message, final Entity centerEntity) {
+        CHANNEL.send(PacketDistributor.TRACKING_ENTITY.with(() -> centerEntity), message);
     }
 
     public static void sendToNearby(Level world, BlockPos pos, Object toSend) {

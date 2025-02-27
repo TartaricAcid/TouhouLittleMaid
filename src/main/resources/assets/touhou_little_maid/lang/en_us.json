@@ -299,6 +299,8 @@
   "overlay.touhou_little_maid.ntr_item.tips": "Change someone else's maid into your own",
   "overlay.touhou_little_maid.remove_backpack.tips": "Remove the backpack from the maid",
   "overlay.touhou_little_maid.saddle.tips": "Right click to carry maid in yours arms",
+  "overlay.touhou_little_maid.can_ai_chat.tips": "Press the chat key (default is T) to have an AI conversation",
+  "overlay.touhou_little_maid.ysm_roulette_anim.tips": "Press the roulette anim key (default is Z) to open the roulette anim screen",
   "gui.touhou_little_maid.schedule.day": "Day Shift",
   "gui.touhou_little_maid.schedule.night": "Night Shift",
   "gui.touhou_little_maid.schedule.all": "All Day",

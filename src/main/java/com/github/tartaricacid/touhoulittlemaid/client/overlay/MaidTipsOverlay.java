@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.overlay;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.event.PressAIChatKeyEvent;
+import com.github.tartaricacid.touhoulittlemaid.compat.ysm.YsmCompat;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
@@ -48,6 +49,7 @@ public class MaidTipsOverlay implements IGuiOverlay {
 
         overlay.addSpecialTips("overlay.touhou_little_maid.ntr_item.tips", (item, maid, player) -> !maid.isOwnedBy(player) && EntityMaid.getNtrItem().test(item));
         overlay.addSpecialTips("overlay.touhou_little_maid.remove_backpack.tips", (item, maid, player) -> maid.isOwnedBy(player) && maid.hasBackpack() && item.is(Tags.Items.SHEARS));
+        overlay.addSpecialTips("overlay.touhou_little_maid.ysm_roulette_anim.tips", MaidTipsOverlay::checkYsmRouletteAnimCondition);
         overlay.addSpecialTips("overlay.touhou_little_maid.can_ai_chat.tips", MaidTipsOverlay::checkAiChatCondition);
 
         for (ILittleMaid littleMaid : TouhouLittleMaid.EXTENSIONS) {
@@ -56,6 +58,20 @@ public class MaidTipsOverlay implements IGuiOverlay {
 
         TIPS = ImmutableMap.copyOf(TIPS);
         SPECIAL_TIPS = ImmutableMap.copyOf(SPECIAL_TIPS);
+    }
+
+    private static boolean checkYsmRouletteAnimCondition(ItemStack item, EntityMaid maid, LocalPlayer player) {
+        if (!YsmCompat.isInstalled()) {
+            return false;
+        }
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.screen != null) {
+            return false;
+        }
+        if (!item.isEmpty()) {
+            return false;
+        }
+        return maid.isOwnedBy(player) && maid.isYsmModel();
     }
 
     private static boolean checkAiChatCondition(ItemStack item, EntityMaid maid, LocalPlayer player) {
