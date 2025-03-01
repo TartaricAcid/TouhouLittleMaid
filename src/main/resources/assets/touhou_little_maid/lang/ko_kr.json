@@ -1,5 +1,5 @@
 {
-  "ai.touhou_little_maid.chat.api_key.empty": "AI 채팅을 위한 API 키가 없습니다f",
+  "ai.touhou_little_maid.chat.api_key.empty": "AI 채팅을 위한 API 키가 없습니다",
   "ai.touhou_little_maid.chat.disable": "AI 채팅 기능이 비활성화되었습니다",
   "ai.touhou_little_maid.chat.input.tip": "텍스트를 입력하고 Enter 키를 눌러 전송합니다",
   "ai.touhou_little_maid.chat.config.tip": "AI 채팅 설정을 열려면 클릭하세요",
