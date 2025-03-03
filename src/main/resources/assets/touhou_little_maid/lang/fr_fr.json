@@ -652,8 +652,6 @@
   "task.touhou_little_maid.melon.condition.has_silk_touch": "Peut tenir un outil avec Toucher de Soie pour récolter la pastèque en entier",
   "task.touhou_little_maid.cocoa.desc": "Votre Maid plantera et récoltera les Fèves de cacao environnantes",
   "task.touhou_little_maid.honey.desc": "Votre Maid collectera le Miel des ruches environnantes",
-  "task.touhou_little_maid.honey.condition.has_bottle": "Doit tenir des cisailles dans sa main principale pour collecter des Rayons de miel",
-  "task.touhou_little_maid.honey.condition.has_shears": "Doit avoir des fioles dans son inventaire et aucunes cisailles en main pour collecter des Fioles de miel",
   "task.touhou_little_maid.grass.desc": "Votre Maid détruira et ramassera toutes les fleurs et herbes environnantes",
   "task.touhou_little_maid.snow.desc": "Votre Maid détruira la neige environnante, tenir une pelle lui permet de récupérer des boules de neige",
   "task.touhou_little_maid.feed.desc": "La Maid nourrira son Maitre quand il/elle à faim",
