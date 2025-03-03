@@ -688,8 +688,6 @@
   "task.touhou_little_maid.melon.condition.has_silk_touch": "오른손은 섬세한 손길 도구를 들고 있어야 합니다(수박 블럭 그대로 드롭 될 것 입니다)",
   "task.touhou_little_maid.cocoa.desc": "메이드는 주변에 코코아를 심거나 수확 할 것입니다",
   "task.touhou_little_maid.honey.desc": "메이드는 주변의 벌집에서 꿀을 모을 것 입니다",
-  "task.touhou_little_maid.honey.condition.has_bottle": "오른손은 가위(collecti honey combs)를 들고 있어야 합니다.",
-  "task.touhou_little_maid.honey.condition.has_shears": "인벤토리에 유리병을 가지고 있습니다  (꿀 채집)",
   "task.touhou_little_maid.grass.desc": "메이드는 주변의 꽃들이나 풀을 치울 것 입니다",
   "task.touhou_little_maid.snow.desc": "메이드는 주변 눈을 청소 할 것 입니다. 삽을 들고 있을때, 눈덩이를 모읍니다",
   "task.touhou_little_maid.feed.desc": "메이드는 마스터가 배가 고플때 음식을 먹일 것 입니다",
