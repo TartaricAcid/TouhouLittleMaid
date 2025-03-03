@@ -531,8 +531,6 @@
   "task.touhou_little_maid.melon.condition.has_silk_touch": "メイドがメインハンドにシルクタッチツールを持っている場合、ブロックのまま収穫します。",
   "task.touhou_little_maid.cocoa.desc": "メイドはカカオを周りに植えたり収穫したりします",
   "task.touhou_little_maid.honey.desc": "メイドは周囲のミツバチの巣から蜂蜜を採集します。",
-  "task.touhou_little_maid.honey.condition.has_bottle": "メインハンドにハサミを持っているとハニカムを集める",
-  "task.touhou_little_maid.honey.condition.has_shears": "インベントリにガラス瓶を持っているとハチミツを集める",
   "task.touhou_little_maid.grass.desc": "メイドは周囲の花や草をお掃除する",
   "task.touhou_little_maid.snow.desc": "メイドが雪かきをします、シャベルを手に持っている時は雪玉を集めます。",
   "task.touhou_little_maid.feed.desc": "ご主人様が空腹になった時、メイドは食事を取らせます",
