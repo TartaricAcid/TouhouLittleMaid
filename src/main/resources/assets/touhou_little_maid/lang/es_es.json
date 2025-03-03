@@ -605,8 +605,6 @@
   "task.touhou_little_maid.melon.condition.has_silk_touch": "La mano principal sostiene una herramienta toque de seda que hace que la sandía misma se deje caer",
   "task.touhou_little_maid.cocoa.desc": "La maid plantará o recolectará cacao alrededor",
   "task.touhou_little_maid.honey.desc": "La maid recogerá miel de las colmenas circundantes",
-  "task.touhou_little_maid.honey.condition.has_bottle": "La mano principal sostiene unas tijeras (Recoger panal de miel)",
-  "task.touhou_little_maid.honey.condition.has_shears": "Tiene una botella de vidrio (recoger miel)",
   "task.touhou_little_maid.grass.desc": "La maid limpiará las flores o pasto de los alrededores",
   "task.touhou_little_maid.snow.desc": "La maid limpiará la nieve circundante, si tiene una pala puede recoger bolas de nieve",
   "task.touhou_little_maid.feed.desc": "La maid alimentará con comida cuando el maestro tenga hambre",
