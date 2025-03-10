@@ -6,14 +6,14 @@ on:
     branches:
       - "1.21"
     paths:
-      - 'src/**'
+      - 'src/main/**'
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           ref: "1.21"
@@ -21,8 +21,8 @@ jobs:
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          distribution: 'microsoft'
           java-version: '21'
+          distribution: 'microsoft'
           server-id: github
           settings-path: ${{ github.workspace }}
 
@@ -33,16 +33,16 @@ jobs:
             ~/.gradle/caches
             ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+          restore-keys: ${{ runner.os }}-gradle-
 
       - name: Build with Gradle
         run: |
           chmod +x ./gradlew
           ./gradlew build
+
       - name: Create timestamp
         id: create_timestamp
-        run: echo "::set-output name=timestamp::$(date '+%Y%m%d-%H%M%S')"
+        run: echo "timestamp=$(date '+%Y-%m-%d-%H-%M-%S')" >> $GITHUB_OUTPUT
         shell: bash
 
       - name: Send file to Release
@@ -52,8 +52,7 @@ jobs:
           body: ${{ github.event.head_commit.message }}
           draft: false
           prerelease: true
-          files: |
-            ./build/libs/*.jar
+          files: ./build/libs/*.jar
 
       - name: Cleanup Gradle Cache
         run: |
