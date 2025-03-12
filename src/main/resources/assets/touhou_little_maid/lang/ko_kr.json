@@ -701,7 +701,6 @@
   "task.touhou_little_maid.feed_animal.condition.assault_weapon": "오른손은 공격 무기를 들고 있어야 합니다(초과 동물 처치)",
   "task.touhou_little_maid.extinguishing.desc": "메이드는 주변의 화재를 진압 할 것 입니다",
   "task.touhou_little_maid.extinguishing.condition.has_extinguisher": "오른손은 소화기를 들고 있어야 합니다",
-  "task.touhou_little_maid.board_games.desc": "주변의 오목판을 찾을 것 입니다",
   "task.touhou_little_maid.gun_attack.desc": "메이드는 TacZ 총을 사용할 수 있습니다",
   "task.touhou_little_maid.gun_attack.condition.has_tacz_gun": "오른손은 TacZ 총기를 들고 있어야 합니다.",
   "task.touhou_little_maid.fishing.desc": "메이드는 주변의 의자를 찾아 앉은 다음 낚시를 시작 할 것 입니다",
