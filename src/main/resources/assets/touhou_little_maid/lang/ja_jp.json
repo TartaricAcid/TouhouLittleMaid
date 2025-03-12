@@ -544,7 +544,6 @@
   "task.touhou_little_maid.feed_animal.condition.assault_weapon": "メインハンドに武器を持っていると、増えすぎた動物を減らします。",
   "task.touhou_little_maid.extinguishing.desc": "メイドは周囲の火を消そうとします",
   "task.touhou_little_maid.extinguishing.condition.has_extinguisher": "メイドが消火器を持っている",
-  "task.touhou_little_maid.board_games.desc": "メイドは近くの五目並べを探します",
   "task.touhou_little_maid.fishing.desc": "メイドは椅子やボートに座って釣りを始めます",
   "task.touhou_little_maid.fishing.condition.has_fishing_rod": "メインハンドに釣り竿を持っている",
   "button.touhou_little_maid.maid.mode.idle": "待機",
