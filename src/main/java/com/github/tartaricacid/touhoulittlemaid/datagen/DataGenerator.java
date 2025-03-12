@@ -1,10 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.datagen;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.datagen.tag.DamageTypeGenerator;
-import com.github.tartaricacid.touhoulittlemaid.datagen.tag.EntityTypeGenerator;
-import com.github.tartaricacid.touhoulittlemaid.datagen.tag.TagBlock;
-import com.github.tartaricacid.touhoulittlemaid.datagen.tag.TagItem;
+import com.github.tartaricacid.touhoulittlemaid.datagen.tag.*;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.api.distmarker.Dist;
@@ -56,6 +53,7 @@ public class DataGenerator {
                 packOutput -> new TagItem(packOutput, registries, blockTagsProvider.contentsGetter(), TouhouLittleMaid.MOD_ID, existingFileHelper));
         generator.addProvider(event.includeServer(), new DamageTypeGenerator(pack, event.getLookupProvider(), event.getExistingFileHelper()));
         generator.addProvider(event.includeServer(), new EntityTypeGenerator(pack, event.getLookupProvider(), event.getExistingFileHelper()));
+        generator.addProvider(event.includeServer(), new TagRecipeSerializer(pack, event.getLookupProvider(), event.getExistingFileHelper()));
 
         // Registry Based Stuff
         DatapackBuiltinEntriesProvider datapackProvider = new RegistryDataGenerator(pack, event.getLookupProvider());
