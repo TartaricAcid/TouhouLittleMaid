@@ -618,7 +618,6 @@
   "task.touhou_little_maid.feed_animal.condition.assault_weapon": "La mano principal tiene un arma de asalto (mata a criaturas excedentes)",
   "task.touhou_little_maid.extinguishing.desc": "La linda maid intentara ser bombero apagando el fuego cerca de ella",
   "task.touhou_little_maid.extinguishing.condition.has_extinguisher": "Tiene que tener un extintor en la mano principal, no querras que apague el fuego con las manos",
-  "task.touhou_little_maid.board_games.desc": "La maid buscará alrededor del tablero gomoku",
   "task.touhou_little_maid.gun_attack.desc": "La maid es capaz de usar la pistola TacZ",
   "task.touhou_little_maid.gun_attack.condition.has_tacz_gun": "La mano principal tiene una pistola TacZ",
   "task.touhou_little_maid.fishing.desc": "La maid buscará una silla alrededor y se sentará sobre ella, y luego comenzará a pescar",
