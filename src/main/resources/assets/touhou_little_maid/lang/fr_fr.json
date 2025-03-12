@@ -665,7 +665,6 @@
   "task.touhou_little_maid.feed_animal.condition.assault_weapon": "Peut tenir une arme de mêlée dans sa main principale afin de tuer le surplus d'animaux avant de les nourrir (Limite définie dans les options du mod)",
   "task.touhou_little_maid.extinguishing.desc": "Votre Maid éteindra les incendies autour d'elle",
   "task.touhou_little_maid.extinguishing.condition.has_extinguisher": "Doit tenir un extincteur",
-  "task.touhou_little_maid.board_games.desc": "Votre Maid cherchera un Gomoku ou un jeu d'échecs à proximité pour jouer avec vous",
   "task.touhou_little_maid.gun_attack.desc": "Votre Maid utilisera les armes à feu de TacZ",
   "task.touhou_little_maid.gun_attack.condition.has_tacz_gun": "Doit tenir une arme à feu de TacZ",
   "task.touhou_little_maid.fishing.desc": "La Maid va chercher une chaise près d'elle et s'asseoir dessus pour ensuite commencer à pêcher",
