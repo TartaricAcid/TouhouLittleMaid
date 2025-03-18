@@ -220,6 +220,10 @@ dependencies {
 
     runtimeOnly fg.deobf("maven.modrinth:farmers-delight:1.20.1-1.2.6-forge")
 
+    //Debug only
+    compileOnly fg.deobf("curse.maven:maid-storage-manager-1210244:6315697")
+    runtimeOnly fg.deobf("curse.maven:maid-storage-manager-1210244:6315697")
+
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 

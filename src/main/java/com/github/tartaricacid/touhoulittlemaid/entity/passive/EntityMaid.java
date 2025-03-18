@@ -572,8 +572,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             InteractMaidEvent event = new InteractMaidEvent(playerIn, this, stack);
             // 利用短路原理，逐个触发对应的交互事件
             if (MinecraftForge.EVENT_BUS.post(event)
-                || stack.interactLivingEntity(playerIn, this, hand).consumesAction()
-                || openMaidGui(playerIn)) {
+                    || stack.interactLivingEntity(playerIn, this, hand).consumesAction()
+                    || openMaidGui(playerIn)) {
                 return InteractionResult.SUCCESS;
             }
         } else {
@@ -2326,7 +2326,11 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
      */
     @Override
     public boolean onClimbable() {
-        boolean result = super.onClimbable();
+        boolean result = false;
+        Path path = this.navigation.getPath();
+        if (path != null && !path.isDone() && path.getNextNodePos().getY() > this.blockPosition().getY()) {
+            result = super.onClimbable();
+        }
         if (result) {
             // 爬梯时，禁止旋转
             this.getLastClimbablePos().ifPresent(climbablePos -> {
@@ -2376,8 +2380,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     @Override
     public void travel(Vec3 travelVector) {
-        if (this.isControlledByLocalInstance() && this.isInWater() && this.getSwimManager().wantToSwim()) {
-            this.moveRelative(0.01F, travelVector);
+        if (this.isControlledByLocalInstance() && this.isInWater() && this.getSwimManager().wantToSwim()) {            this.moveRelative(0.01F, travelVector);
             this.move(MoverType.SELF, this.getDeltaMovement());
             this.setDeltaMovement(this.getDeltaMovement().scale(0.9));
         } else {
