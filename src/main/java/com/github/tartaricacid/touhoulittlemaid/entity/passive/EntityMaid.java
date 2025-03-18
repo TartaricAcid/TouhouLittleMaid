@@ -259,9 +259,12 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     private final FavorabilityManager favorabilityManager;
     private final MaidScriptBookManager scriptBookManager;
     private final MaidSwimManager swimManager;
+    //控制不同的navigation切换的条件以及切换后变更女仆相关的AI控制参数
+    private final MaidNavigationManager navigationManager;
     private final MaidAIChatManager aiChatManager;
     private final SchedulePos schedulePos;
     private final ItemCooldowns cooldowns;
+    ;
 
     public boolean guiOpening = false;
     public MaidFishingHook fishing = null;
@@ -310,6 +313,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
         this.moveControl = new MaidMoveControl(this);
         this.swimManager = new MaidSwimManager(this);
+        this.navigationManager = new MaidNavigationManager(this);
 
         this.cooldowns = new ItemCooldowns();
     }
@@ -536,6 +540,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     public void aiStep() {
         super.aiStep();
         this.updateSwingTime();
+        this.navigationManager.tick();
         if (!level.isClientSide) {
             ChatBubbleManger.tick(this);
             if (this.backpackData != null) {
@@ -2328,8 +2333,29 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     public boolean onClimbable() {
         boolean result = false;
         Path path = this.navigation.getPath();
-        if (path != null && !path.isDone() && path.getNextNodePos().getY() > this.blockPosition().getY()) {
+        if (path != null && !path.isDone()) {
+            //女仆是要爬梯子而不是路过梯子，那么也就意味着当前节点的前后必有一个节点是同坐标的
+            for (int i = Math.max(0, path.getNextNodeIndex() - 3); i < Math.min(path.getNodeCount(), path.getNextNodeIndex() + 3) - 1; i++) {
+                BlockPos pos1 = path.getNodePos(i);
+                BlockPos pos2 = path.getNodePos(i + 1);
+                if (pos1.getX() == pos2.getX() && pos1.getZ() == pos2.getZ()) {
+                    result = true;
+                    break;
+                }
+            }
+        }
+        if (result) {
             result = super.onClimbable();
+            if (!result && !this.isSpectator()) {
+                Optional<BlockPos> ladderPos = net.minecraftforge.common.ForgeHooks.isLivingOnLadder(this.getFeetBlockState(),
+                        level(),
+                        blockPosition().below(),
+                        this);
+                if (ladderPos.isPresent()) {
+                    //TODO: 这里有一个lastClimbablePos权限为Private无法访问。是否重要？不明
+                    result = true;
+                }
+            }
         }
         if (result) {
             // 爬梯时，禁止旋转
@@ -2375,14 +2401,20 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     @Override
     @SuppressWarnings("deprecation")
     public boolean isPushedByFluid() {
-        return !this.isSwimming();
+        //想要游泳的时候，可能会有向水下巡路
+        return !this.getSwimManager().wantToSwim();
     }
 
     @Override
     public void travel(Vec3 travelVector) {
-        if (this.isControlledByLocalInstance() && this.isInWater() && this.getSwimManager().wantToSwim()) {            this.moveRelative(0.01F, travelVector);
-            this.move(MoverType.SELF, this.getDeltaMovement());
-            this.setDeltaMovement(this.getDeltaMovement().scale(0.9));
+        if (this.isControlledByLocalInstance() && this.isInWater()) {
+            if (this.getSwimManager().wantToSwim()) {
+                this.moveRelative(0.01F, travelVector);
+                this.move(MoverType.SELF, this.getDeltaMovement());
+                this.setDeltaMovement(this.getDeltaMovement().scale(0.9));
+            } else {
+                super.travel(travelVector.add(0, 0.5, 0));
+            }
         } else {
             super.travel(travelVector);
         }
@@ -2453,5 +2485,9 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     public MaidAIChatManager getAiChatManager() {
         return aiChatManager;
+    }
+
+    public MaidNavigationManager getNavigationManager() {
+        return navigationManager;
     }
 }
