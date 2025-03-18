@@ -28,7 +28,7 @@ public class MaidSwimManager {
      */
     private BlockPos swimTarget = null;
     /**
-     * 是否已经准备登陆
+     * 是否已经准备登陆，登陆时基于额外的加速度
      */
     private boolean readyToLand = false;
 

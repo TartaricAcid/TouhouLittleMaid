@@ -37,6 +37,7 @@ public class MaidNavigationManager {
             if (mode != Mode.WATER && maid.isInWater() && shouldStartOrStopSwim(5)) {
                 if (switchToNavigation(Mode.WATER, waterNavigation)) {
                     maid.getSwimManager().setWantToSwim(true);
+                    maid.getSwimManager().setReadyToLand(false);
                 }
             } else if (mode == Mode.WATER) {
                 BlockPos endPos = getEndPos(waterNavigation);
@@ -45,14 +46,16 @@ public class MaidNavigationManager {
                         //即将走到水中寻路的尽头，你的女仆是否还需要游泳呢？
                         //a)如果最终女仆是要上岸的，那么这时就没必要继续游泳了。立刻停止并切换到常规模式
                         if (!level.isWaterAt(endPos)) {
-                            if(switchToNavigation(Mode.GROUND, basicNavigation)){
+                            if (switchToNavigation(Mode.GROUND, basicNavigation)) {
                                 maid.getSwimManager().setReadyToLand(true);
                                 maid.getSwimManager().setWantToSwim(false);
                             }
                         } else if (isWaterSurface(endPos)) {
                             maid.getSwimManager().setWantToSwim(false);
+                            maid.getSwimManager().setReadyToLand(false);
                         } else {
                             maid.getSwimManager().setWantToSwim(true);
+                            maid.getSwimManager().setReadyToLand(false);
                         }
                     } else if (!maid.isInWater()) {
                         //b)女仆上岸了，立刻切换到常规寻路
@@ -70,7 +73,6 @@ public class MaidNavigationManager {
         //其他情况，如女仆进行一次传送，可能导致寻路中断，因此需要重新设置女仆是否要游泳
         if (mode != Mode.WATER) {
             maid.getSwimManager().setWantToSwim(false);
-            maid.getSwimManager().setReadyToLand(false);
         }
     }
 
@@ -82,12 +84,14 @@ public class MaidNavigationManager {
                 if (navigation.moveTo(path, ((INavigationMixin) currentNavigation).touhou_little_maid$getSpeedModifier())) {
                     maid.setNavigation(navigation);
                     this.mode = mode;
+                    currentNavigation.stop();
                     return true;
                 }
             }
         } else {
             maid.setNavigation(navigation);
             navigation.stop();
+            currentNavigation.stop();
             return true;
         }
         return false;
@@ -113,7 +117,9 @@ public class MaidNavigationManager {
     }
 
     public boolean isWaterSurface(BlockPos pos) {
-        return level.isWaterAt(pos) && level.getBlockState(pos.above()).isAir();
+        //向上两层（主人浮在水上的话target可能是-1Y的）
+        return (level.isWaterAt(pos) && level.getBlockState(pos.above()).isAir())
+                || (level.isWaterAt(pos.above()) && level.getBlockState(pos.above(2)).isAir());
     }
 
     public @Nullable BlockPos getEndPos(PathNavigation navigation) {

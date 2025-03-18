@@ -2347,7 +2347,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         if (result) {
             result = super.onClimbable();
             if (!result && !this.isSpectator()) {
-                Optional<BlockPos> ladderPos = net.minecraftforge.common.ForgeHooks.isLivingOnLadder(this.getFeetBlockState(),
+                Optional<BlockPos> ladderPos = net.minecraftforge.common.ForgeHooks.isLivingOnLadder(
+                        level.getBlockState(blockPosition().below()),
                         level(),
                         blockPosition().below(),
                         this);
@@ -2401,19 +2402,20 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     @Override
     @SuppressWarnings("deprecation")
     public boolean isPushedByFluid() {
-        //想要游泳的时候，可能会有向水下巡路
         return !this.getSwimManager().wantToSwim();
     }
 
     @Override
     public void travel(Vec3 travelVector) {
-        if (this.isControlledByLocalInstance() && this.isInWater()) {
+        if (this.isControlledByLocalInstance() && isInWater()) {
             if (this.getSwimManager().wantToSwim()) {
                 this.moveRelative(0.01F, travelVector);
                 this.move(MoverType.SELF, this.getDeltaMovement());
                 this.setDeltaMovement(this.getDeltaMovement().scale(0.9));
+            } else if (getSwimManager().isReadyToLand() || isUnderWater()) {
+                super.travel(travelVector.scale(1.2).add(0, 0.5, 0));
             } else {
-                super.travel(travelVector.add(0, 0.5, 0));
+                super.travel(travelVector.scale(1.2).add(0, 0.05, 0));
             }
         } else {
             super.travel(travelVector);
