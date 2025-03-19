@@ -1,9 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.event;
 
+import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MiscConfig;
 import com.github.tartaricacid.touhoulittlemaid.data.MaidNumAttachment;
 import com.github.tartaricacid.touhoulittlemaid.data.PowerAttachment;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameRules;
@@ -12,6 +12,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
+import static com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment.MAID_NUM;
 import static com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment.POWER_NUM;
 
 @EventBusSubscriber
@@ -29,13 +30,14 @@ public class EntityDeathEvent {
         Player newEntity = event.getEntity();
         Player oldEntity = event.getOriginal();
         boolean wasDeath = event.isWasDeath();
-        boolean isKeep = newEntity.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY);
-        if (isKeep || !wasDeath) {
-            PowerAttachment power = oldEntity.getData(POWER_NUM);
-            MaidNumAttachment maidNum = oldEntity.getData(InitDataAttachment.MAID_NUM);
+        boolean isKeep = newEntity.level.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY);
 
-            newEntity.setData(POWER_NUM, power);
-            newEntity.setData(InitDataAttachment.MAID_NUM, maidNum);
+        PowerAttachment power = oldEntity.getData(POWER_NUM);
+        MaidNumAttachment maidNum = oldEntity.getData(MAID_NUM);
+        if (wasDeath && !isKeep) {
+            power.min(MiscConfig.PLAYER_DEATH_LOSS_POWER_POINT.get().floatValue());
         }
+        newEntity.setData(POWER_NUM, power);
+        newEntity.setData(MAID_NUM, maidNum);
     }
 }
