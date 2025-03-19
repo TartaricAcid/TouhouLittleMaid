@@ -82,6 +82,8 @@ public class MaidNavigationManager {
             Path path = navigation.createPath(currentNavigation.getPath().getEndNode().asBlockPos(), 0);
             if (path != null && path.canReach()) {
                 if (navigation.moveTo(path, ((INavigationMixin) currentNavigation).touhou_little_maid$getSpeedModifier())) {
+                    //删除第一个寻路节点，有助于路径切换更加平滑（第一个巡路点的center可能会出现在身后）
+                    path.advance();
                     maid.setNavigation(navigation);
                     this.mode = mode;
                     currentNavigation.stop();
@@ -126,5 +128,13 @@ public class MaidNavigationManager {
         if (navigation.getPath() == null) return null;
         if (navigation.getPath().getEndNode() == null) return null;
         return navigation.getPath().getEndNode().asBlockPos();
+    }
+    public void resetNavigation(){
+        maid.setNavigation(basicNavigation);
+        basicNavigation.stop();
+        waterNavigation.stop();
+        maid.getSwimManager().setWantToSwim(false);
+        maid.getSwimManager().setReadyToLand(false);
+        mode = Mode.GROUND;
     }
 }

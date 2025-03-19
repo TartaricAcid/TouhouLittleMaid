@@ -2332,6 +2332,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     @Override
     public boolean onClimbable() {
         boolean result = false;
+        boolean hasNonLadderTarget = false;
         Path path = this.navigation.getPath();
         if (path != null && !path.isDone()) {
             //女仆是要爬梯子而不是路过梯子，那么也就意味着当前节点的前后必有一个节点是同坐标的
@@ -2342,6 +2343,18 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
                     result = true;
                     break;
                 }
+            }
+            //女仆路径上应当有一个非梯子的路径节点，这样女仆不会在梯子上结束寻路（避免耐摔)
+            for (int i = path.getNextNodeIndex(); i < Math.min(path.getNodeCount(), path.getNextNodeIndex() + 5) - 1; i++) {
+                BlockPos pos1 = path.getNodePos(i);
+                BlockPos pos2 = path.getNodePos(i + 1);
+                if (pos1.getX() != pos2.getX() || pos1.getZ() != pos2.getZ()) {
+                    hasNonLadderTarget = true;
+                    break;
+                }
+            }
+            if (!hasNonLadderTarget) {
+                result = false;
             }
         }
         if (result) {
