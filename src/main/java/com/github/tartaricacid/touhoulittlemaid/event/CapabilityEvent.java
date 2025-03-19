@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.GameRules;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
@@ -47,7 +48,8 @@ public final class CapabilityEvent {
         LazyOptional<PowerCapability> oldPowerCap = getPowerCap(original);
         LazyOptional<PowerCapability> newPowerCap = getPowerCap(newPlayer);
         newPowerCap.ifPresent((newPower) -> oldPowerCap.ifPresent((oldPower) -> {
-            if (event.isWasDeath()) {
+            boolean keep = newPlayer.level.getGameRules().getRule(GameRules.RULE_KEEPINVENTORY).get();
+            if (event.isWasDeath() && !keep) {
                 newPower.set(oldPower.get() - MiscConfig.PLAYER_DEATH_LOSS_POWER_POINT.get().floatValue());
             } else {
                 newPower.set(oldPower.get());
