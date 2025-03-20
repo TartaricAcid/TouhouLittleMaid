@@ -2,6 +2,8 @@ package com.github.tartaricacid.touhoulittlemaid.entity.ai.navigation;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DoorBlock;
@@ -11,6 +13,7 @@ import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.level.pathfinder.PathfindingContext;
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
  * 该方法仅修改了栅栏门和梯子的寻路判断
@@ -97,6 +100,11 @@ public class MaidNodeEvaluator extends WalkNodeEvaluator {
             pathType = PathType.WALKABLE;
         } else {
             pathType = context.getPathTypeFromState(pX, pY, pZ);
+            // 判断目标方块的碰撞高度。有些半透明方块拥有超过 0.5（台阶）的高度，此时女仆是不能从其中穿过的，需要将其视为不可通行方块
+            VoxelShape shape = blockState.getCollisionShape(level, pos);
+            if (pathType != BlockPathTypes.BLOCKED && shape.max(Direction.Axis.Y) - shape.min(Direction.Axis.Y) > 0.5) {
+                pathType = BlockPathTypes.BLOCKED;
+            }
         }
         if (pathType == PathType.DOOR_WOOD_CLOSED && this.mob instanceof EntityMaid maid && !this.canOpenDoor(blockState.getBlock(), maid)) {
             pathType = PathType.DOOR_IRON_CLOSED;

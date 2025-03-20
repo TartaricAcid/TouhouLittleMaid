@@ -8,6 +8,16 @@
     "CropBlockAccessor", "EntityAccessor", "EntityMixin", "FenceGateBlockAccessor", "FishingHookPredicateMixin",
     "MixinArrowEntity",
     "MixinCrossbowItem", "MixinStructureTemplate", "MixinThrownTrident", "PlayerMixin"
+    "CropBlockAccessor",
+    "EntityAccessor",
+    "EntityMixin",
+    "FenceGateBlockAccessor",
+    "FishingHookPredicateMixin",
+    "MixinArrowEntity",
+    "MixinStructureTemplate",
+    "MixinThrownTrident",
+    "NavigationMixin",
+    "PlayerMixin"
   ],
   "client": [
     "client.HumanoidModelMixin", "client.ItemPropertiesMixin", "client.LanguageMixin",

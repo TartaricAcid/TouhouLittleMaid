@@ -35,6 +35,7 @@ public class MaidFollowOwnerTask extends Behavior<EntityMaid> {
         if (ownerStateConditions(owner) && maidStateConditions(maid) && !maid.closerThan(owner, startDistance)) {
             if (!maid.closerThan(owner, minTeleportDistance)) {
                 teleportToOwner(maid, owner);
+                maid.getNavigationManager().resetNavigation();
             } else if (!ownerIsWalkTarget(maid, owner)) {
                 BehaviorUtils.setWalkAndLookTargetMemories(maid, owner, speedModifier, stopDistance);
             }
