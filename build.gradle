@@ -212,6 +212,17 @@ dependencies {
     implementation fg.deobf("maven.modrinth:curios:1.19.2-5.1.6.3-forge")
 
     implementation fg.deobf("curse.maven:aquaculture-60028:5320128")
+    // runtimeOnly fg.deobf("maven.modrinth:embeddium:0.3.31+mc1.20.1")
+    // runtimeOnly fg.deobf('maven.modrinth:oculus:1.20.1-1.7.0')
+
+    // runtimeOnly fg.deobf("maven.modrinth:common-network:1.0.5-1.20.1")
+    // runtimeOnly fg.deobf("maven.modrinth:just-more-cakes:1.18.1-forge")
+    // runtimeOnly fg.deobf("maven.modrinth:spawn-animations:1.10+mod-forge")
+
+    runtimeOnly fg.deobf("maven.modrinth:farmers-delight:1.20.1-1.2.6-forge")
+//
+//    //Debug only
+//    runtimeOnly fg.deobf("curse.maven:maid-storage-manager-1210244:6315697")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }

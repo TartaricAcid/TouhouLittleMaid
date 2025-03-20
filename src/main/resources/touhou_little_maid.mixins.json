@@ -10,7 +10,17 @@
     "EntityMixin",
     "MixinArrowEntity",
     "MixinStructureTemplate",
-    "MixinThrownTrident", "PlayerMixin"
+    "MixinThrownTrident",
+    "PlayerMixin",
+    "CropBlockAccessor",
+    "EntityAccessor",
+    "EntityMixin",
+    "FishingHookPredicateMixin",
+    "MixinArrowEntity",
+    "MixinStructureTemplate",
+    "MixinThrownTrident",
+    "NavigationMixin",
+    "PlayerMixin"
   ],
   "client": [
     "client.HumanoidModelMixin",

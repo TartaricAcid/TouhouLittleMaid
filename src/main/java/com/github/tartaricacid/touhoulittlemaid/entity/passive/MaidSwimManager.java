@@ -1,18 +1,16 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.passive;
 
-import com.github.tartaricacid.touhoulittlemaid.entity.ai.navigation.MaidPathNavigation;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.Pose;
-import net.minecraft.world.entity.ai.navigation.AmphibiousPathNavigation;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import org.jetbrains.annotations.Nullable;
 
 public class MaidSwimManager {
     /**
      * 游泳碰撞箱
      */
     private static final EntityDimensions SWIMMING_DIMENSIONS = EntityDimensions.scalable(0.6F, 0.6F);
-    private final MaidPathNavigation groundNavigation;
-    private final AmphibiousPathNavigation waterNavigation;
     private final EntityMaid maid;
     /**
      * 正在食用可提供水下呼吸的食物标志位
@@ -23,10 +21,18 @@ public class MaidSwimManager {
      */
     private boolean wantToSwim = false;
 
+    /**
+     * 游泳目标点，控制视角用
+     */
+    private BlockPos swimTarget = null;
+    /**
+     * 是否已经准备登陆，登陆时基于额外的加速度
+     */
+    private boolean readyToLand = false;
+
+
     public MaidSwimManager(EntityMaid maid) {
         this.maid = maid;
-        this.groundNavigation = new MaidPathNavigation(maid, maid.level);
-        this.waterNavigation = new AmphibiousPathNavigation(maid, maid.level);
         maid.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
     }
 
@@ -44,13 +50,6 @@ public class MaidSwimManager {
      */
     public void updateSwimming() {
         if (!maid.level.isClientSide) {
-            if (maid.isEffectiveAi() && maid.isInWater()) {
-                maid.setNavigation(this.waterNavigation);
-            } else {
-                maid.setNavigation(this.groundNavigation);
-                this.setWantToSwim(false);
-            }
-
             this.updatePose();
         }
     }
@@ -89,5 +88,25 @@ public class MaidSwimManager {
 
     public EntityDimensions getSwimmingDimensions() {
         return SWIMMING_DIMENSIONS;
+    }
+
+    public void setSwimTarget(BlockPos pos) {
+        this.swimTarget = pos;
+    }
+
+    @Nullable
+    public BlockPos getSwimTarget() {
+        if (!wantToSwim()) {
+            return null;
+        }
+        return swimTarget;
+    }
+
+    public void setReadyToLand(boolean readyToLand) {
+        this.readyToLand = readyToLand;
+    }
+
+    public boolean isReadyToLand() {
+        return readyToLand;
     }
 }
