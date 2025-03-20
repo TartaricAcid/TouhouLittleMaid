@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.ai.navigation.MaidPathNav
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.navigation.MaidUnderWaterPathNavigation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.navigation.AmphibiousPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.level.Level;
@@ -43,6 +44,16 @@ public class MaidNavigationManager {
                     maid.getSwimManager().setWantToSwim(true);
                     maid.getSwimManager().setReadyToLand(false);
                 }
+            } else if (mode != Mode.WATER && maid.isUnderWater() && !canFloat(maid.blockPosition().above())) {
+                if (switchToNavigation(Mode.WATER, waterNavigation)) {
+                    maid.getSwimManager().setWantToSwim(true);
+                    maid.getSwimManager().setReadyToLand(false);
+                }
+            } else if (mode != Mode.WATER && targetingUnderWater()) {
+                if (switchToNavigation(Mode.WATER, waterNavigation)) {
+                    maid.getSwimManager().setWantToSwim(false);
+                    maid.getSwimManager().setReadyToLand(false);
+                }
             } else if (mode == Mode.WATER) {
                 BlockPos endPos = getEndPos(waterNavigation);
                 if (endPos != null) {
@@ -67,6 +78,9 @@ public class MaidNavigationManager {
                             maid.getSwimManager().setWantToSwim(false);
                             maid.getSwimManager().setReadyToLand(false);
                         }
+                    } else if(!maid.isUnderWater()){
+                        // 女仆半身入水（那貌似游泳就不大礼貌了）
+                        maid.getSwimManager().setWantToSwim(false);
                     } else {
                         maid.getSwimManager().setWantToSwim(true);
                         maid.getSwimManager().setSwimTarget(endPos);
@@ -79,6 +93,13 @@ public class MaidNavigationManager {
             maid.getSwimManager().setWantToSwim(false);
         }
     }
+
+    private boolean targetingUnderWater() {
+        if (!maid.getBrain().hasMemoryValue(MemoryModuleType.WALK_TARGET))
+            return false;
+        return !isWaterSurface(maid.getBrain().getMemory(MemoryModuleType.WALK_TARGET).get().getTarget().currentBlockPosition());
+    }
+
 
     @SuppressWarnings("all")
     private boolean switchToNavigation(Mode mode, PathNavigation navigation) {
@@ -115,6 +136,10 @@ public class MaidNavigationManager {
             }
         }
         return true;
+    }
+
+    private boolean canFloat(BlockPos pos) {
+        return (level.isWaterAt(pos) && level.getBlockState(pos.above()).isAir());
     }
 
     public PathNavigation getBasicNavigation() {

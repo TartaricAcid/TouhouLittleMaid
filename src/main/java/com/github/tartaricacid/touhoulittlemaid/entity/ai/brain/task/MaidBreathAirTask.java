@@ -231,12 +231,8 @@ public class MaidBreathAirTask extends Behavior<EntityMaid> {
     // 提供空气的判断
     //改：反正女仆也钻不进一格的高度（寻路困难），直接判断两格的空气，避免寻路判断发生的故障
     private boolean givesAir(EntityMaid maid, BlockPos pos) {
-        return blockGivesAir(maid, pos) && blockGivesAir(maid, pos.above());
-    }
-
-    private boolean blockGivesAir(EntityMaid maid, BlockPos pos) {
         Level level = maid.level;
         BlockState blockstate = level.getBlockState(pos);
-        return (level.getFluidState(pos).isEmpty() || blockstate.is(Blocks.BUBBLE_COLUMN));
+        return (level.getFluidState(pos).isEmpty() || blockstate.is(Blocks.BUBBLE_COLUMN) && blockstate.getBlock().isPathfindable(blockstate, level, pos, PathComputationType.LAND));
     }
 }

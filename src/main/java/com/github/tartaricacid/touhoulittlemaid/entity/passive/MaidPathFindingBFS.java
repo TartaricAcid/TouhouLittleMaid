@@ -33,7 +33,6 @@ public class MaidPathFindingBFS {
         this.nodeEvaluator = nodeEvaluator;
         this.centerPos = maid.blockPosition();
         this.maxDistance = maxDistance;
-        this.cachePos.add(this.centerPos);
 
         int offset = (int) Math.ceil(this.maxDistance);
         PathNavigationRegion region = new PathNavigationRegion(level,
@@ -42,12 +41,13 @@ public class MaidPathFindingBFS {
         nodeEvaluator.prepare(region, maid);
         Node start = nodeEvaluator.getStart();
         if (start != null) {
+            this.cachePos.add(start.asBlockPos());
             this.queueNode.add(start);
         }
     }
 
     private boolean canPathReachInternal(BlockPos pos) {
-        return this.cachePos.contains(pos) || this.cachePos.contains(pos.above()) || this.cachePos.contains(pos.below());
+        return this.cachePos.contains(pos) || this.cachePos.contains(pos.above());
     }
 
     public boolean canPathReach(BlockPos pos) {
