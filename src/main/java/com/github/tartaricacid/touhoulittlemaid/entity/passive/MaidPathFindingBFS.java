@@ -24,11 +24,15 @@ public class MaidPathFindingBFS {
 
     private boolean isFinished = false;
 
-    @SuppressWarnings("all")
     public MaidPathFindingBFS(NodeEvaluator nodeEvaluator, ServerLevel level, EntityMaid maid) {
+        this(nodeEvaluator, level, maid, maid.searchRadius());
+    }
+
+    @SuppressWarnings("all")
+    public MaidPathFindingBFS(NodeEvaluator nodeEvaluator, ServerLevel level, EntityMaid maid, float maxDistance) {
         this.nodeEvaluator = nodeEvaluator;
         this.centerPos = maid.blockPosition();
-        this.maxDistance = maid.searchRadius();
+        this.maxDistance = maxDistance;
         this.cachePos.add(this.centerPos);
 
         int offset = (int) Math.ceil(this.maxDistance);
@@ -81,5 +85,10 @@ public class MaidPathFindingBFS {
             cachePos.add(tmpNode[i].asBlockPos());
             queueNode.add(tmpNode[i]);
         }
+    }
+
+    public void finish() {
+        this.isFinished = true;
+        this.nodeEvaluator.done();
     }
 }

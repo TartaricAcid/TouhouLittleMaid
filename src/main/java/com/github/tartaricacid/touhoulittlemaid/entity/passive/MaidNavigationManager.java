@@ -2,11 +2,16 @@ package com.github.tartaricacid.touhoulittlemaid.entity.passive;
 
 import com.github.tartaricacid.touhoulittlemaid.api.mixin.INavigationMixin;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.navigation.MaidPathNavigation;
+import com.github.tartaricacid.touhoulittlemaid.entity.ai.navigation.MaidUnderWaterPathNavigation;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.navigation.AmphibiousPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.pathfinder.AmphibiousNodeEvaluator;
+import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.level.pathfinder.PathFinder;
 import org.jetbrains.annotations.Nullable;
 
 public class MaidNavigationManager {
@@ -25,7 +30,8 @@ public class MaidNavigationManager {
         this.maid = maid;
         this.level = maid.level;
         this.basicNavigation = new MaidPathNavigation(maid, maid.level);
-        this.waterNavigation = new AmphibiousPathNavigation(maid, maid.level);
+        this.waterNavigation = new MaidUnderWaterPathNavigation(maid, maid.level);
+
         maid.setNavigation(basicNavigation);
     }
 
@@ -122,7 +128,7 @@ public class MaidNavigationManager {
     public boolean isWaterSurface(BlockPos pos) {
         // 向上两层（主人浮在水上的话 target 可能是 -1Y 的）
         return (level.isWaterAt(pos) && level.getBlockState(pos.above()).isAir())
-               || (level.isWaterAt(pos.above()) && level.getBlockState(pos.above(2)).isAir());
+                || (level.isWaterAt(pos.above()) && level.getBlockState(pos.above(2)).isAir());
     }
 
     @Nullable

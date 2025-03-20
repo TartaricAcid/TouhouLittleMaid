@@ -1,33 +1,42 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.MaidPathFindingBFS;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.BaubleItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.SpawnParticleMessage;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.behavior.Behavior;
+import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PotionItem;
 import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraftforge.items.wrapper.RangedWrapper;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 女仆在水下，空气值不足时，会尝试吃任何可以补充空气的东西
  */
-public class MaidBreathAirEatenTask extends Behavior<EntityMaid> {
+public class MaidBreathAirTask extends Behavior<EntityMaid> {
     private static final int MAX_PROBABILITY = 5;
 
-    public MaidBreathAirEatenTask() {
+    public MaidBreathAirTask() {
         super(ImmutableMap.of());
     }
 
@@ -36,6 +45,13 @@ public class MaidBreathAirEatenTask extends Behavior<EntityMaid> {
         // 正在食用可呼吸的食物
         if (maid.getSwimManager().isEatBreatheItem()) {
             return false;
+        }
+        // 如果正在上浮但是失去目标也是需要重新计算的。目标存在时可以不需要再次计算
+        if (maid.getSwimManager().isGoingToBreath() && maid.getBrain().hasMemoryValue(MemoryModuleType.WALK_TARGET)) {
+            // 有可能在途中被其他任务覆盖呼吸目标点，还是吸口气比较要紧
+            if (givesAir(maid, maid.getBrain().getMemory(MemoryModuleType.WALK_TARGET).get().getTarget().currentBlockPosition())) {
+                return false;
+            }
         }
         // 氧气值，默认最大是 300
         // 100 则意味着还有 5 秒呼吸时间
@@ -56,12 +72,8 @@ public class MaidBreathAirEatenTask extends Behavior<EntityMaid> {
 
     @Override
     protected void start(ServerLevel level, EntityMaid maid, long gameTime) {
-        this.eatBreatheItem(maid);
-    }
-
-    @Override
-    protected boolean canStillUse(ServerLevel level, EntityMaid maid, long gameTime) {
-        return this.checkExtraStartConditions(level, maid);
+        if (this.eatBreatheItem(maid)) return;
+        this.findAirPosition(maid);
     }
 
     private boolean hasDrownBauble(EntityMaid maid) {
@@ -74,7 +86,7 @@ public class MaidBreathAirEatenTask extends Behavior<EntityMaid> {
         return false;
     }
 
-    private void eatBreatheItem(EntityMaid maid) {
+    private boolean eatBreatheItem(EntityMaid maid) {
         // 先查询手部的物品能否吃：能就直接开吃，否就进行后续工作
         for (InteractionHand hand : InteractionHand.values()) {
             ItemStack itemInHand = maid.getItemInHand(hand);
@@ -83,7 +95,7 @@ public class MaidBreathAirEatenTask extends Behavior<EntityMaid> {
             }
             if (this.isBreatheFood(maid, itemInHand)) {
                 this.startEatBreatheItem(maid, itemInHand, hand);
-                return;
+                return true;
             }
         }
 
@@ -120,6 +132,7 @@ public class MaidBreathAirEatenTask extends Behavior<EntityMaid> {
         if (hasFood) {
             this.startEatBreatheItem(maid, itemInHand, eanHand);
         }
+        return hasFood;
     }
 
     private void startEatBreatheItem(EntityMaid maid, ItemStack stack, InteractionHand hand) {
@@ -172,5 +185,58 @@ public class MaidBreathAirEatenTask extends Behavior<EntityMaid> {
             }
         }
         return false;
+    }
+
+
+    // 寻找可呼吸新鲜空气的地方
+    private void findAirPosition(EntityMaid maid) {
+        if (!maid.canBrainMoving()) return;
+        MaidPathFindingBFS pathFinding = new MaidPathFindingBFS(maid.getNavigation().getNodeEvaluator(), (ServerLevel) maid.level, maid, 64);
+        // 周围16格以内
+        final int offset = 16;
+        Optional<BlockPos> match = BlockPos.findClosestMatch(maid.blockPosition(),
+                offset,
+                offset,
+                blockPos -> this.givesAir(maid, blockPos) && pathFinding.canPathReach(blockPos));
+        if (match.isPresent()) {
+            maid.getSwimManager().setGoingToBreath(true);
+            BehaviorUtils.setWalkAndLookTargetMemories(maid, match.get(), 0.5f, 1);
+            pathFinding.finish();
+            return;
+        }
+
+        // 当前女仆坐标的海平面位置
+        BlockPos.MutableBlockPos seaLevelPos = maid.blockPosition().mutable().setY(maid.level.getSeaLevel() + 1);
+        if (this.givesAir(maid, seaLevelPos) && maid.canPathReach(seaLevelPos)) {
+            maid.getSwimManager().setGoingToBreath(true);
+            BehaviorUtils.setWalkAndLookTargetMemories(maid, seaLevelPos, 0.5f, 1);
+            pathFinding.finish();
+            return;
+        }
+
+        // 当前女仆坐标的海平面16*16*1区域
+        final int seaLevelOffset = 15;
+        Iterable<BlockPos> canBreathPos = BlockPos.betweenClosed(seaLevelPos.getX() - seaLevelOffset, seaLevelPos.getY(), seaLevelPos.getZ() - seaLevelOffset,
+                seaLevelPos.getX() + seaLevelOffset, seaLevelPos.getY(), seaLevelPos.getZ() + seaLevelOffset);
+        for (BlockPos canBreathPo : canBreathPos) {
+            if (this.givesAir(maid, canBreathPo) && maid.canPathReach(canBreathPo)) {
+                maid.getSwimManager().setGoingToBreath(true);
+                BehaviorUtils.setWalkAndLookTargetMemories(maid, canBreathPo, 0.5f, 1);
+                pathFinding.finish();
+                return;
+            }
+        }
+    }
+
+    // 提供空气的判断
+    //改：反正女仆也钻不进一格的高度（寻路困难），直接判断两格的空气，避免寻路判断发生的故障
+    private boolean givesAir(EntityMaid maid, BlockPos pos) {
+        return blockGivesAir(maid, pos) && blockGivesAir(maid, pos.above());
+    }
+
+    private boolean blockGivesAir(EntityMaid maid, BlockPos pos) {
+        Level level = maid.level;
+        BlockState blockstate = level.getBlockState(pos);
+        return (level.getFluidState(pos).isEmpty() || blockstate.is(Blocks.BUBBLE_COLUMN));
     }
 }
