@@ -1,10 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.passive;
 
-import com.github.tartaricacid.touhoulittlemaid.entity.ai.navigation.MaidPathNavigation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.Pose;
-import net.minecraft.world.entity.ai.navigation.AmphibiousPathNavigation;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import org.jetbrains.annotations.Nullable;
 
@@ -96,13 +94,18 @@ public class MaidSwimManager {
         this.swimTarget = pos;
     }
 
-    public @Nullable BlockPos getSwimTarget() {
-        if (!wantToSwim()) return null;
+    @Nullable
+    public BlockPos getSwimTarget() {
+        if (!wantToSwim()) {
+            return null;
+        }
         return swimTarget;
     }
+
     public void setReadyToLand(boolean readyToLand) {
         this.readyToLand = readyToLand;
     }
+
     public boolean isReadyToLand() {
         return readyToLand;
     }

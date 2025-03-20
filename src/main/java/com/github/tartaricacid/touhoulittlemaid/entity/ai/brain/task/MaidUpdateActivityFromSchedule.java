@@ -58,36 +58,36 @@ public class MaidUpdateActivityFromSchedule extends Behavior<EntityMaid> {
     private static void updateActivityFromSchedule(ServerLevel level, EntityMaid maid, Brain<EntityMaid> brain, long gameTime) {
         long dayTime = level.getDayTime();
         if (maid.isMaidInSittingPose() || maid.isPassenger()) {
-                if (gameTime - brain.lastScheduleUpdate > 20L) {
-                    brain.lastScheduleUpdate = gameTime;
-                    Activity activity = brain.getSchedule().getActivityAt((int) (dayTime % 24000L));
-                    Activity riderActivity;
-                    if (activity.equals(Activity.WORK)) {
-                        riderActivity = InitEntities.RIDE_WORK.get();
-                    } else if (activity.equals(Activity.IDLE)) {
-                        riderActivity = InitEntities.RIDE_IDLE.get();
-                    } else {
-                        riderActivity = InitEntities.RIDE_REST.get();
-                    }
-                    if (!brain.isActive(riderActivity)) {
-                        brain.eraseMemory(MemoryModuleType.PATH);
-                        brain.eraseMemory(MemoryModuleType.WALK_TARGET);
-                        brain.setActiveActivityIfPossible(riderActivity);
+            if (gameTime - brain.lastScheduleUpdate > 20L) {
+                brain.lastScheduleUpdate = gameTime;
+                Activity activity = brain.getSchedule().getActivityAt((int) (dayTime % 24000L));
+                Activity riderActivity;
+                if (activity.equals(Activity.WORK)) {
+                    riderActivity = InitEntities.RIDE_WORK.get();
+                } else if (activity.equals(Activity.IDLE)) {
+                    riderActivity = InitEntities.RIDE_IDLE.get();
+                } else {
+                    riderActivity = InitEntities.RIDE_REST.get();
+                }
+                if (!brain.isActive(riderActivity)) {
+                    brain.eraseMemory(MemoryModuleType.PATH);
+                    brain.eraseMemory(MemoryModuleType.WALK_TARGET);
+                    brain.setActiveActivityIfPossible(riderActivity);
 
-                        // 如果是拥有工作点的 task，需要脱离骑乘的实体
-                        if (maid.isPassenger() && !riderActivity.equals(InitEntities.RIDE_WORK.get())) {
-                            if (!maid.getTask().workPointTask(maid)) {
-                                return;
-                            }
-                            // 特殊的实体（比如娱乐工具的，就不需要脱离）
-                            if (maid.getVehicle() instanceof EntitySit) {
-                                return;
-                            }
-                            maid.stopRiding();
+                    // 如果是拥有工作点的 task，需要脱离骑乘的实体
+                    if (maid.isPassenger() && !riderActivity.equals(InitEntities.RIDE_WORK.get())) {
+                        if (!maid.getTask().workPointTask(maid)) {
+                            return;
                         }
+                        // 特殊的实体（比如娱乐工具的，就不需要脱离）
+                        if (maid.getVehicle() instanceof EntitySit) {
+                            return;
+                        }
+                        maid.stopRiding();
                     }
                 }
-            } else {
+            }
+        } else {
             brain.updateActivityFromSchedule(dayTime, level.getGameTime());
         }
     }

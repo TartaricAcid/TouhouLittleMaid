@@ -122,7 +122,7 @@ public class MaidNodeEvaluator extends WalkNodeEvaluator {
             pathType = BlockPathTypes.WALKABLE;
         } else {
             pathType = WalkNodeEvaluator.getBlockPathTypeRaw(level, pos);
-            // 判断目标方块的碰撞高度。有些半透明方块拥有超过0.5（台阶）的高度，此时女仆是不能从其中穿过的，需要将其视为不可通行方块
+            // 判断目标方块的碰撞高度。有些半透明方块拥有超过 0.5（台阶）的高度，此时女仆是不能从其中穿过的，需要将其视为不可通行方块
             VoxelShape shape = blockState.getCollisionShape(level, pos);
             if (pathType != BlockPathTypes.BLOCKED && shape.max(Direction.Axis.Y) - shape.min(Direction.Axis.Y) > 0.5) {
                 pathType = BlockPathTypes.BLOCKED;

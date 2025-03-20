@@ -259,12 +259,11 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     private final FavorabilityManager favorabilityManager;
     private final MaidScriptBookManager scriptBookManager;
     private final MaidSwimManager swimManager;
-    //控制不同的navigation切换的条件以及切换后变更女仆相关的AI控制参数
+    // 控制不同的 navigation 切换的条件以及切换后变更女仆相关的 AI 控制参数
     private final MaidNavigationManager navigationManager;
     private final MaidAIChatManager aiChatManager;
     private final SchedulePos schedulePos;
     private final ItemCooldowns cooldowns;
-    ;
 
     public boolean guiOpening = false;
     public MaidFishingHook fishing = null;
@@ -300,6 +299,11 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
      * 一个记录女仆已经生成墓碑的变量，避免死亡重复生成墓碑
      */
     private boolean alreadyDropped = false;
+
+    /**
+     * 爬梯的计时器，用于在爬梯后的一段时间内禁用摔落伤害
+     */
+    private int climbFallDelayTicks = 0;
 
     protected EntityMaid(EntityType<EntityMaid> type, Level world) {
         super(type, world);
@@ -495,6 +499,10 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         if (playerHurtSoundCount > 0) {
             playerHurtSoundCount--;
         }
+        if (climbFallDelayTicks > 0) {
+            climbFallDelayTicks--;
+            this.fallDistance = 0;
+        }
         this.spawnPortalParticle();
         this.randomRestoreHealth();
         this.onMaidSleep();
@@ -577,8 +585,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             InteractMaidEvent event = new InteractMaidEvent(playerIn, this, stack);
             // 利用短路原理，逐个触发对应的交互事件
             if (MinecraftForge.EVENT_BUS.post(event)
-                    || stack.interactLivingEntity(playerIn, this, hand).consumesAction()
-                    || openMaidGui(playerIn)) {
+                || stack.interactLivingEntity(playerIn, this, hand).consumesAction()
+                || openMaidGui(playerIn)) {
                 return InteractionResult.SUCCESS;
             }
         } else {
@@ -2332,10 +2340,9 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     @Override
     public boolean onClimbable() {
         boolean result = false;
-        boolean hasNonLadderTarget = false;
         Path path = this.navigation.getPath();
         if (path != null && !path.isDone()) {
-            //女仆是要爬梯子而不是路过梯子，那么也就意味着当前节点的前后必有一个节点是同坐标的
+            // 女仆是要爬梯子而不是路过梯子，那么也就意味着当前节点的前后必有一个节点是同坐标的
             for (int i = Math.max(0, path.getNextNodeIndex() - 3); i < Math.min(path.getNodeCount(), path.getNextNodeIndex() + 3) - 1; i++) {
                 BlockPos pos1 = path.getNodePos(i);
                 BlockPos pos2 = path.getNodePos(i + 1);
@@ -2344,34 +2351,22 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
                     break;
                 }
             }
-            //女仆路径上应当有一个非梯子的路径节点，这样女仆不会在梯子上结束寻路（避免耐摔)
-            for (int i = path.getNextNodeIndex(); i < Math.min(path.getNodeCount(), path.getNextNodeIndex() + 5) - 1; i++) {
-                BlockPos pos1 = path.getNodePos(i);
-                BlockPos pos2 = path.getNodePos(i + 1);
-                if (pos1.getX() != pos2.getX() || pos1.getZ() != pos2.getZ()) {
-                    hasNonLadderTarget = true;
-                    break;
-                }
-            }
-            if (!hasNonLadderTarget) {
-                result = false;
-            }
         }
         if (result) {
             result = super.onClimbable();
+            // 用作脚手架和卡在梯子顶部的特判，避免女仆卡在脚手架顶上
             if (!result && !this.isSpectator()) {
-                Optional<BlockPos> ladderPos = net.minecraftforge.common.ForgeHooks.isLivingOnLadder(
+                Optional<BlockPos> ladderPos = ForgeHooks.isLivingOnLadder(
                         level.getBlockState(blockPosition().below()),
-                        level(),
-                        blockPosition().below(),
-                        this);
+                        level(), blockPosition().below(), this);
                 if (ladderPos.isPresent()) {
-                    //TODO: 这里有一个lastClimbablePos权限为Private无法访问。是否重要？不明
                     result = true;
                 }
             }
         }
         if (result) {
+            // 爬梯后一段时间禁用摔落伤害
+            this.climbFallDelayTicks = 30;
             // 爬梯时，禁止旋转
             this.getLastClimbablePos().ifPresent(climbablePos -> {
                 BlockState blockState = this.level.getBlockState(climbablePos);
@@ -2425,7 +2420,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
                 this.moveRelative(0.01F, travelVector);
                 this.move(MoverType.SELF, this.getDeltaMovement());
                 this.setDeltaMovement(this.getDeltaMovement().scale(0.9));
-            } else if (getSwimManager().isReadyToLand() || isUnderWater()) {
+            } else if (this.getSwimManager().isReadyToLand() || isUnderWater()) {
                 super.travel(travelVector.scale(1.2).add(0, 0.5, 0));
             } else {
                 super.travel(travelVector.scale(1.2).add(0, 0.05, 0));

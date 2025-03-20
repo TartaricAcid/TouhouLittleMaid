@@ -11,7 +11,7 @@ public class NavigationMixin implements INavigationMixin {
     @Shadow protected double speedModifier;
 
     @Unique
-    public double touhou_little_maid$getSpeedModifier(){
+    public double touhouLittleMaid$GetSpeedModifier(){
         return this.speedModifier;
     }
 }
