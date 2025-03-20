@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.MaidPathFindingBFS;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
@@ -33,6 +34,7 @@ public abstract class MaidMoveToBlockTask extends MaidCheckRateTask {
     }
 
     protected final void searchForDestination(ServerLevel worldIn, EntityMaid maid) {
+        MaidPathFindingBFS pathFinding = getOrCreateArrivalMap(worldIn, maid);
         BlockPos centrePos = this.getWorkSearchPos(maid);
         int searchRange = (int) maid.getRestrictRadius();
         BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
@@ -41,7 +43,7 @@ public abstract class MaidMoveToBlockTask extends MaidCheckRateTask {
                 for (int x = 0; x <= i; x = x > 0 ? -x : 1 - x) {
                     for (int z = x < i && x > -i ? i : 0; z <= i; z = z > 0 ? -z : 1 - z) {
                         mutableBlockPos.setWithOffset(centrePos, x, y - 1, z);
-                        if (maid.isWithinRestriction(mutableBlockPos) && shouldMoveTo(worldIn, maid, mutableBlockPos) && checkPathReach(maid, mutableBlockPos)
+                        if (maid.isWithinRestriction(mutableBlockPos) && shouldMoveTo(worldIn, maid, mutableBlockPos) && checkPathReach(maid, pathFinding, mutableBlockPos)
                             && checkOwnerPos(maid, mutableBlockPos)) {
                             BehaviorUtils.setWalkAndLookTargetMemories(maid, mutableBlockPos, this.movementSpeed, 0);
                             maid.getBrain().setMemory(InitEntities.TARGET_POS.get(), new BlockPosTracker(mutableBlockPos));
@@ -54,6 +56,13 @@ public abstract class MaidMoveToBlockTask extends MaidCheckRateTask {
             }
         }
         this.currentWorkPos = null;
+    }
+
+    /**
+     * 获取可达性地图的寻路对象
+     */
+    protected MaidPathFindingBFS getOrCreateArrivalMap(ServerLevel worldIn, EntityMaid maid) {
+        return new MaidPathFindingBFS(maid.getNavigation().getNodeEvaluator(), worldIn, maid);
     }
 
     // 获取工作的搜寻中心点
@@ -87,7 +96,12 @@ public abstract class MaidMoveToBlockTask extends MaidCheckRateTask {
      */
     protected abstract boolean shouldMoveTo(ServerLevel worldIn, EntityMaid entityIn, BlockPos pos);
 
+    @Deprecated(forRemoval = true)
     protected boolean checkPathReach(EntityMaid maid, BlockPos pos) {
         return maid.canPathReach(pos);
+    }
+
+    protected boolean checkPathReach(EntityMaid maid, MaidPathFindingBFS pathFinding, BlockPos pos) {
+        return pathFinding.canPathReach(pos);
     }
 }
