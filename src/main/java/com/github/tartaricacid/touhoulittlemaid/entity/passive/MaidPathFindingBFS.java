@@ -1,58 +1,58 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.passive;
 
-import com.google.common.cache.Cache;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.PathNavigationRegion;
 import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.NodeEvaluator;
-import oshi.util.tuples.Pair;
 
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Queue;
+import java.util.Set;
 
 /**
  * BFS版的寻路算法，用于计算从中心开始扩散的若干个点到中心点的可达性
  */
 public class MaidPathFindingBFS {
+    private final Node[] tmpNode = new Node[20];
+    private final Set<BlockPos> cachePos = Sets.newHashSet();
+    private final Queue<Node> queueNode = Lists.newLinkedList();
     private final NodeEvaluator nodeEvaluator;
-    private final ServerLevel level;
-    private BlockPos center;
-    private double maxDistance;
-    private final Set<BlockPos> cache;
-    private boolean isFinished = false;
-    private final Queue<Node> queue;
-    private Node[] tmp = new Node[20];
-    private EntityMaid maid;
+    private final BlockPos centerPos;
+    private final double maxDistance;
 
+    private boolean isFinished = false;
+
+    @SuppressWarnings("all")
     public MaidPathFindingBFS(NodeEvaluator nodeEvaluator, ServerLevel level, EntityMaid maid) {
-        this.maid = maid;
         this.nodeEvaluator = nodeEvaluator;
-        this.level = level;
-        maxDistance = maid.searchRadius();
-        int d = (int) Math.ceil(maxDistance);
-        center = maid.blockPosition();
+        this.centerPos = maid.blockPosition();
+        this.maxDistance = maid.searchRadius();
+        this.cachePos.add(this.centerPos);
+
+        int offset = (int) Math.ceil(this.maxDistance);
         PathNavigationRegion region = new PathNavigationRegion(level,
-                center.offset(-d, -d, -d),
-                center.offset(d, d, d)
-        );
+                centerPos.offset(-offset, -offset, -offset),
+                centerPos.offset(offset, offset, offset));
         nodeEvaluator.prepare(region, maid);
-        this.cache = new HashSet<>();
-        this.cache.add(center);
-        this.queue = new LinkedList<>();
-        //起点
         Node start = nodeEvaluator.getStart();
-        if (start != null)
-            this.queue.add(start);
+        if (start != null) {
+            this.queueNode.add(start);
+        }
     }
 
     private boolean canPathReachInternal(BlockPos pos) {
-        return this.cache.contains(pos) || this.cache.contains(pos.above()) || this.cache.contains(pos.below());
+        return this.cachePos.contains(pos) || this.cachePos.contains(pos.above()) || this.cachePos.contains(pos.below());
     }
 
     public boolean canPathReach(BlockPos pos) {
-        if (canPathReachInternal(pos)) return true;
-        if (isFinished) return false;
+        if (canPathReachInternal(pos)) {
+            return true;
+        }
+        if (isFinished) {
+            return false;
+        }
         while (!canPathReachInternal(pos) && !isFinished) {
             searchStep();
         }
@@ -60,21 +60,26 @@ public class MaidPathFindingBFS {
     }
 
     private void searchStep() {
-        if (isFinished) return;
-        if (queue.isEmpty()) {
+        if (isFinished) {
+            return;
+        }
+        if (queueNode.isEmpty()) {
             isFinished = true;
             return;
         }
-        Node node = queue.poll();
-        int neighbors = this.nodeEvaluator.getNeighbors(tmp, node);
+        Node node = queueNode.poll();
+        int neighbors = this.nodeEvaluator.getNeighbors(tmpNode, node);
         for (int i = 0; i < neighbors; i++) {
-//            if (tmp[i].costMalus < 0) continue;
-            if (cache.contains(tmp[i].asBlockPos())) continue;
-            BlockPos offset = tmp[i].asBlockPos().subtract(center);
+            if (cachePos.contains(tmpNode[i].asBlockPos())) {
+                continue;
+            }
+            BlockPos offset = tmpNode[i].asBlockPos().subtract(centerPos);
             double neighborDistance = offset.getX() * offset.getX() + offset.getZ() * offset.getZ();
-            if (neighborDistance > maxDistance * maxDistance) continue;
-            cache.add(tmp[i].asBlockPos());
-            queue.add(tmp[i]);
+            if (neighborDistance > maxDistance * maxDistance) {
+                continue;
+            }
+            cachePos.add(tmpNode[i].asBlockPos());
+            queueNode.add(tmpNode[i]);
         }
     }
 }

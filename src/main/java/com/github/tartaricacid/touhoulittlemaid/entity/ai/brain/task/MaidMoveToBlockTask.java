@@ -44,7 +44,7 @@ public abstract class MaidMoveToBlockTask extends MaidCheckRateTask {
                     for (int z = x < i && x > -i ? i : 0; z <= i; z = z > 0 ? -z : 1 - z) {
                         mutableBlockPos.setWithOffset(centrePos, x, y - 1, z);
                         if (maid.isWithinRestriction(mutableBlockPos) && shouldMoveTo(worldIn, maid, mutableBlockPos) && checkPathReach(maid, pathFinding, mutableBlockPos)
-                                && checkOwnerPos(maid, mutableBlockPos)) {
+                            && checkOwnerPos(maid, mutableBlockPos)) {
                             BehaviorUtils.setWalkAndLookTargetMemories(maid, mutableBlockPos, this.movementSpeed, 0);
                             maid.getBrain().setMemory(InitEntities.TARGET_POS.get(), new BlockPosTracker(mutableBlockPos));
                             this.currentWorkPos = mutableBlockPos;
@@ -96,6 +96,7 @@ public abstract class MaidMoveToBlockTask extends MaidCheckRateTask {
      */
     protected abstract boolean shouldMoveTo(ServerLevel worldIn, EntityMaid entityIn, BlockPos pos);
 
+    @Deprecated(forRemoval = true)
     protected boolean checkPathReach(EntityMaid maid, BlockPos pos) {
         return maid.canPathReach(pos);
     }
