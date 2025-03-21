@@ -48,9 +48,12 @@ public class MaidBreathAirTask extends Behavior<EntityMaid> {
         }
         // 如果正在上浮但是失去目标也是需要重新计算的。目标存在时可以不需要再次计算
         if (maid.getSwimManager().isGoingToBreath() && maid.getBrain().hasMemoryValue(MemoryModuleType.WALK_TARGET)) {
+            BlockPos target = maid.getBrain().getMemory(MemoryModuleType.WALK_TARGET).get().getTarget().currentBlockPosition();
             // 有可能在途中被其他任务覆盖呼吸目标点，还是吸口气比较要紧
-            if (givesAir(maid, maid.getBrain().getMemory(MemoryModuleType.WALK_TARGET).get().getTarget().currentBlockPosition())) {
-                return false;
+            if (givesAir(maid, target)) {
+                //不明原因出现的莫名其妙重寻路导致生成一条新的不可达路线
+                if (!maid.getNavigation().isDone() || maid.blockPosition().distManhattan(target) <= 1)
+                    return false;
             }
         }
         // 氧气值，默认最大是 300
@@ -191,17 +194,15 @@ public class MaidBreathAirTask extends Behavior<EntityMaid> {
     // 寻找可呼吸新鲜空气的地方
     private void findAirPosition(EntityMaid maid) {
         if (!maid.canBrainMoving()) return;
-        MaidPathFindingBFS pathFinding = new MaidPathFindingBFS(maid.getNavigation().getNodeEvaluator(), (ServerLevel) maid.level, maid, 64);
+        MaidPathFindingBFS pathFinding = new MaidPathFindingBFS(maid.getNavigation().getNodeEvaluator(), (ServerLevel) maid.level, maid, 16, 16);
         // 周围16格以内
         final int offset = 16;
-        Optional<BlockPos> match = BlockPos.findClosestMatch(maid.blockPosition(),
-                offset,
-                offset,
-                blockPos -> this.givesAir(maid, blockPos) && pathFinding.canPathReach(blockPos));
-        if (match.isPresent()) {
+        Optional<BlockPos> match = pathFinding.find(blockPos -> this.givesAir(maid, blockPos));
+        pathFinding.finish();
+        // Fixme: BFS算法找到的目标点在A*算法中可能会需要更多步骤才能走到，当超过了寻路长度后可能会被截断导致无法找到路径
+        if (match.isPresent() && maid.canPathReach(match.get())) {
             maid.getSwimManager().setGoingToBreath(true);
             BehaviorUtils.setWalkAndLookTargetMemories(maid, match.get(), 0.5f, 1);
-            pathFinding.finish();
             return;
         }
 
@@ -210,19 +211,17 @@ public class MaidBreathAirTask extends Behavior<EntityMaid> {
         if (this.givesAir(maid, seaLevelPos) && maid.canPathReach(seaLevelPos)) {
             maid.getSwimManager().setGoingToBreath(true);
             BehaviorUtils.setWalkAndLookTargetMemories(maid, seaLevelPos, 0.5f, 1);
-            pathFinding.finish();
             return;
         }
 
-        // 当前女仆坐标的海平面16*16*1区域
-        final int seaLevelOffset = 15;
+        // 当前女仆坐标的海平面5*5*1区域
+        final int seaLevelOffset = 2;
         Iterable<BlockPos> canBreathPos = BlockPos.betweenClosed(seaLevelPos.getX() - seaLevelOffset, seaLevelPos.getY(), seaLevelPos.getZ() - seaLevelOffset,
                 seaLevelPos.getX() + seaLevelOffset, seaLevelPos.getY(), seaLevelPos.getZ() + seaLevelOffset);
         for (BlockPos canBreathPo : canBreathPos) {
             if (this.givesAir(maid, canBreathPo) && maid.canPathReach(canBreathPo)) {
                 maid.getSwimManager().setGoingToBreath(true);
                 BehaviorUtils.setWalkAndLookTargetMemories(maid, canBreathPo, 0.5f, 1);
-                pathFinding.finish();
                 return;
             }
         }
@@ -233,6 +232,6 @@ public class MaidBreathAirTask extends Behavior<EntityMaid> {
     private boolean givesAir(EntityMaid maid, BlockPos pos) {
         Level level = maid.level;
         BlockState blockstate = level.getBlockState(pos);
-        return (level.getFluidState(pos).isEmpty() || blockstate.is(Blocks.BUBBLE_COLUMN) && blockstate.getBlock().isPathfindable(blockstate, level, pos, PathComputationType.LAND));
+        return (level.getFluidState(pos).isEmpty() || blockstate.is(Blocks.BUBBLE_COLUMN)) && blockstate.getBlock().isPathfindable(blockstate, level, pos, PathComputationType.LAND);
     }
 }

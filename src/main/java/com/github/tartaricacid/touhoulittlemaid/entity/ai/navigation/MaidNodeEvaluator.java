@@ -72,9 +72,9 @@ public class MaidNodeEvaluator extends WalkNodeEvaluator {
             BlockPathTypes typeBelow = getMaidBlockPathTypeRaw(level, pos.set(x, y - 1, z));
 
             type = typeBelow != BlockPathTypes.WALKABLE
-                   && typeBelow != BlockPathTypes.OPEN
-                   && typeBelow != BlockPathTypes.WATER
-                   && typeBelow != BlockPathTypes.LAVA ? BlockPathTypes.WALKABLE : BlockPathTypes.OPEN;
+                    && typeBelow != BlockPathTypes.OPEN
+                    && typeBelow != BlockPathTypes.WATER
+                    && typeBelow != BlockPathTypes.LAVA ? BlockPathTypes.WALKABLE : BlockPathTypes.OPEN;
 
             if (typeBelow == BlockPathTypes.DAMAGE_FIRE) {
                 type = BlockPathTypes.DAMAGE_FIRE;

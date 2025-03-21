@@ -4,15 +4,11 @@ import com.github.tartaricacid.touhoulittlemaid.api.mixin.INavigationMixin;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.navigation.MaidPathNavigation;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.navigation.MaidUnderWaterPathNavigation;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.navigation.AmphibiousPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.pathfinder.AmphibiousNodeEvaluator;
-import net.minecraft.world.level.pathfinder.Node;
-import net.minecraft.world.level.pathfinder.Path;
-import net.minecraft.world.level.pathfinder.PathFinder;
+import net.minecraft.world.level.pathfinder.*;
 import org.jetbrains.annotations.Nullable;
 
 public class MaidNavigationManager {
@@ -44,23 +40,26 @@ public class MaidNavigationManager {
                     maid.getSwimManager().setWantToSwim(true);
                     maid.getSwimManager().setReadyToLand(false);
                 }
-            } else if (mode != Mode.WATER && maid.isUnderWater() && !canFloat(maid.blockPosition().above())) {
+            } else if (mode != Mode.WATER && maid.isUnderWater() && mayBeStuckUnderWater(maid.blockPosition())) {
                 if (switchToNavigation(Mode.WATER, waterNavigation)) {
                     maid.getSwimManager().setWantToSwim(true);
                     maid.getSwimManager().setReadyToLand(false);
                 }
             } else if (mode != Mode.WATER && targetingUnderWater()) {
                 if (switchToNavigation(Mode.WATER, waterNavigation)) {
-                    maid.getSwimManager().setWantToSwim(false);
+                    maid.getSwimManager().setWantToSwim(true);
                     maid.getSwimManager().setReadyToLand(false);
                 }
             } else if (mode == Mode.WATER) {
+                // 如果满足使用水下寻路的附加条件，则不进行下面的判断
+                boolean shouldUseWater = targetingUnderWater() || (maid.isUnderWater() && mayBeStuckUnderWater(maid.blockPosition()));
+                // 要判断出水，需要当前存在路径
                 BlockPos endPos = getEndPos(waterNavigation);
-                if (endPos != null) {
+                if (!shouldUseWater && endPos != null) {
                     if (!shouldStartOrStopSwim(2)) {
                         // 即将走到水中寻路的尽头，你的女仆是否还需要游泳呢？
                         // a：如果最终女仆是要上岸的，那么这时就没必要继续游泳了。立刻停止并切换到常规模式
-                        if (!level.isWaterAt(endPos)) {
+                        if (!level.isWaterAt(endPos) && !level.isWaterAt(endPos.below())) {
                             if (switchToNavigation(Mode.GROUND, basicNavigation)) {
                                 maid.getSwimManager().setReadyToLand(true);
                                 maid.getSwimManager().setWantToSwim(false);
@@ -78,14 +77,22 @@ public class MaidNavigationManager {
                             maid.getSwimManager().setWantToSwim(false);
                             maid.getSwimManager().setReadyToLand(false);
                         }
-                    } else if(!maid.isUnderWater()){
+                    } else if (!maid.isUnderWater()) {
                         // 女仆半身入水（那貌似游泳就不大礼貌了）
                         maid.getSwimManager().setWantToSwim(false);
                     } else {
                         maid.getSwimManager().setWantToSwim(true);
                         maid.getSwimManager().setSwimTarget(endPos);
                     }
+                } else if (endPos == null && maid.getSwimManager().isGoingToBreath()) {
+                    maid.getSwimManager().setWantToSwim(false);
+                } else if (shouldUseWater) {
+                    maid.getSwimManager().setWantToSwim(true);
+                    if (endPos != null) {
+                        maid.getSwimManager().setSwimTarget(endPos);
+                    }
                 }
+
             }
         }
         // 其他情况，如女仆进行一次传送，可能导致寻路中断，因此需要重新设置女仆是否要游泳
@@ -97,7 +104,7 @@ public class MaidNavigationManager {
     private boolean targetingUnderWater() {
         if (!maid.getBrain().hasMemoryValue(MemoryModuleType.WALK_TARGET))
             return false;
-        return !isWaterSurface(maid.getBrain().getMemory(MemoryModuleType.WALK_TARGET).get().getTarget().currentBlockPosition());
+        return isUnderWater(maid.getBrain().getMemory(MemoryModuleType.WALK_TARGET).get().getTarget().currentBlockPosition());
     }
 
 
@@ -138,8 +145,8 @@ public class MaidNavigationManager {
         return true;
     }
 
-    private boolean canFloat(BlockPos pos) {
-        return (level.isWaterAt(pos) && level.getBlockState(pos.above()).isAir());
+    private boolean mayBeStuckUnderWater(BlockPos pos) {
+        return level.isWaterAt(pos) && !level.getBlockState(pos.above()).isPathfindable(level, pos, PathComputationType.LAND);
     }
 
     public PathNavigation getBasicNavigation() {
@@ -153,7 +160,15 @@ public class MaidNavigationManager {
     public boolean isWaterSurface(BlockPos pos) {
         // 向上两层（主人浮在水上的话 target 可能是 -1Y 的）
         return (level.isWaterAt(pos) && level.getBlockState(pos.above()).isAir())
+                || (level.isWaterAt(pos.below()) && level.getBlockState(pos).isAir())
                 || (level.isWaterAt(pos.above()) && level.getBlockState(pos.above(2)).isAir());
+    }
+
+    private boolean isUnderWater(BlockPos blockPos) {
+        if (level.isWaterAt(blockPos) && level.isWaterAt(blockPos.above())) {
+            return true;
+        }
+        return false;
     }
 
     @Nullable
