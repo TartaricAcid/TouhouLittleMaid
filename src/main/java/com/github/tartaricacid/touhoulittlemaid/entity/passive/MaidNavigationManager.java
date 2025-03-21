@@ -111,9 +111,16 @@ public class MaidNavigationManager {
     }
 
     private boolean targetingUnderWater() {
+        //判断Target是否在水下
         if (!maid.getBrain().hasMemoryValue(MemoryModuleType.WALK_TARGET))
             return false;
-        return isUnderWater(maid.getBrain().getMemory(MemoryModuleType.WALK_TARGET).get().getTarget().currentBlockPosition());
+        return isUnderWater(maid
+                .getBrain()
+                .getMemory(MemoryModuleType.WALK_TARGET)
+                .get()
+                .getTarget()
+                .currentBlockPosition()
+        );
     }
 
 
@@ -154,6 +161,10 @@ public class MaidNavigationManager {
         return true;
     }
 
+    /**
+     * 判断女仆是否可能被卡在水下（头顶方块）
+     * 即判断在水中的女仆头顶有没有方块
+     */
     private boolean mayBeStuckUnderWater(BlockPos pos) {
         return level.isWaterAt(pos) && !level.getBlockState(pos.above()).isPathfindable(level, pos, PathComputationType.LAND);
     }
@@ -167,14 +178,19 @@ public class MaidNavigationManager {
     }
 
     public boolean isWaterSurface(BlockPos pos) {
-        // 向上两层（主人浮在水上的话 target 可能是 -1Y 的）
+        // 向上两层（主人浮在水上的话 target 可能是 -1Y 的），向上一层（寻路规则）
         return (level.isWaterAt(pos) && level.getBlockState(pos.above()).isAir())
                 || (level.isWaterAt(pos.below()) && level.getBlockState(pos).isAir())
                 || (level.isWaterAt(pos.above()) && level.getBlockState(pos.above(2)).isAir());
     }
 
+    /**
+     * 判断目标位置是否两格或更深
+     */
     private boolean isUnderWater(BlockPos blockPos) {
-        if (level.isWaterAt(blockPos) && level.isWaterAt(blockPos.above())) {
+        if (level.isWaterAt(blockPos)
+                && level.isWaterAt(blockPos.above())
+                && level.isWaterAt(blockPos.above(2))) {
             return true;
         }
         return false;
