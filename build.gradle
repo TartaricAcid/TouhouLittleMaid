@@ -193,7 +193,7 @@ dependencies {
 
     implementation fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_config_forge}")
 
-    runtimeOnly fg.deobf("curse.maven:citadel-331936:${citadel_id}")
+    runtimeOnly fg.deobf("maven.modrinth:citadel:2.4.9-forge")
     implementation fg.deobf("curse.maven:domestication-innovation-591149:${domestication_innovation_id}")
 
     implementation fg.deobf("curse.maven:slashblade-241596:${slashblade_id}")
