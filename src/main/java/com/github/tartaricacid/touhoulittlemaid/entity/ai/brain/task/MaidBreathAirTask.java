@@ -32,6 +32,7 @@ import java.util.Optional;
 
 /**
  * 女仆在水下，空气值不足时，会尝试吃任何可以补充空气的东西
+ * 如果没有找到，则会尝试寻找可以呼吸的位置
  */
 public class MaidBreathAirTask extends Behavior<EntityMaid> {
     private static final int MAX_PROBABILITY = 5;
@@ -195,8 +196,8 @@ public class MaidBreathAirTask extends Behavior<EntityMaid> {
     private void findAirPosition(EntityMaid maid) {
         if (!maid.canBrainMoving()) return;
         MaidPathFindingBFS pathFinding = new MaidPathFindingBFS(maid.getNavigation().getNodeEvaluator(), (ServerLevel) maid.level, maid, 16, 16);
-        // 周围16格以内
-        final int offset = 16;
+        // 周围12格以内（原定16格，目前性能可能不足以稳定流畅运行，改为12）
+        final int offset = 12;
         Optional<BlockPos> match = pathFinding.find(blockPos -> this.givesAir(maid, blockPos));
         pathFinding.finish();
         // Fixme: BFS算法找到的目标点在A*算法中可能会需要更多步骤才能走到，当超过了寻路长度后可能会被截断导致无法找到路径
