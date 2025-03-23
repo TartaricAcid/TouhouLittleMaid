@@ -16,6 +16,8 @@ import org.jetbrains.annotations.Nullable;
  * 水下的寻路节点计算器，修改了起点计算方法
  */
 public class MaidUnderWaterNodeEvaluator extends AmphibiousNodeEvaluator implements ICachedEvaluator {
+    protected CenterOffsetBlockPosSet vis;
+
     public MaidUnderWaterNodeEvaluator() {
         // 倾向于浅处游泳？那不是好事一桩？
         super(true);
@@ -34,10 +36,11 @@ public class MaidUnderWaterNodeEvaluator extends AmphibiousNodeEvaluator impleme
 
     @Override
     public Node getStart() {
-        return this.getStartNode(new BlockPos(Mth.floor(this.mob.getBoundingBox().minX), Mth.floor(this.mob.getBoundingBox().minY + 0.5D), Mth.floor(this.mob.getBoundingBox().minZ)));
+        int x = Mth.floor(this.mob.getBoundingBox().minX);
+        int y = Mth.floor(this.mob.getBoundingBox().minY + 0.5);
+        int z = Mth.floor(this.mob.getBoundingBox().minZ);
+        return this.getStartNode(new BlockPos(x, y, z));
     }
-
-    protected CenterOffsetBlockPosSet vis;
 
     @Override
     public void init(int x, int y, int z, int cx, int cy, int cz) {
@@ -53,15 +56,14 @@ public class MaidUnderWaterNodeEvaluator extends AmphibiousNodeEvaluator impleme
      * 使得出水路径能够在水面上一格生成路径点，使得女仆不容易卡在水底
      */
     @Override
-    public int getNeighbors(Node[] pOutputArray, Node pNode) {
-        int nodeId = super.getNeighbors(pOutputArray, pNode);
-        if (level.getFluidState(pNode.asBlockPos()).is(FluidTags.WATER)
-                && level.getFluidState(pNode.asBlockPos().above()).isEmpty()
-        ) {
-            Node node = this.getNode(pNode.x, pNode.y + 1, pNode.z);
-            if (!node.closed) {
-                node.costMalus++;
-                pOutputArray[nodeId++] = node;
+    public int getNeighbors(Node[] outputArray, Node node) {
+        int nodeId = super.getNeighbors(outputArray, node);
+        BlockPos blockPos = node.asBlockPos();
+        if (level.getFluidState(blockPos).is(FluidTags.WATER) && level.getFluidState(blockPos.above()).isEmpty()) {
+            Node aboveNode = this.getNode(node.x, node.y + 1, node.z);
+            if (!aboveNode.closed) {
+                aboveNode.costMalus++;
+                outputArray[nodeId++] = aboveNode;
             }
         }
         return nodeId;
@@ -71,25 +73,27 @@ public class MaidUnderWaterNodeEvaluator extends AmphibiousNodeEvaluator impleme
      * 删除斜向上岸的路径
      */
     @Override
-    protected boolean isNeighborValid(@Nullable Node pNeighbor, Node pNode) {
+    protected boolean isNeighborValid(@Nullable Node neighbor, Node node) {
         // 快速可达判断的缓存机制
-        if (pNeighbor != null && vis != null && vis.isVis(pNeighbor.asBlockPos()))
+        if (neighbor != null && vis != null && vis.isVis(neighbor.asBlockPos())) {
             return false;
-        if (pNeighbor != null
-                && level.getFluidState(pNode.asBlockPos()).is(FluidTags.WATER)
-                && level.getFluidState(pNeighbor.asBlockPos()).isEmpty()
-                && pNode.y != pNeighbor.y
-                && (pNode.x != pNeighbor.x || pNode.z != pNeighbor.z)
-        )
+        }
+        BlockPos blockPos = node.asBlockPos();
+        if (neighbor != null && level.getFluidState(blockPos).is(FluidTags.WATER)
+            && level.getFluidState(neighbor.asBlockPos()).isEmpty()
+            && node.y != neighbor.y && (node.x != neighbor.x || node.z != neighbor.z)) {
             return false;
-        return super.isNeighborValid(pNeighbor, pNode);
+        }
+        return super.isNeighborValid(neighbor, node);
     }
 
     @Nullable
     @Override
-    protected Node findAcceptedNode(int pX, int pY, int pZ, int pVerticalDeltaLimit, double pNodeFloorLevel, Direction pDirection, BlockPathTypes pPathType) {
+    protected Node findAcceptedNode(int pX, int pY, int pZ, int verticalDeltaLimit, double nodeFloorLevel, Direction direction, BlockPathTypes pathType) {
         // 快速可达判断的缓存机制
-        if (vis != null && vis.isVis(pX, pY, pZ)) return null;
-        return super.findAcceptedNode(pX, pY, pZ, pVerticalDeltaLimit, pNodeFloorLevel, pDirection, pPathType);
+        if (vis != null && vis.isVis(pX, pY, pZ)) {
+            return null;
+        }
+        return super.findAcceptedNode(pX, pY, pZ, verticalDeltaLimit, nodeFloorLevel, direction, pathType);
     }
 }

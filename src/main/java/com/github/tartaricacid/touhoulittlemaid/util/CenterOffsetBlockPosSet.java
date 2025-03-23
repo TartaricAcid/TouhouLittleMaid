@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.util;
 import net.minecraft.core.BlockPos;
 
 import java.util.BitSet;
-import java.util.Set;
 
 /**
  * 基于中心偏移量的快速方块位置标记缓存
@@ -12,10 +11,10 @@ public class CenterOffsetBlockPosSet {
     private final int cx;
     private final int cy;
     private final int cz;
-    private final BitSet bitset;
     private final int x;
     private final int y;
     private final int z;
+    private final BitSet bitset;
 
     public CenterOffsetBlockPosSet(int x, int y, int z, int cx, int cy, int cz) {
         this.x = x;
@@ -32,8 +31,9 @@ public class CenterOffsetBlockPosSet {
         int ty = pos.getY() - cy + y;
         int tz = pos.getZ() - cz + z;
         int index = 4 * x * y * tz + 2 * y * tx + ty;
-        if (tx < 0 || ty < 0 || tz < 0 || tx >= x * 2 || ty >= y * 2 || tz >= z * 2)
+        if (tx < 0 || ty < 0 || tz < 0 || tx >= x * 2 || ty >= y * 2 || tz >= z * 2) {
             return;
+        }
         bitset.set(index, true);
     }
 
@@ -41,8 +41,9 @@ public class CenterOffsetBlockPosSet {
         int tx = pos.getX() - cx + x;
         int ty = pos.getY() - cy + y;
         int tz = pos.getZ() - cz + z;
-        if (tx < 0 || ty < 0 || tz < 0 || tx >= x * 2 || ty >= y * 2 || tz >= z * 2)
+        if (tx < 0 || ty < 0 || tz < 0 || tx >= x * 2 || ty >= y * 2 || tz >= z * 2) {
             return true;
+        }
         int index = 4 * x * y * tz + 2 * y * tx + ty;
         return bitset.get(index);
     }
@@ -51,8 +52,9 @@ public class CenterOffsetBlockPosSet {
         int tx = ix - cx + x;
         int ty = iy - cy + y;
         int tz = iz - cz + z;
-        if (tx < 0 || ty < 0 || tz < 0 || tx >= x * 2 || ty >= y * 2 || tz >= z * 2)
+        if (tx < 0 || ty < 0 || tz < 0 || tx >= x * 2 || ty >= y * 2 || tz >= z * 2) {
             return true;
+        }
         int index = 4 * x * y * tz + 2 * y * tx + ty;
         return bitset.get(index);
     }

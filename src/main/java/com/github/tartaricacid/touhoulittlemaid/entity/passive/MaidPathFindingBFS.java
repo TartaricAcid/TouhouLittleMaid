@@ -6,7 +6,6 @@ import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.PathNavigationRegion;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.NodeEvaluator;
 import org.jetbrains.annotations.Nullable;
@@ -52,8 +51,9 @@ public class MaidPathFindingBFS {
                 offset + 1, verticalSearchRange + 1, offset + 1,
                 centerPos.getX(), centerPos.getY(), centerPos.getZ()
         );
-        if (nodeEvaluator instanceof ICachedEvaluator ice)
+        if (nodeEvaluator instanceof ICachedEvaluator ice) {
             ice.init(offset, verticalSearchRange, offset, centerPos.getX(), centerPos.getY(), centerPos.getZ());
+        }
         nodeEvaluator.prepare(region, maid);
         Node start = nodeEvaluator.getStart();
         if (start != null) {
@@ -79,7 +79,8 @@ public class MaidPathFindingBFS {
         return canPathReachInternal(pos);
     }
 
-    private @Nullable BlockPos searchStep() {
+    @Nullable
+    private BlockPos searchStep() {
         if (isFinished) {
             return null;
         }
@@ -94,15 +95,17 @@ public class MaidPathFindingBFS {
                 continue;
             }
             BlockPos offset = tmpNode[i].asBlockPos().subtract(centerPos);
-            if (offset.getY() > verticalSearchRange || offset.getY() < -verticalSearchRange)
+            if (verticalSearchRange < offset.getY() || offset.getY() < -verticalSearchRange) {
                 continue;
+            }
             double neighborDistance = offset.getX() * offset.getX() + offset.getZ() * offset.getZ();
             if (neighborDistance > maxDistance * maxDistance) {
                 continue;
             }
             cachePos.markVis(tmpNode[i].asBlockPos());
-            if (this.nodeEvaluator instanceof ICachedEvaluator ice)
+            if (this.nodeEvaluator instanceof ICachedEvaluator ice) {
                 ice.markVis(tmpNode[i].asBlockPos());
+            }
             queueNode.add(tmpNode[i]);
         }
         return node.asBlockPos();
@@ -111,8 +114,9 @@ public class MaidPathFindingBFS {
     public Optional<BlockPos> find(Predicate<BlockPos> predicate) {
         while (!isFinished) {
             BlockPos blockPos = searchStep();
-            if (blockPos != null && predicate.test(blockPos))
+            if (blockPos != null && predicate.test(blockPos)) {
                 return Optional.of(blockPos);
+            }
         }
         return Optional.empty();
     }

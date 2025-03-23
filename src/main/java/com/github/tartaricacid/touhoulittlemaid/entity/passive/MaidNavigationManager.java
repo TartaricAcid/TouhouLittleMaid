@@ -8,15 +8,11 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.navigation.AmphibiousPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.pathfinder.*;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.level.pathfinder.PathComputationType;
 import org.jetbrains.annotations.Nullable;
 
 public class MaidNavigationManager {
-    public enum Mode {
-        GROUND,
-        WATER
-    }
-
     private final MaidPathNavigation basicNavigation;
     private final AmphibiousPathNavigation waterNavigation;
     private final EntityMaid maid;
@@ -28,7 +24,6 @@ public class MaidNavigationManager {
         this.level = maid.level;
         this.basicNavigation = new MaidPathNavigation(maid, maid.level);
         this.waterNavigation = new MaidUnderWaterPathNavigation(maid, maid.level);
-
         maid.setNavigation(basicNavigation);
     }
 
@@ -41,7 +36,7 @@ public class MaidNavigationManager {
                     maid.getSwimManager().setReadyToLand(false);
                 }
             } else if (mode != Mode.WATER && maid.isUnderWater() && mayBeStuckUnderWater(maid.blockPosition())) {
-                //如果女仆发现其所在位置不能上浮，那么也应该进入游泳状态（顶着头呆呆的）
+                // 如果女仆发现其所在位置不能上浮，那么也应该进入游泳状态（顶着头呆呆的）
                 if (switchToNavigation(Mode.WATER, waterNavigation)) {
                     maid.getSwimManager().setWantToSwim(true);
                     maid.getSwimManager().setReadyToLand(false);
@@ -53,10 +48,10 @@ public class MaidNavigationManager {
                     maid.getSwimManager().setReadyToLand(false);
                 }
             } else if (mode == Mode.WATER) {
-                //女仆当前正在使用水下寻路（不保证游泳的状态）
+                // 女仆当前正在使用水下寻路（不保证游泳的状态）
                 // 如果满足使用水下寻路的附加条件，则不进行下面的判断（目标水下或者无法上浮），防止状态之间的闪烁
                 boolean shouldUseWater = (maid.isInWater() && targetingUnderWater())
-                        || (maid.isUnderWater() && mayBeStuckUnderWater(maid.blockPosition()));
+                                         || (maid.isUnderWater() && mayBeStuckUnderWater(maid.blockPosition()));
                 // 要判断出水，需要当前存在路径
                 BlockPos endPos = getEndPos(waterNavigation);
                 if (!shouldUseWater && endPos != null) {
@@ -111,9 +106,10 @@ public class MaidNavigationManager {
     }
 
     private boolean targetingUnderWater() {
-        //判断Target是否在水下
-        if (!maid.getBrain().hasMemoryValue(MemoryModuleType.WALK_TARGET))
+        // 判断 Target 是否在水下
+        if (!maid.getBrain().hasMemoryValue(MemoryModuleType.WALK_TARGET)) {
             return false;
+        }
         return isUnderWater(maid
                 .getBrain()
                 .getMemory(MemoryModuleType.WALK_TARGET)
@@ -180,20 +176,17 @@ public class MaidNavigationManager {
     public boolean isWaterSurface(BlockPos pos) {
         // 向上两层（主人浮在水上的话 target 可能是 -1Y 的），向上一层（寻路规则）
         return (level.isWaterAt(pos) && level.getBlockState(pos.above()).isAir())
-                || (level.isWaterAt(pos.below()) && level.getBlockState(pos).isAir())
-                || (level.isWaterAt(pos.above()) && level.getBlockState(pos.above(2)).isAir());
+               || (level.isWaterAt(pos.below()) && level.getBlockState(pos).isAir())
+               || (level.isWaterAt(pos.above()) && level.getBlockState(pos.above(2)).isAir());
     }
 
     /**
      * 判断目标位置是否两格或更深
      */
     private boolean isUnderWater(BlockPos blockPos) {
-        if (level.isWaterAt(blockPos)
-                && level.isWaterAt(blockPos.above())
-                && level.isWaterAt(blockPos.above(2))) {
-            return true;
-        }
-        return false;
+        return level.isWaterAt(blockPos)
+               && level.isWaterAt(blockPos.above())
+               && level.isWaterAt(blockPos.above(2));
     }
 
     @Nullable
@@ -214,5 +207,10 @@ public class MaidNavigationManager {
         maid.getSwimManager().setWantToSwim(false);
         maid.getSwimManager().setReadyToLand(false);
         mode = Mode.GROUND;
+    }
+
+    public enum Mode {
+        GROUND,
+        WATER
     }
 }

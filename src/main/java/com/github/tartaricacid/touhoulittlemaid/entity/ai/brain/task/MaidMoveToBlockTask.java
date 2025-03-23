@@ -44,12 +44,12 @@ public abstract class MaidMoveToBlockTask extends MaidCheckRateTask {
                     for (int z = x < i && x > -i ? i : 0; z <= i; z = z > 0 ? -z : 1 - z) {
                         mutableBlockPos.setWithOffset(centrePos, x, y - 1, z);
                         if (maid.isWithinRestriction(mutableBlockPos) && shouldMoveTo(worldIn, maid, mutableBlockPos) && checkPathReach(maid, pathFinding, mutableBlockPos)
-                                && checkOwnerPos(maid, mutableBlockPos)) {
+                            && checkOwnerPos(maid, mutableBlockPos)) {
                             BehaviorUtils.setWalkAndLookTargetMemories(maid, mutableBlockPos, this.movementSpeed, 0);
                             maid.getBrain().setMemory(InitEntities.TARGET_POS.get(), new BlockPosTracker(mutableBlockPos));
                             this.currentWorkPos = mutableBlockPos;
                             this.setNextCheckTickCount(5);
-                            clearCurrentArrivalMap(pathFinding);
+                            this.clearCurrentArrivalMap(pathFinding);
                             return;
                         }
                     }
@@ -57,7 +57,7 @@ public abstract class MaidMoveToBlockTask extends MaidCheckRateTask {
             }
         }
         this.currentWorkPos = null;
-        clearCurrentArrivalMap(pathFinding);
+        this.clearCurrentArrivalMap(pathFinding);
     }
 
     protected void clearCurrentArrivalMap(MaidPathFindingBFS pathFinding) {
