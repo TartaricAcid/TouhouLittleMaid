@@ -28,6 +28,11 @@ public class MaidFollowOwnerTask extends Behavior<EntityMaid> {
     }
 
     @Override
+    protected boolean checkExtraStartConditions(ServerLevel level, EntityMaid maid) {
+        return !maid.getSwimManager().isGoingToBreath();
+    }
+
+    @Override
     protected void start(ServerLevel worldIn, EntityMaid maid, long gameTimeIn) {
         LivingEntity owner = maid.getOwner();
         int startDistance = (int) maid.getRestrictRadius() - 2;

@@ -49,6 +49,7 @@ public abstract class MaidMoveToBlockTask extends MaidCheckRateTask {
                             maid.getBrain().setMemory(InitEntities.TARGET_POS.get(), new BlockPosTracker(mutableBlockPos));
                             this.currentWorkPos = mutableBlockPos;
                             this.setNextCheckTickCount(5);
+                            this.clearCurrentArrivalMap(pathFinding);
                             return;
                         }
                     }
@@ -56,6 +57,11 @@ public abstract class MaidMoveToBlockTask extends MaidCheckRateTask {
             }
         }
         this.currentWorkPos = null;
+        this.clearCurrentArrivalMap(pathFinding);
+    }
+
+    protected void clearCurrentArrivalMap(MaidPathFindingBFS pathFinding) {
+        pathFinding.finish();
     }
 
     /**
