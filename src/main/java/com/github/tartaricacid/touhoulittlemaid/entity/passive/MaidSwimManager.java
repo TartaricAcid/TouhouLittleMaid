@@ -29,6 +29,10 @@ public class MaidSwimManager {
      * 是否已经准备登陆，登陆时基于额外的加速度
      */
     private boolean readyToLand = false;
+    /**
+     * 是否准备前去呼吸，用于屏蔽距离传送
+     */
+    private boolean isGoingToBreath = false;
 
 
     public MaidSwimManager(EntityMaid maid) {
@@ -108,5 +112,13 @@ public class MaidSwimManager {
 
     public boolean isReadyToLand() {
         return readyToLand;
+    }
+
+    public void setGoingToBreath(boolean goingToBreath) {
+        isGoingToBreath = goingToBreath;
+    }
+
+    public boolean isGoingToBreath() {
+        return isGoingToBreath;
     }
 }
