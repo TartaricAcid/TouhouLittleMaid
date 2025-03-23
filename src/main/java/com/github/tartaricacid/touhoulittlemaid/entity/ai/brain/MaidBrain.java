@@ -87,7 +87,8 @@ public final class MaidBrain {
 
     private static void registerCoreGoals(Brain<EntityMaid> brain) {
         Pair<Integer, Behavior<? super EntityMaid>> swimJump = Pair.of(0, new MaidSwimJumpTask(0.8f));
-        Pair<Integer, Behavior<? super EntityMaid>> breathAirEaten = Pair.of(0, new MaidBreathAirEatenTask());
+        Pair<Integer, Behavior<? super EntityMaid>> breathAir = Pair.of(0, new MaidBreathAirTask());
+        Pair<Integer, Behavior<? super EntityMaid>> breathAirStop = Pair.of(0, new MaidBreathAirStopTask());
         Pair<Integer, Behavior<? super EntityMaid>> climb = Pair.of(0, new MaidClimbTask());
         Pair<Integer, Behavior<? super EntityMaid>> look = Pair.of(0, new LookAtTargetSink(45, 90));
         Pair<Integer, Behavior<? super EntityMaid>> maidPanic = Pair.of(1, new MaidPanicTask());
@@ -100,16 +101,16 @@ public final class MaidBrain {
         Pair<Integer, Behavior<? super EntityMaid>> pickupItem = Pair.of(10, new MaidPickupEntitiesTask(EntityMaid::isPickup, 0.6f));
         Pair<Integer, Behavior<? super EntityMaid>> clearSleep = Pair.of(99, new MaidClearSleepTask());
 
-        brain.addActivity(Activity.CORE, ImmutableList.of(swimJump, climb, breathAirEaten, look, maidPanic, maidAwait, interactWithDoor,
+        brain.addActivity(Activity.CORE, ImmutableList.of(swimJump, climb, breathAir, breathAirStop, look, maidPanic, maidAwait, interactWithDoor,
                 walkToTarget, followOwner, followOwnerVehicle, healSelf, pickupItem, clearSleep));
     }
 
     private static void registerIdleGoals(Brain<EntityMaid> brain) {
-        Pair<Integer, Behavior<? super EntityMaid>> beg = Pair.of(5, new MaidBegTask());
-        Pair<Integer, Behavior<? super EntityMaid>> homeMeal = Pair.of(6, new MaidFindHomeMealTask(0.6f, 2));
-        Pair<Integer, Behavior<? super EntityMaid>> joy = Pair.of(7, new MaidJoyTask(0.6f, 2));
-        Pair<Integer, Behavior<? super EntityMaid>> supplemented = Pair.of(20, getLookAndRandomWalk(maid -> true));
-        Pair<Integer, Behavior<? super EntityMaid>> updateActivity = Pair.of(99, new MaidUpdateActivityFromSchedule());
+        Pair<Integer, BehaviorControl<? super EntityMaid>> beg = Pair.of(5, new MaidBegTask());
+        Pair<Integer, BehaviorControl<? super EntityMaid>> homeMeal = Pair.of(6, new MaidFindHomeMealTask(0.6f, 2));
+        Pair<Integer, BehaviorControl<? super EntityMaid>> joy = Pair.of(7, new MaidJoyTask(0.6f, 2));
+        Pair<Integer, BehaviorControl<? super EntityMaid>> supplemented = Pair.of(20, getLookAndRandomWalk(maid -> true));
+        Pair<Integer, BehaviorControl<? super EntityMaid>> updateActivity = Pair.of(99, new MaidUpdateActivityFromSchedule());
 
         brain.addActivity(Activity.IDLE, ImmutableList.of(beg, homeMeal, joy, supplemented, updateActivity));
     }
@@ -125,7 +126,7 @@ public final class MaidBrain {
         }
         pairMaidList.add(Pair.of(6, new MaidBegTask()));
         pairMaidList.add(Pair.of(7, new MaidWorkMealTask()));
-        pairMaidList.add(Pair.of(20, getLookAndRandomWalk(e -> e.getTask().enableLookAndRandomWalk(e))));
+        pairMaidList.add(Pair.of(20, getLookAndRandomWalk(e -> e.getTask().enableLookAndRandomWalk(e) && !e.getSwimManager().isGoingToBreath())));
         brain.addActivity(Activity.WORK, ImmutableList.copyOf(pairMaidList));
     }
 
