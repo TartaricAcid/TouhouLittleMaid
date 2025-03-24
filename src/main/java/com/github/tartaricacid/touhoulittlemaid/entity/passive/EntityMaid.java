@@ -604,6 +604,10 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     @Override
     public InteractionResult mobInteract(Player playerIn, InteractionHand hand) {
+        // 禁止 fake player 交互女仆
+        if (playerIn instanceof FakePlayer) {
+            return InteractionResult.PASS;
+        }
         if (hand == InteractionHand.MAIN_HAND && isOwnedBy(playerIn)) {
             ItemStack stack = playerIn.getMainHandItem();
             InteractMaidEvent event = new InteractMaidEvent(playerIn, this, stack);
