@@ -130,6 +130,8 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.ITeleporter;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -580,6 +582,10 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     @Override
     public InteractionResult mobInteract(Player playerIn, InteractionHand hand) {
+        // 禁止 fake player 交互女仆
+        if (playerIn instanceof FakePlayer) {
+            return InteractionResult.PASS;
+        }
         if (hand == InteractionHand.MAIN_HAND && isOwnedBy(playerIn)) {
             ItemStack stack = playerIn.getMainHandItem();
             InteractMaidEvent event = new InteractMaidEvent(playerIn, this, stack);
