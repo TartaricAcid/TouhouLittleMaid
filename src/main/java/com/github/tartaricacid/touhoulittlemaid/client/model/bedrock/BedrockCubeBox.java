@@ -95,4 +95,9 @@ public class BedrockCubeBox implements BedrockCube {
             }
         }
     }
+
+    @Override
+    public BedrockPolygon[] getPolygons() {
+        return polygons;
+    }
 }

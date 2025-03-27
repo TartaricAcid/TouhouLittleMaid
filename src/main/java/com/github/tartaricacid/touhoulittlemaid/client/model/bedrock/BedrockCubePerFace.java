@@ -87,4 +87,9 @@ public class BedrockCubePerFace implements BedrockCube {
             }
         }
     }
+
+    @Override
+    public BedrockPolygon[] getPolygons() {
+        return polygons;
+    }
 }
