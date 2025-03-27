@@ -131,9 +131,11 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.damagesource.DamageContainer;
+import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.ItemStackHandler;
@@ -829,6 +831,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         return false;
     }
 
+    @SuppressWarnings("ReferenceToMixin")
     private ItemStack getArrowFromEntity(AbstractArrow entity) {
         if (entity instanceof MixinArrowEntity mixinArrow) {
             if (mixinArrow.tlmInGround() || entity.isNoPhysics()) {
@@ -2318,7 +2321,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             result = super.onClimbable();
             // 用作脚手架和卡在梯子顶部的特判，避免女仆卡在脚手架顶上
             if (!result && !this.isSpectator()) {
-                Optional<BlockPos> ladderPos = ForgeHooks.isLivingOnLadder(
+                Optional<BlockPos> ladderPos = CommonHooks.isLivingOnLadder(
                         level.getBlockState(blockPosition().below()),
                         level(), blockPosition().below(), this);
                 if (ladderPos.isPresent()) {

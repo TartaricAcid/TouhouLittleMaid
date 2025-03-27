@@ -162,7 +162,7 @@ public class MaidNavigationManager {
      * 即判断在水中的女仆头顶有没有方块
      */
     private boolean mayBeStuckUnderWater(BlockPos pos) {
-        return level.isWaterAt(pos) && !level.getBlockState(pos.above()).isPathfindable(level, pos, PathComputationType.LAND);
+        return level.isWaterAt(pos) && !level.getBlockState(pos.above()).isPathfindable(PathComputationType.LAND);
     }
 
     public PathNavigation getBasicNavigation() {

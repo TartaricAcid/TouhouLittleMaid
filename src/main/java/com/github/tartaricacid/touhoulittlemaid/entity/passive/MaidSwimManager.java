@@ -3,7 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.passive;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.Pose;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.PathType;
 import org.jetbrains.annotations.Nullable;
 
 public class MaidSwimManager {
@@ -37,7 +37,7 @@ public class MaidSwimManager {
 
     public MaidSwimManager(EntityMaid maid) {
         this.maid = maid;
-        maid.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
+        maid.setPathfindingMalus(PathType.WATER, 0.0F);
     }
 
     /**

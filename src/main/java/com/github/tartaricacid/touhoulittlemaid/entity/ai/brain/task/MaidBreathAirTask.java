@@ -7,7 +7,6 @@ import com.github.tartaricacid.touhoulittlemaid.inventory.handler.BaubleItemHand
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.SpawnParticlePackage;
 import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
@@ -22,14 +21,13 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PotionItem;
 import net.minecraft.world.item.alchemy.PotionContents;
-import net.neoforged.neoforge.items.wrapper.RangedWrapper;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.level.EmptyBlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.NodeEvaluator;
 import net.minecraft.world.level.pathfinder.PathComputationType;
-import net.minecraftforge.items.wrapper.RangedWrapper;
+import net.neoforged.neoforge.items.wrapper.RangedWrapper;
 
 import java.util.List;
 import java.util.Optional;
@@ -253,6 +251,6 @@ public class MaidBreathAirTask extends Behavior<EntityMaid> {
         Level level = maid.level;
         BlockState blockState = level.getBlockState(pos);
         boolean noFluid = level.getFluidState(pos).isEmpty() || blockState.is(Blocks.BUBBLE_COLUMN);
-        return noFluid && blockState.getBlock().isPathfindable(blockState, level, pos, PathComputationType.LAND);
+        return noFluid && !blockState.isCollisionShapeFullBlock(EmptyBlockGetter.INSTANCE, BlockPos.ZERO);
     }
 }

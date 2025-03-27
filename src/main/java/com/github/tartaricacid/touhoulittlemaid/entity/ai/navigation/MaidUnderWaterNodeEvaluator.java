@@ -8,8 +8,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.PathNavigationRegion;
 import net.minecraft.world.level.pathfinder.AmphibiousNodeEvaluator;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.Node;
+import net.minecraft.world.level.pathfinder.PathType;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -59,7 +59,7 @@ public class MaidUnderWaterNodeEvaluator extends AmphibiousNodeEvaluator impleme
     public int getNeighbors(Node[] outputArray, Node node) {
         int nodeId = super.getNeighbors(outputArray, node);
         BlockPos blockPos = node.asBlockPos();
-        if (level.getFluidState(blockPos).is(FluidTags.WATER) && level.getFluidState(blockPos.above()).isEmpty()) {
+        if (mob.level.getFluidState(blockPos).is(FluidTags.WATER) && mob.level.getFluidState(blockPos.above()).isEmpty()) {
             Node aboveNode = this.getNode(node.x, node.y + 1, node.z);
             if (!aboveNode.closed) {
                 aboveNode.costMalus++;
@@ -79,8 +79,8 @@ public class MaidUnderWaterNodeEvaluator extends AmphibiousNodeEvaluator impleme
             return false;
         }
         BlockPos blockPos = node.asBlockPos();
-        if (neighbor != null && level.getFluidState(blockPos).is(FluidTags.WATER)
-            && level.getFluidState(neighbor.asBlockPos()).isEmpty()
+        if (neighbor != null && mob.level.getFluidState(blockPos).is(FluidTags.WATER)
+            && mob.level.getFluidState(neighbor.asBlockPos()).isEmpty()
             && node.y != neighbor.y && (node.x != neighbor.x || node.z != neighbor.z)) {
             return false;
         }
@@ -89,7 +89,7 @@ public class MaidUnderWaterNodeEvaluator extends AmphibiousNodeEvaluator impleme
 
     @Nullable
     @Override
-    protected Node findAcceptedNode(int pX, int pY, int pZ, int verticalDeltaLimit, double nodeFloorLevel, Direction direction, BlockPathTypes pathType) {
+    protected Node findAcceptedNode(int pX, int pY, int pZ, int verticalDeltaLimit, double nodeFloorLevel, Direction direction, PathType pathType) {
         // 快速可达判断的缓存机制
         if (vis != null && vis.isVis(pX, pY, pZ)) {
             return null;

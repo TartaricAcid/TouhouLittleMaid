@@ -70,7 +70,7 @@ public class MaidMoveControl extends MoveControl {
                 BlockState blockState = this.mob.level.getBlockState(blockPos);
                 VoxelShape voxelShape = blockState.getCollisionShape(this.mob.level(), blockPos);
 
-                if (this.mob.getStepHeight() < y && x * x + z * z < Math.max(1, this.mob.getBbWidth())
+                if (this.mob.maxUpStep() < y && x * x + z * z < Math.max(1, this.mob.getBbWidth())
                     || !voxelShape.isEmpty()
                        && this.mob.getY() < (voxelShape.max(Direction.Axis.Y) + blockPos.getY())
                        && !blockState.is(TagBlock.MAID_JUMP_FORBIDDEN_BLOCK)
