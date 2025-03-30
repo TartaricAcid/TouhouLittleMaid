@@ -488,7 +488,7 @@
   "message.touhou_little_maid.servant_bell.not_same_dimension": "Bạn không ở cùng chiều không gian với maid của bạn. Maid đang ở %s",
   "message.touhou_little_maid.servant_bell.no_result": "Không tìm thấy maid",
   "message.touhou_little_maid.servant_bell.data_is_empty": "Không có maid được đánh dấu",
-  "message.touhou_little_maid.cchess.check": "Kiểm tra",
+  "message.touhou_little_maid.cchess.check": "Chiếu Tướng",
   "message.touhou_little_maid.cchess.repeat": "Draw by Repetition!",
   "message.touhou_little_maid.cchess.reset": "Ấn chuột phải vào vùng đen bên phải để đặt lại",
   "message.touhou_little_maid.wchess.reset": "Ấn chuột phải vào vùng màu vàng nhạt ở cả hai bên để đặt lại",
