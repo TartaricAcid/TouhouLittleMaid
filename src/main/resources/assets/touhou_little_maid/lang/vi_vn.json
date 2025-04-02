@@ -2,7 +2,7 @@
   "ai.touhou_little_maid.chat.api_key.empty": "Bạn không có key API để chat với AI",
   "ai.touhou_little_maid.chat.disable": "Tính năng nói chuyện với AI đã tắt",
   "ai.touhou_little_maid.chat.input.tip": "Nhập văn bản và bấm nút Enter để gửi",
-  "ai.touhou_little_maid.chat.config.tip": "Bấm để mở cấu hình AI",
+  "ai.touhou_little_maid.chat.config.tip": "Ấn để mở cấu hình trò chuyện AI",
   "ai.touhou_little_maid.chat.connect.fail": "Lỗi chat phản hồi: ",
   "ai.touhou_little_maid.chat.format.json_format_error": "Chuỗi JSON không hợp lệ đã được trả về: %s",
   "ai.touhou_little_maid.chat.format.text_is_empty": "Chuỗi trả về trống: %s",
