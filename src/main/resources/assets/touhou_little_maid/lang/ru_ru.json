@@ -270,6 +270,7 @@
   "patchouli.touhou_little_maid.book.entries.maid.gap.name": "Разрыв",
   "patchouli.touhou_little_maid.book.entries.maid.gap.pages.0.text": "Украшение, которое переносит предметы.$(br2)Нажмите ПКМ по сундуку этим предметом, чтобы пометить сундук, затем откройте GUI, чтобы изменить настройки и поместите этот предмет в слот украшений горничной.$(br2)После этого, горничная будет класть/брать предметы из сундука автоматически.",
   "patchouli.touhou_little_maid.book.entries.maid.maid_home.pages.1.text": "Используйте компас, чтобы увидеть домашнюю позицию горничной",
+  "patchouli.touhou_little_maid.book.entries.maid.last_slot.name": "Специальный последний слот",
   "patchouli.touhou_little_maid.book.entries.other.chisel_and_statues.name": "Зубило и Статуи",
   "patchouli.touhou_little_maid.book.entries.other.chisel_and_statues.pages.0.text": "ПКМ с зубилом по глине позволит создать статуи различных размеров. Поддерживаются статуи 1x1x1, 1x1x2, 2x2x4 и 3x3x6.",
   "patchouli.touhou_little_maid.book.entries.other.chisel_and_statues.pages.1.text": "Вы должны держать фотографию горничной в свободной руке, а в основной руке - зубило, затем щелкните ПКМ на нижнюю часть структуры, чтобы выгравировать горничную с фото.",
