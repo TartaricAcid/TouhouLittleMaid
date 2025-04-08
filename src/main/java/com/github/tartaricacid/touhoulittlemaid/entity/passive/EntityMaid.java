@@ -2374,7 +2374,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             if (!result && !this.isSpectator()) {
                 Optional<BlockPos> ladderPos = ForgeHooks.isLivingOnLadder(
                         level.getBlockState(blockPosition().below()),
-                        level(), blockPosition().below(), this);
+                        level, blockPosition().below(), this);
                 if (ladderPos.isPresent()) {
                     result = true;
                 }
@@ -2427,6 +2427,19 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     @SuppressWarnings("deprecation")
     public boolean isPushedByFluid() {
         return !this.getSwimManager().wantToSwim();
+    }
+
+    /**
+     * 方法被Mob类覆写了，添加了一个骑乘判断，很奇怪？
+     */
+    @Override
+    public boolean isControlledByLocalInstance() {
+        Entity entity = this.getControllingPassenger();
+        if (entity instanceof Player) {
+            return ((Player)entity).isLocalPlayer();
+        } else {
+            return !this.level.isClientSide;
+        }
     }
 
     @Override
