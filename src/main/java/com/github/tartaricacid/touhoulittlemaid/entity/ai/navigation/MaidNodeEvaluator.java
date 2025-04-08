@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.ai.navigation;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -27,6 +28,16 @@ public class MaidNodeEvaluator extends WalkNodeEvaluator {
     public int getNeighbors(Node[] outputArray, Node node) {
         int nodeId = super.getNeighbors(outputArray, node);
         return this.createClimbNode(nodeId, outputArray, node);
+    }
+
+    @Override
+    protected double getFloorLevel(BlockPos pPos) {
+        BlockPos blockpos = pPos.below();
+        //上下两格水，女仆会浮在水面上，尝试向陆地寻路？
+        if (level.getFluidState(blockpos).is(FluidTags.WATER) && level.getFluidState(pPos).is(FluidTags.WATER)) {
+            return pPos.getY();
+        }
+        return super.getFloorLevel(pPos);
     }
 
     // 将可爬行物加入寻路节点里头
@@ -72,9 +83,9 @@ public class MaidNodeEvaluator extends WalkNodeEvaluator {
             BlockPathTypes typeBelow = getMaidBlockPathTypeRaw(level, pos.set(x, y - 1, z));
 
             type = typeBelow != BlockPathTypes.WALKABLE
-                   && typeBelow != BlockPathTypes.OPEN
-                   && typeBelow != BlockPathTypes.WATER
-                   && typeBelow != BlockPathTypes.LAVA ? BlockPathTypes.WALKABLE : BlockPathTypes.OPEN;
+                    && typeBelow != BlockPathTypes.OPEN
+                    && typeBelow != BlockPathTypes.WATER
+                    && typeBelow != BlockPathTypes.LAVA ? BlockPathTypes.WALKABLE : BlockPathTypes.OPEN;
 
             if (typeBelow == BlockPathTypes.DAMAGE_FIRE) {
                 type = BlockPathTypes.DAMAGE_FIRE;
