@@ -197,4 +197,10 @@ public class EntityFairy extends Monster implements RangedAttackMob, FlyingAnima
     protected SoundEvent getDeathSound() {
         return InitSounds.FAIRY_DEATH.get();
     }
+
+    @Override
+    public boolean isInvulnerableTo(DamageSource pSource) {
+        if(pSource.isFall()) return true;
+        return super.isInvulnerableTo(pSource);
+    }
 }

@@ -8,6 +8,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
@@ -42,7 +43,7 @@ public class MaidMoveControl extends MoveControl {
             float speedLerp = Mth.lerp(1, this.maid.getSpeed(), speed);
 
             if (maid.getSwimManager().getSwimTarget() != null) {
-                maid.getLookControl().setLookAt(maid.getSwimManager().getSwimTarget().getCenter());
+                maid.getLookControl().setLookAt(Vec3.atCenterOf(maid.getSwimManager().getSwimTarget()));
             }
 
             // 太慢了，3 倍基础速度
@@ -68,7 +69,7 @@ public class MaidMoveControl extends MoveControl {
 
                 BlockPos blockPos = this.mob.blockPosition();
                 BlockState blockState = this.mob.level.getBlockState(blockPos);
-                VoxelShape voxelShape = blockState.getCollisionShape(this.mob.level(), blockPos);
+                VoxelShape voxelShape = blockState.getCollisionShape(this.mob.level, blockPos);
 
                 if (this.mob.getStepHeight() < y && x * x + z * z < Math.max(1, this.mob.getBbWidth())
                     || !voxelShape.isEmpty()

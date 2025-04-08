@@ -106,11 +106,11 @@ public final class MaidBrain {
     }
 
     private static void registerIdleGoals(Brain<EntityMaid> brain) {
-        Pair<Integer, BehaviorControl<? super EntityMaid>> beg = Pair.of(5, new MaidBegTask());
-        Pair<Integer, BehaviorControl<? super EntityMaid>> homeMeal = Pair.of(6, new MaidFindHomeMealTask(0.6f, 2));
-        Pair<Integer, BehaviorControl<? super EntityMaid>> joy = Pair.of(7, new MaidJoyTask(0.6f, 2));
-        Pair<Integer, BehaviorControl<? super EntityMaid>> supplemented = Pair.of(20, getLookAndRandomWalk(maid -> true));
-        Pair<Integer, BehaviorControl<? super EntityMaid>> updateActivity = Pair.of(99, new MaidUpdateActivityFromSchedule());
+        Pair<Integer, Behavior<? super EntityMaid>> beg = Pair.of(5, new MaidBegTask());
+        Pair<Integer, Behavior<? super EntityMaid>> homeMeal = Pair.of(6, new MaidFindHomeMealTask(0.6f, 2));
+        Pair<Integer, Behavior<? super EntityMaid>> joy = Pair.of(7, new MaidJoyTask(0.6f, 2));
+        Pair<Integer, Behavior<? super EntityMaid>> supplemented = Pair.of(20, getLookAndRandomWalk(maid -> true));
+        Pair<Integer, Behavior<? super EntityMaid>> updateActivity = Pair.of(99, new MaidUpdateActivityFromSchedule());
 
         brain.addActivity(Activity.IDLE, ImmutableList.of(beg, homeMeal, joy, supplemented, updateActivity));
     }
