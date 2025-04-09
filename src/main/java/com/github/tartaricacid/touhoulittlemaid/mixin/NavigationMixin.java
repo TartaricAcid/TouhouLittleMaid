@@ -8,10 +8,12 @@ import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(PathNavigation.class)
 public class NavigationMixin implements INavigationMixin {
-    @Shadow protected double speedModifier;
+    @Shadow
+    protected double speedModifier;
 
     @Unique
-    public double touhouLittleMaid$GetSpeedModifier(){
+    @Override
+    public double touhouLittleMaid$GetSpeedModifier() {
         return this.speedModifier;
     }
 }
