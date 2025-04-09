@@ -2,11 +2,11 @@ package com.github.tartaricacid.touhoulittlemaid.entity.ai.navigation;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.path.MaidSelectivePathFinding;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.navigation.AmphibiousPathNavigation;
+import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.PathFinder;
 
-public class MaidUnderWaterPathNavigation extends AmphibiousPathNavigation {
+public class MaidUnderWaterPathNavigation extends WaterBoundPathNavigation {
     public MaidUnderWaterPathNavigation(Mob mob, Level level) {
         super(mob, level);
     }

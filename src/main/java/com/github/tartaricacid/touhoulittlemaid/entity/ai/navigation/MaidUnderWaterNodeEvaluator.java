@@ -39,7 +39,7 @@ public class MaidUnderWaterNodeEvaluator extends AmphibiousNodeEvaluator impleme
         int x = Mth.floor(this.mob.getBoundingBox().minX);
         int y = Mth.floor(this.mob.getBoundingBox().minY + 0.5);
         int z = Mth.floor(this.mob.getBoundingBox().minZ);
-        return this.getStartNode(new BlockPos(x, y, z));
+        return this.getNode(new BlockPos(x, y, z));
     }
 
     @Override

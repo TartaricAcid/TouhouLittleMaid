@@ -5,8 +5,8 @@ import com.github.tartaricacid.touhoulittlemaid.entity.ai.navigation.MaidPathNav
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.navigation.MaidUnderWaterPathNavigation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
-import net.minecraft.world.entity.ai.navigation.AmphibiousPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.level.pathfinder.PathComputationType;
@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class MaidNavigationManager {
     private final MaidPathNavigation basicNavigation;
-    private final AmphibiousPathNavigation waterNavigation;
+    private final WaterBoundPathNavigation waterNavigation;
     private final EntityMaid maid;
     private final Level level;
     private Mode mode = Mode.GROUND;

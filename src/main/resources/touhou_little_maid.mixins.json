@@ -12,7 +12,6 @@
     "MixinArrowEntity",
     "MixinThrownTrident",
     "PlayerMixin",
-    "MixinStructureTemplate",
     "MixinThrownTrident",
     "PlayerMixin",
     "CropBlockAccessor",
@@ -20,7 +19,6 @@
     "EntityMixin",
     "FishingHookPredicateMixin",
     "MixinArrowEntity",
-    "MixinStructureTemplate",
     "MixinThrownTrident",
     "NavigationMixin",
     "PlayerMixin"
