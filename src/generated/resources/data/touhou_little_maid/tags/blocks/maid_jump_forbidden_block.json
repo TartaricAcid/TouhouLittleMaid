@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:doors",
+    "#minecraft:fences",
+    "#minecraft:climbable"
+  ]
+}

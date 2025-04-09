@@ -27,6 +27,7 @@ public class MaidDataGenerator {
         // Tags
         BlockTagsProvider blocktagsprovider = new TagBlock(generator, TouhouLittleMaid.MOD_ID, helper);
         generator.addProvider(new EntityTypeGenerator(generator, event.getExistingFileHelper()));
+        generator.addProvider(blocktagsprovider);
         generator.addProvider(new TagItem(generator, blocktagsprovider, TouhouLittleMaid.MOD_ID, helper));
     }
 }
