@@ -816,7 +816,7 @@
   "top.touhou_little_maid.entity_maid.favorability": "Cấp Độ Thiện Cảm: %d",
   "top.touhou_little_maid.entity_maid.nex_favorability_point": "%d điểm để nâng cấp",
   "domesticationinnovation.touhou_little_maid.enchantment.undead_curse": "§4Phù phép Lời Nguyền Kiếp Sau không thể sử dụng cho maid!",
-  "domesticationinnovation.touhou_little_maid.enchantment.blazing_protection": "§4Phù phép Bảo Vệ Khỏi Lửa không thể áp dụng lên maid!",
+  "domesticationinnovation.touhou_little_maid.enchantment.blazing_protection": "§4Phù phép Bảo Vệ Khỏi Lửa không thể sưe dụng cho maid!",
   "config.jade.plugin_touhou_little_maid.maid": "Hiển Thị Thông Tin Bổ Sung của Maid",
   "config.jade.plugin_touhou_little_maid.shrine_lamp": "Hiển Thị Thông Tin Bổ Sung Của Đèn Lồng Điện Thờ",
   "patchouli.touhou_little_maid.book.name": "Gensokyo đáng nhớ",
@@ -967,5 +967,5 @@
   "patchouli.touhou_little_maid.book.entries.overview.make_custom_chatbubble_text.pages.2.text": "Dòng đầu tiên của mỗi trang phải có tên loại, nó chỉ định trong trường hợp nào script được hiển thị.$(br2)Các tên loại có sẵn là:$(br)Lịch Trình Liên Quan:$(li)work: Hiển thị trong bất kỳ lịch trình làm việc nào$(li)idle: Hiển thị khi ở trạng thái nghỉ hoặc không hoạt động$(li)sleep: Hiển thị khi ngủ",
   "patchouli.touhou_little_maid.book.entries.overview.make_custom_chatbubble_text.pages.3.text": "Các tình huống khác:$(li)buổi sáng: Hiển thị vào buổi sáng$(li)night: Hiển thị vào buổi tối$(li)rain: Hiển thị khi trời mưa$(li)snow: Hiển thị khi trời tuyết$(li)cold: Hiển thị khi ở trong quần xã lạnh$(li)hot: Hiển thị khi ở trong quần xã nóng$(li)hurt: Hiển thị khi bị thương$(li)beg: Hiển thị khi cầu xin",
   "patchouli.touhou_little_maid.book.entries.overview.make_custom_chatbubble_text.pages.4.text": "Chế độ làm việc: $(li)Sẽ được hiển thị ở các chế độ làm việc cụ thể như tấn công, làm nông, v.v. $(br2)Khi đã viết xong script, bạn chỉ cần ấn chuột phải vào người giúp việc để viết script. $(br)Nếu bạn ấn chuột phải vào maid bằng Sách và Bút Lông (hoặc Sách đã được viết) trong khi giữ phím shift, bạn có thể xóa script của maid. $(br)Nếu bạn giữ Sách và Bút Lông trống và ấn chuột phải vào maid đã có script, bạn có thể sao chép scrpit của maid vào sách.",
-  "patchouli.touhou_little_maid.book.entries.overview.make_custom_chatbubble_text.pages.5.text": "Khi chức năng công cụ nâng cao (F3+H) được bật, bạn có thể thấy các tên này trên mẹo văn bản trên giao diện chuyển đổi chế độ làm việc."
+  "patchouli.touhou_little_maid.book.entries.overview.make_custom_chatbubble_text.pages.5.text": "Khi chức năng công cụ nâng cao (F3+H) được bật, bạn có thể thấy các tên này ở mẹo văn bản trên giao diện đổi chế độ làm việc."
 }
