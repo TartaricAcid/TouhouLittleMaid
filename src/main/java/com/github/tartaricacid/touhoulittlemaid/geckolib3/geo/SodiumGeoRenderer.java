@@ -72,31 +72,24 @@ public class SodiumGeoRenderer {
 
             int faces = mesh.faces(i);
             boolean mirrored = (faces & 0b1000000) != 0;
-            int vertexCount = 24;
             if (RenderSystem.getModelViewMatrix().m32() == 0) {
                 if ((C101.x + C000.x) * dy.x + (C101.y + C000.y) * dy.y + (C101.z + C000.z) * dy.z < 0) {
                     faces &= ~0b000001; // Backface culling down
-                    vertexCount -= 4;
                 }
                 if ((C110.x + C011.x) * dy.x + (C110.y + C011.y) * dy.y + (C110.z + C011.z) * dy.z > 0) {
                     faces &= ~0b000010; // Backface culling up
-                    vertexCount -= 4;
                 }
                 if ((C100.x + C010.x) * dz.x + (C100.y + C010.y) * dz.y + (C100.z + C010.z) * dz.z < 0) {
                     faces &= ~0b000100; // Backface culling north
-                    vertexCount -= 4;
                 }
                 if ((C001.x + C111.x) * dz.x + (C001.y + C111.y) * dz.y + (C001.z + C111.z) * dz.z > 0) {
                     faces &= ~0b001000; // Backface culling south
-                    vertexCount -= 4;
                 }
                 if ((C101.x + C110.x) * dx.x + (C101.y + C110.y) * dx.y + (C101.z + C110.z) * dx.z > 0) {
                     faces &= mirrored ? ~0b100000 : ~0b010000;
-                    vertexCount -= 4;
                 }
                 if ((C000.x + C011.x) * dx.x + (C000.y + C011.y) * dx.y + (C000.z + C011.z) * dx.z < 0) {
                     faces &= mirrored ? ~0b010000 : ~0b100000;
-                    vertexCount -= 4;
                 }
             } else {
                 Matrix3f normal = poseStack.last().normal();
@@ -115,6 +108,7 @@ public class SodiumGeoRenderer {
             int normalNZ = packUnsafe(-dx.z, -dy.z, -dz.z);
 
             long ptr = SCRATCH_BUFFER;
+            int vertexCount = 0;
             if (!mirrored) {
                 if ((faces & 0b000001) != 0) // DOWN
                 {
@@ -129,6 +123,7 @@ public class SodiumGeoRenderer {
 
                     emitVertex(ptr, C100.x, C100.y, C100.z, color, mesh.downU1(i), mesh.downV0(i), packedOverlay, packedLight, normalNY);
                     ptr += ModelVertex.STRIDE;
+                    vertexCount+=4;
                 }
                 if ((faces & 0b000010) != 0) // UP
                 {
@@ -143,6 +138,7 @@ public class SodiumGeoRenderer {
 
                     emitVertex(ptr, C111.x, C111.y, C111.z, color, mesh.upU1(i), mesh.upV0(i), packedOverlay, packedLight, normalPY);
                     ptr += ModelVertex.STRIDE;
+                    vertexCount+=4;
                 }
                 if ((faces & 0b000100) != 0) // NORTH
                 {
@@ -157,6 +153,7 @@ public class SodiumGeoRenderer {
 
                     emitVertex(ptr, C110.x, C110.y, C110.z, color, mesh.northU1(i), mesh.northV0(i), packedOverlay, packedLight, normalNZ);
                     ptr += ModelVertex.STRIDE;
+                    vertexCount+=4;
                 }
                 if ((faces & 0b001000) != 0) // SOUTH
                 {
@@ -171,6 +168,7 @@ public class SodiumGeoRenderer {
 
                     emitVertex(ptr, C011.x, C011.y, C011.z, color, mesh.southU1(i), mesh.southV0(i), packedOverlay, packedLight, normalPZ);
                     ptr += ModelVertex.STRIDE;
+                    vertexCount+=4;
                 }
                 if ((faces & 0b010000) != 0) // WEST
                 {
@@ -185,6 +183,7 @@ public class SodiumGeoRenderer {
 
                     emitVertex(ptr, C111.x, C111.y, C111.z, color, mesh.westU1(i), mesh.westV0(i), packedOverlay, packedLight, normalNX);
                     ptr += ModelVertex.STRIDE;
+                    vertexCount+=4;
                 }
                 if ((faces & 0b100000) != 0) // EAST
                 {
@@ -199,6 +198,7 @@ public class SodiumGeoRenderer {
 
                     emitVertex(ptr, C010.x, C010.y, C010.z, color, mesh.eastU1(i), mesh.eastV0(i), packedOverlay, packedLight, normalPX);
                     ptr += ModelVertex.STRIDE;
+                    vertexCount+=4;
                 }
             } else {
                 if ((faces & 0b000001) != 0) // DOWN
@@ -214,6 +214,7 @@ public class SodiumGeoRenderer {
 
                     emitVertex(ptr, C100.x, C100.y, C100.z, color, mesh.downU1(i), mesh.downV1(i), packedOverlay, packedLight, normalNY);
                     ptr += ModelVertex.STRIDE;
+                    vertexCount+=4;
                 }
                 if ((faces & 0b000010) != 0) // UP
                 {
@@ -228,6 +229,7 @@ public class SodiumGeoRenderer {
 
                     emitVertex(ptr, C111.x, C111.y, C111.z, color, mesh.upU1(i), mesh.upV1(i), packedOverlay, packedLight, normalPY);
                     ptr += ModelVertex.STRIDE;
+                    vertexCount+=4;
                 }
                 if ((faces & 0b000100) != 0) // NORTH
                 {
@@ -242,6 +244,7 @@ public class SodiumGeoRenderer {
 
                     emitVertex(ptr, C110.x, C110.y, C110.z, color, mesh.northU1(i), mesh.northV1(i), packedOverlay, packedLight, normalNZ);
                     ptr += ModelVertex.STRIDE;
+                    vertexCount+=4;
                 }
                 if ((faces & 0b001000) != 0) // SOUTH
                 {
@@ -256,6 +259,7 @@ public class SodiumGeoRenderer {
 
                     emitVertex(ptr, C011.x, C011.y, C011.z, color, mesh.southU1(i), mesh.southV1(i), packedOverlay, packedLight, normalPZ);
                     ptr += ModelVertex.STRIDE;
+                    vertexCount+=4;
                 }
                 if ((faces & 0b010000) != 0) // WEST
                 {
@@ -270,6 +274,7 @@ public class SodiumGeoRenderer {
 
                     emitVertex(ptr, C111.x, C111.y, C111.z, color, mesh.westU1(i), mesh.westV1(i), packedOverlay, packedLight, normalNX);
                     ptr += ModelVertex.STRIDE;
+                    vertexCount+=4;
                 }
                 if ((faces & 0b100000) != 0) // EAST
                 {
@@ -284,6 +289,7 @@ public class SodiumGeoRenderer {
 
                     emitVertex(ptr, C010.x, C010.y, C010.z, color, mesh.eastU1(i), mesh.eastV1(i), packedOverlay, packedLight, normalPX);
                     ptr += ModelVertex.STRIDE;
+                    vertexCount+=4;
                 }
             }
 
