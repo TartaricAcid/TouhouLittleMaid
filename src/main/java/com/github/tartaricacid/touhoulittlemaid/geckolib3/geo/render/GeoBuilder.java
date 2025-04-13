@@ -6,11 +6,9 @@ import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.raw.pojo.ModelProp
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.raw.tree.RawBoneGroup;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.raw.tree.RawGeometryTree;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.render.built.GeoBone;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.render.built.GeoCube;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.render.built.GeoMesh;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.render.built.GeoModel;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.VectorUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
@@ -41,16 +39,10 @@ public class GeoBuilder implements IGeoBuilder {
         Vector3f pivot = VectorUtils.convertDoubleToFloat(VectorUtils.fromArray(rawBone.getPivot()));
         rotation.mul(-1, -1, 1);
 
-//        List<GeoCube> cubes = new ArrayList<>();
-//        if (!ArrayUtils.isEmpty(rawBone.getCubes())) {
-//            for (Cube cube : rawBone.getCubes()) {
-//                cubes.add(GeoCube.createFromPojoCube(cube, properties,
-//                        rawBone.getInflate() == null ? null : rawBone.getInflate() / 16, rawBone.getMirror()));
-//            }
-//        }
         Cube[] cubes = rawBone.getCubes();
         GeoMesh.GeoMeshBuilder meshBuilder = new GeoMesh.GeoMeshBuilder(cubes == null ? 0 : cubes.length);
         if (cubes != null) {
+            // 使用 For i 循环访问数组效率更高
             for (int i = 0; i < cubes.length; i++) {
                 meshBuilder.addCube(cubes[i], properties, rawBone.getInflate() == null ? 0 : rawBone.getInflate(), rawBone.getMirror());
             }

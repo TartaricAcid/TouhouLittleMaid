@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.geckolib3.geo;
+package com.github.tartaricacid.touhoulittlemaid.compat.sodium;
 
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated.AnimatedGeoBone;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.render.built.GeoMesh;
@@ -14,7 +14,7 @@ import org.joml.Vector3f;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
 
-public class SodiumGeoRenderer {
+class SodiumGeoRenderer {
     static Vector3f C000 = new Vector3f();
     static Vector3f C100 = new Vector3f();
     static Vector3f C110 = new Vector3f();
@@ -29,7 +29,7 @@ public class SodiumGeoRenderer {
     private static final long SCRATCH_BUFFER = MemoryUtil.nmemAlignedAlloc(64, 24 * ModelVertex.STRIDE);
     private static final MemoryStack STACK = MemoryStack.create();
 
-    public static int packUnsafe(float x, float y, float z) {
+    private static int packUnsafe(float x, float y, float z) {
         int normX = (int) (x * 127.0f) & 255;
         int normY = (int) (y * 127.0f) & 255;
         int normZ = (int) (z * 127.0f) & 255;
@@ -37,15 +37,18 @@ public class SodiumGeoRenderer {
         return (normZ << 16) | (normY << 8) | normX;
     }
 
-    public static boolean renderCubesOfBone(AnimatedGeoBone bone, PoseStack poseStack, VertexConsumer buffer, int packedLight,
-                                            int packedOverlay, float red, float green, float blue, float alpha) {
+    static boolean renderCubesOfBone(AnimatedGeoBone bone, PoseStack poseStack, VertexConsumer buffer, int packedLight,
+                                     int packedOverlay, float red, float green, float blue, float alpha) {
         VertexBufferWriter writer = VertexConsumerUtils.convertOrLog(buffer);
         if (writer == null) {
             return false;
         }
-
-        if (bone.isHidden()) return true;
-        if (bone.cubesAreHidden()) return true;
+        if (bone.isHidden()) {
+            return true;
+        }
+        if (bone.cubesAreHidden()) {
+            return true;
+        }
 
         GeoMesh mesh = bone.geoBone().cubes();
 
@@ -118,86 +121,88 @@ public class SodiumGeoRenderer {
             if (!mirrored) {
                 if ((faces & 0b000001) != 0) // DOWN
                 {
-                    emitVertex(ptr, C101.x, C101.y, C101.z, color, mesh.downU1(i), mesh.downV1(i), packedOverlay, packedLight, normalNY);
+                    emitVertex(ptr, C101.x, C101.y, C101.z, color, mesh.downU0(i), mesh.downV1(i), packedOverlay, packedLight, normalNY);
                     ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C001.x, C001.y, C001.z, color, mesh.downU0(i), mesh.downV1(i), packedOverlay, packedLight, normalNY);
+                    emitVertex(ptr, C001.x, C001.y, C001.z, color, mesh.downU1(i), mesh.downV1(i), packedOverlay, packedLight, normalNY);
                     ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C000.x, C000.y, C000.z, color, mesh.downU0(i), mesh.downV0(i), packedOverlay, packedLight, normalNY);
+                    emitVertex(ptr, C000.x, C000.y, C000.z, color, mesh.downU1(i), mesh.downV0(i), packedOverlay, packedLight, normalNY);
                     ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C100.x, C100.y, C100.z, color, mesh.downU1(i), mesh.downV0(i), packedOverlay, packedLight, normalNY);
+                    emitVertex(ptr, C100.x, C100.y, C100.z, color, mesh.downU0(i), mesh.downV0(i), packedOverlay, packedLight, normalNY);
                     ptr += ModelVertex.STRIDE;
                 }
                 if ((faces & 0b000010) != 0) // UP
                 {
-                    emitVertex(ptr, C110.x, C110.y, C110.z, color, mesh.upU1(i), mesh.upV1(i), packedOverlay, packedLight, normalPY);
+                    emitVertex(ptr, C110.x, C110.y, C110.z, color, mesh.upU0(i), mesh.upV1(i), packedOverlay, packedLight, normalPY);
                     ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C010.x, C010.y, C010.z, color, mesh.upU0(i), mesh.upV1(i), packedOverlay, packedLight, normalPY);
+                    emitVertex(ptr, C010.x, C010.y, C010.z, color, mesh.upU1(i), mesh.upV1(i), packedOverlay, packedLight, normalPY);
                     ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C011.x, C011.y, C011.z, color, mesh.upU0(i), mesh.upV0(i), packedOverlay, packedLight, normalPY);
+                    emitVertex(ptr, C011.x, C011.y, C011.z, color, mesh.upU1(i), mesh.upV0(i), packedOverlay, packedLight, normalPY);
                     ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C111.x, C111.y, C111.z, color, mesh.upU1(i), mesh.upV0(i), packedOverlay, packedLight, normalPY);
+                    emitVertex(ptr, C111.x, C111.y, C111.z, color, mesh.upU0(i), mesh.upV0(i), packedOverlay, packedLight, normalPY);
                     ptr += ModelVertex.STRIDE;
                 }
                 if ((faces & 0b000100) != 0) // NORTH
                 {
-                    emitVertex(ptr, C100.x, C100.y, C100.z, color, mesh.northU1(i), mesh.northV1(i), packedOverlay, packedLight, normalNZ);
+                    emitVertex(ptr, C100.x, C100.y, C100.z, color, mesh.northU0(i), mesh.northV1(i), packedOverlay, packedLight, normalNZ);
                     ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C000.x, C000.y, C000.z, color, mesh.northU0(i), mesh.northV1(i), packedOverlay, packedLight, normalNZ);
+                    emitVertex(ptr, C000.x, C000.y, C000.z, color, mesh.northU1(i), mesh.northV1(i), packedOverlay, packedLight, normalNZ);
                     ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C010.x, C010.y, C010.z, color, mesh.northU0(i), mesh.northV0(i), packedOverlay, packedLight, normalNZ);
+                    emitVertex(ptr, C010.x, C010.y, C010.z, color, mesh.northU1(i), mesh.northV0(i), packedOverlay, packedLight, normalNZ);
                     ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C110.x, C110.y, C110.z, color, mesh.northU1(i), mesh.northV0(i), packedOverlay, packedLight, normalNZ);
+                    emitVertex(ptr, C110.x, C110.y, C110.z, color, mesh.northU0(i), mesh.northV0(i), packedOverlay, packedLight, normalNZ);
                     ptr += ModelVertex.STRIDE;
                 }
                 if ((faces & 0b001000) != 0) // SOUTH
                 {
-                    emitVertex(ptr, C001.x, C001.y, C001.z, color, mesh.southU1(i), mesh.southV1(i), packedOverlay, packedLight, normalPZ);
+                    emitVertex(ptr, C001.x, C001.y, C001.z, color, mesh.southU0(i), mesh.southV1(i), packedOverlay, packedLight, normalPZ);
                     ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C101.x, C101.y, C101.z, color, mesh.southU0(i), mesh.southV1(i), packedOverlay, packedLight, normalPZ);
+                    emitVertex(ptr, C101.x, C101.y, C101.z, color, mesh.southU1(i), mesh.southV1(i), packedOverlay, packedLight, normalPZ);
                     ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C111.x, C111.y, C111.z, color, mesh.southU0(i), mesh.southV0(i), packedOverlay, packedLight, normalPZ);
+                    emitVertex(ptr, C111.x, C111.y, C111.z, color, mesh.southU1(i), mesh.southV0(i), packedOverlay, packedLight, normalPZ);
                     ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C011.x, C011.y, C011.z, color, mesh.southU1(i), mesh.southV0(i), packedOverlay, packedLight, normalPZ);
+                    emitVertex(ptr, C011.x, C011.y, C011.z, color, mesh.southU0(i), mesh.southV0(i), packedOverlay, packedLight, normalPZ);
                     ptr += ModelVertex.STRIDE;
                 }
                 if ((faces & 0b010000) != 0) // WEST
                 {
-                    emitVertex(ptr, C101.x, C101.y, C101.z, color, mesh.westU1(i), mesh.westV1(i), packedOverlay, packedLight, normalNX);
+                    // FIXME 你问我为什么 WEST 是 EAST 的 UV，我也不知道，但是游戏内就是好的
+                    emitVertex(ptr, C101.x, C101.y, C101.z, color, mesh.eastU0(i), mesh.eastV1(i), packedOverlay, packedLight, normalPX);
                     ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C100.x, C100.y, C100.z, color, mesh.westU0(i), mesh.westV1(i), packedOverlay, packedLight, normalNX);
+                    emitVertex(ptr, C100.x, C100.y, C100.z, color, mesh.eastU1(i), mesh.eastV1(i), packedOverlay, packedLight, normalPX);
                     ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C110.x, C110.y, C110.z, color, mesh.westU0(i), mesh.westV0(i), packedOverlay, packedLight, normalNX);
+                    emitVertex(ptr, C110.x, C110.y, C110.z, color, mesh.eastU1(i), mesh.eastV0(i), packedOverlay, packedLight, normalPX);
                     ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C111.x, C111.y, C111.z, color, mesh.westU1(i), mesh.westV0(i), packedOverlay, packedLight, normalNX);
+                    emitVertex(ptr, C111.x, C111.y, C111.z, color, mesh.eastU0(i), mesh.eastV0(i), packedOverlay, packedLight, normalPX);
                     ptr += ModelVertex.STRIDE;
                 }
                 if ((faces & 0b100000) != 0) // EAST
                 {
-                    emitVertex(ptr, C000.x, C000.y, C000.z, color, mesh.eastU1(i), mesh.eastV1(i), packedOverlay, packedLight, normalPX);
+                    // FIXME 你问我为什么 EAST 是 WEST 的 UV，我也不知道，但是游戏内就是好的
+                    emitVertex(ptr, C000.x, C000.y, C000.z, color, mesh.westU0(i), mesh.westV1(i), packedOverlay, packedLight, normalNX);
                     ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C001.x, C001.y, C001.z, color, mesh.eastU0(i), mesh.eastV1(i), packedOverlay, packedLight, normalPX);
+                    emitVertex(ptr, C001.x, C001.y, C001.z, color, mesh.westU1(i), mesh.westV1(i), packedOverlay, packedLight, normalNX);
                     ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C011.x, C011.y, C011.z, color, mesh.eastU0(i), mesh.eastV0(i), packedOverlay, packedLight, normalPX);
+                    emitVertex(ptr, C011.x, C011.y, C011.z, color, mesh.westU1(i), mesh.westV0(i), packedOverlay, packedLight, normalNX);
                     ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C010.x, C010.y, C010.z, color, mesh.eastU1(i), mesh.eastV0(i), packedOverlay, packedLight, normalPX);
+                    emitVertex(ptr, C010.x, C010.y, C010.z, color, mesh.westU0(i), mesh.westV0(i), packedOverlay, packedLight, normalNX);
                     ptr += ModelVertex.STRIDE;
                 }
             } else {
@@ -293,11 +298,11 @@ public class SodiumGeoRenderer {
         return true;
     }
 
-    static void emitVertex(long ptr, float x, float y, float z, int color, float u, float v, int packedOverlay, int packedLight, int normal) {
+    private static void emitVertex(long ptr, float x, float y, float z, int color, float u, float v, int packedOverlay, int packedLight, int normal) {
         ModelVertex.write(ptr, x, y, z, color, u, v, packedOverlay, packedLight, normal);
     }
 
-    static void flush(VertexBufferWriter writer, int vertexCount) {
+    private static void flush(VertexBufferWriter writer, int vertexCount) {
         try (MemoryStack stack = MemoryStack.stackPush()) {
             writer.push(stack, SCRATCH_BUFFER, vertexCount, ModelVertex.FORMAT);
         }

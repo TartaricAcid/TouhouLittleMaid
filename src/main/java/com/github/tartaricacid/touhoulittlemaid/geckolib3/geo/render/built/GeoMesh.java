@@ -8,7 +8,10 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 public class GeoMesh {
-    public static final int FACE_COUNT = 6; // Down, Up, North, South, West, East
+    /**
+     * Down, Up, North, South, West, East
+     */
+    public static final int FACE_COUNT = 6;
 
     private final int cubeCount;
     private final int[] faces;
@@ -23,8 +26,7 @@ public class GeoMesh {
     private final float[] v1;
 
 
-    public GeoMesh(int cubeCount, int[] faces, Vector3f[] position, Vector3f[] dx, Vector3f[] dy, Vector3f[] dz,
-                   Vector3f[] dl, float[] u0, float[] v0, float[] u1, float[] v1) {
+    public GeoMesh(int cubeCount, int[] faces, Vector3f[] position, Vector3f[] dx, Vector3f[] dy, Vector3f[] dz, Vector3f[] dl, float[] u0, float[] v0, float[] u1, float[] v1) {
         this.cubeCount = cubeCount;
         this.faces = faces;
         this.position = position;
@@ -39,9 +41,10 @@ public class GeoMesh {
     }
 
     static public class GeoMeshBuilder {
-        private final int cubeCount;
-        private int index = 0;
+        private static final float DEGREES_TO_RADIANS = 0.017453292519943295f;
+
         private final Matrix4f poseMatrix = new Matrix4f();
+        private final int cubeCount;
 
         private final int[] FACES;
         private final Vector3f[] POSITION;
@@ -54,8 +57,7 @@ public class GeoMesh {
         private final float[] U1;
         private final float[] V1;
 
-
-        private static final float DEGREES_TO_RADIANS = 0.017453292519943295f;
+        private int index = 0;
 
         public GeoMeshBuilder(int cubeCount) {
             this.cubeCount = cubeCount;
@@ -139,10 +141,10 @@ public class GeoMesh {
                     double[] uv = down.getUv();
                     double[] uvSize = down.getUvSize();
 
-                    U0[faceIndex + 0] = (float) uv[0] / textureWidth;
-                    V0[faceIndex + 0] = (float) uv[1] / textureHeight;
-                    U1[faceIndex + 0] = ((float) uv[0] + (float) uvSize[0]) / textureWidth;
-                    V1[faceIndex + 0] = ((float) uv[1] + (float) uvSize[1]) / textureHeight;
+                    U0[faceIndex] = (float) uv[0] / textureWidth;
+                    V0[faceIndex] = (float) uv[1] / textureHeight;
+                    U1[faceIndex] = ((float) uv[0] + (float) uvSize[0]) / textureWidth;
+                    V1[faceIndex] = ((float) uv[1] + (float) uvSize[1]) / textureHeight;
                 }
                 if (up != null) {
                     faces |= 0b000010;
@@ -202,10 +204,10 @@ public class GeoMesh {
 
                 float u0 = (float) (uv[0] + uvSize.z + uvSize.x);
                 float v0 = (float) (uv[1] + uvSize.z);
-                U0[faceIndex + 0] = u0 / textureWidth;
-                V0[faceIndex + 0] = v0 / textureHeight;
-                U1[faceIndex + 0] = (u0 + (float) uvSize.x) / textureWidth;
-                V1[faceIndex + 0] = (v0 + (float) uvSize.z) / textureHeight;
+                U0[faceIndex] = u0 / textureWidth;
+                V0[faceIndex] = v0 / textureHeight;
+                U1[faceIndex] = (u0 + (float) uvSize.x) / textureWidth;
+                V1[faceIndex] = (v0 - (float) uvSize.z) / textureHeight;
 
                 u0 = (float) (uv[0] + uvSize.z);
                 v0 = (float) (uv[1]);
