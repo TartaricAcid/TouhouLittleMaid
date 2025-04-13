@@ -19,21 +19,19 @@ public class GeoMesh {
     private final Vector3f[] dx;
     private final Vector3f[] dy;
     private final Vector3f[] dz;
-    private final Vector3f[] dl;
     private final float[] u0;
     private final float[] v0;
     private final float[] u1;
     private final float[] v1;
 
 
-    public GeoMesh(int cubeCount, int[] faces, Vector3f[] position, Vector3f[] dx, Vector3f[] dy, Vector3f[] dz, Vector3f[] dl, float[] u0, float[] v0, float[] u1, float[] v1) {
+    public GeoMesh(int cubeCount, int[] faces, Vector3f[] position, Vector3f[] dx, Vector3f[] dy, Vector3f[] dz, float[] u0, float[] v0, float[] u1, float[] v1) {
         this.cubeCount = cubeCount;
         this.faces = faces;
         this.position = position;
         this.dx = dx;
         this.dy = dy;
         this.dz = dz;
-        this.dl = dl;
         this.u0 = u0;
         this.v0 = v0;
         this.u1 = u1;
@@ -51,7 +49,6 @@ public class GeoMesh {
         private final Vector3f[] DX;
         private final Vector3f[] DY;
         private final Vector3f[] DZ;
-        private final Vector3f[] DL;
         private final float[] U0;
         private final float[] V0;
         private final float[] U1;
@@ -66,7 +63,6 @@ public class GeoMesh {
             this.DX = new Vector3f[cubeCount];
             this.DY = new Vector3f[cubeCount];
             this.DZ = new Vector3f[cubeCount];
-            this.DL = new Vector3f[cubeCount];
             this.U0 = new float[cubeCount * FACE_COUNT];
             this.V0 = new float[cubeCount * FACE_COUNT];
             this.U1 = new float[cubeCount * FACE_COUNT];
@@ -77,7 +73,6 @@ public class GeoMesh {
                 DX[i] = new Vector3f();
                 DY[i] = new Vector3f();
                 DZ[i] = new Vector3f();
-                DL[i] = new Vector3f();
             }
         }
 
@@ -119,8 +114,6 @@ public class GeoMesh {
 
             diff = Math.max(0.001f, size.z + inflate * 2);
             DZ[index].set(poseMatrix.m20() * diff, poseMatrix.m21() * diff, poseMatrix.m22() * diff);
-
-            DL[index].set(1.0f / DX[index].length(), 1.0f / DY[index].length(), 1.0f / DZ[index].length());
 
             UvUnion uvUnion = cubeIn.getUv();
             boolean isBoxUV = uvUnion.isBoxUV;
@@ -250,7 +243,7 @@ public class GeoMesh {
         }
 
         public GeoMesh build() {
-            return new GeoMesh(cubeCount, FACES, POSITION, DX, DY, DZ, DL, U0, V0, U1, V1);
+            return new GeoMesh(cubeCount, FACES, POSITION, DX, DY, DZ, U0, V0, U1, V1);
         }
     }
 
@@ -272,10 +265,6 @@ public class GeoMesh {
 
     public Vector3f dz(int index) {
         return dz[index];
-    }
-
-    public Vector3f dl(int index) {
-        return dl[index];
     }
 
     public float u0(int index, int face) {

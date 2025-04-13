@@ -71,14 +71,9 @@ class SodiumGeoRenderer {
             C110.add(dz, C111);
             C010.add(dz, C011);
 
-            Vector3f dl = mesh.dl(i);
-            dx.mul(dl.x);
-            dy.mul(dl.y);
-            dz.mul(dl.z);
-            dx.cross(dy, nz);
-            dy.cross(dz, nx);
-            dz.cross(dx, ny);
-
+            dx.cross(dy, nz).normalize();
+            dy.cross(dz, nx).normalize();
+            dz.cross(dx, ny).normalize();
 
             int faces = mesh.faces(i);
             boolean mirrored = (faces & 0b1000000) != 0;
@@ -106,12 +101,9 @@ class SodiumGeoRenderer {
                 mesh.dx(i).cross(mesh.dy(i), nz);
                 mesh.dy(i).cross(mesh.dz(i), nx);
                 mesh.dz(i).cross(mesh.dx(i), ny);
-                nx.normalize();
-                ny.normalize();
-                nz.normalize();
-                nx.mul(normal);
-                ny.mul(normal);
-                nz.mul(normal);
+                nx.mul(normal).normalize();
+                ny.mul(normal).normalize();
+                nz.mul(normal).normalize();
             }
             int normalPX = packUnsafe(nx.x, nx.y, nx.z);
             int normalPY = packUnsafe(ny.x, ny.y, ny.z);
