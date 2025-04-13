@@ -26,6 +26,9 @@ class SodiumGeoRenderer {
     static Vector3f dx = new Vector3f();
     static Vector3f dy = new Vector3f();
     static Vector3f dz = new Vector3f();
+    static Vector3f nx = new Vector3f();
+    static Vector3f ny = new Vector3f();
+    static Vector3f nz = new Vector3f();
     private static final long SCRATCH_BUFFER = MemoryUtil.nmemAlignedAlloc(64, 24 * ModelVertex.STRIDE);
     private static final MemoryStack STACK = MemoryStack.create();
 
@@ -72,43 +75,50 @@ class SodiumGeoRenderer {
             dx.mul(dl.x);
             dy.mul(dl.y);
             dz.mul(dl.z);
+            dx.cross(dy, nz);
+            dy.cross(dz, nx);
+            dz.cross(dx, ny);
+
 
             int faces = mesh.faces(i);
             boolean mirrored = (faces & 0b1000000) != 0;
             if (RenderSystem.getModelViewMatrix().m32() == 0) {
-                if ((C101.x + C000.x) * dy.x + (C101.y + C000.y) * dy.y + (C101.z + C000.z) * dy.z < 0) {
+                if ((C101.x + C000.x) * ny.x + (C101.y + C000.y) * ny.y + (C101.z + C000.z) * ny.z < 0) {
                     faces &= ~0b000001; // Backface culling down
                 }
-                if ((C110.x + C011.x) * dy.x + (C110.y + C011.y) * dy.y + (C110.z + C011.z) * dy.z > 0) {
+                if ((C110.x + C011.x) * ny.x + (C110.y + C011.y) * ny.y + (C110.z + C011.z) * ny.z > 0) {
                     faces &= ~0b000010; // Backface culling up
                 }
-                if ((C100.x + C010.x) * dz.x + (C100.y + C010.y) * dz.y + (C100.z + C010.z) * dz.z < 0) {
+                if ((C100.x + C010.x) * nz.x + (C100.y + C010.y) * nz.y + (C100.z + C010.z) * nz.z < 0) {
                     faces &= ~0b000100; // Backface culling north
                 }
-                if ((C001.x + C111.x) * dz.x + (C001.y + C111.y) * dz.y + (C001.z + C111.z) * dz.z > 0) {
+                if ((C001.x + C111.x) * nz.x + (C001.y + C111.y) * nz.y + (C001.z + C111.z) * nz.z > 0) {
                     faces &= ~0b001000; // Backface culling south
                 }
-                if ((C101.x + C110.x) * dx.x + (C101.y + C110.y) * dx.y + (C101.z + C110.z) * dx.z > 0) {
+                if ((C101.x + C110.x) * nx.x + (C101.y + C110.y) * nx.y + (C101.z + C110.z) * nx.z > 0) {
                     faces &= mirrored ? ~0b100000 : ~0b010000;
                 }
-                if ((C000.x + C011.x) * dx.x + (C000.y + C011.y) * dx.y + (C000.z + C011.z) * dx.z < 0) {
+                if ((C000.x + C011.x) * nx.x + (C000.y + C011.y) * nx.y + (C000.z + C011.z) * nx.z < 0) {
                     faces &= mirrored ? ~0b010000 : ~0b100000;
                 }
             } else {
                 Matrix3f normal = poseStack.last().normal();
-                mesh.dx(i).mul(normal, dx);
-                mesh.dy(i).mul(normal, dy);
-                mesh.dz(i).mul(normal, dz);
-                dx.normalize();
-                dy.normalize();
-                dz.normalize();
+                mesh.dx(i).cross(mesh.dy(i), nz);
+                mesh.dy(i).cross(mesh.dz(i), nx);
+                mesh.dz(i).cross(mesh.dx(i), ny);
+                nx.normalize();
+                ny.normalize();
+                nz.normalize();
+                nx.mul(normal);
+                ny.mul(normal);
+                nz.mul(normal);
             }
-            int normalPX = packUnsafe(dx.x, dx.y, dx.z);
-            int normalPY = packUnsafe(dy.x, dy.y, dy.z);
-            int normalPZ = packUnsafe(dz.x, dz.y, dz.z);
-            int normalNX = packUnsafe(-dx.x, -dx.y, -dx.z);
-            int normalNY = packUnsafe(-dy.z, -dy.y, -dy.z);
-            int normalNZ = packUnsafe(-dz.x, -dz.y, -dz.z);
+            int normalPX = packUnsafe(nx.x, nx.y, nx.z);
+            int normalPY = packUnsafe(ny.x, ny.y, ny.z);
+            int normalPZ = packUnsafe(nz.x, nz.y, nz.z);
+            int normalNX = packUnsafe(-nx.x, -nx.y, -nx.z);
+            int normalNY = packUnsafe(-ny.z, -ny.y, -ny.z);
+            int normalNZ = packUnsafe(-nz.x, -nz.y, -nz.z);
 
             long ptr = SCRATCH_BUFFER;
             int vertexCount = 0;

@@ -34,6 +34,9 @@ public interface IGeoRenderer<T> {
     Vector3f dx = new Vector3f();
     Vector3f dy = new Vector3f();
     Vector3f dz = new Vector3f();
+    Vector3f nx = new Vector3f();
+    Vector3f ny = new Vector3f();
+    Vector3f nz = new Vector3f();
 
     MultiBufferSource getCurrentRTB();
 
@@ -107,17 +110,23 @@ public interface IGeoRenderer<T> {
             dx.mul(dl.x);
             dy.mul(dl.y);
             dz.mul(dl.z);
+            dx.cross(dy, nz);
+            dy.cross(dz, nx);
+            dz.cross(dx, ny);
 
             int faces = mesh.faces(i);
             boolean mirrored = (faces & 0b1000000) != 0;
             if (RenderSystem.getModelViewMatrix().m32() != 0) {
                 Matrix3f normal = poseStack.last().normal();
-                mesh.dx(i).mul(normal, dx);
-                mesh.dy(i).mul(normal, dy);
-                mesh.dz(i).mul(normal, dz);
-                dx.normalize();
-                dy.normalize();
-                dz.normalize();
+                mesh.dx(i).cross(mesh.dy(i), nz);
+                mesh.dy(i).cross(mesh.dz(i), nx);
+                mesh.dz(i).cross(mesh.dx(i), ny);
+                nx.normalize();
+                ny.normalize();
+                nz.normalize();
+                nx.mul(normal);
+                ny.mul(normal);
+                nz.mul(normal);
             }
 
             if (!mirrored) {
