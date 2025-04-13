@@ -1,0 +1,305 @@
+package com.github.tartaricacid.touhoulittlemaid.geckolib3.geo;
+
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated.AnimatedGeoBone;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.render.built.GeoMesh;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import me.jellysquid.mods.sodium.client.render.vertex.VertexConsumerUtils;
+import net.caffeinemc.mods.sodium.api.vertex.buffer.VertexBufferWriter;
+import net.caffeinemc.mods.sodium.api.vertex.format.common.ModelVertex;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.lwjgl.system.MemoryStack;
+import org.lwjgl.system.MemoryUtil;
+
+public class SodiumGeoRenderer {
+    static Vector3f C000 = new Vector3f();
+    static Vector3f C100 = new Vector3f();
+    static Vector3f C110 = new Vector3f();
+    static Vector3f C010 = new Vector3f();
+    static Vector3f C001 = new Vector3f();
+    static Vector3f C101 = new Vector3f();
+    static Vector3f C111 = new Vector3f();
+    static Vector3f C011 = new Vector3f();
+    static Vector3f dx = new Vector3f();
+    static Vector3f dy = new Vector3f();
+    static Vector3f dz = new Vector3f();
+    private static final long SCRATCH_BUFFER = MemoryUtil.nmemAlignedAlloc(64, 24 * ModelVertex.STRIDE);
+    private static final MemoryStack STACK = MemoryStack.create();
+
+    public static int packUnsafe(float x, float y, float z) {
+        int normX = (int) (x * 127.0f) & 255;
+        int normY = (int) (y * 127.0f) & 255;
+        int normZ = (int) (z * 127.0f) & 255;
+
+        return (normZ << 16) | (normY << 8) | normX;
+    }
+
+    public static boolean renderCubesOfBone(AnimatedGeoBone bone, PoseStack poseStack, VertexConsumer buffer, int packedLight,
+                                            int packedOverlay, float red, float green, float blue, float alpha) {
+        VertexBufferWriter writer = VertexConsumerUtils.convertOrLog(buffer);
+        if (writer == null) {
+            return false;
+        }
+
+        if (bone.isHidden()) return true;
+        if (bone.cubesAreHidden()) return true;
+
+        GeoMesh mesh = bone.geoBone().cubes();
+
+        int color = (int) (alpha * 255.0f) << 24 | (int) (blue * 255.0f) << 16 | (int) (green * 255.0f) << 8 | (int) (red * 255.0f);
+        for (int i = 0; i < mesh.getCubeCount(); i++) {
+            Matrix4f pose = poseStack.last().pose();
+            mesh.position(i).mulPosition(pose, C000);
+            mesh.dx(i).mulDirection(pose, dx);
+            mesh.dy(i).mulDirection(pose, dy);
+            mesh.dz(i).mulDirection(pose, dz);
+
+            C000.add(dx, C100);
+            C100.add(dy, C110);
+            C000.add(dy, C010);
+            C000.add(dz, C001);
+            C100.add(dz, C101);
+            C110.add(dz, C111);
+            C010.add(dz, C011);
+
+            Vector3f dl = mesh.dl(i);
+            dx.mul(dl.x);
+            dy.mul(dl.y);
+            dz.mul(dl.z);
+
+            int faces = mesh.faces(i);
+            boolean mirrored = (faces & 0b1000000) != 0;
+            int vertexCount = 24;
+            if (RenderSystem.getModelViewMatrix().m32() == 0) {
+                if ((C101.x + C000.x) * dy.x + (C101.y + C000.y) * dy.y + (C101.z + C000.z) * dy.z < 0) {
+                    faces &= ~0b000001; // Backface culling down
+                    vertexCount -= 4;
+                }
+                if ((C110.x + C011.x) * dy.x + (C110.y + C011.y) * dy.y + (C110.z + C011.z) * dy.z > 0) {
+                    faces &= ~0b000010; // Backface culling up
+                    vertexCount -= 4;
+                }
+                if ((C100.x + C010.x) * dz.x + (C100.y + C010.y) * dz.y + (C100.z + C010.z) * dz.z < 0) {
+                    faces &= ~0b000100; // Backface culling north
+                    vertexCount -= 4;
+                }
+                if ((C001.x + C111.x) * dz.x + (C001.y + C111.y) * dz.y + (C001.z + C111.z) * dz.z > 0) {
+                    faces &= ~0b001000; // Backface culling south
+                    vertexCount -= 4;
+                }
+                if ((C101.x + C110.x) * dx.x + (C101.y + C110.y) * dx.y + (C101.z + C110.z) * dx.z > 0) {
+                    faces &= mirrored ? ~0b100000 : ~0b010000;
+                    vertexCount -= 4;
+                }
+                if ((C000.x + C011.x) * dx.x + (C000.y + C011.y) * dx.y + (C000.z + C011.z) * dx.z < 0) {
+                    faces &= mirrored ? ~0b010000 : ~0b100000;
+                    vertexCount -= 4;
+                }
+            } else {
+                Matrix3f normal = poseStack.last().normal();
+                mesh.dx(i).mul(normal, dx);
+                mesh.dy(i).mul(normal, dy);
+                mesh.dz(i).mul(normal, dz);
+                dx.normalize();
+                dy.normalize();
+                dz.normalize();
+            }
+            int normalPX = packUnsafe(dx.x, dy.x, dz.x);
+            int normalPY = packUnsafe(dx.y, dy.y, dz.y);
+            int normalPZ = packUnsafe(dx.z, dy.z, dz.z);
+            int normalNX = packUnsafe(-dx.x, -dy.x, -dz.x);
+            int normalNY = packUnsafe(-dx.y, -dy.y, -dz.y);
+            int normalNZ = packUnsafe(-dx.z, -dy.z, -dz.z);
+
+            long ptr = SCRATCH_BUFFER;
+            if (!mirrored) {
+                if ((faces & 0b000001) != 0) // DOWN
+                {
+                    emitVertex(ptr, C101.x, C101.y, C101.z, color, mesh.downU1(i), mesh.downV1(i), packedOverlay, packedLight, normalNY);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C001.x, C001.y, C001.z, color, mesh.downU0(i), mesh.downV1(i), packedOverlay, packedLight, normalNY);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C000.x, C000.y, C000.z, color, mesh.downU0(i), mesh.downV0(i), packedOverlay, packedLight, normalNY);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C100.x, C100.y, C100.z, color, mesh.downU1(i), mesh.downV0(i), packedOverlay, packedLight, normalNY);
+                    ptr += ModelVertex.STRIDE;
+                }
+                if ((faces & 0b000010) != 0) // UP
+                {
+                    emitVertex(ptr, C110.x, C110.y, C110.z, color, mesh.upU1(i), mesh.upV1(i), packedOverlay, packedLight, normalPY);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C010.x, C010.y, C010.z, color, mesh.upU0(i), mesh.upV1(i), packedOverlay, packedLight, normalPY);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C011.x, C011.y, C011.z, color, mesh.upU0(i), mesh.upV0(i), packedOverlay, packedLight, normalPY);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C111.x, C111.y, C111.z, color, mesh.upU1(i), mesh.upV0(i), packedOverlay, packedLight, normalPY);
+                    ptr += ModelVertex.STRIDE;
+                }
+                if ((faces & 0b000100) != 0) // NORTH
+                {
+                    emitVertex(ptr, C100.x, C100.y, C100.z, color, mesh.northU1(i), mesh.northV1(i), packedOverlay, packedLight, normalNZ);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C000.x, C000.y, C000.z, color, mesh.northU0(i), mesh.northV1(i), packedOverlay, packedLight, normalNZ);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C010.x, C010.y, C010.z, color, mesh.northU0(i), mesh.northV0(i), packedOverlay, packedLight, normalNZ);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C110.x, C110.y, C110.z, color, mesh.northU1(i), mesh.northV0(i), packedOverlay, packedLight, normalNZ);
+                    ptr += ModelVertex.STRIDE;
+                }
+                if ((faces & 0b001000) != 0) // SOUTH
+                {
+                    emitVertex(ptr, C001.x, C001.y, C001.z, color, mesh.southU1(i), mesh.southV1(i), packedOverlay, packedLight, normalPZ);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C101.x, C101.y, C101.z, color, mesh.southU0(i), mesh.southV1(i), packedOverlay, packedLight, normalPZ);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C111.x, C111.y, C111.z, color, mesh.southU0(i), mesh.southV0(i), packedOverlay, packedLight, normalPZ);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C011.x, C011.y, C011.z, color, mesh.southU1(i), mesh.southV0(i), packedOverlay, packedLight, normalPZ);
+                    ptr += ModelVertex.STRIDE;
+                }
+                if ((faces & 0b010000) != 0) // WEST
+                {
+                    emitVertex(ptr, C101.x, C101.y, C101.z, color, mesh.westU1(i), mesh.westV1(i), packedOverlay, packedLight, normalNX);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C100.x, C100.y, C100.z, color, mesh.westU0(i), mesh.westV1(i), packedOverlay, packedLight, normalNX);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C110.x, C110.y, C110.z, color, mesh.westU0(i), mesh.westV0(i), packedOverlay, packedLight, normalNX);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C111.x, C111.y, C111.z, color, mesh.westU1(i), mesh.westV0(i), packedOverlay, packedLight, normalNX);
+                    ptr += ModelVertex.STRIDE;
+                }
+                if ((faces & 0b100000) != 0) // EAST
+                {
+                    emitVertex(ptr, C000.x, C000.y, C000.z, color, mesh.eastU1(i), mesh.eastV1(i), packedOverlay, packedLight, normalPX);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C001.x, C001.y, C001.z, color, mesh.eastU0(i), mesh.eastV1(i), packedOverlay, packedLight, normalPX);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C011.x, C011.y, C011.z, color, mesh.eastU0(i), mesh.eastV0(i), packedOverlay, packedLight, normalPX);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C010.x, C010.y, C010.z, color, mesh.eastU1(i), mesh.eastV0(i), packedOverlay, packedLight, normalPX);
+                    ptr += ModelVertex.STRIDE;
+                }
+            } else {
+                if ((faces & 0b000001) != 0) // DOWN
+                {
+                    emitVertex(ptr, C101.x, C101.y, C101.z, color, mesh.downU1(i), mesh.downV0(i), packedOverlay, packedLight, normalNY);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C001.x, C001.y, C001.z, color, mesh.downU0(i), mesh.downV0(i), packedOverlay, packedLight, normalNY);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C000.x, C000.y, C000.z, color, mesh.downU0(i), mesh.downV1(i), packedOverlay, packedLight, normalNY);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C100.x, C100.y, C100.z, color, mesh.downU1(i), mesh.downV1(i), packedOverlay, packedLight, normalNY);
+                    ptr += ModelVertex.STRIDE;
+                }
+                if ((faces & 0b000010) != 0) // UP
+                {
+                    emitVertex(ptr, C110.x, C110.y, C110.z, color, mesh.upU1(i), mesh.upV0(i), packedOverlay, packedLight, normalPY);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C010.x, C010.y, C010.z, color, mesh.upU0(i), mesh.upV0(i), packedOverlay, packedLight, normalPY);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C011.x, C011.y, C011.z, color, mesh.upU0(i), mesh.upV1(i), packedOverlay, packedLight, normalPY);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C111.x, C111.y, C111.z, color, mesh.upU1(i), mesh.upV1(i), packedOverlay, packedLight, normalPY);
+                    ptr += ModelVertex.STRIDE;
+                }
+                if ((faces & 0b000100) != 0) // NORTH
+                {
+                    emitVertex(ptr, C100.x, C100.y, C100.z, color, mesh.northU1(i), mesh.northV0(i), packedOverlay, packedLight, normalNZ);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C000.x, C000.y, C000.z, color, mesh.northU0(i), mesh.northV0(i), packedOverlay, packedLight, normalNZ);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C010.x, C010.y, C010.z, color, mesh.northU0(i), mesh.northV1(i), packedOverlay, packedLight, normalNZ);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C110.x, C110.y, C110.z, color, mesh.northU1(i), mesh.northV1(i), packedOverlay, packedLight, normalNZ);
+                    ptr += ModelVertex.STRIDE;
+                }
+                if ((faces & 0b001000) != 0) // SOUTH
+                {
+                    emitVertex(ptr, C001.x, C001.y, C001.z, color, mesh.southU1(i), mesh.southV0(i), packedOverlay, packedLight, normalPZ);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C101.x, C101.y, C101.z, color, mesh.southU0(i), mesh.southV0(i), packedOverlay, packedLight, normalPZ);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C111.x, C111.y, C111.z, color, mesh.southU0(i), mesh.southV1(i), packedOverlay, packedLight, normalPZ);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C011.x, C011.y, C011.z, color, mesh.southU1(i), mesh.southV1(i), packedOverlay, packedLight, normalPZ);
+                    ptr += ModelVertex.STRIDE;
+                }
+                if ((faces & 0b010000) != 0) // WEST
+                {
+                    emitVertex(ptr, C101.x, C101.y, C101.z, color, mesh.westU1(i), mesh.westV0(i), packedOverlay, packedLight, normalNX);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C100.x, C100.y, C100.z, color, mesh.westU0(i), mesh.westV0(i), packedOverlay, packedLight, normalNX);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C110.x, C110.y, C110.z, color, mesh.westU0(i), mesh.westV1(i), packedOverlay, packedLight, normalNX);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C111.x, C111.y, C111.z, color, mesh.westU1(i), mesh.westV1(i), packedOverlay, packedLight, normalNX);
+                    ptr += ModelVertex.STRIDE;
+                }
+                if ((faces & 0b100000) != 0) // EAST
+                {
+                    emitVertex(ptr, C000.x, C000.y, C000.z, color, mesh.eastU1(i), mesh.eastV0(i), packedOverlay, packedLight, normalPX);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C001.x, C001.y, C001.z, color, mesh.eastU0(i), mesh.eastV0(i), packedOverlay, packedLight, normalPX);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C011.x, C011.y, C011.z, color, mesh.eastU0(i), mesh.eastV1(i), packedOverlay, packedLight, normalPX);
+                    ptr += ModelVertex.STRIDE;
+
+                    emitVertex(ptr, C010.x, C010.y, C010.z, color, mesh.eastU1(i), mesh.eastV1(i), packedOverlay, packedLight, normalPX);
+                    ptr += ModelVertex.STRIDE;
+                }
+            }
+
+            flush(writer, vertexCount);
+        }
+
+        return true;
+    }
+
+    static void emitVertex(long ptr, float x, float y, float z, int color, float u, float v, int packedOverlay, int packedLight, int normal) {
+        ModelVertex.write(ptr, x, y, z, color, u, v, packedOverlay, packedLight, normal);
+    }
+
+    static void flush(VertexBufferWriter writer, int vertexCount) {
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            writer.push(stack, SCRATCH_BUFFER, vertexCount, ModelVertex.FORMAT);
+        }
+    }
+}

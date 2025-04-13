@@ -207,14 +207,15 @@ dependencies {
     compileOnly fg.deobf("maven.modrinth:torohealth-damage-indicators-updated:1.20.1-forge-1")
 
     implementation fg.deobf("curse.maven:aquaculture-60028:5585290")
-    runtimeOnly fg.deobf("curse.maven:lavafishing-1035887:5432767")
+    //runtimeOnly fg.deobf("curse.maven:lavafishing-1035887:5432767")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     runtimeOnly fg.deobf("maven.modrinth:better-advancements:0.4.2.10-forge")
     runtimeOnly fg.deobf("maven.modrinth:farmers-delight:1.20.1-1.2.6-forge")
     runtimeOnly fg.deobf("maven.modrinth:ice-and-fire-dragons:2.1.13-1.20.1-beta-5")
-    // runtimeOnly fg.deobf("maven.modrinth:embeddium:0.3.31+mc1.20.1")
+    runtimeOnly fg.deobf("maven.modrinth:embeddium:0.3.31+mc1.20.1")
+    compileOnly fg.deobf("maven.modrinth:embeddium:0.3.31+mc1.20.1")
     // runtimeOnly fg.deobf('maven.modrinth:oculus:1.20.1-1.7.0')
     // runtimeOnly fg.deobf("curse.maven:maid-storage-manager-1210244:6315697")
 }

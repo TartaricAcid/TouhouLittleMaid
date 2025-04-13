@@ -9,6 +9,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.overlay.MaidTipsOverlay;
 import com.github.tartaricacid.touhoulittlemaid.compat.immersivemelodies.ImmersiveMelodiesCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.oculus.OculusCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.simplehats.SimpleHatsCompat;
+import com.github.tartaricacid.touhoulittlemaid.compat.sodium.SodiumCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.ysm.YsmCompat;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
@@ -31,6 +32,7 @@ public class ClientSetupEvent {
         SimpleHatsCompat.init();
         ImmersiveMelodiesCompat.init();
         OculusCompat.init();
+        SodiumCompat.init();
     }
 
     @SubscribeEvent
