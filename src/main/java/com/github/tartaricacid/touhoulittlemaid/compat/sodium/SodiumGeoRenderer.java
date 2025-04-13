@@ -103,12 +103,12 @@ class SodiumGeoRenderer {
                 dy.normalize();
                 dz.normalize();
             }
-            int normalPX = packUnsafe(dx.x, dy.x, dz.x);
-            int normalPY = packUnsafe(dx.y, dy.y, dz.y);
-            int normalPZ = packUnsafe(dx.z, dy.z, dz.z);
-            int normalNX = packUnsafe(-dx.x, -dy.x, -dz.x);
-            int normalNY = packUnsafe(-dx.y, -dy.y, -dz.y);
-            int normalNZ = packUnsafe(-dx.z, -dy.z, -dz.z);
+            int normalPX = packUnsafe(dx.x, dx.y, dx.z);
+            int normalPY = packUnsafe(dy.x, dy.y, dy.z);
+            int normalPZ = packUnsafe(dz.x, dz.y, dz.z);
+            int normalNX = packUnsafe(-dx.x, -dx.y, -dx.z);
+            int normalNY = packUnsafe(-dy.z, -dy.y, -dy.z);
+            int normalNZ = packUnsafe(-dz.x, -dz.y, -dz.z);
 
             long ptr = SCRATCH_BUFFER;
             int vertexCount = 0;
