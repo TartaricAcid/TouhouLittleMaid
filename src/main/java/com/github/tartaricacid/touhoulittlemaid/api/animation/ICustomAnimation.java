@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.api.animation;
 
-import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockPart;
+import com.github.tartaricacid.simplebedrockmodel.client.bedrock.model.BedrockPart;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated.AnimatedGeoModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.world.entity.LivingEntity;

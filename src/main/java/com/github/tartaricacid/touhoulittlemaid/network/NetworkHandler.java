@@ -116,6 +116,8 @@ public final class NetworkHandler {
         // 仅安装 YSM 后才会发送此包
         CHANNEL.registerMessage(44, SyncYsmMaidDataMessage.class, SyncYsmMaidDataMessage::encode, SyncYsmMaidDataMessage::decode, SyncYsmMaidDataMessage::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        CHANNEL.registerMessage(45, TTSSystemAudioToClientMessage.class, TTSSystemAudioToClientMessage::encode, TTSSystemAudioToClientMessage::decode, TTSSystemAudioToClientMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 
     public static void sendToClientPlayer(Object message, Player player) {

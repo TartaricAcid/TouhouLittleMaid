@@ -4,16 +4,18 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.response.ResponseChat;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.Site;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.Service;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.fishaudio.TTSClient;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.fishaudio.request.TTSRequest;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.openai.ChatClient;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.openai.request.ChatCompletion;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.openai.response.ChatCompletionResponse;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.chat.openai.ChatClient;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.chat.openai.request.ChatCompletion;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.chat.openai.response.ChatCompletionResponse;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSApiType;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSClient;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSRequest;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.AIConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManger;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.TTSAudioToClientMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.TTSSystemAudioToClientMessage;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
@@ -48,10 +50,22 @@ public final class MaidAIChatManager extends MaidAIChatData {
         }
     }
 
+    @SuppressWarnings("all")
     private void tts(Site site, String chatText, String ttsText) {
-        TTSClient ttsClient = Service.getTtsClient(site);
-        TTSRequest ttsRequest = Service.getTtsRequest(this.getTtsModel(), ttsText);
-        ttsClient.request(ttsRequest).handle(data -> onPlaySoundSync(chatText, data), throwable -> onTtsFailSync(chatText, throwable));
+        // 调用系统 TTS，那么此时就只需要发送给指定的玩家即可
+        if (TTSApiType.SYSTEM.getName().equals(site.getApiType())) {
+            onPlaySoundLocal(chatText, ttsText);
+        } else {
+            TTSClient ttsClient = Service.getTtsClient(site);
+            String ttsLang = "en";
+            String[] split = this.getTtsLanguage().split("_");
+            if (split.length >= 2) {
+                ttsLang = split[0];
+            }
+            TTSRequest ttsRequest = Service.getTtsRequest(site, ttsText, ttsLang, this.getTtsModel());
+            ttsClient.request(ttsRequest).handle(data -> onPlaySoundSync(chatText, (byte[]) data),
+                    throwable -> onTtsFailSync(chatText, (Throwable) throwable));
+        }
     }
 
     private void onShowChatSync(ChatCompletionResponse result) {
@@ -106,6 +120,19 @@ public final class MaidAIChatManager extends MaidAIChatData {
                 player.sendSystemMessage(Component.translatable("ai.touhou_little_maid.chat.connect.fail")
                         .append(message).withStyle(ChatFormatting.RED));
             }
+        });
+    }
+
+    private void onPlaySoundLocal(String chatText, String ttsText) {
+        if (!(maid.level instanceof ServerLevel serverLevel)) {
+            return;
+        }
+        MinecraftServer server = serverLevel.getServer();
+        server.submit(() -> {
+            if (maid.getOwner() instanceof ServerPlayer player) {
+                NetworkHandler.sendToClientPlayer(new TTSSystemAudioToClientMessage(ttsText), player);
+            }
+            ChatBubbleManger.addAiChatText(maid, chatText);
         });
     }
 

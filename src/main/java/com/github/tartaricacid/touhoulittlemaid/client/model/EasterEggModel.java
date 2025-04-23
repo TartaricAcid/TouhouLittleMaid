@@ -1,8 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.client.model;
 
+import com.github.tartaricacid.simplebedrockmodel.client.bedrock.pojo.BedrockModelPOJO;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.client.animation.script.ModelRendererWrapper;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
-import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.BedrockModelPOJO;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
 import net.minecraft.client.Minecraft;
@@ -28,6 +29,7 @@ public class EasterEggModel extends BedrockModel<Mob> {
         } catch (IOException exception) {
             exception.printStackTrace();
         }
+        this.modelMap.forEach((key, model) -> modelMapWrapper.put(key, new ModelRendererWrapper(model)));
     }
 
     public static EasterEggModel getInstance() {

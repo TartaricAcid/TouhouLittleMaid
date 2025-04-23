@@ -123,15 +123,21 @@ public class MaidNodeEvaluator extends WalkNodeEvaluator {
         } else {
             pathType = WalkNodeEvaluator.getBlockPathTypeRaw(level, pos);
             // 判断目标方块的碰撞高度。有些半透明方块拥有超过 0.5（台阶）的高度，此时女仆是不能从其中穿过的，需要将其视为不可通行方块
-            VoxelShape shape = blockState.getCollisionShape(level, pos);
-            if (pathType != BlockPathTypes.BLOCKED && shape.max(Direction.Axis.Y) - shape.min(Direction.Axis.Y) > 0.5) {
-                pathType = BlockPathTypes.BLOCKED;
+            if (!heightCheckExclusions(pathType)) {
+                VoxelShape shape = blockState.getCollisionShape(level, pos);
+                if (pathType != BlockPathTypes.BLOCKED && shape.max(Direction.Axis.Y) - shape.min(Direction.Axis.Y) > 0.5) {
+                    pathType = BlockPathTypes.BLOCKED;
+                }
             }
         }
         if (pathType == BlockPathTypes.DOOR_WOOD_CLOSED && this.mob instanceof EntityMaid maid && !this.canOpenDoor(blockState.getBlock(), maid)) {
             pathType = BlockPathTypes.DOOR_IRON_CLOSED;
         }
         return pathType;
+    }
+
+    private boolean heightCheckExclusions(BlockPathTypes pathType) {
+        return pathType == BlockPathTypes.DOOR_OPEN || pathType == BlockPathTypes.DOOR_WOOD_CLOSED;
     }
 
     private boolean canOpenDoor(Block block, EntityMaid maid) {

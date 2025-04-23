@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.immersivemelodies;
 
-import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockPart;
+import com.github.tartaricacid.simplebedrockmodel.client.bedrock.model.BedrockPart;
 import immersive_melodies.client.animation.accessors.ModelAccessor;
 import net.minecraft.world.entity.Mob;
 

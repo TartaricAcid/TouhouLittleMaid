@@ -3,14 +3,14 @@ package com.github.tartaricacid.touhoulittlemaid.ai.service;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.HistoryChat;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.MaidAIChatManager;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.Site;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.fishaudio.TTSClient;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.fishaudio.request.Format;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.fishaudio.request.OpusBitRate;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.fishaudio.request.TTSRequest;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.openai.ChatClient;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.openai.request.ChatCompletion;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.openai.request.ResponseFormat;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.openai.request.Role;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.chat.openai.ChatClient;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.chat.openai.request.ChatCompletion;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.chat.openai.request.ResponseFormat;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.chat.openai.request.Role;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.player2.STTClient;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSClient;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSFactory;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSRequest;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.AIConfig;
 import com.github.tartaricacid.touhoulittlemaid.util.CappedQueue;
 import com.google.gson.Gson;
@@ -28,6 +28,10 @@ public final class Service {
     private static final HttpClient TTS_HTTP_CLIENT = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(10))
             .proxy(new ConfigProxySelector(AIConfig.TTS_PROXY_ADDRESS))
+            .build();
+    private static final HttpClient STT_HTTP_CLIENT = HttpClient.newBuilder()
+            .connectTimeout(Duration.ofSeconds(10))
+            .proxy(new ConfigProxySelector(AIConfig.STT_PROXY_ADDRESS))
             .build();
 
     public static ChatClient getChatClient(Site site) {
@@ -52,7 +56,9 @@ public final class Service {
                     .model(model)
                     .temperature(chatTemperature)
                     .setResponseFormat(ResponseFormat.json())
-                    .systemChat(setting);
+                    .systemChat(setting)
+                    // 塞入一个参考回应，能让 AI 尽可能遵循参考格式进行回复
+                    .assistantChat("{\"chat_text\":\"看到你真开心！要不要一起去挖矿？\",\"tts_text\":\"看到你真开心！要不要一起去挖矿？\"}");
 
             // 倒序遍历，将历史对话加载进去
             history.getDeque().descendingIterator().forEachRemaining(historyChat -> {
@@ -65,24 +71,25 @@ public final class Service {
                 }
             });
 
+            // 最后强调一下语言类型
+            chatCompletion.userChat(String.format("请用%s语言回复 chat_text 部分！并用%s语言回复 tts_text 部分！", language, chatManager.getTtsLanguage()));
+
             return chatCompletion;
         }).orElse(null);
     }
 
-    public static TTSClient getTtsClient(Site site) {
-        String ttsApiKey = site.getApiKey();
-        String ttsBaseUrl = site.getUrl();
-        return TTSClient.create(TTS_HTTP_CLIENT)
-                .apiKey(ttsApiKey)
-                .baseUrl(ttsBaseUrl);
+    @Nullable
+    public static TTSClient<?> getTtsClient(Site site) {
+        return TTSFactory.getTtsClient(TTS_HTTP_CLIENT, site);
     }
 
-    public static TTSRequest getTtsRequest(String model, String text) {
-        return TTSRequest.create()
-                .setReferenceId(model)
-                .setFormat(Format.OPUS)
-                // OPUS 极低比特率情况下，音质效果也还不错
-                .setOpusBitrate(OpusBitRate.LOWEST)
-                .setText(text);
+    @Nullable
+    public static TTSRequest getTtsRequest(Site site, String ttsText, String ttsLang, String model) {
+        return TTSFactory.getTtsRequest(site, ttsText, ttsLang, model);
+    }
+
+    public static STTClient getSttClient(String url) {
+        return STTClient.create(STT_HTTP_CLIENT)
+                .baseUrl(url);
     }
 }

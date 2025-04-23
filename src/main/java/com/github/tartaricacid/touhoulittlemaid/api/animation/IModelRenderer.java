@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.api.animation;
 
-import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockPart;
+
+import com.github.tartaricacid.simplebedrockmodel.client.bedrock.model.BedrockPart;
 
 public interface IModelRenderer {
     /**

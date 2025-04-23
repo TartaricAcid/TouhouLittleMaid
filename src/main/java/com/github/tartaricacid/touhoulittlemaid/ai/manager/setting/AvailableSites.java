@@ -1,6 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.manager.setting;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.chat.ChatApiType;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSApiType;
 import com.github.tartaricacid.touhoulittlemaid.util.GetJarResources;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +19,7 @@ import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class AvailableSites {
     public static final String FILE_NAME = "available_sites.yml";
@@ -59,6 +62,7 @@ public class AvailableSites {
 
         // 分类
         allSites.forEach((key, value) -> {
+            fixOldVersionConfig(value);
             try {
                 Site site = new Site(value);
                 // 必须设置了 key 的才能用于聊天
@@ -123,5 +127,19 @@ public class AvailableSites {
 
     public static Map<String, List<String>> getClientTtsSites() {
         return CLIENT_TTS_SITES;
+    }
+
+    private static void fixOldVersionConfig(LinkedHashMap<String, Object> map) {
+        String type = Objects.requireNonNullElse((String) map.get("type"), StringUtils.EMPTY);
+        String apiType = Objects.requireNonNullElse((String) map.get("api_type"), StringUtils.EMPTY);
+        // 如果缺失 api_type 字段，那么依据类型给其补上默认的
+        if (apiType.isBlank()) {
+            if ("chat".equals(type)) {
+                map.put("api_type", ChatApiType.OPENAI.getName());
+            }
+            if ("tts".equals(type)) {
+                map.put("api_type", TTSApiType.FISH_AUDIO.getName());
+            }
+        }
     }
 }

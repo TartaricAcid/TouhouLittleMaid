@@ -2,7 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.animation.special;
 
 import com.github.tartaricacid.touhoulittlemaid.api.animation.ICustomAnimation;
 import com.github.tartaricacid.touhoulittlemaid.api.animation.IModelRenderer;
-import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockPart;
+import com.github.tartaricacid.simplebedrockmodel.client.bedrock.model.BedrockPart;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;

@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.manager.entity;
 
-import com.github.tartaricacid.touhoulittlemaid.ai.service.openai.request.Role;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.chat.openai.request.Role;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 
 public record HistoryChat(Role role, String message, long gameTime) {

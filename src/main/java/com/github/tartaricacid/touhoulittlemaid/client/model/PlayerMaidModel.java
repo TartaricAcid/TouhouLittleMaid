@@ -1,8 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.client.model;
 
+import com.github.tartaricacid.simplebedrockmodel.client.bedrock.pojo.BedrockModelPOJO;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.client.animation.script.ModelRendererWrapper;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
-import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.BedrockModelPOJO;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
@@ -33,5 +34,6 @@ public class PlayerMaidModel extends BedrockModel<Mob> {
                 exception.printStackTrace();
             }
         }
+        this.modelMap.forEach((key, model) -> modelMapWrapper.put(key, new ModelRendererWrapper(model)));
     }
 }

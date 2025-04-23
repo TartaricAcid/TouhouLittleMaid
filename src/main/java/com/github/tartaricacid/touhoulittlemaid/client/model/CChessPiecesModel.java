@@ -1,9 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.client.model;
 
+import com.github.tartaricacid.simplebedrockmodel.client.bedrock.model.BedrockPart;
+import com.github.tartaricacid.simplebedrockmodel.client.bedrock.pojo.BedrockModelPOJO;
+import com.github.tartaricacid.simplebedrockmodel.client.bedrock.pojo.BedrockVersion;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
-import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockPart;
-import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.BedrockModelPOJO;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -22,7 +23,7 @@ public class CChessPiecesModel {
     private final BedrockPart main;
 
     public CChessPiecesModel(String name) {
-        this.main = bedrockModel.getModelMap().get(name).getModelRenderer();
+        this.main = bedrockModel.getModelMap().get(name);
     }
 
     public static CChessPiecesModel[] initModel() {

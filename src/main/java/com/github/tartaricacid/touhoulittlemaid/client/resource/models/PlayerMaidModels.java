@@ -5,7 +5,6 @@ import com.github.tartaricacid.touhoulittlemaid.client.animation.inner.InnerAnim
 import com.github.tartaricacid.touhoulittlemaid.client.model.PlayerMaidModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Lists;

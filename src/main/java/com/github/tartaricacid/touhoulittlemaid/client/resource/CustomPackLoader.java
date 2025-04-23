@@ -1,13 +1,13 @@
 package com.github.tartaricacid.touhoulittlemaid.client.resource;
 
+import com.github.tartaricacid.simplebedrockmodel.client.bedrock.pojo.BedrockModelPOJO;
+import com.github.tartaricacid.simplebedrockmodel.client.bedrock.pojo.BedrockVersion;
+import com.github.tartaricacid.simplebedrockmodel.client.bedrock.pojo.CubesItem;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.CustomJsAnimationManger;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.condition.ConditionManager;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.cache.CacheIconManager;
-import com.github.tartaricacid.touhoulittlemaid.client.model.BedrockVersion;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
-import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.BedrockModelPOJO;
-import com.github.tartaricacid.touhoulittlemaid.client.model.pojo.CubesItem;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.texture.FilePackTexture;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.texture.ZipPackTexture;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.models.ChairModels;

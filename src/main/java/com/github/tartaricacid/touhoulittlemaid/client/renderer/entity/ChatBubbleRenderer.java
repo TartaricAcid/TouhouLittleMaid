@@ -11,6 +11,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.GameRenderer;
@@ -26,10 +27,12 @@ import org.joml.Matrix4f;
 
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class ChatBubbleRenderer {
-    protected static final RenderStateShard.TransparencyStateShard NO_TRANSPARENCY = new RenderStateShard.TransparencyStateShard("no_transparency", RenderSystem::disableBlend, () -> {
+    private static final RenderStateShard.TransparencyStateShard NO_TRANSPARENCY = new RenderStateShard.TransparencyStateShard("no_transparency", RenderSystem::disableBlend, () -> {
     });
+    private static final Function<ResourceLocation, RenderType> CHAT_BUBBLE_RENDER = Util.memoize(ChatBubbleRenderer::chatBubbleRender);
     private static final List<Pair<Long, ChatText>> TMP_CHAT_BUBBLES = Lists.newArrayList();
     private static final String LEFT_ARROW = "left_arrow";
     private static final String MIDDLE_ARROW = "middle_arrow";
@@ -153,10 +156,9 @@ public class ChatBubbleRenderer {
     }
 
     private static void renderIcon(int startX, int startY, ResourceLocation iconPath, RenderData data) {
-        VertexConsumer iconVertexBuilder = data.buffer.getBuffer(chatBubbleRender(iconPath));
-        AbstractTexture texture = Minecraft.getInstance().textureManager.getTexture(iconPath);
-        if (texture instanceof SizeTexture) {
-            SizeTexture sizeTexture = (SizeTexture) texture;
+        VertexConsumer iconVertexBuilder = data.buffer.getBuffer(CHAT_BUBBLE_RENDER.apply(iconPath));
+        AbstractTexture texture = Minecraft.getInstance().getTextureManager().getTexture(iconPath);
+        if (texture instanceof SizeTexture sizeTexture) {
             int textureHeight = sizeTexture.getHeight();
             int textureWidth = sizeTexture.getWidth();
             int count = textureHeight / (textureWidth / 3);
@@ -211,7 +213,7 @@ public class ChatBubbleRenderer {
         data.matrixStack.mulPose(data.renderer.getDispatcher().cameraOrientation());
         data.matrixStack.scale(-0.025F, -0.025F, 0.025F);
 
-        VertexConsumer vertexBuilder = data.buffer.getBuffer(chatBubbleRender(bg));
+        VertexConsumer vertexBuilder = data.buffer.getBuffer(CHAT_BUBBLE_RENDER.apply(bg));
         drawBg(data.matrixStack, vertexBuilder, leftStartX, startY, 0.2f, 0, 0);
         for (int i = 0; i < count; i++) {
             drawBg(data.matrixStack, vertexBuilder, middleStartX, startY, 0.2f, 1, 0);

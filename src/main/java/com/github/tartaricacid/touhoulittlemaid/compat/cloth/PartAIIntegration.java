@@ -34,6 +34,14 @@ public class PartAIIntegration {
         MaidAIChatManager manager = maid.getAiChatManager();
         ConfigCategory ai = root.getOrCreateCategory(Component.translatable("config.touhou_little_maid.part_ai"));
 
+        ai.addEntry(entryBuilder.startTextField(Component.translatable("config.touhou_little_maid.part_ai.owner_name"), manager.getOwnerName())
+                .setDefaultValue(StringUtils.EMPTY).setSaveConsumer(manager::setOwnerName)
+                .setTooltip(Component.translatable("config.touhou_little_maid.part_ai.owner_name.tooltip")).build());
+
+        ai.addEntry(entryBuilder.startTextField(Component.translatable("config.touhou_little_maid.part_ai.custom_setting"), manager.getCustomSetting())
+                .setDefaultValue(StringUtils.EMPTY).setSaveConsumer(manager::setCustomSetting)
+                .setTooltip(Component.translatable("config.touhou_little_maid.part_ai.custom_setting.tooltip")).build());
+
         String chatSiteName = manager.getChatSiteName();
         String defaultChatSiteName = AIChatScreen.CLIENT_CHAT_SITES.containsKey(chatSiteName) ? chatSiteName : StringUtils.EMPTY;
         DropdownBoxEntry<String> chatSite = entryBuilder.startStringDropdownMenu(Component.translatable("config.touhou_little_maid.part_ai.chat_site_name"), defaultChatSiteName)

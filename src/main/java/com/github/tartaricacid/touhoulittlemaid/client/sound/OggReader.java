@@ -14,6 +14,7 @@ import org.gagravarr.ogg.OggStreamIdentifier;
 import org.lwjgl.BufferUtils;
 
 import javax.sound.sampled.AudioFormat;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -94,6 +95,10 @@ public final class OggReader {
         }
     }
 
+    public static Type getOggType(byte[] data) throws IOException {
+        return getOggType(new ByteArrayInputStream(data));
+    }
+
     private static Type getOggType(InputStream stream) throws IOException {
         try (OggFile oggFile = new OggFile(stream)) {
             OggStreamIdentifier.OggStreamType streamType = OggStreamIdentifier.identifyType(oggFile.getPacketReader().getNextPacket());
@@ -107,7 +112,7 @@ public final class OggReader {
         }
     }
 
-    private enum Type {
+    public enum Type {
         VORBIS,
         OPUS,
         UNKNOWN

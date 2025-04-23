@@ -10,6 +10,8 @@ public class MaidAIDataSerializable {
     protected String ttsSiteName = "";
     protected String ttsModel = "";
     protected String ttsLanguage = "";
+    protected String ownerName = "";
+    protected String customSetting = "";
 
     public void decode(FriendlyByteBuf buf) {
         chatSiteName = buf.readUtf();
@@ -18,6 +20,8 @@ public class MaidAIDataSerializable {
         ttsSiteName = buf.readUtf();
         ttsModel = buf.readUtf();
         ttsLanguage = buf.readUtf();
+        ownerName = buf.readUtf();
+        customSetting = buf.readUtf();
     }
 
     public void encode(FriendlyByteBuf buf) {
@@ -27,6 +31,8 @@ public class MaidAIDataSerializable {
         buf.writeUtf(ttsSiteName);
         buf.writeUtf(ttsModel);
         buf.writeUtf(ttsLanguage);
+        buf.writeUtf(ownerName);
+        buf.writeUtf(customSetting);
     }
 
     public void copyFrom(MaidAIDataSerializable data) {
@@ -36,6 +42,8 @@ public class MaidAIDataSerializable {
         ttsSiteName = data.ttsSiteName;
         ttsModel = data.ttsModel;
         ttsLanguage = data.ttsLanguage;
+        ownerName = data.ownerName;
+        customSetting = data.customSetting;
     }
 
     public void readFromTag(CompoundTag tag) {
@@ -47,6 +55,8 @@ public class MaidAIDataSerializable {
             ttsSiteName = data.getString("TtsSiteName");
             ttsModel = data.getString("TtsModel");
             ttsLanguage = data.getString("TtsLanguage");
+            ownerName = data.getString("OwnerName");
+            customSetting = data.getString("CustomSetting");
         }
     }
 
@@ -59,6 +69,8 @@ public class MaidAIDataSerializable {
             data.putString("TtsSiteName", ttsSiteName);
             data.putString("TtsModel", ttsModel);
             data.putString("TtsLanguage", ttsLanguage);
+            data.putString("OwnerName", ownerName);
+            data.putString("CustomSetting", customSetting);
         }
         tag.put("MaidAIChatData", data);
     }
@@ -109,5 +121,21 @@ public class MaidAIDataSerializable {
 
     public void setTtsLanguage(String ttsLanguage) {
         this.ttsLanguage = ttsLanguage;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public String getCustomSetting() {
+        return customSetting;
+    }
+
+    public void setCustomSetting(String customSetting) {
+        this.customSetting = customSetting;
     }
 }

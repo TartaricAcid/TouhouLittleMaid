@@ -3,10 +3,14 @@ package com.github.tartaricacid.touhoulittlemaid.ai.manager.setting;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.response.ResponseChat;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.Service;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.items.wrapper.RangedWrapper;
 import org.apache.commons.lang3.StringUtils;
 
@@ -26,7 +30,14 @@ public class PapiReplacer {
                 .replace("${inventory_items}", getInventoryItems(maid))
                 .replace("${output_json_format}", getOutputJsonFormat())
                 .replace("${chat_language}", language)
-                .replace("${tts_language}", ttsLanguage(maid.getAiChatManager().getTtsLanguage()));
+                .replace("${tts_language}", ttsLanguage(maid.getAiChatManager().getTtsLanguage()))
+                .replace("${healthy}", getHealthyInfo(maid))
+                .replace("${owner_healthy}", getOwnerHealthyInfo(maid))
+                .replace("${armor_items}", getArmorItems(maid))
+                .replace("${effects}", getEffects(maid))
+                .replace("${biome}", getBiome(maid))
+                .replace("${owner_name}", getOwnerName(maid))
+                .replace("${custom_setting}", maid.getAiChatManager().getCustomSetting());
     }
 
     /**
@@ -40,6 +51,62 @@ public class PapiReplacer {
         }
         Locale locale = Locale.forLanguageTag(languageTag);
         return locale.getDisplayLanguage() + " (" + locale.getDisplayCountry() + ")";
+    }
+
+    private static String getBiome(EntityMaid maid) {
+        Biome biome = maid.level.getBiome(maid.blockPosition()).value();
+        ResourceLocation key = maid.level.registryAccess().registryOrThrow(Registries.BIOME).getKey(biome);
+        return key == null ? "未知 Biome" : key.toString();
+    }
+
+    private static String getEffects(EntityMaid maid) {
+        List<String> names = new ArrayList<>();
+        maid.getActiveEffects().forEach(i -> {
+            names.add(i.toString());
+        });
+        if (names.isEmpty()) {
+            return "无";
+        }
+        return StringUtils.join(names, ", ");
+    }
+
+    private static String getArmorItems(EntityMaid maid) {
+        List<String> names = new ArrayList<>();
+        maid.getArmorSlots().forEach(stack -> {
+            if (!stack.isEmpty()) {
+                String itemName = stack.getDisplayName().getString();
+                int count = stack.getCount();
+                names.add(String.format("%sx%s", itemName, count));
+            }
+        });
+        if (names.isEmpty()) {
+            return "空的";
+        }
+        return StringUtils.join(names, ", ");
+    }
+
+    private static String getHealthyInfo(EntityMaid maid) {
+        float maxHealth = maid.getMaxHealth();
+        float health = maid.getHealth();
+        return String.format("%s (max %s)", health, maxHealth);
+    }
+
+    private static String getOwnerHealthyInfo(EntityMaid maid) {
+        LivingEntity owner = maid.getOwner();
+        if (owner != null) {
+            float maxHealth = owner.getMaxHealth();
+            float health = owner.getHealth();
+            return String.format("%s (max %s)", health, maxHealth);
+        }
+        return StringUtils.EMPTY;
+    }
+
+    private static String getOwnerName(EntityMaid maid) {
+        String ownerName = maid.getAiChatManager().getOwnerName();
+        if (StringUtils.isBlank(ownerName)) {
+            return "主人";
+        }
+        return ownerName;
     }
 
     private static String getWeather(Level level) {
