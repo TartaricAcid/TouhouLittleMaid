@@ -258,3 +258,8 @@ idea {
         downloadJavadoc = true
     }
 }
+
+java {
+    // 编译源码文件，方便发布 maven
+    withSourcesJar()
+}
