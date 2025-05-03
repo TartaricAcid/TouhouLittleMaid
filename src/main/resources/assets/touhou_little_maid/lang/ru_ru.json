@@ -269,6 +269,7 @@
   "tooltips.touhou_little_maid.maid_beacon.desc": "Сохранённая сила: %s",
   "tooltips.touhou_little_maid.chair_show.desc": "Удерживайте этот предмет и присядьте, чтобы отобразить хитбокс стульев",
   "tooltips.touhou_little_maid.model_switcher.bounded": "Уже привязано к горничной",
+  "tooltips.touhou_little_maid.custom_sound.credit": "",
   "tooltips.touhou_little_maid.custom_sound.open_url": "Открыть url набора звуков",
   "tooltips.touhou_little_maid.custom_sound.play_sound": "Нажмите, чтобы воспроизвести звук",
   "tooltips.touhou_little_maid.fox_scroll.dimension": "§a▍ §7Измерение: %s",
