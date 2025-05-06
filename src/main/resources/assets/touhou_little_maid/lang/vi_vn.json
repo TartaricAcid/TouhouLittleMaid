@@ -565,7 +565,7 @@
   "config.touhou_little_maid.maid.maid_backpack_blacklist": "Danh Sách Đen Balo Của Maid",
   "config.touhou_little_maid.maid.maid_backpack_blacklist.tooltip": "Những vật phẩm này không thể đặt vào balo của maid",
   "config.touhou_little_maid.maid.maid_attack_ignore": "Maid Tấn Công Bỏ Qua Mục Tiêu",
-  "config.touhou_little_maid.maid.maid_attack_ignore.tooltip": "Các thực thể mà maid sẽ không nhận là mục tiêu tấn công",
+  "config.touhou_little_maid.maid.maid_attack_ignore.tooltip": "Những thực thể này sẽ không bị maid nhận là mục tiêu tấn công",
   "config.touhou_little_maid.maid.maid_ranged_attack_ignore": "Chế độ tấn công trong phạm vi của maid bỏ qua các thực thể",
   "config.touhou_little_maid.maid.maid_ranged_attack_ignore.tooltip": "Những thực thể mà maid sẽ không đánh khi trong phạm vi tấn công",
   "config.touhou_little_maid.maid.maid_gomoku_owner_limit": "Giới hạn cờ ca-rô của Maid với Chủ Nhân",
