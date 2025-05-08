@@ -250,6 +250,6 @@ public class MaidBreathAirTask extends Behavior<EntityMaid> {
         Level level = maid.level;
         BlockState blockState = level.getBlockState(pos);
         boolean noFluid = level.getFluidState(pos).isEmpty() || blockState.is(Blocks.BUBBLE_COLUMN);
-        return noFluid && blockState.getBlock().isPathfindable(blockState, level, pos, PathComputationType.LAND);
+        return noFluid && blockState.getCollisionShape(level, pos).isEmpty();
     }
 }

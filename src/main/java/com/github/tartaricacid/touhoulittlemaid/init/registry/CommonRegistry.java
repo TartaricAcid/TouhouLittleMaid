@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.init.registry;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.block.multiblock.MultiBlockManager;
 import com.github.tartaricacid.touhoulittlemaid.compat.ysm.YsmCompat;
+import com.github.tartaricacid.touhoulittlemaid.debug.target.DebugMaidManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.ExtraMaidBrainManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.fishing.FishingTypeManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
@@ -39,5 +40,6 @@ public final class CommonRegistry {
         MaidMealManager.init();
         TaskDataRegister.init();
         FishingTypeManager.init();
+        DebugMaidManager.init();
     }
 }

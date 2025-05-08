@@ -5,9 +5,11 @@ import com.github.tartaricacid.touhoulittlemaid.client.animation.HardcodedAnimat
 import com.github.tartaricacid.touhoulittlemaid.client.overlay.MaidTipsOverlay;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRenderer;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.GeckoEntityMaidRenderer;
+import com.github.tartaricacid.touhoulittlemaid.debug.target.DebugTarget;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.ExtraMaidBrainManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.data.TaskDataRegister;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.meal.MaidMealManager;
 import com.github.tartaricacid.touhoulittlemaid.inventory.chest.ChestManager;
@@ -16,6 +18,10 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.world.entity.Mob;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Function;
 
 public interface ILittleMaid {
     /**
@@ -110,5 +116,9 @@ public interface ILittleMaid {
      */
     @OnlyIn(Dist.CLIENT)
     default void addHardcodeAnimation(HardcodedAnimationManger manger) {
+    }
+
+    default Collection<? extends Function<EntityMaid, List<DebugTarget>>> getMaidDebugTargets() {
+        return List.of();
     }
 }

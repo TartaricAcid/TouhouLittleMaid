@@ -1,7 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.debug;
 
 import com.github.tartaricacid.touhoulittlemaid.api.event.InteractMaidEvent;
+import com.github.tartaricacid.touhoulittlemaid.debug.target.DebugMaidManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityEvent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
@@ -17,8 +19,14 @@ public class ChangeMaidOwner {
         Player player = event.getPlayer();
         EntityMaid maid = event.getMaid();
         if (player.getMainHandItem().is(Items.DEBUG_STICK)) {
-            maid.setOwnerUUID(UUID.randomUUID());
-            maid.level.broadcastEntityEvent(maid, EntityEvent.TAMING_SUCCEEDED);
+            if(player.isShiftKeyDown()) {
+                maid.setOwnerUUID(UUID.randomUUID());
+                maid.level.broadcastEntityEvent(maid, EntityEvent.TAMING_SUCCEEDED);
+            }else{
+                if(!event.getWorld().isClientSide) {
+                    DebugMaidManager.triggerDebuggingMaid((ServerPlayer) player, maid);
+                }
+            }
             event.setCanceled(true);
         }
     }
