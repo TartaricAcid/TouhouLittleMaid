@@ -15,6 +15,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.task.meal.MaidMealManager
 import com.github.tartaricacid.touhoulittlemaid.inventory.chest.ChestManager;
 import com.github.tartaricacid.touhoulittlemaid.item.bauble.BaubleManager;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.util.VisibleForDebug;
 import net.minecraft.world.entity.Mob;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -118,6 +119,7 @@ public interface ILittleMaid {
     default void addHardcodeAnimation(HardcodedAnimationManger manger) {
     }
 
+    @VisibleForDebug
     default Collection<? extends Function<EntityMaid, List<DebugTarget>>> getMaidDebugTargets() {
         return List.of();
     }

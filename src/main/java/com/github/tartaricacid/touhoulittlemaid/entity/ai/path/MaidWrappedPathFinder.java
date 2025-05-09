@@ -1,7 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai.path;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.debug.target.DebugMaidManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.Mob;
@@ -10,30 +12,32 @@ import net.minecraft.world.level.pathfinder.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 用于加入debug信息
  */
 public class MaidWrappedPathFinder extends PathFinder {
-    public MaidWrappedPathFinder(NodeEvaluator pNodeEvaluator, int pMaxVisitedNodes) {
-        super(pNodeEvaluator, pMaxVisitedNodes);
-    }
+    protected Mob mob;
 
-    Mob pMob;
-
-    @Nullable
-    @Override
-    public Path findPath(PathNavigationRegion pRegion, Mob pMob, Set<BlockPos> pTargetPositions, float pMaxRange, int pAccuracy, float pSearchDepthMultiplier) {
-        this.pMob = pMob;
-        return super.findPath(pRegion, pMob, pTargetPositions, pMaxRange, pAccuracy, pSearchDepthMultiplier);
+    public MaidWrappedPathFinder(NodeEvaluator nodeEvaluator, int maxVisitedNodes) {
+        super(nodeEvaluator, maxVisitedNodes);
     }
 
     @Nullable
     @Override
-    public Path findPath(ProfilerFiller pProfiler, Node pNode, Map<Target, BlockPos> pTargetPos, float pMaxRange, int pAccuracy, float pSearchDepthMultiplier) {
-        if (pMob instanceof EntityMaid maid && DebugMaidManager.getDebuggingPlayer(maid) != null) {
-            List<Node> tmpClosedSet = new ArrayList<>();
+    public Path findPath(PathNavigationRegion region, Mob mob, Set<BlockPos> targetPositions, float maxRange, int accuracy, float searchDepthMultiplier) {
+        this.mob = mob;
+        return super.findPath(region, mob, targetPositions, maxRange, accuracy, searchDepthMultiplier);
+    }
+
+    @Nullable
+    @Override
+    public Path findPath(ProfilerFiller profiler, Node node, Map<Target, BlockPos> targetPos, float maxRange, int accuracy, float searchDepthMultiplier) {
+        if (TouhouLittleMaid.DEBUG && mob instanceof EntityMaid maid && DebugMaidManager.getDebuggingPlayer(maid) != null) {
+            List<Node> tmpClosedSet = Lists.newArrayList();
             this.openSet = new BinaryHeap() {
                 @Override
                 public @NotNull Node pop() {
@@ -42,24 +46,21 @@ public class MaidWrappedPathFinder extends PathFinder {
                     return pop;
                 }
             };
-            Path path = super.findPath(pProfiler, pNode, pTargetPos, pMaxRange, pAccuracy, pSearchDepthMultiplier);
+            Path path = super.findPath(profiler, node, targetPos, maxRange, accuracy, searchDepthMultiplier);
             if (path == null) {
                 return null;
             }
-            //因为上面wrap了一手pop，所以下面的代码会导致close的大小发生变化，需要先处理
-            Node[] closedSet = new Node[tmpClosedSet.size()];
-            for (int i = 0; i < tmpClosedSet.size(); i++) {
-                closedSet[i] = tmpClosedSet.get(i);
-            }
+            // 因为上面 wrap 了一手 pop，所以下面的代码会导致 close 的大小发生变化，需要先处理
+            Node[] closedSet = tmpClosedSet.toArray(new Node[0]);
 
             Node[] openSet = new Node[this.openSet.size()];
             int idx = 0;
             while (!this.openSet.isEmpty()) {
                 openSet[idx++] = this.openSet.pop();
             }
-            path.setDebug(openSet, closedSet, pTargetPos.keySet());
+            path.setDebug(openSet, closedSet, targetPos.keySet());
             return path;
         }
-        return super.findPath(pProfiler, pNode, pTargetPos, pMaxRange, pAccuracy, pSearchDepthMultiplier);
+        return super.findPath(profiler, node, targetPos, maxRange, accuracy, searchDepthMultiplier);
     }
 }

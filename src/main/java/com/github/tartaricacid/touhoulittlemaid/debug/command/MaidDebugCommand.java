@@ -1,7 +1,9 @@
-package com.github.tartaricacid.touhoulittlemaid.debug;
+package com.github.tartaricacid.touhoulittlemaid.debug.command;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -12,14 +14,20 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.VisibleForDebug;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.FarmBlock;
 
+@VisibleForDebug
 public final class MaidDebugCommand {
     private static final String MAID_DEBUG_NAME = "debug";
+
+    private static final String ENABLE = "enable";
+    private static final String VALUE = "value";
 
     private static final String SPAWN_MAID = "spawn_maid";
     private static final String COUNT_NAME = "count";
@@ -30,6 +38,11 @@ public final class MaidDebugCommand {
 
     public static LiteralArgumentBuilder<CommandSourceStack> get() {
         LiteralArgumentBuilder<CommandSourceStack> debug = Commands.literal(MAID_DEBUG_NAME);
+
+        // 开启调试渲染功能
+        LiteralArgumentBuilder<CommandSourceStack> enable = Commands.literal(ENABLE);
+        RequiredArgumentBuilder<CommandSourceStack, Boolean> value = Commands.argument(VALUE, BoolArgumentType.bool());
+        debug.then(enable.then(value.executes(MaidDebugCommand::enableDebug)));
 
         // 批量生成女仆
         LiteralArgumentBuilder<CommandSourceStack> spawnMaid = Commands.literal(SPAWN_MAID);
@@ -45,7 +58,24 @@ public final class MaidDebugCommand {
         return debug;
     }
 
+    private static int enableDebug(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        boolean value = BoolArgumentType.getBool(context, VALUE);
+        ServerPlayer serverPlayer = context.getSource().getPlayerOrException();
+        if (value) {
+            TouhouLittleMaid.DEBUG = true;
+            serverPlayer.sendSystemMessage(Component.translatable("debug.touhou_little_maid.enable.true"));
+        } else {
+            TouhouLittleMaid.DEBUG = false;
+            serverPlayer.sendSystemMessage(Component.translatable("debug.touhou_little_maid.enable.false"));
+        }
+        return Command.SINGLE_SUCCESS;
+    }
+
     private static int spawnMaid(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        if (!TouhouLittleMaid.DEBUG) {
+            return Command.SINGLE_SUCCESS;
+        }
+
         String modelId = StringArgumentType.getString(context, MODEL_ID);
         int count = IntegerArgumentType.getInteger(context, COUNT_NAME);
         ServerPlayer serverPlayer = context.getSource().getPlayerOrException();
@@ -66,6 +96,10 @@ public final class MaidDebugCommand {
     }
 
     private static int setFarm(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        if (!TouhouLittleMaid.DEBUG) {
+            return Command.SINGLE_SUCCESS;
+        }
+
         int size = IntegerArgumentType.getInteger(context, SIZE);
         ServerPlayer serverPlayer = context.getSource().getPlayerOrException();
         if (size > 0) {
