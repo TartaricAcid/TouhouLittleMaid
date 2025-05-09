@@ -299,7 +299,6 @@
   "overlay.touhou_little_maid.glass_bottle.tips": "마우스 오른쪽 클릭으로 일부 경험치를 꺼내고, 웅크린 채로 클릭하면 모두 꺼냅니다",
   "overlay.touhou_little_maid.name_tag.tips": "마우스 오른쪽 클릭으로 메이드의 이름을 지정합니다",
   "overlay.touhou_little_maid.lead.tips": "마우스 오른쪽 클릭으로 메이드에게 끈을 겁니다",
-  "overlay.touhou_little_maid.debug_stick.tips": "메이드의  소유자 UUID를 변경합니다",
   "overlay.touhou_little_maid.ntr_item.tips": "다른 사람의 메이드를 내 메이드로 변경합니다.",
   "overlay.touhou_little_maid.remove_backpack.tips": "메이드로부터 배낭을 제거합니다.",
   "overlay.touhou_little_maid.saddle.tips": "마우스 오른쪽 클릭으로 메이드를 안을 수 있습니다",
