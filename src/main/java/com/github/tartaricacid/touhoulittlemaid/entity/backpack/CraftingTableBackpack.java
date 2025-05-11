@@ -2,7 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.backpack;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
-import com.github.tartaricacid.touhoulittlemaid.client.model.backpack.CraftingTableBackpackModel;
+import com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityTombstone;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
@@ -22,6 +22,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
+
+import static com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader.CRAFTING_TABLE_BACKPACK;
 
 public class CraftingTableBackpack extends IMaidBackpack {
     public static final ResourceLocation ID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "crafting_table_backpack");
@@ -69,14 +71,14 @@ public class CraftingTableBackpack extends IMaidBackpack {
     @Override
     @OnlyIn(Dist.CLIENT)
     public EntityModel<EntityMaid> getBackpackModel(EntityModelSet modelSet) {
-        return new CraftingTableBackpackModel(modelSet.bakeLayer(CraftingTableBackpackModel.LAYER));
+        return BedrockModelLoader.getModel(CRAFTING_TABLE_BACKPACK);
     }
 
     @Nullable
     @Override
     @OnlyIn(Dist.CLIENT)
     public ResourceLocation getBackpackTexture() {
-        return new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/crafting_table_backpack.png");
+        return new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/bedrock/entity/backpack/crafting_table_backpack.png");
     }
 
     @Override

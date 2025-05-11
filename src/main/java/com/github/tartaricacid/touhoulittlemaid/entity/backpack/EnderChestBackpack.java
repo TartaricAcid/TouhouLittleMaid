@@ -2,7 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.backpack;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
-import com.github.tartaricacid.touhoulittlemaid.client.model.backpack.EnderChestBackpackModel;
+import com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityTombstone;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
@@ -23,6 +23,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
+
+import static com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader.END_CHEST_BACKPACK;
 
 public class EnderChestBackpack extends IMaidBackpack {
     public static final ResourceLocation ID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "ender_chest_backpack");
@@ -63,14 +65,14 @@ public class EnderChestBackpack extends IMaidBackpack {
     @Override
     @OnlyIn(Dist.CLIENT)
     public EntityModel<EntityMaid> getBackpackModel(EntityModelSet modelSet) {
-        return new EnderChestBackpackModel(modelSet.bakeLayer(EnderChestBackpackModel.LAYER));
+        return BedrockModelLoader.getModel(END_CHEST_BACKPACK);
     }
 
     @Nullable
     @Override
     @OnlyIn(Dist.CLIENT)
     public ResourceLocation getBackpackTexture() {
-        return new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/ender_chest_backpack.png");
+        return new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/bedrock/entity/backpack/ender_chest_backpack.png");
     }
 
     @OnlyIn(Dist.CLIENT)

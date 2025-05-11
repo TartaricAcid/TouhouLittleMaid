@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.ai.service.Service;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.chat.openai.request.ChatCompletion;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.chat.openai.response.ChatCallback;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.chat.openai.response.ChatCompletionResponse;
+import com.google.common.collect.Maps;
 import com.google.common.net.HttpHeaders;
 import com.google.common.net.MediaType;
 
@@ -12,12 +13,14 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public final class ChatClient {
     private final HttpClient httpClient;
     private String baseUrl = "";
     private String apiKey = "";
+    private Map<String, String> extraHeader = Maps.newHashMap();
     private ChatCompletion chatCompletion;
 
     public static ChatClient create(final HttpClient httpClient) {
@@ -42,19 +45,25 @@ public final class ChatClient {
         return this;
     }
 
+    public ChatClient extraHeader(final Map<String, String> extraHeader) {
+        this.extraHeader = extraHeader;
+        return this;
+    }
+
     public ChatClient chat(final ChatCompletion chatCompletion) {
         this.chatCompletion = chatCompletion;
         return this;
     }
 
     public void handle(Consumer<ChatCompletionResponse> consumer, Consumer<Throwable> failConsumer) {
-        HttpRequest httpRequest = HttpRequest.newBuilder()
+        HttpRequest.Builder builder = HttpRequest.newBuilder()
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.JSON_UTF_8.toString())
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + this.apiKey)
                 .POST(HttpRequest.BodyPublishers.ofString(Service.GSON.toJson(chatCompletion)))
                 .timeout(Duration.ofSeconds(20))
-                .uri(URI.create(baseUrl + ChatCompletion.getUrl()))
-                .build();
+                .uri(URI.create(baseUrl + ChatCompletion.getUrl()));
+        this.extraHeader.forEach(builder::header);
+        HttpRequest httpRequest = builder.build();
         httpClient.sendAsync(httpRequest, HttpResponse.BodyHandlers.ofString())
                 .whenComplete((response, throwable) -> {
                     ChatCallback callback = new ChatCallback(consumer);

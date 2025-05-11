@@ -24,6 +24,6 @@ public class LinearKeyFrame extends BoneKeyFrame {
         }
         Vector3f begin = beginPoint.eval(evaluator);
         Vector3f end = endPoint.eval(evaluator);
-        return begin.lerp(end, (float)percentCompleted);
+        return MathUtil.lerpValues(percentCompleted, begin, end);
     }
 }

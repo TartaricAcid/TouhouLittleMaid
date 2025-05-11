@@ -3,12 +3,15 @@ package com.github.tartaricacid.touhoulittlemaid.client.resource;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.download.InfoGetManager;
 import com.google.common.collect.Maps;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -22,9 +25,10 @@ import java.util.zip.ZipFile;
 
 public class LanguageLoader {
     private static final String COMMENT_SYMBOL = "#";
-    private static final Pattern LANG_PATTERN = Pattern.compile("^assets/[\\w.]+/lang/(\\w{2}_\\w{2})\\.lang$");
+    private static final Pattern LANG_PATTERN = Pattern.compile("^assets/[\\w.]+/lang/(\\w{2}_\\w{2})\\.(?:lang|json)$");
     private static final Map<String, Map<String, String>> LANG_CACHE = Maps.newHashMap();
     private static final String REMOVE_KEY = "subtitle.touhou_little_maid.other.credit";
+    private static final Gson GSON = new Gson();
 
     public static void clear() {
         LANG_CACHE.clear();
@@ -43,7 +47,7 @@ public class LanguageLoader {
         if (matcher.find()) {
             String languageCode = matcher.group(1);
             LANG_CACHE.putIfAbsent(languageCode, Maps.newHashMap());
-            getLanguageMap(zipFile, LANG_CACHE.get(languageCode), filePath);
+            getLanguageMap(zipFile, LANG_CACHE.get(languageCode), filePath, filePath.endsWith(".json"));
         }
     }
 
@@ -67,13 +71,13 @@ public class LanguageLoader {
         }
     }
 
-    private static void getLanguageMap(ZipFile zipFile, Map<String, String> langData, String filePath) throws IOException {
+    private static void getLanguageMap(ZipFile zipFile, Map<String, String> langData, String filePath, boolean newFormat) throws IOException {
         ZipEntry entry = zipFile.getEntry(filePath);
         if (entry == null) {
             return;
         }
         try (InputStream stream = zipFile.getInputStream(entry)) {
-            readLanguages(langData, stream);
+            readLanguages(langData, stream, newFormat);
         } catch (IOException ioe) {
             TouhouLittleMaid.LOGGER.warn("Failed to load language file: {}", filePath);
             ioe.printStackTrace();
@@ -85,25 +89,31 @@ public class LanguageLoader {
             return;
         }
         try (InputStream stream = Files.newInputStream(languageFile.toPath())) {
-            readLanguages(langData, stream);
+            readLanguages(langData, stream, languageFile.getName().endsWith(".json"));
         }
     }
 
-    private static void readLanguages(Map<String, String> langData, InputStream stream) throws IOException {
-        List<String> lines = IOUtils.readLines(stream, StandardCharsets.UTF_8);
-        for (String str : lines) {
-            if (str.startsWith(COMMENT_SYMBOL)) {
-                continue;
+    private static void readLanguages(Map<String, String> langData, InputStream stream, boolean newFormat) throws IOException {
+        if (newFormat) {
+            Map<String, String> result = GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8), new TypeToken<>() {
+            });
+            langData.putAll(result);
+        } else {
+            List<String> lines = IOUtils.readLines(stream, StandardCharsets.UTF_8);
+            for (String str : lines) {
+                if (str.startsWith(COMMENT_SYMBOL)) {
+                    continue;
+                }
+                String[] map = str.split("=", 2);
+                if (map.length != 2) {
+                    continue;
+                }
+                String key = map[0];
+                if (REMOVE_KEY.equals(key)) {
+                    continue;
+                }
+                langData.put(key, map[1]);
             }
-            String[] map = str.split("=", 2);
-            if (map.length != 2) {
-                continue;
-            }
-            String key = map[0];
-            if (REMOVE_KEY.equals(key)) {
-                continue;
-            }
-            langData.put(key, map[1]);
         }
     }
 }

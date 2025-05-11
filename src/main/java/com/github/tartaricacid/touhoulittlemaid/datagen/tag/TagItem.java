@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.datagen.tag;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
@@ -17,6 +18,8 @@ import java.util.concurrent.CompletableFuture;
 
 public class TagItem extends ItemTagsProvider {
     public static final TagKey<Item> MAID_TAMED_ITEM = TagKey.create(Registries.ITEM, new ResourceLocation(TouhouLittleMaid.MOD_ID, "maid_tamed_item"));
+    public static final TagKey<Item> MAID_MENDING_BLOCKLIST_ITEM = TagKey.create(Registries.ITEM, new ResourceLocation(TouhouLittleMaid.MOD_ID, "maid_mending_blocklist_item"));
+    public static final TagKey<Item> MAID_VANISHING_BLOCKLIST_ITEM = TagKey.create(Registries.ITEM, new ResourceLocation(TouhouLittleMaid.MOD_ID, "maid_vanishing_blocklist_item"));
 
     public TagItem(PackOutput pOutput, CompletableFuture<HolderLookup.Provider> pLookupProvider, CompletableFuture<TagLookup<Block>> pBlockTags, String modId, @Nullable ExistingFileHelper existingFileHelper) {
         super(pOutput, pLookupProvider, pBlockTags, modId, existingFileHelper);
@@ -36,5 +39,8 @@ public class TagItem extends ItemTagsProvider {
                 .addOptional(new ResourceLocation("kawaiidishes:piece_of_cheesecake"))
                 .addOptional(new ResourceLocation("kawaiidishes:piece_of_chocolate_cheesecake"))
                 .addOptional(new ResourceLocation("kawaiidishes:piece_of_honey_cheesecake"));
+
+        tag(MAID_MENDING_BLOCKLIST_ITEM).add(InitItems.ULTRAMARINE_ORB_ELIXIR.get());
+        tag(MAID_VANISHING_BLOCKLIST_ITEM).add(InitItems.ULTRAMARINE_ORB_ELIXIR.get());
     }
 }

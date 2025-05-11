@@ -1,0 +1,7 @@
+{
+  "type": "touhou_little_maid:addition",
+  "conditions": [],
+  "loot_table_add": "touhou_little_maid:chest/very_rare_bauble",
+  "loot_table_id": "minecraft:chests/woodland_mansion",
+  "loot_table_type": "minecraft:chest"
+}

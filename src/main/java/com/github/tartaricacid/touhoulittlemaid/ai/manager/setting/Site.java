@@ -18,6 +18,7 @@ public class Site {
     private static final String API_KEY = "api_key";
     private static final String MODELS = "models";
     private static final String EXTRA_ARGS = "extra_args";
+    private static final String EXTRA_HEADER = "extra_header";
 
     private String type;
     private String apiType;
@@ -25,14 +26,16 @@ public class Site {
     private String apiKey;
     private List<String> models;
     private Map<String, Object> extraArgs;
+    private Map<String, String> extraHeader;
 
-    public Site(String type, String apiType, String url, String apiKey, List<String> models, Map<String, Object> extraArgs) {
+    public Site(String type, String apiType, String url, String apiKey, List<String> models, Map<String, Object> extraArgs, Map<String, String> extraHeader) {
         this.type = type;
         this.apiType = apiType;
         this.url = url;
         this.apiKey = apiKey;
         this.models = models;
         this.extraArgs = extraArgs;
+        this.extraHeader = extraHeader;
     }
 
     @SuppressWarnings("unchecked")
@@ -43,6 +46,7 @@ public class Site {
         this.apiKey = Objects.requireNonNullElse((String) map.get(API_KEY), StringUtils.EMPTY);
         this.models = Objects.requireNonNullElse((List<String>) map.get(MODELS), Lists.newArrayList());
         this.extraArgs = Objects.requireNonNullElse((Map<String, Object>) map.get(EXTRA_ARGS), Maps.newHashMap());
+        this.extraHeader = Objects.requireNonNullElse((Map<String, String>) map.get(EXTRA_HEADER), Maps.newHashMap());
     }
 
     public String getType() {
@@ -91,5 +95,9 @@ public class Site {
 
     public Map<String, Object> getExtraArgs() {
         return extraArgs;
+    }
+
+    public Map<String, String> getExtraHeader() {
+        return extraHeader;
     }
 }

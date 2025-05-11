@@ -1,0 +1,7 @@
+{
+  "type": "touhou_little_maid:addition",
+  "conditions": [],
+  "loot_table_add": "touhou_little_maid:fishing/power_point",
+  "loot_table_id": "minecraft:gameplay/fishing/junk",
+  "loot_table_type": "minecraft:fishing"
+}

@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly"
+            }
+          ],
+          "name": "touhou_little_maid:nimble_fabric"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "touhou_little_maid:nimble_fabric"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "touhou_little_maid:item_magnet_bauble"
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 6
+        }
+      ],
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 2.0,
+        "min": 1.0
+      }
+    }
+  ],
+  "random_sequence": "touhou_little_maid:chest/rare_bauble"
+}

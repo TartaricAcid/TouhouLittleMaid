@@ -1,0 +1,162 @@
+{
+	"pack_name": "{pack.touhou_little_maid.chair.name}",
+	"author": ["Succinum", "Pajinyi"],
+	"version": "1.0.0",
+	"date": "2019-08-08",
+	"icon": "touhou_little_maid:textures/chair_icon.png",
+	"model_list": [
+		{
+			"model_id": "touhou_little_maid:cushion",
+			"mounted_height": 3
+		},
+		{
+			"model_id": "touhou_little_maid:class_desk",
+			"mounted_height": 15,
+			"tameable_can_ride": false,
+			"animation": []
+		},
+		{
+			"model_id": "touhou_little_maid:class_chair",
+			"mounted_height": 6,
+			"animation": []
+		},
+		{
+			"model_id": "touhou_little_maid:kotatsu",
+			"mounted_height": 13,
+			"tameable_can_ride": false,
+			"render_item_scale": 0.4
+		},
+		{
+			"model_id": "touhou_little_maid:play_station",
+			"mounted_height": 1,
+			"render_item_scale": 0.7
+		},
+		{
+			"model_id": "touhou_little_maid:tall_stool",
+			"mounted_height": 15
+		},
+		{
+			"model_id": "touhou_little_maid:low_stool",
+			"mounted_height": 8
+		},
+		{
+			"model_id": "touhou_little_maid:barbecue_booth",
+			"mounted_height": 16,
+			"render_item_scale": 0.3
+		},
+		{
+			"model_id": "touhou_little_maid:barbecue_booth_2",
+			"texture": "touhou_little_maid:textures/entity/barbecue_booth.png",
+			"mounted_height": 2,
+			"render_item_scale": 0.3,
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "touhou_little_maid:long_stool",
+			"mounted_height": 7,
+			"animation": []
+		},
+		{
+			"model_id": "touhou_little_maid:square_table",
+			"mounted_height": 15,
+			"render_item_scale": 0.7,
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "touhou_little_maid:mahjong_table",
+			"mounted_height": 15,
+			"render_item_scale": 0.9,
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "touhou_little_maid:beach_chair",
+			"mounted_height": 5
+		},
+		{
+			"model_id": "touhou_little_maid:parasol",
+			"mounted_height": 0,
+			"render_item_scale": 0.6,
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "touhou_little_maid:water_wheel",
+			"mounted_height": 3,
+			"render_item_scale": 0.4,
+			"tameable_can_ride": false,
+			"animation": ["touhou_little_maid:animation/base/rotation/x_normal_speed.js"]
+		},
+		{
+			"model_id": "touhou_little_maid:saisen_bako",
+			"mounted_height": 17,
+			"render_item_scale": 0.7,
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "touhou_little_maid:well",
+			"mounted_height": 7,
+			"render_item_scale": 0.9,
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "touhou_little_maid:torii",
+			"mounted_height": 7,
+			"render_item_scale": 0.15,
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "touhou_little_maid:torii_2",
+			"texture": "touhou_little_maid:textures/entity/torii.png",
+			"name": "{model.touhou_little_maid.torii.name}",
+			"mounted_height": 7,
+			"render_item_scale": 0.15,
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "touhou_little_maid:torii_3",
+			"texture": "touhou_little_maid:textures/entity/torii.png",
+			"name": "{model.touhou_little_maid.torii.name}",
+			"mounted_height": 7,
+			"render_item_scale": 0.12,
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "touhou_little_maid:ema",
+			"mounted_height": 0,
+			"render_item_scale": 0.6,
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "touhou_little_maid:anti_collision_bucket",
+			"mounted_height": 14
+		},
+		{
+			"model_id": "touhou_little_maid:park_bench",
+			"mounted_height": 7,
+			"render_item_scale": 0.4
+		},
+		{
+			"model_id": "touhou_little_maid:rinnosuke_children_toys",
+			"mounted_height": 13
+		},
+		{
+			"model_id": "touhou_little_maid:moto",
+			"mounted_height": 11,
+			"render_item_scale": 0.7
+		},
+		{
+			"model_id": "touhou_little_maid:bowl",
+			"texture": "touhou_little_maid:textures/entity/sukuna_shinmyoumaru.png",
+			"mounted_height": 2
+		},
+		{
+			"model_id": "touhou_little_maid:lucky_cat_2m",
+			"animation": ["touhou_little_maid:animation/base/rotation/reciprocate.js", "touhou_little_maid:animation/base/time/system_rotation.js"],
+			"description": ["{model.touhou_little_maid.lucky_cat_2m.desc}"],
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "touhou_little_maid:yumemi_strawberry_milk",
+			"animation": []
+		}
+	]
+}

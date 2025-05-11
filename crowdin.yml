@@ -1,3 +1,5 @@
 files:
   - source: /src/main/resources/assets/touhou_little_maid/lang/en_us.json
     translation: /src/main/resources/assets/touhou_little_maid/lang/%locale%.json
+  - source: /src/main/resources/assets/touhou_little_maid/tlm_custom_pack/touhou_little_maid-1.0.0/assets/*/lang/en_us.json
+    translation: /%original_path%/%locale%.json

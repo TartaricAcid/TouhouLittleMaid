@@ -61,7 +61,6 @@ public class AnimationProcessor<T extends AnimatableEntity<?>> {
 
         // InstancedAnimationFactory 仅保有一个 AnimationData 实例，与传入的 uniqueID 无关
         AnimationData manager = this.animatable.getAnimationData();
-        Vector3f vec3 = new Vector3f();
         for (AnimationController<T> controller : manager.getAnimationControllers()) {
             if (reloadAnimations) {
                 controller.markNeedsReload();
@@ -72,46 +71,46 @@ public class AnimationProcessor<T extends AnimatableEntity<?>> {
             event.setController(controller);
             // 处理动画并向点队列添加新值
             controller.process(seekTime, event, evaluator, modelRendererList, false, rendererDirty, shouldUpdate);
-            boolean isParallelController = controller.isParallelController();
+            boolean isParallelController = controller.getName().startsWith("parallel_");
             // 遍历每个骨骼，并对属性进行插值计算
             for (BoneAnimationQueue boneAnimation : controller.getBoneAnimationQueues()) {
                 BoneTopLevelSnapshot snapshot = boneAnimation.topLevelSnapshot;
+                BoneSnapshot initialSnapshot = snapshot.bone.getInitialSnapshot();
+                PointData pointData = snapshot.cachedPointData;
 
                 // 如果此骨骼有任何旋转值
-                if (boneAnimation.rotation != null) {
-                    boneAnimation.rotation.getLerpPoint(evaluator, vec3);
-                    BoneSnapshot initialSnapshot = snapshot.bone.getInitialSnapshot();
-                    PointData pointData = snapshot.cachedPointData;
-                    pointData.rotationValueX += vec3.x();
-                    pointData.rotationValueY += vec3.y();
-                    pointData.rotationValueZ += vec3.z();
+                if (!boneAnimation.rotationQueue().isEmpty()) {
+                    Vector3f scale = boneAnimation.rotationQueue().poll().getLerpPoint(evaluator);
+                    pointData.rotationValueX += scale.x();
+                    pointData.rotationValueY += scale.y();
+                    pointData.rotationValueZ += scale.z();
                     if (isParallelController) {
                         snapshot.rotationValueX = pointData.rotationValueX + initialSnapshot.rotationValueX;
                         snapshot.rotationValueY = pointData.rotationValueY + initialSnapshot.rotationValueY;
                         snapshot.rotationValueZ = pointData.rotationValueZ + initialSnapshot.rotationValueZ;
                     } else {
-                        snapshot.rotationValueX = vec3.x() + initialSnapshot.rotationValueX;
-                        snapshot.rotationValueY = vec3.y() + initialSnapshot.rotationValueY;
-                        snapshot.rotationValueZ = vec3.z() + initialSnapshot.rotationValueZ;
+                        snapshot.rotationValueX = scale.x() + initialSnapshot.rotationValueX;
+                        snapshot.rotationValueY = scale.y() + initialSnapshot.rotationValueY;
+                        snapshot.rotationValueZ = scale.z() + initialSnapshot.rotationValueZ;
                     }
                     snapshot.isCurrentlyRunningRotationAnimation = true;
                 }
 
                 // 如果此骨骼有任何位置值
-                if (boneAnimation.position != null) {
-                    boneAnimation.position.getLerpPoint(evaluator, vec3);
-                    snapshot.positionOffsetX = vec3.x();
-                    snapshot.positionOffsetY = vec3.y();
-                    snapshot.positionOffsetZ = vec3.z();
+                if (!boneAnimation.positionQueue().isEmpty()) {
+                    Vector3f position = boneAnimation.positionQueue().poll().getLerpPoint(evaluator);
+                    snapshot.positionOffsetX = position.x();
+                    snapshot.positionOffsetY = position.y();
+                    snapshot.positionOffsetZ = position.z();
                     snapshot.isCurrentlyRunningPositionAnimation = true;
                 }
 
                 // 如果此骨骼有任何缩放点
-                if (boneAnimation.scale != null) {
-                    boneAnimation.scale.getLerpPoint(evaluator, vec3);
-                    snapshot.scaleValueX = vec3.x();
-                    snapshot.scaleValueY = vec3.y();
-                    snapshot.scaleValueZ = vec3.z();
+                if (!boneAnimation.scaleQueue().isEmpty()) {
+                    Vector3f scale = boneAnimation.scaleQueue().poll().getLerpPoint(evaluator);
+                    snapshot.scaleValueX = scale.x();
+                    snapshot.scaleValueY = scale.y();
+                    snapshot.scaleValueZ = scale.z();
                     snapshot.isCurrentlyRunningScaleAnimation = true;
                 }
             }

@@ -2,7 +2,8 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockGomoku;
-import com.github.tartaricacid.touhoulittlemaid.client.model.ComputerModel;
+import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.SimpleBedrockModel;
+import com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityComputer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -13,13 +14,14 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 
 public class TileEntityComputerRenderer implements BlockEntityRenderer<TileEntityComputer> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/computer.png");
-    private final ComputerModel model;
+    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/bedrock/block/computer.png");
+    private final SimpleBedrockModel<Entity> model;
 
     public TileEntityComputerRenderer(BlockEntityRendererProvider.Context context) {
-        model = new ComputerModel(context.bakeLayer(ComputerModel.LAYER));
+        model = BedrockModelLoader.getModel(BedrockModelLoader.COMPUTER);
     }
 
     @Override

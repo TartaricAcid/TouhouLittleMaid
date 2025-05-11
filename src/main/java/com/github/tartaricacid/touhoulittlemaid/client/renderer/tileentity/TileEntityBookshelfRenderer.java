@@ -2,9 +2,9 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockGomoku;
-import com.github.tartaricacid.touhoulittlemaid.client.model.BookshelfModel;
+import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.SimpleBedrockModel;
+import com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityBookshelf;
-import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGomoku;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -14,13 +14,14 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 
 public class TileEntityBookshelfRenderer implements BlockEntityRenderer<TileEntityBookshelf> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/bookshelf.png");
-    private final BookshelfModel model;
+    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/bedrock/block/bookshelf.png");
+    private final SimpleBedrockModel<Entity> model;
 
     public TileEntityBookshelfRenderer(BlockEntityRendererProvider.Context context) {
-        model = new BookshelfModel(context.bakeLayer(BookshelfModel.LAYER));
+        model = BedrockModelLoader.getModel(BedrockModelLoader.BOOKSHELF);
     }
 
     @Override

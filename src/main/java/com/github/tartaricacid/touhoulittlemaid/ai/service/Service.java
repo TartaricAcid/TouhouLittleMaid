@@ -7,7 +7,8 @@ import com.github.tartaricacid.touhoulittlemaid.ai.service.chat.openai.ChatClien
 import com.github.tartaricacid.touhoulittlemaid.ai.service.chat.openai.request.ChatCompletion;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.chat.openai.request.ResponseFormat;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.chat.openai.request.Role;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.player2.STTClient;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.STTClient;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.STTFactory;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSClient;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSFactory;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSRequest;
@@ -18,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.net.http.HttpClient;
 import java.time.Duration;
+import java.util.Map;
 
 public final class Service {
     public static final Gson GSON = new Gson();
@@ -37,9 +39,11 @@ public final class Service {
     public static ChatClient getChatClient(Site site) {
         String chatApiKey = site.getApiKey();
         String chatBaseUrl = site.getUrl();
+        Map<String, String> extraHeader = site.getExtraHeader();
         return ChatClient.create(CHAT_HTTP_CLIENT)
                 .apiKey(chatApiKey)
-                .baseUrl(chatBaseUrl);
+                .baseUrl(chatBaseUrl)
+                .extraHeader(extraHeader);
     }
 
     @Nullable
@@ -88,8 +92,7 @@ public final class Service {
         return TTSFactory.getTtsRequest(site, ttsText, ttsLang, model);
     }
 
-    public static STTClient getSttClient(String url) {
-        return STTClient.create(STT_HTTP_CLIENT)
-                .baseUrl(url);
+    public static STTClient getSttClient() {
+        return STTFactory.getSttClient(STT_HTTP_CLIENT);
     }
 }

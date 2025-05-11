@@ -88,7 +88,13 @@ public class GeoMesh {
             float diff = Math.max(0.001f, size.x + inflate * 2);
 
             Vector3f P1 = new Vector3f(-(origin.x + size.x) - inflate, origin.y - inflate, origin.z - inflate);
-            if (Boolean.TRUE.equals(mirror)) {
+            boolean finallyMirror = false;
+            if (cubeIn.getMirror() != null) {
+                finallyMirror = cubeIn.getMirror();
+            } else if (mirror != null) {
+                finallyMirror = mirror;
+            }
+            if (finallyMirror) {
                 P1.x += diff;
                 diff = -diff;
             }
@@ -118,7 +124,7 @@ public class GeoMesh {
             UvUnion uvUnion = cubeIn.getUv();
             boolean isBoxUV = uvUnion.isBoxUV;
 
-            int faces = Boolean.TRUE.equals(mirror) ? 0b1000000 : 0;
+            int faces = finallyMirror ? 0b1000000 : 0;
             int faceIndex = index * FACE_COUNT;
             if (!isBoxUV) {
                 UvFaces faceUV = uvUnion.faceUV;
@@ -190,7 +196,7 @@ public class GeoMesh {
                     V1[faceIndex + 5] = ((float) uv[1] + (float) uvSize[1]) / textureHeight;
                 }
             } else {
-                faces = 0b111111;
+                faces |= 0b111111;
                 double[] uv = cubeIn.getUv().boxUVCoords;
                 Vec3 uvSize = VectorUtils.fromArray(cubeIn.getSize());
                 uvSize = new Vec3(Math.floor(uvSize.x), Math.floor(uvSize.y), Math.floor(uvSize.z));

@@ -6,7 +6,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.PathNavigationRegion;
 import net.minecraft.world.level.pathfinder.NodeEvaluator;
 import net.minecraft.world.level.pathfinder.Path;
-import net.minecraft.world.level.pathfinder.PathFinder;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
@@ -15,7 +14,7 @@ import java.util.Set;
  * 水下的时候让女仆选择合适的路径计算器，使用不同的启发函数进行寻路
  * 如果目标是上岸，则对 Y 差值给出额外的开销，来减少向下搜索的数量
  */
-public class MaidSelectivePathFinding extends PathFinder {
+public class MaidSelectivePathFinding extends MaidWrappedPathFinder {
     private final MaidUnderWaterBoardingPathFinder boarding;
     private final BlockGetter level;
 

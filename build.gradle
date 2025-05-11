@@ -158,8 +158,8 @@ dependencies {
     }
 
     // 拆分出来的基岩版模型加载库
-    jarJar(implementation(fg.deobf("libs:simplebedrockmodel:1.20.1-release-1.1.0"))) {
-        jarJar.ranged(it, "[1.1.0,)")
+    jarJar(implementation(fg.deobf("libs:simplebedrockmodel:1.20.1-release-1.2.0"))) {
+        jarJar.ranged(it, "[1.2.0,)")
     }
 
     // 单元测试
@@ -218,6 +218,8 @@ dependencies {
     runtimeOnly fg.deobf("maven.modrinth:embeddium:0.3.31+mc1.20.1")
     compileOnly fg.deobf("maven.modrinth:embeddium:0.3.31+mc1.20.1")
 
+    runtimeOnly fg.deobf("maven.modrinth:lootr:0.7.35.90-forge")
+
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     // runtimeOnly fg.deobf("maven.modrinth:farmers-delight:1.20.1-1.2.6-forge")
@@ -245,6 +247,11 @@ jar {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
+}
+
+java {
+    // 编译源码文件，方便发布 maven
+    withSourcesJar()
 }
 
 // 让 idea 主动下载前置库的源码和 Javadoc

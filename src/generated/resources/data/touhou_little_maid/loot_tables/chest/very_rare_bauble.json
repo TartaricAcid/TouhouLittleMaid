@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly"
+            }
+          ],
+          "name": "touhou_little_maid:ultramarine_orb_elixir"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "touhou_little_maid:ultramarine_orb_elixir",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 4
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "touhou_little_maid:chest/very_rare_bauble"
+}

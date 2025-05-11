@@ -17,9 +17,9 @@ public final class InitDamage {
     public static DamageSource danmakuDamage(Entity thrower, EntityDanmaku danmaku) {
         Registry<DamageType> damageTypes = thrower.level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE);
         if (danmaku.isHurtEnderman()) {
-            return new DamageSource(damageTypes.getHolderOrThrow(DANMAKU_ENDER_KILLER), thrower);
+            return new DamageSource(damageTypes.getHolderOrThrow(DANMAKU_ENDER_KILLER), danmaku, thrower);
         } else {
-            return new DamageSource(damageTypes.getHolderOrThrow(DANMAKU), thrower);
+            return new DamageSource(damageTypes.getHolderOrThrow(DANMAKU), danmaku, thrower);
         }
     }
 }

@@ -76,7 +76,7 @@ public class BaseAdvancement {
     private static void generateAltar(Consumer<Advancement> saver, ExistingFileHelper existingFileHelper, Advancement root) {
         Advancement altar = make(Items.RED_WOOL, "build_altar").parent(root)
                 .addCriterion("maid_event", MaidEventTrigger.create(TriggerType.BUILD_ALTAR))
-                .rewards(AdvancementRewards.Builder.loot(LootTableGenerator.POWER_POINT))
+                .rewards(AdvancementRewards.Builder.loot(LootTableGenerator.ADVANCEMENT_POWER_POINT))
                 .save(saver, id("base/build_altar"), existingFileHelper);
 
         EntityPredicate.Builder predicate = EntityPredicate.Builder.entity().of(InitEntities.FAIRY.get());

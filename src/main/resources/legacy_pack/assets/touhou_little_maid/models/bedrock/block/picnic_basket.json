@@ -1,0 +1,78 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.model",
+				"texture_width": 128,
+				"texture_height": 128,
+				"visible_bounds_width": 3,
+				"visible_bounds_height": 2.5,
+				"visible_bounds_offset": [0, 0.75, 0]
+			},
+			"bones": [
+				{
+					"name": "all",
+					"pivot": [0, 0, 1]
+				},
+				{
+					"name": "upperCover",
+					"parent": "all",
+					"pivot": [0, 8, 6],
+					"cubes": [
+						{"origin": [-9, 10, -6], "size": [18, 1, 12], "uv": [0, 0]},
+						{"origin": [-8, 8, -6], "size": [16, 2, 1], "uv": [46, 36]},
+						{"origin": [-8, 8, 5], "size": [16, 2, 1], "uv": [49, 17]},
+						{"origin": [8, 8, -6], "size": [1, 2, 12], "uv": [46, 43]},
+						{"origin": [-9, 8, -6], "size": [1, 2, 12], "uv": [49, 2]}
+					]
+				},
+				{
+					"name": "bone7",
+					"parent": "upperCover",
+					"pivot": [-0.5, 8.8, 3.4],
+					"rotation": [-35, 0, 0]
+				},
+				{
+					"name": "body",
+					"parent": "all",
+					"pivot": [0, 1, 0]
+				},
+				{
+					"name": "box",
+					"parent": "body",
+					"pivot": [0, 1, 0],
+					"cubes": [
+						{"origin": [-8, 2, -6], "size": [16, 6, 1], "uv": [46, 28]},
+						{"origin": [-8, 2, 5], "size": [16, 6, 1], "uv": [15, 47]},
+						{"origin": [8, 2, -6], "size": [1, 6, 12], "uv": [31, 28]},
+						{"origin": [-9, 2, -6], "size": [1, 6, 12], "uv": [0, 44]},
+						{"origin": [-9, 1, -6], "size": [18, 1, 12], "uv": [0, 14]}
+					]
+				},
+				{
+					"name": "rightHandle",
+					"parent": "all",
+					"pivot": [3.3, 6.5, 0],
+					"rotation": [0, 0, -110],
+					"cubes": [
+						{"origin": [2.8, 6, 6], "size": [8, 1, 1], "uv": [49, 21]},
+						{"origin": [2.8, 6, -7], "size": [8, 1, 1], "uv": [17, 36]},
+						{"origin": [10.8, 6, -7], "size": [1, 1, 14], "uv": [0, 28]}
+					]
+				},
+				{
+					"name": "leftHandle",
+					"parent": "all",
+					"pivot": [-3.3, 6.5, 0],
+					"rotation": [0, 0, 110],
+					"cubes": [
+						{"origin": [-10.8, 6, 6], "size": [8, 1, 1], "uv": [49, 21], "mirror": true},
+						{"origin": [-10.8, 6, -7], "size": [8, 1, 1], "uv": [17, 36], "mirror": true},
+						{"origin": [-11.8, 6, -7], "size": [1, 1, 14], "uv": [0, 28]}
+					]
+				}
+			]
+		}
+	]
+}

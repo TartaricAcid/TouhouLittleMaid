@@ -68,12 +68,11 @@ public interface IGeoRenderer<T> {
     default void renderRecursively(AnimatedGeoBone bone, PoseStack poseStack, VertexConsumer buffer, int packedLight,
                                    int packedOverlay, float red, float green, float blue, float alpha) {
         int cubePackedLight = bone.geoBone().glow() ? LightTexture.pack(15, 15) : packedLight;
-        poseStack.pushPose();
-        boolean scaleAllIsZero = RenderUtils.prepMatrixForBone(poseStack, bone);
-        if (scaleAllIsZero) {
-            poseStack.popPose();
+        if ((bone.getScaleX() == 0 ? 0 : 1) + (bone.getScaleY() == 0 ? 0 : 1) + (bone.getScaleZ() == 0 ? 0 : 1) < 2) {
             return;
         }
+        poseStack.pushPose();
+        RenderUtils.prepMatrixForBone(poseStack, bone);
         if (!SodiumCompat.sodiumRenderCubesOfBone(bone, poseStack, buffer, cubePackedLight, packedOverlay, red, green, blue, alpha)) {
             renderCubesOfBone(bone, poseStack, buffer, cubePackedLight, packedOverlay, red, green, blue, alpha);
         }
@@ -123,142 +122,79 @@ public interface IGeoRenderer<T> {
                 nz.mul(normal).normalize();
             }
 
-            if (!mirrored) {
-                if ((faces & 0b000001) != 0) // DOWN
-                {
-                    buffer.vertex(C101.x, C101.y, C101.z, red, green, blue, alpha, mesh.downU0(i), mesh.downV1(i),
-                            packedOverlay, packedLight, -ny.x, -ny.y, -ny.z);
-                    buffer.vertex(C001.x, C001.y, C001.z, red, green, blue, alpha, mesh.downU1(i), mesh.downV1(i),
-                            packedOverlay, packedLight, -ny.x, -ny.y, -ny.z);
-                    buffer.vertex(C000.x, C000.y, C000.z, red, green, blue, alpha, mesh.downU1(i), mesh.downV0(i),
-                            packedOverlay, packedLight, -ny.x, -ny.y, -ny.z);
-                    buffer.vertex(C100.x, C100.y, C100.z, red, green, blue, alpha, mesh.downU0(i), mesh.downV0(i),
-                            packedOverlay, packedLight, -ny.x, -ny.y, -ny.z);
-                }
-                if ((faces & 0b000010) != 0) // UP
-                {
-                    buffer.vertex(C110.x, C110.y, C110.z, red, green, blue, alpha, mesh.upU0(i), mesh.upV1(i),
-                            packedOverlay, packedLight, ny.x, ny.y, ny.z);
-                    buffer.vertex(C010.x, C010.y, C010.z, red, green, blue, alpha, mesh.upU1(i), mesh.upV1(i),
-                            packedOverlay, packedLight, ny.x, ny.y, ny.z);
-                    buffer.vertex(C011.x, C011.y, C011.z, red, green, blue, alpha, mesh.upU1(i), mesh.upV0(i),
-                            packedOverlay, packedLight, ny.x, ny.y, ny.z);
-                    buffer.vertex(C111.x, C111.y, C111.z, red, green, blue, alpha, mesh.upU0(i), mesh.upV0(i),
-                            packedOverlay, packedLight, ny.x, ny.y, ny.z);
-                }
-                if ((faces & 0b000100) != 0) // NORTH
-                {
-                    buffer.vertex(C100.x, C100.y, C100.z, red, green, blue, alpha, mesh.northU0(i), mesh.northV1(i),
-                            packedOverlay, packedLight, -nz.x, -nz.y, -nz.z);
-                    buffer.vertex(C000.x, C000.y, C000.z, red, green, blue, alpha, mesh.northU1(i), mesh.northV1(i),
-                            packedOverlay, packedLight, -nz.x, -nz.y, -nz.z);
-                    buffer.vertex(C010.x, C010.y, C010.z, red, green, blue, alpha, mesh.northU1(i), mesh.northV0(i),
-                            packedOverlay, packedLight, -nz.x, -nz.y, -nz.z);
-                    buffer.vertex(C110.x, C110.y, C110.z, red, green, blue, alpha, mesh.northU0(i), mesh.northV0(i),
-                            packedOverlay, packedLight, -nz.x, -nz.y, -nz.z);
-                }
-                if ((faces & 0b001000) != 0) // SOUTH
-                {
-                    buffer.vertex(C001.x, C001.y, C001.z, red, green, blue, alpha, mesh.southU0(i), mesh.southV1(i),
-                            packedOverlay, packedLight, nz.x, nz.y, nz.z);
-                    buffer.vertex(C101.x, C101.y, C101.z, red, green, blue, alpha, mesh.southU1(i), mesh.southV1(i),
-                            packedOverlay, packedLight, nz.x, nz.y, nz.z);
-                    buffer.vertex(C111.x, C111.y, C111.z, red, green, blue, alpha, mesh.southU1(i), mesh.southV0(i),
-                            packedOverlay, packedLight, nz.x, nz.y, nz.z);
-                    buffer.vertex(C011.x, C011.y, C011.z, red, green, blue, alpha, mesh.southU0(i), mesh.southV0(i),
-                            packedOverlay, packedLight, nz.x, nz.y, nz.z);
-                }
-                if ((faces & 0b010000) != 0) // WEST
-                {
-                    // FIXME 你问我为什么 WEST 是 EAST 的 UV，我也不知道，但是游戏内就是好的
-                    buffer.vertex(C101.x, C101.y, C101.z, red, green, blue, alpha, mesh.eastU0(i), mesh.eastV1(i),
-                            packedOverlay, packedLight, nx.x, nx.y, nx.z);
-                    buffer.vertex(C100.x, C100.y, C100.z, red, green, blue, alpha, mesh.eastU1(i), mesh.eastV1(i),
-                            packedOverlay, packedLight, nx.x, nx.y, nx.z);
-                    buffer.vertex(C110.x, C110.y, C110.z, red, green, blue, alpha, mesh.eastU1(i), mesh.eastV0(i),
-                            packedOverlay, packedLight, nx.x, nx.y, nx.z);
-                    buffer.vertex(C111.x, C111.y, C111.z, red, green, blue, alpha, mesh.eastU0(i), mesh.eastV0(i),
-                            packedOverlay, packedLight, nx.x, nx.y, nx.z);
-                }
-                if ((faces & 0b100000) != 0) // EAST
-                {
-                    // FIXME 你问我为什么 EAST 是 WEST 的 UV，我也不知道，但是游戏内就是好的
-                    buffer.vertex(C000.x, C000.y, C000.z, red, green, blue, alpha, mesh.westU0(i), mesh.westV1(i),
-                            packedOverlay, packedLight, -nx.x, -nx.y, -nx.z);
-                    buffer.vertex(C001.x, C001.y, C001.z, red, green, blue, alpha, mesh.westU1(i), mesh.westV1(i),
-                            packedOverlay, packedLight, -nx.x, -nx.y, -nx.z);
-                    buffer.vertex(C011.x, C011.y, C011.z, red, green, blue, alpha, mesh.westU1(i), mesh.westV0(i),
-                            packedOverlay, packedLight, -nx.x, -nx.y, -nx.z);
-                    buffer.vertex(C010.x, C010.y, C010.z, red, green, blue, alpha, mesh.westU0(i), mesh.westV0(i),
-                            packedOverlay, packedLight, -nx.x, -nx.y, -nx.z);
-                }
-            } else {
-                if ((faces & 0b000001) != 0) // DOWN
-                {
-                    buffer.vertex(C101.x, C101.y, C101.z, red, green, blue, alpha, mesh.downU1(i), mesh.downV0(i),
-                            packedOverlay, packedLight, -ny.x, -ny.y, -ny.z);
-                    buffer.vertex(C001.x, C001.y, C001.z, red, green, blue, alpha, mesh.downU0(i), mesh.downV0(i),
-                            packedOverlay, packedLight, -ny.x, -ny.y, -ny.z);
-                    buffer.vertex(C000.x, C000.y, C000.z, red, green, blue, alpha, mesh.downU0(i), mesh.downV1(i),
-                            packedOverlay, packedLight, -ny.x, -ny.y, -ny.z);
-                    buffer.vertex(C100.x, C100.y, C100.z, red, green, blue, alpha, mesh.downU1(i), mesh.downV1(i),
-                            packedOverlay, packedLight, -ny.x, -ny.y, -ny.z);
-                }
-                if ((faces & 0b000010) != 0) // UP
-                {
-                    buffer.vertex(C110.x, C110.y, C110.z, red, green, blue, alpha, mesh.upU1(i), mesh.upV0(i),
-                            packedOverlay, packedLight, ny.x, ny.y, ny.z);
-                    buffer.vertex(C010.x, C010.y, C010.z, red, green, blue, alpha, mesh.upU0(i), mesh.upV0(i),
-                            packedOverlay, packedLight, ny.x, ny.y, ny.z);
-                    buffer.vertex(C011.x, C011.y, C011.z, red, green, blue, alpha, mesh.upU0(i), mesh.upV1(i),
-                            packedOverlay, packedLight, ny.x, ny.y, ny.z);
-                    buffer.vertex(C111.x, C111.y, C111.z, red, green, blue, alpha, mesh.upU1(i), mesh.upV1(i),
-                            packedOverlay, packedLight, ny.x, ny.y, ny.z);
-                }
-                if ((faces & 0b000100) != 0) // NORTH
-                {
-                    buffer.vertex(C100.x, C100.y, C100.z, red, green, blue, alpha, mesh.northU1(i), mesh.northV0(i),
-                            packedOverlay, packedLight, -nz.x, -nz.y, -nz.z);
-                    buffer.vertex(C000.x, C000.y, C000.z, red, green, blue, alpha, mesh.northU0(i), mesh.northV0(i),
-                            packedOverlay, packedLight, -nz.x, -nz.y, -nz.z);
-                    buffer.vertex(C010.x, C010.y, C010.z, red, green, blue, alpha, mesh.northU0(i), mesh.northV1(i),
-                            packedOverlay, packedLight, -nz.x, -nz.y, -nz.z);
-                    buffer.vertex(C110.x, C110.y, C110.z, red, green, blue, alpha, mesh.northU1(i), mesh.northV1(i),
-                            packedOverlay, packedLight, -nz.x, -nz.y, -nz.z);
-                }
-                if ((faces & 0b001000) != 0) // SOUTH
-                {
-                    buffer.vertex(C001.x, C001.y, C001.z, red, green, blue, alpha, mesh.southU1(i), mesh.southV0(i),
-                            packedOverlay, packedLight, nz.x, nz.y, nz.z);
-                    buffer.vertex(C101.x, C101.y, C101.z, red, green, blue, alpha, mesh.southU0(i), mesh.southV0(i),
-                            packedOverlay, packedLight, nz.x, nz.y, nz.z);
-                    buffer.vertex(C111.x, C111.y, C111.z, red, green, blue, alpha, mesh.southU0(i), mesh.southV1(i),
-                            packedOverlay, packedLight, nz.x, nz.y, nz.z);
-                    buffer.vertex(C011.x, C011.y, C011.z, red, green, blue, alpha, mesh.southU1(i), mesh.southV1(i),
-                            packedOverlay, packedLight, nz.x, nz.y, nz.z);
-                }
-                if ((faces & 0b010000) != 0) // WEST
-                {
-                    buffer.vertex(C101.x, C101.y, C101.z, red, green, blue, alpha, mesh.westU1(i), mesh.westV0(i),
-                            packedOverlay, packedLight, -nx.x, -nx.y, -nx.z);
-                    buffer.vertex(C100.x, C100.y, C100.z, red, green, blue, alpha, mesh.westU0(i), mesh.westV0(i),
-                            packedOverlay, packedLight, -nx.x, -nx.y, -nx.z);
-                    buffer.vertex(C110.x, C110.y, C110.z, red, green, blue, alpha, mesh.westU0(i), mesh.westV1(i),
-                            packedOverlay, packedLight, -nx.x, -nx.y, -nx.z);
-                    buffer.vertex(C111.x, C111.y, C111.z, red, green, blue, alpha, mesh.westU1(i), mesh.westV1(i),
-                            packedOverlay, packedLight, -nx.x, -nx.y, -nx.z);
-                }
-                if ((faces & 0b100000) != 0) // EAST
-                {
-                    buffer.vertex(C000.x, C000.y, C000.z, red, green, blue, alpha, mesh.eastU1(i), mesh.eastV0(i),
-                            packedOverlay, packedLight, nx.x, nx.y, nx.z);
-                    buffer.vertex(C001.x, C001.y, C001.z, red, green, blue, alpha, mesh.eastU0(i), mesh.eastV0(i),
-                            packedOverlay, packedLight, nx.x, nx.y, nx.z);
-                    buffer.vertex(C011.x, C011.y, C011.z, red, green, blue, alpha, mesh.eastU0(i), mesh.eastV1(i),
-                            packedOverlay, packedLight, nx.x, nx.y, nx.z);
-                    buffer.vertex(C010.x, C010.y, C010.z, red, green, blue, alpha, mesh.eastU1(i), mesh.eastV1(i),
-                            packedOverlay, packedLight, nx.x, nx.y, nx.z);
-                }
+            if (mirrored) {
+                nx.mul(-1);
+                ny.mul(-1);
+                nz.mul(-1);
+            }
+
+            if ((faces & 0b000001) != 0) // DOWN
+            {
+                buffer.vertex(C101.x, C101.y, C101.z, red, green, blue, alpha, mesh.downU0(i), mesh.downV1(i),
+                        packedOverlay, packedLight, -ny.x, -ny.y, -ny.z);
+                buffer.vertex(C001.x, C001.y, C001.z, red, green, blue, alpha, mesh.downU1(i), mesh.downV1(i),
+                        packedOverlay, packedLight, -ny.x, -ny.y, -ny.z);
+                buffer.vertex(C000.x, C000.y, C000.z, red, green, blue, alpha, mesh.downU1(i), mesh.downV0(i),
+                        packedOverlay, packedLight, -ny.x, -ny.y, -ny.z);
+                buffer.vertex(C100.x, C100.y, C100.z, red, green, blue, alpha, mesh.downU0(i), mesh.downV0(i),
+                        packedOverlay, packedLight, -ny.x, -ny.y, -ny.z);
+            }
+            if ((faces & 0b000010) != 0) // UP
+            {
+                buffer.vertex(C110.x, C110.y, C110.z, red, green, blue, alpha, mesh.upU0(i), mesh.upV1(i),
+                        packedOverlay, packedLight, ny.x, ny.y, ny.z);
+                buffer.vertex(C010.x, C010.y, C010.z, red, green, blue, alpha, mesh.upU1(i), mesh.upV1(i),
+                        packedOverlay, packedLight, ny.x, ny.y, ny.z);
+                buffer.vertex(C011.x, C011.y, C011.z, red, green, blue, alpha, mesh.upU1(i), mesh.upV0(i),
+                        packedOverlay, packedLight, ny.x, ny.y, ny.z);
+                buffer.vertex(C111.x, C111.y, C111.z, red, green, blue, alpha, mesh.upU0(i), mesh.upV0(i),
+                        packedOverlay, packedLight, ny.x, ny.y, ny.z);
+            }
+            if ((faces & 0b000100) != 0) // NORTH
+            {
+                buffer.vertex(C100.x, C100.y, C100.z, red, green, blue, alpha, mesh.northU0(i), mesh.northV1(i),
+                        packedOverlay, packedLight, -nz.x, -nz.y, -nz.z);
+                buffer.vertex(C000.x, C000.y, C000.z, red, green, blue, alpha, mesh.northU1(i), mesh.northV1(i),
+                        packedOverlay, packedLight, -nz.x, -nz.y, -nz.z);
+                buffer.vertex(C010.x, C010.y, C010.z, red, green, blue, alpha, mesh.northU1(i), mesh.northV0(i),
+                        packedOverlay, packedLight, -nz.x, -nz.y, -nz.z);
+                buffer.vertex(C110.x, C110.y, C110.z, red, green, blue, alpha, mesh.northU0(i), mesh.northV0(i),
+                        packedOverlay, packedLight, -nz.x, -nz.y, -nz.z);
+            }
+            if ((faces & 0b001000) != 0) // SOUTH
+            {
+                buffer.vertex(C001.x, C001.y, C001.z, red, green, blue, alpha, mesh.southU0(i), mesh.southV1(i),
+                        packedOverlay, packedLight, nz.x, nz.y, nz.z);
+                buffer.vertex(C101.x, C101.y, C101.z, red, green, blue, alpha, mesh.southU1(i), mesh.southV1(i),
+                        packedOverlay, packedLight, nz.x, nz.y, nz.z);
+                buffer.vertex(C111.x, C111.y, C111.z, red, green, blue, alpha, mesh.southU1(i), mesh.southV0(i),
+                        packedOverlay, packedLight, nz.x, nz.y, nz.z);
+                buffer.vertex(C011.x, C011.y, C011.z, red, green, blue, alpha, mesh.southU0(i), mesh.southV0(i),
+                        packedOverlay, packedLight, nz.x, nz.y, nz.z);
+            }
+            if ((faces & 0b010000) != 0) // WEST
+            {
+                // FIXME 你问我为什么 WEST 是 EAST 的 UV，我也不知道，但是游戏内就是好的
+                buffer.vertex(C101.x, C101.y, C101.z, red, green, blue, alpha, mesh.eastU0(i), mesh.eastV1(i),
+                        packedOverlay, packedLight, nx.x, nx.y, nx.z);
+                buffer.vertex(C100.x, C100.y, C100.z, red, green, blue, alpha, mesh.eastU1(i), mesh.eastV1(i),
+                        packedOverlay, packedLight, nx.x, nx.y, nx.z);
+                buffer.vertex(C110.x, C110.y, C110.z, red, green, blue, alpha, mesh.eastU1(i), mesh.eastV0(i),
+                        packedOverlay, packedLight, nx.x, nx.y, nx.z);
+                buffer.vertex(C111.x, C111.y, C111.z, red, green, blue, alpha, mesh.eastU0(i), mesh.eastV0(i),
+                        packedOverlay, packedLight, nx.x, nx.y, nx.z);
+            }
+            if ((faces & 0b100000) != 0) // EAST
+            {
+                // FIXME 你问我为什么 EAST 是 WEST 的 UV，我也不知道，但是游戏内就是好的
+                buffer.vertex(C000.x, C000.y, C000.z, red, green, blue, alpha, mesh.westU0(i), mesh.westV1(i),
+                        packedOverlay, packedLight, -nx.x, -nx.y, -nx.z);
+                buffer.vertex(C001.x, C001.y, C001.z, red, green, blue, alpha, mesh.westU1(i), mesh.westV1(i),
+                        packedOverlay, packedLight, -nx.x, -nx.y, -nx.z);
+                buffer.vertex(C011.x, C011.y, C011.z, red, green, blue, alpha, mesh.westU1(i), mesh.westV0(i),
+                        packedOverlay, packedLight, -nx.x, -nx.y, -nx.z);
+                buffer.vertex(C010.x, C010.y, C010.z, red, green, blue, alpha, mesh.westU0(i), mesh.westV0(i),
+                        packedOverlay, packedLight, -nx.x, -nx.y, -nx.z);
             }
         }
     }

@@ -53,6 +53,10 @@ public class BackpackManager {
 
     @OnlyIn(Dist.CLIENT)
     public static void initClient(EntityModelSet modelSet) {
+        // 有些模组可能会比上面 init 还要早执行这块，所以需要检查一下？
+        if (BACKPACK_ID_MAP == null) {
+            init();
+        }
         BACKPACK_MODEL_MAP = Maps.newHashMap();
         BACKPACK_ID_MAP.forEach((id, backpack) -> BACKPACK_MODEL_MAP.put(id, Pair.of(backpack.getBackpackModel(modelSet), backpack.getBackpackTexture())));
         BACKPACK_MODEL_MAP = ImmutableMap.copyOf(BACKPACK_MODEL_MAP);

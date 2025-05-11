@@ -3,8 +3,8 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Point;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockGomoku;
-import com.github.tartaricacid.touhoulittlemaid.client.model.GomokuModel;
-import com.github.tartaricacid.touhoulittlemaid.client.model.PieceModel;
+import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.SimpleBedrockModel;
+import com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGomoku;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -22,21 +22,22 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 
 public class TileEntityGomokuRenderer implements BlockEntityRenderer<TileEntityGomoku> {
-    private static final ResourceLocation CHECKER_BOARD_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/gomoku.png");
-    private static final ResourceLocation BLACK_PIECE_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/black_piece.png");
-    private static final ResourceLocation WHITE_PIECE_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/white_piece.png");
+    private static final ResourceLocation CHECKER_BOARD_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/bedrock/block/gomoku.png");
+    private static final ResourceLocation BLACK_PIECE_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/bedrock/block/gomoku_black_piece.png");
+    private static final ResourceLocation WHITE_PIECE_TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/bedrock/block/gomoku_white_piece.png");
     private static final int TIPS_RENDER_DISTANCE = 16;
     private static final int PIECE_RENDER_DISTANCE = 24;
-    private final GomokuModel CHECKER_BOARD_MODEL;
-    private final PieceModel PIECE_MODEL;
+    private final SimpleBedrockModel<Entity> CHECKER_BOARD_MODEL;
+    private final SimpleBedrockModel<Entity> PIECE_MODEL;
     private final Font font;
     private final BlockEntityRenderDispatcher dispatcher;
 
     public TileEntityGomokuRenderer(BlockEntityRendererProvider.Context context) {
-        CHECKER_BOARD_MODEL = new GomokuModel(context.bakeLayer(GomokuModel.LAYER));
-        PIECE_MODEL = new PieceModel(context.bakeLayer(PieceModel.LAYER));
+        CHECKER_BOARD_MODEL = BedrockModelLoader.getModel(BedrockModelLoader.GOMOKU);
+        PIECE_MODEL = BedrockModelLoader.getModel(BedrockModelLoader.GOMOKU_PIECE);
         this.font = context.getFont();
         this.dispatcher = context.getBlockEntityRenderDispatcher();
     }

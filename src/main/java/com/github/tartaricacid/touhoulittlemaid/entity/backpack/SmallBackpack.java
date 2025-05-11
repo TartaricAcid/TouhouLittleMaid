@@ -2,7 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.backpack;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
-import com.github.tartaricacid.touhoulittlemaid.client.model.backpack.SmallBackpackModel;
+import com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityTombstone;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
@@ -23,6 +23,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
+
+import static com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader.SMALL_BACKPACK;
 
 public class SmallBackpack extends IMaidBackpack {
     public static final ResourceLocation ID = new ResourceLocation(TouhouLittleMaid.MOD_ID, "small_backpack");
@@ -64,14 +66,14 @@ public class SmallBackpack extends IMaidBackpack {
     @Override
     @OnlyIn(Dist.CLIENT)
     public EntityModel<EntityMaid> getBackpackModel(EntityModelSet modelSet) {
-        return new SmallBackpackModel(modelSet.bakeLayer(SmallBackpackModel.LAYER));
+        return BedrockModelLoader.getModel(SMALL_BACKPACK);
     }
 
     @Nullable
     @Override
     @OnlyIn(Dist.CLIENT)
     public ResourceLocation getBackpackTexture() {
-        return new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/maid_backpack_small.png");
+        return new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/bedrock/entity/backpack/small_backpack.png");
     }
 
     @OnlyIn(Dist.CLIENT)

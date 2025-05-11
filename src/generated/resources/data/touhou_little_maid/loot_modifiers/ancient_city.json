@@ -1,0 +1,7 @@
+{
+  "type": "touhou_little_maid:addition",
+  "conditions": [],
+  "loot_table_add": "touhou_little_maid:chest/shrine_less",
+  "loot_table_id": "minecraft:chests/ancient_city",
+  "loot_table_type": "minecraft:chest"
+}

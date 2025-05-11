@@ -72,13 +72,16 @@ public class BlockShrine extends BaseEntityBlock {
                 return InteractionResult.PASS;
             }
             if (playerIn.getMainHandItem().isEmpty()) {
-                if (playerIn.getHealth() < (playerIn.getMaxHealth() / 2) + 1) {
-                    if (!worldIn.isClientSide) {
-                        playerIn.sendSystemMessage(Component.translatable("message.touhou_little_maid.shrine.health_low"));
+                // 创造模式玩家可以随意复活
+                if (!playerIn.isCreative()) {
+                    if (playerIn.getHealth() < (playerIn.getMaxHealth() / 2) + 1) {
+                        if (!worldIn.isClientSide) {
+                            playerIn.sendSystemMessage(Component.translatable("message.touhou_little_maid.shrine.health_low"));
+                        }
+                        return InteractionResult.FAIL;
                     }
-                    return InteractionResult.FAIL;
+                    playerIn.setHealth(0.25f);
                 }
-                playerIn.setHealth(0.25f);
                 ItemStack film = shrine.getStorageItem();
                 ItemFilm.filmToMaid(film, worldIn, pos.above(), playerIn);
                 if (playerIn instanceof ServerPlayer serverPlayer) {

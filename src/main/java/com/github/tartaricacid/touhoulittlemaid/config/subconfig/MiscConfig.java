@@ -64,7 +64,7 @@ public final class MiscConfig {
         USE_NEW_MAID_FAIRY_MODEL = builder.define("UseNewMaidFairyModel", true);
 
         builder.comment("Whether to enable model icon caching");
-        MODEL_ICON_CACHE = builder.define("ModelIconCache", true);
+        MODEL_ICON_CACHE = builder.define("EnableModelIconCache", false);
 
         builder.pop();
     }

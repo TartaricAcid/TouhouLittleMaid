@@ -19,6 +19,7 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -35,7 +36,7 @@ public class ItemSmartSlab extends AbstractStoreMaidItem {
     private final Type type;
 
     public ItemSmartSlab(Type type) {
-        super((new Properties()).stacksTo(1));
+        super((new Properties()).stacksTo(1).rarity(Rarity.RARE));
         this.type = type;
     }
 

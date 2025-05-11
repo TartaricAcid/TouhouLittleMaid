@@ -1,0 +1,29 @@
+{
+  "values": [
+    "minecraft:iron_golem",
+    {
+      "id": "guardvillagers:guard",
+      "required": false
+    },
+    {
+      "id": "earthtojavamobs:furnace_golem",
+      "required": false
+    },
+    {
+      "id": "earthmobsmod:furnace_golem",
+      "required": false
+    },
+    {
+      "id": "mutantmonsters:mutant_snow_golem",
+      "required": false
+    },
+    {
+      "id": "alexscaves:gingerbread_man",
+      "required": false
+    },
+    {
+      "id": "alexsmobs:bunfungus",
+      "required": false
+    }
+  ]
+}

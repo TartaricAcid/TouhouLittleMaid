@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.model.bedrock;
 
+import com.github.tartaricacid.simplebedrockmodel.client.bedrock.AbstractBedrockEntityModel;
 import com.github.tartaricacid.simplebedrockmodel.client.bedrock.AbstractBedrockModel;
 import com.github.tartaricacid.simplebedrockmodel.client.bedrock.model.BedrockPart;
 import com.github.tartaricacid.simplebedrockmodel.client.bedrock.pojo.BedrockModelPOJO;
@@ -30,7 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
-public class BedrockModel<T extends LivingEntity> extends AbstractBedrockModel<T> {
+public class BedrockModel<T extends LivingEntity> extends AbstractBedrockEntityModel<T> {
     /**
      * 用于自定义动画的变量
      */

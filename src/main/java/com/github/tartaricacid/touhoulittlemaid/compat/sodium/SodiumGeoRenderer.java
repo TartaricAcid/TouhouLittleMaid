@@ -79,16 +79,16 @@ class SodiumGeoRenderer {
             boolean mirrored = (faces & 0b1000000) != 0;
             if (RenderSystem.getModelViewMatrix().m32() == 0) {
                 if ((C101.x + C000.x) * ny.x + (C101.y + C000.y) * ny.y + (C101.z + C000.z) * ny.z < 0) {
-                    faces &= ~0b000001; // Backface culling down
+                    faces &= mirrored ? ~0b000010 : ~0b00001;
                 }
                 if ((C110.x + C011.x) * ny.x + (C110.y + C011.y) * ny.y + (C110.z + C011.z) * ny.z > 0) {
-                    faces &= ~0b000010; // Backface culling up
+                    faces &= mirrored ? ~0b00001 : ~0b000010;
                 }
                 if ((C100.x + C010.x) * nz.x + (C100.y + C010.y) * nz.y + (C100.z + C010.z) * nz.z < 0) {
-                    faces &= ~0b000100; // Backface culling north
+                    faces &= mirrored ? ~0b001000 : ~0b000100;
                 }
                 if ((C001.x + C111.x) * nz.x + (C001.y + C111.y) * nz.y + (C001.z + C111.z) * nz.z > 0) {
-                    faces &= ~0b001000; // Backface culling south
+                    faces &= mirrored ? ~0b000100 : ~0b001000;
                 }
                 if ((C101.x + C110.x) * nx.x + (C101.y + C110.y) * nx.y + (C101.z + C110.z) * nx.z > 0) {
                     faces &= mirrored ? ~0b100000 : ~0b010000;
@@ -105,6 +105,13 @@ class SodiumGeoRenderer {
                 ny.mul(normal).normalize();
                 nz.mul(normal).normalize();
             }
+
+            if (mirrored) {
+                nx.mul(-1);
+                ny.mul(-1);
+                nz.mul(-1);
+            }
+
             int normalPX = packUnsafe(nx.x, nx.y, nx.z);
             int normalPY = packUnsafe(ny.x, ny.y, ny.z);
             int normalPZ = packUnsafe(nz.x, nz.y, nz.z);
@@ -114,190 +121,97 @@ class SodiumGeoRenderer {
 
             long ptr = SCRATCH_BUFFER;
             int vertexCount = 0;
-            if (!mirrored) {
-                if ((faces & 0b000001) != 0) // DOWN
-                {
-                    emitVertex(ptr, C101.x, C101.y, C101.z, color, mesh.downU0(i), mesh.downV1(i), packedOverlay, packedLight, normalNY);
-                    ptr += ModelVertex.STRIDE;
+            if ((faces & 0b000001) != 0) // DOWN
+            {
+                emitVertex(ptr, C101.x, C101.y, C101.z, color, mesh.downU0(i), mesh.downV1(i), packedOverlay, packedLight, normalNY);
+                ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C001.x, C001.y, C001.z, color, mesh.downU1(i), mesh.downV1(i), packedOverlay, packedLight, normalNY);
-                    ptr += ModelVertex.STRIDE;
+                emitVertex(ptr, C001.x, C001.y, C001.z, color, mesh.downU1(i), mesh.downV1(i), packedOverlay, packedLight, normalNY);
+                ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C000.x, C000.y, C000.z, color, mesh.downU1(i), mesh.downV0(i), packedOverlay, packedLight, normalNY);
-                    ptr += ModelVertex.STRIDE;
+                emitVertex(ptr, C000.x, C000.y, C000.z, color, mesh.downU1(i), mesh.downV0(i), packedOverlay, packedLight, normalNY);
+                ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C100.x, C100.y, C100.z, color, mesh.downU0(i), mesh.downV0(i), packedOverlay, packedLight, normalNY);
-                    ptr += ModelVertex.STRIDE;
-                    vertexCount+=4;
-                }
-                if ((faces & 0b000010) != 0) // UP
-                {
-                    emitVertex(ptr, C110.x, C110.y, C110.z, color, mesh.upU0(i), mesh.upV1(i), packedOverlay, packedLight, normalPY);
-                    ptr += ModelVertex.STRIDE;
+                emitVertex(ptr, C100.x, C100.y, C100.z, color, mesh.downU0(i), mesh.downV0(i), packedOverlay, packedLight, normalNY);
+                ptr += ModelVertex.STRIDE;
+                vertexCount += 4;
+            }
+            if ((faces & 0b000010) != 0) // UP
+            {
+                emitVertex(ptr, C110.x, C110.y, C110.z, color, mesh.upU0(i), mesh.upV1(i), packedOverlay, packedLight, normalPY);
+                ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C010.x, C010.y, C010.z, color, mesh.upU1(i), mesh.upV1(i), packedOverlay, packedLight, normalPY);
-                    ptr += ModelVertex.STRIDE;
+                emitVertex(ptr, C010.x, C010.y, C010.z, color, mesh.upU1(i), mesh.upV1(i), packedOverlay, packedLight, normalPY);
+                ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C011.x, C011.y, C011.z, color, mesh.upU1(i), mesh.upV0(i), packedOverlay, packedLight, normalPY);
-                    ptr += ModelVertex.STRIDE;
+                emitVertex(ptr, C011.x, C011.y, C011.z, color, mesh.upU1(i), mesh.upV0(i), packedOverlay, packedLight, normalPY);
+                ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C111.x, C111.y, C111.z, color, mesh.upU0(i), mesh.upV0(i), packedOverlay, packedLight, normalPY);
-                    ptr += ModelVertex.STRIDE;
-                    vertexCount+=4;
-                }
-                if ((faces & 0b000100) != 0) // NORTH
-                {
-                    emitVertex(ptr, C100.x, C100.y, C100.z, color, mesh.northU0(i), mesh.northV1(i), packedOverlay, packedLight, normalNZ);
-                    ptr += ModelVertex.STRIDE;
+                emitVertex(ptr, C111.x, C111.y, C111.z, color, mesh.upU0(i), mesh.upV0(i), packedOverlay, packedLight, normalPY);
+                ptr += ModelVertex.STRIDE;
+                vertexCount += 4;
+            }
+            if ((faces & 0b000100) != 0) // NORTH
+            {
+                emitVertex(ptr, C100.x, C100.y, C100.z, color, mesh.northU0(i), mesh.northV1(i), packedOverlay, packedLight, normalNZ);
+                ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C000.x, C000.y, C000.z, color, mesh.northU1(i), mesh.northV1(i), packedOverlay, packedLight, normalNZ);
-                    ptr += ModelVertex.STRIDE;
+                emitVertex(ptr, C000.x, C000.y, C000.z, color, mesh.northU1(i), mesh.northV1(i), packedOverlay, packedLight, normalNZ);
+                ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C010.x, C010.y, C010.z, color, mesh.northU1(i), mesh.northV0(i), packedOverlay, packedLight, normalNZ);
-                    ptr += ModelVertex.STRIDE;
+                emitVertex(ptr, C010.x, C010.y, C010.z, color, mesh.northU1(i), mesh.northV0(i), packedOverlay, packedLight, normalNZ);
+                ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C110.x, C110.y, C110.z, color, mesh.northU0(i), mesh.northV0(i), packedOverlay, packedLight, normalNZ);
-                    ptr += ModelVertex.STRIDE;
-                    vertexCount+=4;
-                }
-                if ((faces & 0b001000) != 0) // SOUTH
-                {
-                    emitVertex(ptr, C001.x, C001.y, C001.z, color, mesh.southU0(i), mesh.southV1(i), packedOverlay, packedLight, normalPZ);
-                    ptr += ModelVertex.STRIDE;
+                emitVertex(ptr, C110.x, C110.y, C110.z, color, mesh.northU0(i), mesh.northV0(i), packedOverlay, packedLight, normalNZ);
+                ptr += ModelVertex.STRIDE;
+                vertexCount += 4;
+            }
+            if ((faces & 0b001000) != 0) // SOUTH
+            {
+                emitVertex(ptr, C001.x, C001.y, C001.z, color, mesh.southU0(i), mesh.southV1(i), packedOverlay, packedLight, normalPZ);
+                ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C101.x, C101.y, C101.z, color, mesh.southU1(i), mesh.southV1(i), packedOverlay, packedLight, normalPZ);
-                    ptr += ModelVertex.STRIDE;
+                emitVertex(ptr, C101.x, C101.y, C101.z, color, mesh.southU1(i), mesh.southV1(i), packedOverlay, packedLight, normalPZ);
+                ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C111.x, C111.y, C111.z, color, mesh.southU1(i), mesh.southV0(i), packedOverlay, packedLight, normalPZ);
-                    ptr += ModelVertex.STRIDE;
+                emitVertex(ptr, C111.x, C111.y, C111.z, color, mesh.southU1(i), mesh.southV0(i), packedOverlay, packedLight, normalPZ);
+                ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C011.x, C011.y, C011.z, color, mesh.southU0(i), mesh.southV0(i), packedOverlay, packedLight, normalPZ);
-                    ptr += ModelVertex.STRIDE;
-                    vertexCount+=4;
-                }
-                if ((faces & 0b010000) != 0) // WEST
-                {
-                    // FIXME 你问我为什么 WEST 是 EAST 的 UV，我也不知道，但是游戏内就是好的
-                    emitVertex(ptr, C101.x, C101.y, C101.z, color, mesh.eastU0(i), mesh.eastV1(i), packedOverlay, packedLight, normalPX);
-                    ptr += ModelVertex.STRIDE;
+                emitVertex(ptr, C011.x, C011.y, C011.z, color, mesh.southU0(i), mesh.southV0(i), packedOverlay, packedLight, normalPZ);
+                ptr += ModelVertex.STRIDE;
+                vertexCount += 4;
+            }
+            if ((faces & 0b010000) != 0) // WEST
+            {
+                // FIXME 你问我为什么 WEST 是 EAST 的 UV，我也不知道，但是游戏内就是好的
+                emitVertex(ptr, C101.x, C101.y, C101.z, color, mesh.eastU0(i), mesh.eastV1(i), packedOverlay, packedLight, normalPX);
+                ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C100.x, C100.y, C100.z, color, mesh.eastU1(i), mesh.eastV1(i), packedOverlay, packedLight, normalPX);
-                    ptr += ModelVertex.STRIDE;
+                emitVertex(ptr, C100.x, C100.y, C100.z, color, mesh.eastU1(i), mesh.eastV1(i), packedOverlay, packedLight, normalPX);
+                ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C110.x, C110.y, C110.z, color, mesh.eastU1(i), mesh.eastV0(i), packedOverlay, packedLight, normalPX);
-                    ptr += ModelVertex.STRIDE;
+                emitVertex(ptr, C110.x, C110.y, C110.z, color, mesh.eastU1(i), mesh.eastV0(i), packedOverlay, packedLight, normalPX);
+                ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C111.x, C111.y, C111.z, color, mesh.eastU0(i), mesh.eastV0(i), packedOverlay, packedLight, normalPX);
-                    ptr += ModelVertex.STRIDE;
-                    vertexCount+=4;
-                }
-                if ((faces & 0b100000) != 0) // EAST
-                {
-                    // FIXME 你问我为什么 EAST 是 WEST 的 UV，我也不知道，但是游戏内就是好的
-                    emitVertex(ptr, C000.x, C000.y, C000.z, color, mesh.westU0(i), mesh.westV1(i), packedOverlay, packedLight, normalNX);
-                    ptr += ModelVertex.STRIDE;
+                emitVertex(ptr, C111.x, C111.y, C111.z, color, mesh.eastU0(i), mesh.eastV0(i), packedOverlay, packedLight, normalPX);
+                ptr += ModelVertex.STRIDE;
+                vertexCount += 4;
+            }
+            if ((faces & 0b100000) != 0) // EAST
+            {
+                // FIXME 你问我为什么 EAST 是 WEST 的 UV，我也不知道，但是游戏内就是好的
+                emitVertex(ptr, C000.x, C000.y, C000.z, color, mesh.westU0(i), mesh.westV1(i), packedOverlay, packedLight, normalNX);
+                ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C001.x, C001.y, C001.z, color, mesh.westU1(i), mesh.westV1(i), packedOverlay, packedLight, normalNX);
-                    ptr += ModelVertex.STRIDE;
+                emitVertex(ptr, C001.x, C001.y, C001.z, color, mesh.westU1(i), mesh.westV1(i), packedOverlay, packedLight, normalNX);
+                ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C011.x, C011.y, C011.z, color, mesh.westU1(i), mesh.westV0(i), packedOverlay, packedLight, normalNX);
-                    ptr += ModelVertex.STRIDE;
+                emitVertex(ptr, C011.x, C011.y, C011.z, color, mesh.westU1(i), mesh.westV0(i), packedOverlay, packedLight, normalNX);
+                ptr += ModelVertex.STRIDE;
 
-                    emitVertex(ptr, C010.x, C010.y, C010.z, color, mesh.westU0(i), mesh.westV0(i), packedOverlay, packedLight, normalNX);
-                    ptr += ModelVertex.STRIDE;
-                    vertexCount+=4;
-                }
-            } else {
-                if ((faces & 0b000001) != 0) // DOWN
-                {
-                    emitVertex(ptr, C101.x, C101.y, C101.z, color, mesh.downU1(i), mesh.downV0(i), packedOverlay, packedLight, normalNY);
-                    ptr += ModelVertex.STRIDE;
-
-                    emitVertex(ptr, C001.x, C001.y, C001.z, color, mesh.downU0(i), mesh.downV0(i), packedOverlay, packedLight, normalNY);
-                    ptr += ModelVertex.STRIDE;
-
-                    emitVertex(ptr, C000.x, C000.y, C000.z, color, mesh.downU0(i), mesh.downV1(i), packedOverlay, packedLight, normalNY);
-                    ptr += ModelVertex.STRIDE;
-
-                    emitVertex(ptr, C100.x, C100.y, C100.z, color, mesh.downU1(i), mesh.downV1(i), packedOverlay, packedLight, normalNY);
-                    ptr += ModelVertex.STRIDE;
-                    vertexCount+=4;
-                }
-                if ((faces & 0b000010) != 0) // UP
-                {
-                    emitVertex(ptr, C110.x, C110.y, C110.z, color, mesh.upU1(i), mesh.upV0(i), packedOverlay, packedLight, normalPY);
-                    ptr += ModelVertex.STRIDE;
-
-                    emitVertex(ptr, C010.x, C010.y, C010.z, color, mesh.upU0(i), mesh.upV0(i), packedOverlay, packedLight, normalPY);
-                    ptr += ModelVertex.STRIDE;
-
-                    emitVertex(ptr, C011.x, C011.y, C011.z, color, mesh.upU0(i), mesh.upV1(i), packedOverlay, packedLight, normalPY);
-                    ptr += ModelVertex.STRIDE;
-
-                    emitVertex(ptr, C111.x, C111.y, C111.z, color, mesh.upU1(i), mesh.upV1(i), packedOverlay, packedLight, normalPY);
-                    ptr += ModelVertex.STRIDE;
-                    vertexCount+=4;
-                }
-                if ((faces & 0b000100) != 0) // NORTH
-                {
-                    emitVertex(ptr, C100.x, C100.y, C100.z, color, mesh.northU1(i), mesh.northV0(i), packedOverlay, packedLight, normalNZ);
-                    ptr += ModelVertex.STRIDE;
-
-                    emitVertex(ptr, C000.x, C000.y, C000.z, color, mesh.northU0(i), mesh.northV0(i), packedOverlay, packedLight, normalNZ);
-                    ptr += ModelVertex.STRIDE;
-
-                    emitVertex(ptr, C010.x, C010.y, C010.z, color, mesh.northU0(i), mesh.northV1(i), packedOverlay, packedLight, normalNZ);
-                    ptr += ModelVertex.STRIDE;
-
-                    emitVertex(ptr, C110.x, C110.y, C110.z, color, mesh.northU1(i), mesh.northV1(i), packedOverlay, packedLight, normalNZ);
-                    ptr += ModelVertex.STRIDE;
-                    vertexCount+=4;
-                }
-                if ((faces & 0b001000) != 0) // SOUTH
-                {
-                    emitVertex(ptr, C001.x, C001.y, C001.z, color, mesh.southU1(i), mesh.southV0(i), packedOverlay, packedLight, normalPZ);
-                    ptr += ModelVertex.STRIDE;
-
-                    emitVertex(ptr, C101.x, C101.y, C101.z, color, mesh.southU0(i), mesh.southV0(i), packedOverlay, packedLight, normalPZ);
-                    ptr += ModelVertex.STRIDE;
-
-                    emitVertex(ptr, C111.x, C111.y, C111.z, color, mesh.southU0(i), mesh.southV1(i), packedOverlay, packedLight, normalPZ);
-                    ptr += ModelVertex.STRIDE;
-
-                    emitVertex(ptr, C011.x, C011.y, C011.z, color, mesh.southU1(i), mesh.southV1(i), packedOverlay, packedLight, normalPZ);
-                    ptr += ModelVertex.STRIDE;
-                    vertexCount+=4;
-                }
-                if ((faces & 0b010000) != 0) // WEST
-                {
-                    emitVertex(ptr, C101.x, C101.y, C101.z, color, mesh.westU1(i), mesh.westV0(i), packedOverlay, packedLight, normalNX);
-                    ptr += ModelVertex.STRIDE;
-
-                    emitVertex(ptr, C100.x, C100.y, C100.z, color, mesh.westU0(i), mesh.westV0(i), packedOverlay, packedLight, normalNX);
-                    ptr += ModelVertex.STRIDE;
-
-                    emitVertex(ptr, C110.x, C110.y, C110.z, color, mesh.westU0(i), mesh.westV1(i), packedOverlay, packedLight, normalNX);
-                    ptr += ModelVertex.STRIDE;
-
-                    emitVertex(ptr, C111.x, C111.y, C111.z, color, mesh.westU1(i), mesh.westV1(i), packedOverlay, packedLight, normalNX);
-                    ptr += ModelVertex.STRIDE;
-                    vertexCount+=4;
-                }
-                if ((faces & 0b100000) != 0) // EAST
-                {
-                    emitVertex(ptr, C000.x, C000.y, C000.z, color, mesh.eastU1(i), mesh.eastV0(i), packedOverlay, packedLight, normalPX);
-                    ptr += ModelVertex.STRIDE;
-
-                    emitVertex(ptr, C001.x, C001.y, C001.z, color, mesh.eastU0(i), mesh.eastV0(i), packedOverlay, packedLight, normalPX);
-                    ptr += ModelVertex.STRIDE;
-
-                    emitVertex(ptr, C011.x, C011.y, C011.z, color, mesh.eastU0(i), mesh.eastV1(i), packedOverlay, packedLight, normalPX);
-                    ptr += ModelVertex.STRIDE;
-
-                    emitVertex(ptr, C010.x, C010.y, C010.z, color, mesh.eastU1(i), mesh.eastV1(i), packedOverlay, packedLight, normalPX);
-                    ptr += ModelVertex.STRIDE;
-                    vertexCount+=4;
-                }
+                emitVertex(ptr, C010.x, C010.y, C010.z, color, mesh.westU0(i), mesh.westV0(i), packedOverlay, packedLight, normalNX);
+                ptr += ModelVertex.STRIDE;
+                vertexCount += 4;
             }
 
             flush(writer, vertexCount);

@@ -1,0 +1,169 @@
+{
+	"pack_name": "{pack.touhou_little_maid_old.maid.name}",
+	"author": ["Hoishi", "Succinum", "Pajinyi", "ZeniCrow", "FumoLover"],
+	"description": ["{pack.touhou_little_maid_old.maid.desc}"],
+	"version": "1.0.0",
+	"date": "2021-01-17",
+	"icon": "touhou_little_maid_old:textures/maid_icon.png",
+	"model_list": [
+		{
+			"model_id": "touhou_little_maid_old:reimu_hakurei",
+			"description": ["{model.touhou_little_maid_old.reimu_hakurei.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:singyoku2",
+			"description": ["{model.touhou_little_maid_old.singyoku2.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:singyoku3",
+			"description": ["{model.touhou_little_maid_old.singyoku3.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:mima",
+			"description": ["{model.touhou_little_maid_old.mima.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:kikuri",
+			"description": ["{model.touhou_little_maid_old.kikuri.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:konngara",
+			"description": ["{model.touhou_little_maid_old.konngara.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:yuugen_magan",
+			"description": ["{model.touhou_little_maid_old.yuugen_magan.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:elis",
+			"description": ["{model.touhou_little_maid_old.elis.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:sariel",
+			"description": ["{model.touhou_little_maid_old.sariel.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:genjii",
+			"description": ["{model.touhou_little_maid_old.genjii.desc}"],
+			"show_backpack": false,
+			"show_custom_head": false,
+			"animation": [
+				"touhou_little_maid:animation/maid/default/tail/default.js",
+				"touhou_little_maid:animation/maid/default/sit/skirt_hidden.js",
+				"touhou_little_maid:animation/maid/default/head/default.js",
+				"touhou_little_maid:animation/maid/default/head/beg.js",
+				"touhou_little_maid:animation/maid/default/head/music_shake.js",
+				"touhou_little_maid:animation/maid/default/leg/default.js",
+				"touhou_little_maid:animation/maid/default/sit/default.js"
+			]
+		},
+		{
+			"model_id": "touhou_little_maid_old:rika",
+			"description": ["{model.touhou_little_maid_old.rika.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:meira",
+			"description": ["{model.touhou_little_maid_old.meira.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:kirisame_marisa",
+			"description": ["{model.touhou_little_maid_old.kirisame_marisa.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:ellen",
+			"description": ["{model.touhou_little_maid_old.ellen.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:kotohime",
+			"description": ["{model.touhou_little_maid_old.kotohime.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:kana_anaberal",
+			"description": ["{model.touhou_little_maid_old.kana_anaberal.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:rikako_asakura",
+			"description": ["{model.touhou_little_maid_old.rikako_asakura.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:chiyuri_kitashirakawa",
+			"description": ["{model.touhou_little_maid_old.chiyuri_kitashirakawa.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:yumemi_okazaki",
+			"description": ["{model.touhou_little_maid_old.yumemi_okazaki.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:orange",
+			"description": ["{model.touhou_little_maid_old.orange.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:kurumi",
+			"description": ["{model.touhou_little_maid_old.kurumi.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:elly",
+			"description": ["{model.touhou_little_maid_old.elly.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:yuuka_old",
+			"description": ["{model.touhou_little_maid_old.yuuka_old.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:mugetsu",
+			"description": ["{model.touhou_little_maid_old.mugetsu.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:gengetsu",
+			"description": ["{model.touhou_little_maid_old.gengetsu.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:sara",
+			"description": ["{model.touhou_little_maid_old.sara.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:louise",
+			"description": ["{model.touhou_little_maid_old.louise.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:alice",
+			"description": ["{model.touhou_little_maid_old.alice.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:yuki",
+			"description": ["{model.touhou_little_maid_old.yuki.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:mai",
+			"description": ["{model.touhou_little_maid_old.mai.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:yumeko",
+			"description": ["{model.touhou_little_maid_old.yumeko.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:shinki",
+			"description": ["{model.touhou_little_maid_old.shinki.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_old:ruukoto",
+			"description": ["{model.touhou_little_maid_old.ruukoto.desc}"],
+			"animation": [
+				"touhou_little_maid:animation/maid/default/head/default.js",
+				"touhou_little_maid:animation/maid/default/head/beg.js",
+				"touhou_little_maid:animation/maid/default/head/music_shake.js",
+				"touhou_little_maid:animation/maid/default/head/blink.js",
+				"touhou_little_maid:animation/maid/default/head/hurt.js",
+				"touhou_little_maid:animation/maid/default/arm/default.js",
+				"touhou_little_maid:animation/maid/default/arm/swing.js",
+				"touhou_little_maid:animation/maid/default/leg/default.js",
+				"touhou_little_maid:animation/maid/default/sit/skirt_rotation.js",
+				"touhou_little_maid:animation/maid/default/sit/default.js"
+			]
+		},
+		{
+			"model_id": "touhou_little_maid_old:trump_king",
+			"description": ["{model.touhou_little_maid_old.trump_king.desc}"]
+		}
+	]
+}

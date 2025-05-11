@@ -46,11 +46,7 @@ public final class ExpressionEvaluatorImpl<TEntity> implements ExpressionEvaluat
                 return ValueConversions.asFloat(aVal) + ValueConversions.asFloat(bVal);
             },
             arithmetic((a, b) -> a.eval() - b.eval()),
-            arithmetic((a, b) -> {
-                float left = a.eval();
-                if (left == 0) return 0;
-                return left * b.eval();
-            }),
+            arithmetic((a, b) -> a.eval() * b.eval()),
             arithmetic((a, b) -> {
                 // Molang allows division by zero,
                 // which is always equal to 0

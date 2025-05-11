@@ -42,6 +42,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.projectile.MaidFishingHoo
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskIdle;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
+import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.config.MaidConfigContainer;
@@ -49,7 +50,7 @@ import com.github.tartaricacid.touhoulittlemaid.inventory.handler.BaubleItemHand
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.MaidBackpackHandler;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.MaidHandsInvWrapper;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemFilm;
-import com.github.tartaricacid.touhoulittlemaid.mixin.MixinArrowEntity;
+import com.github.tartaricacid.touhoulittlemaid.mixin.accessor.ArrowAccessor;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.ItemBreakMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.message.PlayMaidSoundMessage;
@@ -113,6 +114,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.BaseFireBlock;
@@ -140,6 +142,7 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.ITeleporter;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
@@ -153,7 +156,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
 import java.time.Duration;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 
 import static com.github.tartaricacid.touhoulittlemaid.config.ServerConfig.MAID_AI_TIME_DEBUG;
 
@@ -242,7 +248,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     private static final String STRUCTURE_SPAWN_TAG = "StructureSpawn";
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
 
-    // 启用数据，仅用于旧版存档的迁移
+    // 弃用数据，仅用于旧版存档的迁移
     private static final @Deprecated String BACKPACK_LEVEL_TAG = "MaidBackpackLevel";
     private static final @Deprecated String RESTRICT_CENTER_TAG = "MaidRestrictCenter";
 
@@ -720,14 +726,12 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             }
 
             // 对经验修补的应用，因为全部来自于原版，所以效果也是相同的
-            Map.Entry<EquipmentSlot, ItemStack> entry = EnchantmentHelper.getRandomItemWith(Enchantments.MENDING, this, ItemStack::isDamaged);
-            if (entry != null) {
-                ItemStack itemstack = entry.getValue();
-                if (!itemstack.isEmpty() && itemstack.isDamaged()) {
-                    int i = Math.min((int) (entityXPOrb.value * itemstack.getXpRepairRatio()), itemstack.getDamageValue());
-                    entityXPOrb.value -= (i / 2);
-                    itemstack.setDamageValue(itemstack.getDamageValue() - i);
-                }
+            IItemHandler allItems = new CombinedInvWrapper(armorInvWrapper, handsInvWrapper, maidBauble);
+            ItemStack itemstack = this.getRandomItemWithMendingEnchantments(allItems);
+            if (!itemstack.isEmpty() && itemstack.isDamaged()) {
+                int i = Math.min((int) (entityXPOrb.value * itemstack.getXpRepairRatio()), itemstack.getDamageValue());
+                entityXPOrb.value -= (i / 2);
+                itemstack.setDamageValue(itemstack.getDamageValue() - i);
             }
             if (entityXPOrb.value > 0) {
                 this.setExperience(getExperience() + entityXPOrb.value);
@@ -749,14 +753,13 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             }
 
             // 对经验修补的应用，因为全部来自于原版，所以效果也是相同的
-            ItemStack itemstack = this.getRandomItemWithMendingEnchantments();
+            LazyOptional<IItemHandler> allItems = this.getCapability(ForgeCapabilities.ITEM_HANDLER, null);
+            ItemStack itemstack = this.getRandomItemWithMendingEnchantments(allItems);
             int xpValue = EntityPowerPoint.transPowerValueToXpValue(powerPoint.getValue());
-            if (!itemstack.isEmpty()) {
-                if (!itemstack.isEmpty() && itemstack.isDamaged()) {
-                    int i = Math.min((int) (xpValue * itemstack.getXpRepairRatio()), itemstack.getDamageValue());
-                    xpValue -= (i / 2);
-                    itemstack.setDamageValue(itemstack.getDamageValue() - i);
-                }
+            if (!itemstack.isEmpty() && itemstack.isDamaged()) {
+                int i = Math.min((int) (xpValue * itemstack.getXpRepairRatio()), itemstack.getDamageValue());
+                xpValue -= (i / 2);
+                itemstack.setDamageValue(itemstack.getDamageValue() - i);
             }
             if (xpValue > 0) {
                 this.setExperience(getExperience() + xpValue);
@@ -765,16 +768,19 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         }
     }
 
-    private ItemStack getRandomItemWithMendingEnchantments() {
+    private ItemStack getRandomItemWithMendingEnchantments(LazyOptional<IItemHandler> cap) {
+        return cap.map(this::getRandomItemWithMendingEnchantments).orElse(ItemStack.EMPTY);
+    }
+
+    private ItemStack getRandomItemWithMendingEnchantments(IItemHandler handler) {
         List<ItemStack> stacks = Lists.newArrayList();
-        this.getCapability(ForgeCapabilities.ITEM_HANDLER, null).ifPresent(cap -> {
-            for (int i = 0; i < cap.getSlots(); i++) {
-                ItemStack itemstack = cap.getStackInSlot(i);
-                if (!itemstack.isEmpty() && itemstack.getEnchantmentLevel(Enchantments.MENDING) > 0 && itemstack.isDamaged()) {
-                    stacks.add(itemstack);
-                }
+        for (int i = 0; i < handler.getSlots(); i++) {
+            ItemStack stackInSlot = handler.getStackInSlot(i);
+            if (!stackInSlot.isEmpty() && stackInSlot.getEnchantmentLevel(Enchantments.MENDING) > 0
+                && stackInSlot.isDamaged() && !stackInSlot.is(TagItem.MAID_MENDING_BLOCKLIST_ITEM)) {
+                stacks.add(stackInSlot);
             }
-        });
+        }
         return stacks.isEmpty() ? ItemStack.EMPTY : stacks.get(this.getRandom().nextInt(stacks.size()));
     }
 
@@ -811,7 +817,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     }
 
     private ItemStack getArrowFromEntity(AbstractArrow entity) {
-        if (entity instanceof MixinArrowEntity mixinArrow) {
+        if (entity instanceof ArrowAccessor mixinArrow) {
             if (mixinArrow.tlmInGround() || entity.isNoPhysics()) {
                 return mixinArrow.getTlmPickupItem();
             }
@@ -1426,6 +1432,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
             // 女仆物品栏
             CombinedInvWrapper invWrapper = new CombinedInvWrapper(armorInvWrapper, handsInvWrapper, maidInv, maidBauble, hideInv, taskInv);
+            // 需要考虑消失诅咒附魔
+            destroyVanishingCursedItems(invWrapper);
             for (int i = 0; i < invWrapper.getSlots(); i++) {
                 int size = invWrapper.getSlotLimit(i);
                 tombstone.insertItem(invWrapper.extractItem(i, size, false));
@@ -1446,6 +1454,18 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             // 记录墓碑已经生成，避免重复生成
             alreadyDropped = true;
             level.addFreshEntity(tombstone);
+        }
+    }
+
+    private void destroyVanishingCursedItems(CombinedInvWrapper invWrapper) {
+        if (this.level.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) {
+            return;
+        }
+        for (int i = 0; i < invWrapper.getSlots(); ++i) {
+            ItemStack stack = invWrapper.getStackInSlot(i);
+            if (!stack.isEmpty() && EnchantmentHelper.hasVanishingCurse(stack) && !stack.is(TagItem.MAID_VANISHING_BLOCKLIST_ITEM)) {
+                invWrapper.setStackInSlot(i, ItemStack.EMPTY);
+            }
         }
     }
 
@@ -2289,7 +2309,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     @SuppressWarnings("all")
     public static Ingredient getNtrItem() {
-        return getConfigIngredient(MaidConfig.MAID_NTR_ITEM.get(), Items.STRUCTURE_VOID);
+        return Ingredient.of(InitItems.OWNER_CONVERSION_TOOL.get());
     }
 
     private static Ingredient getConfigIngredient(String config, Item defaultItem) {

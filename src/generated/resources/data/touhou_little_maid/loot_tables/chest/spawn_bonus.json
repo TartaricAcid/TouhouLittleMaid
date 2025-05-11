@@ -1,0 +1,48 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "touhou_little_maid:maid_backpack_small",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "touhou_little_maid:maid_backpack_middle",
+          "weight": 9
+        },
+        {
+          "type": "minecraft:item",
+          "name": "touhou_little_maid:maid_backpack_big",
+          "weight": 4
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 9.0,
+                "min": 3.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "touhou_little_maid:power_point"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "touhou_little_maid:chest/spawn_bonus"
+}

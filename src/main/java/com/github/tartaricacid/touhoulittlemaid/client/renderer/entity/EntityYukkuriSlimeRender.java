@@ -1,7 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.client.model.EntityYukkuriModel;
+import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.SimpleBedrockModel;
+import com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.VanillaConfig;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -12,12 +13,16 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.monster.Slime;
 
-public class EntityYukkuriSlimeRender extends MobRenderer<Slime, EntityYukkuriModel> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/yukkuri.png");
+import java.util.Objects;
+
+import static com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader.REIMU_YUKKURI;
+
+public class EntityYukkuriSlimeRender extends MobRenderer<Slime, SimpleBedrockModel<Slime>> {
+    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/bedrock/entity/reimu_yukkuri.png");
     private final SlimeRenderer vanillaRender;
 
     public EntityYukkuriSlimeRender(EntityRendererProvider.Context context) {
-        super(context, new EntityYukkuriModel(context.bakeLayer(EntityYukkuriModel.LAYER)), 0.25F);
+        super(context, Objects.requireNonNull(BedrockModelLoader.getModel(REIMU_YUKKURI)), 0.25F);
         this.vanillaRender = new SlimeRenderer(context);
     }
 

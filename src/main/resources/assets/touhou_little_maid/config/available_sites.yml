@@ -5,6 +5,8 @@ player2:
   api_type: openai
   url: http://127.0.0.1:4315/v1
   api_key: empty
+  extra_header:
+    player2-game-key: "TouhouLittleMaid"
   models:
     - default
 

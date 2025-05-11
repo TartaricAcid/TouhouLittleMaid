@@ -1,0 +1,21 @@
+{
+  "base": {
+    "parent": "touhou_little_maid:item/camera_in_hand"
+  },
+  "gui_light": "front",
+  "loader": "forge:separate_transforms",
+  "perspectives": {
+    "fixed": {
+      "parent": "minecraft:item/generated",
+      "textures": {
+        "layer0": "touhou_little_maid:item/camera"
+      }
+    },
+    "gui": {
+      "parent": "minecraft:item/generated",
+      "textures": {
+        "layer0": "touhou_little_maid:item/camera"
+      }
+    }
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly"
+            }
+          ],
+          "name": "touhou_little_maid:explosion_protect_bauble"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly"
+            }
+          ],
+          "name": "touhou_little_maid:fire_protect_bauble"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly"
+            }
+          ],
+          "name": "touhou_little_maid:projectile_protect_bauble"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly"
+            }
+          ],
+          "name": "touhou_little_maid:magic_protect_bauble"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly"
+            }
+          ],
+          "name": "touhou_little_maid:fall_protect_bauble"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly"
+            }
+          ],
+          "name": "touhou_little_maid:drown_protect_bauble"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "touhou_little_maid:explosion_protect_bauble",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "touhou_little_maid:fire_protect_bauble",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "touhou_little_maid:projectile_protect_bauble",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "touhou_little_maid:magic_protect_bauble",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "touhou_little_maid:fall_protect_bauble",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "touhou_little_maid:drown_protect_bauble",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 90
+        }
+      ],
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 3.0,
+        "min": 1.0
+      }
+    }
+  ],
+  "random_sequence": "touhou_little_maid:chest/normal_bauble"
+}

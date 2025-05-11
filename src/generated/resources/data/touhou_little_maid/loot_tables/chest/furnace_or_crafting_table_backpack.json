@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "touhou_little_maid:furnace_backpack"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "touhou_little_maid:crafting_table_backpack"
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 8
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "touhou_little_maid:chest/furnace_or_crafting_table_backpack"
+}

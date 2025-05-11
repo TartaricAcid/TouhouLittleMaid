@@ -1,7 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.client.model.AltarModel;
+import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.SimpleBedrockModel;
+import com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityAltar;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -12,15 +13,16 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
 public class TileEntityAltarRenderer implements BlockEntityRenderer<TileEntityAltar> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/altar.png");
-    private final AltarModel MODEL;
+    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/bedrock/block/altar.png");
+    private final SimpleBedrockModel<? extends Entity> model;
 
     public TileEntityAltarRenderer(BlockEntityRendererProvider.Context render) {
-        MODEL = new AltarModel(render.bakeLayer(AltarModel.LAYER));
+        this.model = BedrockModelLoader.getModel(BedrockModelLoader.ALTAR);
     }
 
     @Override
@@ -30,7 +32,7 @@ public class TileEntityAltarRenderer implements BlockEntityRenderer<TileEntityAl
             this.setTranslateAndPose(te, poseStack);
             poseStack.mulPose(Axis.ZN.rotationDegrees(180));
             VertexConsumer buffer = bufferIn.getBuffer(RenderType.entityTranslucent(TEXTURE));
-            MODEL.renderToBuffer(poseStack, buffer, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
+            model.renderToBuffer(poseStack, buffer, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
             poseStack.popPose();
         }
 

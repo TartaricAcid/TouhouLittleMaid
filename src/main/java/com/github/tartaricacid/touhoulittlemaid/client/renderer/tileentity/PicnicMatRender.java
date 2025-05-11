@@ -2,7 +2,8 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockPicnicMat;
-import com.github.tartaricacid.touhoulittlemaid.client.model.PicnicMatModel;
+import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.SimpleBedrockModel;
+import com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityPicnicMat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -13,33 +14,34 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class PicnicMatRender implements BlockEntityRenderer<TileEntityPicnicMat> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/picnic_mat.png");
-    private final PicnicMatModel model;
+    private static final ResourceLocation TEXTURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/bedrock/block/picnic_mat.png");
+    private final SimpleBedrockModel<Entity> model;
     private final BlockEntityRendererProvider.Context context;
 
     public PicnicMatRender(BlockEntityRendererProvider.Context context) {
-        this.model = new PicnicMatModel(context.bakeLayer(PicnicMatModel.LAYER));
+        this.model = BedrockModelLoader.getModel(BedrockModelLoader.PICNIC_MAT);
         this.context = context;
     }
 
     @Override
     public void render(TileEntityPicnicMat picnicMat, float partialTick, PoseStack poseStack, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         BlockState blockState = picnicMat.getBlockState();
-        if (blockState.getValue(BlockPicnicMat.PART).isCenter()) {
+        if (blockState.getValue(BlockPicnicMat.PART).isCenter() && this.model != null) {
             Direction facing = blockState.getValue(BlockPicnicMat.FACING);
             poseStack.pushPose();
             poseStack.translate(0.5, 1.5, 0.5);
             poseStack.mulPose(Axis.ZN.rotationDegrees(180));
             poseStack.mulPose(Axis.YN.rotationDegrees(180 - facing.get2DDataValue() * 90));
             {
-                this.model.getHideModel().getChild("basketHide").visible = !picnicMat.isEmpty(0);
-                this.model.getHideModel().getChild("breadHide").visible = !picnicMat.isEmpty(1);
-                this.model.getHideModel().getChild("cakeHide").visible = !picnicMat.isEmpty(2);
+                this.model.getPart("basketHide").visible = !picnicMat.isEmpty(0);
+                this.model.getPart("breadHide").visible = !picnicMat.isEmpty(1);
+                this.model.getPart("cakeHide").visible = !picnicMat.isEmpty(2);
             }
             {
                 renderFood(picnicMat, 3, -0.6f, -1.5f, 1.4125f, poseStack, bufferIn, combinedLightIn, combinedOverlayIn);

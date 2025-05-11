@@ -1,0 +1,30 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.unknown",
+				"texture_width": 128,
+				"texture_height": 128,
+				"visible_bounds_width": 2,
+				"visible_bounds_height": 2.5,
+				"visible_bounds_offset": [0, 0.75, 0]
+			},
+			"bones": [
+				{
+					"name": "root",
+					"pivot": [0, 2, 0]
+				},
+				{
+					"name": "body",
+					"parent": "root",
+					"pivot": [0, 6.5, 1.5],
+					"cubes": [
+						{"origin": [-4, 2, -1], "size": [8, 9, 5], "uv": [0, 0]},
+						{"origin": [-4, 2, -1], "size": [8, 9, 5], "inflate": 0.25, "uv": [0, 15]}
+					]
+				}
+			]
+		}
+	]
+}

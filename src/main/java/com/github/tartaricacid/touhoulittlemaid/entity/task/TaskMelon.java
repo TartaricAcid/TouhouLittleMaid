@@ -2,13 +2,17 @@ package com.github.tartaricacid.touhoulittlemaid.entity.task;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IFarmTask;
+import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidFarmPlantTask;
+import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidFarmSurroundingMoveTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.base.Predicates;
+import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.ai.behavior.BehaviorControl;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -36,6 +40,13 @@ public class TaskMelon implements IFarmTask {
     @Override
     public boolean isSeed(ItemStack stack) {
         return false;
+    }
+
+    @Override
+    public List<Pair<Integer, BehaviorControl<? super EntityMaid>>> createBrainTasks(EntityMaid maid) {
+        MaidFarmSurroundingMoveTask maidFarmSurroundingMoveTask = new MaidFarmSurroundingMoveTask(this, 0.6f);
+        MaidFarmPlantTask maidFarmPlantTask = new MaidFarmPlantTask(this);
+        return Lists.newArrayList(Pair.of(5, maidFarmSurroundingMoveTask), Pair.of(6, maidFarmPlantTask));
     }
 
     @Override

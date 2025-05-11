@@ -1,0 +1,6 @@
+{
+  "type": "touhou_little_maid:addition",
+  "conditions": [],
+  "loot_table_add": "touhou_little_maid:chest/power_point",
+  "loot_table_type": "minecraft:chest"
+}

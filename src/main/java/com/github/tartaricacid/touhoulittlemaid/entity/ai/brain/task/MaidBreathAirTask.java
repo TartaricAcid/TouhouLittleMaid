@@ -25,7 +25,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.NodeEvaluator;
-import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraftforge.items.wrapper.RangedWrapper;
 
 import java.util.List;
@@ -250,6 +249,6 @@ public class MaidBreathAirTask extends Behavior<EntityMaid> {
         Level level = maid.level;
         BlockState blockState = level.getBlockState(pos);
         boolean noFluid = level.getFluidState(pos).isEmpty() || blockState.is(Blocks.BUBBLE_COLUMN);
-        return noFluid && blockState.getBlock().isPathfindable(blockState, level, pos, PathComputationType.LAND);
+        return noFluid && blockState.getCollisionShape(level, pos).isEmpty();
     }
 }
