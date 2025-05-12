@@ -1,1 +1,12 @@
-{}
+{
+    "maid_pack.geckolib.name": "Model Geckolib",
+    "model.geckolib.foxmaid.name": "Vu Nữ Cáo",
+    "model.geckolib.winefox.name": "Cáo Rượu",
+    "chair_pack.geckolib.name": "Model Geckolib",
+    "model.geckolib.qingluka.name": "Alex",
+    "maid_pack.geckolib.desc": "Model sử dụng hoạt ảnh Bedrock Edition",
+    "model.geckolib.winefox.desc": "§7Một cô gái cáo thích uống rượu",
+    "model.geckolib.foxmaid.desc": "§7Inari Ōkami của Điện Thờ",
+    "chair_pack.geckolib.desc": "Model sử dụng hoạt ảnh Bedrock Edition",
+    "model.geckolib.qingluka.desc": "§7Tác giả: qingluka"
+}
