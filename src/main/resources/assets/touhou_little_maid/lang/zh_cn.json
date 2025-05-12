@@ -626,6 +626,8 @@
   "config.touhou_little_maid.misc.scarecrow_range.tooltip": "麻石狐像阻止女仆妖精生成的范围",
   "config.touhou_little_maid.misc.use_new_maid_fairy_model": "使用新版女仆妖精模型",
   "config.touhou_little_maid.misc.use_new_maid_fairy_model.tooltip": "是否使用新版女仆妖精模型",
+  "config.touhou_little_maid.misc.invulnerable_particle_effect": "无敌效果粒子",
+  "config.touhou_little_maid.misc.invulnerable_particle_effect.tooltip": "当女仆处于无敌状态时，是否渲染粒子效果？",
   "config.touhou_little_maid.vanilla": "原版设置",
   "config.touhou_little_maid.vanilla.replace_slime_model": "替换史莱姆模型",
   "config.touhou_little_maid.vanilla.replace_slime_model.tooltip": "将史莱姆模型替换为油库里",
