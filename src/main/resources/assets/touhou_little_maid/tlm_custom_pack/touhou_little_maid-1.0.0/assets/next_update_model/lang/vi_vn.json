@@ -1,8 +1,8 @@
 {
-    "chair_pack.next_update_model.desc": "Một số mô hình sẽ được thêm vào trong tương lai",
-    "chair_pack.next_update_model.name": "Bản cập nhật mô hình tiếp theo",
+    "chair_pack.next_update_model.desc": "Một số model hiện đang được lên kế hoạch nhưng chưa được thực hiện",
+    "chair_pack.next_update_model.name": "Bản cập nhật tiếp theo của gói model",
     "model.next_update_model.stage.name": "Sân khấu",
-    "model.next_update_model.japanese_lottery_machine.name": "Máy sổ số Nhật",
+    "model.next_update_model.japanese_lottery_machine.name": "Máy xổ số Nhật",
     "model.next_update_model.fishpond.name": "Hồ cá",
     "model.next_update_model.mine.name": "Mìn",
     "model.next_update_model.logging_hut.name": "Chòi gỗ",
