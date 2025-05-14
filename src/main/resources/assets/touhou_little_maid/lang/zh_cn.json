@@ -654,7 +654,6 @@
   "config.touhou_little_maid.global_ai.tts_enable": "启用 TTS",
   "config.touhou_little_maid.global_ai.tts_enable.tooltip": "是否启用 AI TTS（文本转语音）",
   "config.touhou_little_maid.global_ai.tts_language": "TTS 语言",
-  "config.touhou_little_maid.global_ai.tts_language.tooltip": "文本转语音时，语言的语言类型",
   "task.touhou_little_maid.idle": "空闲",
   "task.touhou_little_maid.attack": "攻击",
   "task.touhou_little_maid.ranged_attack": "弓兵",
