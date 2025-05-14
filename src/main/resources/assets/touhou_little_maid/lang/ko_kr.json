@@ -644,7 +644,6 @@
   "config.touhou_little_maid.global_ai.tts_enable": "TTS 활성화",
   "config.touhou_little_maid.global_ai.tts_enable.tooltip": "AI TTS 활성화 또는 비활성화",
   "config.touhou_little_maid.global_ai.tts_language": "TTS 언어",
-  "config.touhou_little_maid.global_ai.tts_language.tooltip": "당신이 사용 중인 TTS 언어",
   "task.touhou_little_maid.idle": "자유행동",
   "task.touhou_little_maid.attack": "공격",
   "task.touhou_little_maid.ranged_attack": "활",
