@@ -644,7 +644,6 @@
   "config.touhou_little_maid.global_ai.tts_enable": "Включить TTS",
   "config.touhou_little_maid.global_ai.tts_enable.tooltip": "Включать или нет AI TTS",
   "config.touhou_little_maid.global_ai.tts_language": "Язык TTS",
-  "config.touhou_little_maid.global_ai.tts_language.tooltip": "Используемый TTS язык",
   "task.touhou_little_maid.idle": "Ожидание",
   "task.touhou_little_maid.attack": "Атака",
   "task.touhou_little_maid.ranged_attack": "Лук",
