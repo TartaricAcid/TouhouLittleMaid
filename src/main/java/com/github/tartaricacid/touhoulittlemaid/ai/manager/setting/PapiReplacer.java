@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.manager.setting;
 
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.response.ResponseChat;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.Service;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.Client;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -30,14 +30,14 @@ public class PapiReplacer {
                 .replace("${inventory_items}", getInventoryItems(maid))
                 .replace("${output_json_format}", getOutputJsonFormat())
                 .replace("${chat_language}", language)
-                .replace("${tts_language}", ttsLanguage(maid.getAiChatManager().getTtsLanguage()))
+                .replace("${tts_language}", ttsLanguage(maid.getAiChatManager().getTTSLanguage()))
                 .replace("${healthy}", getHealthyInfo(maid))
                 .replace("${owner_healthy}", getOwnerHealthyInfo(maid))
                 .replace("${armor_items}", getArmorItems(maid))
                 .replace("${effects}", getEffects(maid))
                 .replace("${biome}", getBiome(maid))
                 .replace("${owner_name}", getOwnerName(maid))
-                .replace("${custom_setting}", maid.getAiChatManager().getCustomSetting());
+                .replace("${custom_setting}", maid.getAiChatManager().customSetting);
     }
 
     /**
@@ -102,7 +102,7 @@ public class PapiReplacer {
     }
 
     private static String getOwnerName(EntityMaid maid) {
-        String ownerName = maid.getAiChatManager().getOwnerName();
+        String ownerName = maid.getAiChatManager().ownerName;
         if (StringUtils.isBlank(ownerName)) {
             return "主人";
         }
@@ -168,6 +168,6 @@ public class PapiReplacer {
     }
 
     private static String getOutputJsonFormat() {
-        return Service.GSON.toJson(new ResponseChat());
+        return Client.GSON.toJson(new ResponseChat());
     }
 }

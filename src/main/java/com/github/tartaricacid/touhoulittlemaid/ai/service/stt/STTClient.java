@@ -1,10 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.service.stt;
 
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import net.minecraft.world.entity.player.Player;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.Client;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.ResponseCallback;
 
-public interface STTClient {
-    void startRecord(Player player, EntityMaid maid);
+public interface STTClient extends Client {
+    void startRecord(STTConfig config, ResponseCallback<String> callback);
 
-    void stopRecord(Player player, EntityMaid maid);
+    void stopRecord(STTConfig config, ResponseCallback<String> callback);
 }

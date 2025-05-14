@@ -12,8 +12,6 @@ public final class ClothConfigCompat {
     }
 
     public static void openPartAiSettingScreen(EntityMaid maid) {
-        ConfigBuilder configBuilder = PartAIIntegration.getConfigBuilder(maid);
-        configBuilder.setGlobalizedExpanded(true);
-        Minecraft.getInstance().setScreen(configBuilder.build());
+
     }
 }

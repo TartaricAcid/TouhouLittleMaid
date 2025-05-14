@@ -1,7 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.client.input;
 
-import com.github.tartaricacid.touhoulittlemaid.ai.service.Service;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.STTClient;
+import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.STTCallback;
+import com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.AvailableSites;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.STTConfig;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.STTSite;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.AIConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.blaze3d.platform.InputConstants;
@@ -20,7 +22,6 @@ import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.Comparator;
@@ -42,7 +43,10 @@ public class STTChatKey {
     @SubscribeEvent
     public static void onSttChatPress(InputEvent.Key event) {
         if (STT_CHAT_KEY.matches(event.getKey(), event.getScanCode())) {
-            if (!AIConfig.CHAT_ENABLED.get()) {
+            if (!AIConfig.LLM_ENABLED.get()) {
+                return;
+            }
+            if (!AIConfig.STT_ENABLED.get()) {
                 return;
             }
             LocalPlayer player = Minecraft.getInstance().player;
@@ -57,7 +61,6 @@ public class STTChatKey {
                 getNearestMaid(player, STTChatKey::sttStart);
                 return;
             }
-
             if (event.getAction() == GLFW.GLFW_RELEASE) {
                 getNearestMaid(player, STTChatKey::sttStop);
             }
@@ -97,41 +100,31 @@ public class STTChatKey {
         return mc.isWindowActive();
     }
 
-    @OnlyIn(Dist.CLIENT)
     private static void sttStart(EntityMaid maid) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) {
             return;
         }
-        if (AIConfig.CHAT_ENABLED.get()) {
-            String url = AIConfig.STT_URL.get();
-            if (StringUtils.isBlank(url)) {
-                player.sendSystemMessage(Component.translatable("ai.touhou_little_maid.chat.stt.empty"));
-            } else {
-                STTClient sttClient = Service.getSttClient();
-                if (sttClient != null) {
-                    sttClient.startRecord(player, maid);
-                }
-            }
+        STTSite sttSite = AvailableSites.getSTTSite(AIConfig.STT_TYPE.get().getName());
+        if (!sttSite.enabled()) {
+            player.sendSystemMessage(Component.translatable("ai.touhou_little_maid.chat.stt.empty"));
+            return;
         }
+        STTConfig config = new STTConfig();
+        STTCallback callback = new STTCallback(player, maid);
+        sttSite.client().startRecord(config, callback);
     }
 
-    @OnlyIn(Dist.CLIENT)
     private static void sttStop(EntityMaid maid) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) {
             return;
         }
-        if (!AIConfig.CHAT_ENABLED.get()) {
-            return;
-        }
-        String url = AIConfig.STT_URL.get();
-        if (StringUtils.isBlank(url)) {
-            return;
-        }
-        STTClient sttClient = Service.getSttClient();
-        if (sttClient != null) {
-            sttClient.stopRecord(player, maid);
+        STTSite sttSite = AvailableSites.getSTTSite(AIConfig.STT_TYPE.get().getName());
+        if (sttSite.enabled()) {
+            STTConfig config = new STTConfig();
+            STTCallback callback = new STTCallback(player, maid);
+            sttSite.client().stopRecord(config, callback);
         }
     }
 }

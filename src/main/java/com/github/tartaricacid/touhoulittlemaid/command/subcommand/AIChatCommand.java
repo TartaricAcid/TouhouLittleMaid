@@ -22,7 +22,7 @@ public class AIChatCommand {
     }
 
     private static int reload(CommandContext<CommandSourceStack> context) {
-        AvailableSites.readSites();
+        AvailableSites.init();
         NetworkHandler.CHANNEL.send(PacketDistributor.ALL.noArg(), new SyncAiSettingMessage());
         context.getSource().sendSuccess(() -> Component.translatable("message.touhou_little_maid.ai_chat.reload_success"), true);
         return Command.SINGLE_SUCCESS;

@@ -1,12 +1,12 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.service.tts.fishaudio.request;
 
-import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSRequest;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.Format;
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.util.Mth;
 
 import java.util.List;
 
-public class TTSFishAudioRequest implements TTSRequest {
+public class TTSFishAudioRequest {
     @SerializedName("text")
     private String text = "";
 
@@ -42,10 +42,6 @@ public class TTSFishAudioRequest implements TTSRequest {
 
     public static TTSFishAudioRequest create() {
         return new TTSFishAudioRequest();
-    }
-
-    public static String getUrl() {
-        return "/tts";
     }
 
     private TTSFishAudioRequest() {

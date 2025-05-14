@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid;
 
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.backpack.IBackpackContainerScreen;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.config.MaidAIChatConfigContainerGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.config.MaidConfigContainerGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.task.MaidTaskConfigGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.MaidTabButton;
@@ -39,6 +40,12 @@ public class MaidTabs<T extends AbstractMaidContainer> {
             maidConfig.active = false;
         }
 
-        return new MaidTabButton[]{main, taskConfig, maidConfig};
+        MaidTabButton maidAIChatConfig = new MaidTabButton(leftPos + 169, topPos + 5, 182, "maid_ai_chat_config",
+                (b) -> NetworkHandler.CHANNEL.sendToServer(new ToggleTabMessage(entityId, TabIndex.MAID_AI_CHAT_CONFIG)));
+        if (screen instanceof MaidAIChatConfigContainerGui) {
+            maidAIChatConfig.active = false;
+        }
+
+        return new MaidTabButton[]{main, taskConfig, maidConfig, maidAIChatConfig};
     }
 }

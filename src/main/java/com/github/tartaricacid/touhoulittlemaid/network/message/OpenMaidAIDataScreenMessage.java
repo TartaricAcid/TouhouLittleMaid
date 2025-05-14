@@ -1,26 +1,22 @@
 package com.github.tartaricacid.touhoulittlemaid.network.message;
 
-import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.MaidAIDataSerializable;
+import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.MaidAIChatSerializable;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.AIChatScreen;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.mod.ClothConfigScreen;
-import com.github.tartaricacid.touhoulittlemaid.compat.cloth.ClothConfigCompat;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.init.registry.CompatRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
 public class OpenMaidAIDataScreenMessage {
     private final int entityId;
-    private final MaidAIDataSerializable data;
+    private final MaidAIChatSerializable data;
 
-    public OpenMaidAIDataScreenMessage(int entityId, MaidAIDataSerializable data) {
+    public OpenMaidAIDataScreenMessage(int entityId, MaidAIChatSerializable data) {
         this.entityId = entityId;
         this.data = data;
     }
@@ -32,7 +28,7 @@ public class OpenMaidAIDataScreenMessage {
 
     public static OpenMaidAIDataScreenMessage decode(FriendlyByteBuf buf) {
         int entityId = buf.readInt();
-        MaidAIDataSerializable data = new MaidAIDataSerializable();
+        MaidAIChatSerializable data = new MaidAIChatSerializable();
         data.decode(buf);
         return new OpenMaidAIDataScreenMessage(entityId, data);
     }
@@ -61,11 +57,7 @@ public class OpenMaidAIDataScreenMessage {
     @OnlyIn(Dist.CLIENT)
     private static void openConfigScreen(EntityMaid maid, Minecraft mc) {
         if (mc.screen instanceof AIChatScreen) {
-            if (ModList.get().isLoaded(CompatRegistry.CLOTH_CONFIG)) {
-                ClothConfigCompat.openPartAiSettingScreen(maid);
-            } else {
-                ClothConfigScreen.open();
-            }
+            // TODO
         }
     }
 }

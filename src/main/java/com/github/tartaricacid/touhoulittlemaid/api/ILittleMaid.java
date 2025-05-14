@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.api;
 
+import com.github.tartaricacid.touhoulittlemaid.ai.service.SerializerRegister;
 import com.github.tartaricacid.touhoulittlemaid.block.multiblock.MultiBlockManager;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.HardcodedAnimationManger;
 import com.github.tartaricacid.touhoulittlemaid.client.overlay.MaidTipsOverlay;
@@ -87,6 +88,14 @@ public interface ILittleMaid {
      * @param manager 注册器
      */
     default void addExtraMaidBrain(ExtraMaidBrainManager manager) {
+    }
+
+    /**
+     * 注册女仆的 AI 聊天功能的序列化器
+     *
+     * @param register 注册器
+     */
+    default void registerAIChatSerializer(SerializerRegister register) {
     }
 
     /**
