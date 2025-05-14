@@ -651,7 +651,6 @@
   "config.touhou_little_maid.global_ai.tts_enable": "Bật Chuyển Văn Bản Thành Giọng Nói",
   "config.touhou_little_maid.global_ai.tts_enable.tooltip": "Có Bật Chuyển Văn Bản Thành Giọng Nói AI không",
   "config.touhou_little_maid.global_ai.tts_language": "Ngôn Ngữ Chuyển Văn Bản Thành Giọng Nói",
-  "config.touhou_little_maid.global_ai.tts_language.tooltip": "Ngôn Ngữ Chuyển Văn Bản Thành Giọng Nói bạn đang dùng",
   "task.touhou_little_maid.idle": "Nhàn Rỗi",
   "task.touhou_little_maid.attack": "Tấn công",
   "task.touhou_little_maid.ranged_attack": "Cung",
