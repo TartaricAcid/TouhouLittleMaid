@@ -2,7 +2,6 @@
   "ai.touhou_little_maid.chat.api_key.empty": "AIチャット用のAPIキーがありません",
   "ai.touhou_little_maid.chat.disable": "AIチャット機能は無効になっています",
   "ai.touhou_little_maid.chat.input.tip": "テキストを入力し、Enter キーを押して送信します",
-  "ai.touhou_little_maid.chat.config.tip": "クリックして AI チャットの設定を開きます",
   "ai.touhou_little_maid.chat.connect.fail": "チャットの応答エラー: ",
   "ai.touhou_little_maid.chat.format.json_format_error": "有効なJSON文字列が返されませんでした: %s",
   "ai.touhou_little_maid.chat.format.text_is_empty": "返された文字列は空です: %s",
