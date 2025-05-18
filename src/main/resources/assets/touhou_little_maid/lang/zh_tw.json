@@ -1,11 +1,6 @@
 {
-  "ai.touhou_little_maid.chat.api_key.empty": "你沒有設置 AI 對話的 API Key",
   "ai.touhou_little_maid.chat.disable": "AI 對話功能已被禁用",
   "ai.touhou_little_maid.chat.input.tip": "輸入內容進行對話，按下Enter鍵進行發送",
-  "ai.touhou_little_maid.chat.connect.fail": "回應聊天資訊時發生錯誤：",
-  "ai.touhou_little_maid.chat.format.json_format_error": "返回了非法的 JSON 字串：%s",
-  "ai.touhou_little_maid.chat.format.text_is_empty": "返回字串為空：%s",
-  "ai.touhou_little_maid.tts.connect.fail": "回應 TTS 時發生了錯誤：",
   "advancements.touhou_little_maid.base.craft_gohei.description": "合成御幣",
   "advancements.touhou_little_maid.base.craft_gohei.title": "赤色幻想",
   "advancements.touhou_little_maid.base.build_altar.description": "修建女僕模組的祭壇",
