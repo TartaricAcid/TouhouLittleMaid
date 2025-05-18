@@ -1,11 +1,6 @@
 {
-  "ai.touhou_little_maid.chat.api_key.empty": "AIチャット用のAPIキーがありません",
   "ai.touhou_little_maid.chat.disable": "AIチャット機能は無効になっています",
   "ai.touhou_little_maid.chat.input.tip": "テキストを入力し、Enter キーを押して送信します",
-  "ai.touhou_little_maid.chat.connect.fail": "チャットの応答エラー: ",
-  "ai.touhou_little_maid.chat.format.json_format_error": "有効なJSON文字列が返されませんでした: %s",
-  "ai.touhou_little_maid.chat.format.text_is_empty": "返された文字列は空です: %s",
-  "ai.touhou_little_maid.tts.connect.fail": "TTSの応答エラー: ",
   "advancements.touhou_little_maid.base.craft_gohei.description": "御幣をクラフトする",
   "advancements.touhou_little_maid.base.craft_gohei.title": "幻想への鍵？",
   "advancements.touhou_little_maid.base.build_altar.description": "祭壇を建てて、幻想を始めよう",
