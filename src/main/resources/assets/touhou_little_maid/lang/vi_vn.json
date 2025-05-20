@@ -1,4 +1,7 @@
 {
+  "ai.touhou_little_maid.chat.llm.empty": "Không có trang web model ngôn ngữ lớn (LLM) nào khả dụng, vui lòng kiểm tra xem trang web có liên quan đã được cấu hình hay chưa",
+  "ai.touhou_little_maid.chat.tts.empty": "Không có trang web chuyển văn bản thành giọng nói (TTS) nào khả dụng, vui lòng kiểm tra xem trang web có liên quan đã được cấu hình hay chưa",
+  "ai.touhou_little_maid.chat.stt.empty": "Không có trang web chuyển giọng nói thành văn bản (STT) nào khả dụng, vui lòng kiểm tra xem trang web có liên quan đã được cấu hình hay chưa",
   "ai.touhou_little_maid.chat.disable": "Tính năng trò chuyện AI đã bị vô hiệu hoá",
   "ai.touhou_little_maid.chat.input.tip": "Nhập nội dung để bắt đầu cuộc trò chuyện và nhấn Enter để gửi",
   "advancements.touhou_little_maid.base.craft_gohei.description": "Chế tạo cây gohei",
