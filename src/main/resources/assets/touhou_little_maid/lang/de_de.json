@@ -1,4 +1,7 @@
 {
+  "ai.touhou_little_maid.chat.llm.role_no_setting": "Keine Rolle festgelegt",
+  "ai.touhou_little_maid.chat.llm.role_no_setting_and_gen_setting": "Keine Rolleneinstellung gefunden – erstelle eine neue...",
+  "ai.touhou_little_maid.chat.llm.auto_gen_setting": "Charakter-Einstellungsdateien werden automatisch erstellt",
   "entity.touhou_little_maid.chair": "Stuhl",
   "entity.touhou_little_maid.fairy": "Maid Fee",
   "entity.touhou_little_maid.box": "Kuchen Box",
