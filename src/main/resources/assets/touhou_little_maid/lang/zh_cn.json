@@ -929,6 +929,7 @@
   "patchouli.touhou_little_maid.book.entries.maid.snowball_fight.name": "打雪仗",
   "patchouli.touhou_little_maid.book.entries.maid.snowball_fight.pages.0.text": "当女仆在雪地中，并且处于空闲模式时，女仆就会朝玩家或者其他女仆丢雪球。",
   "patchouli.touhou_little_maid.book.entries.maid.chat_bubbles.name": "聊天气泡",
+  "patchouli.touhou_little_maid.book.entries.maid.chat_bubbles.pages.0.text": "女仆会偶尔显示一些随机的聊天气泡",
   "patchouli.touhou_little_maid.book.entries.maid.other_backpack.name": "其他背包",
   "patchouli.touhou_little_maid.book.entries.maid.other_backpack.pages.0.text": "有些背包拥有其他功能，例如工作台背包、熔炉背包和末影箱背包",
   "patchouli.touhou_little_maid.book.entries.maid.kappa_compass.name": "女仆任务范围",
