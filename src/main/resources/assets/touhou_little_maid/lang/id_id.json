@@ -39,5 +39,13 @@
   "advancements.touhou_little_maid.base.pickup_power_point.description": "Ambil power point",
   "advancements.touhou_little_maid.base.pickup_power_point.title": "Rasakan Pelangi",
   "advancements.touhou_little_maid.base.spawn_maid.description": "Panggil maid melalui altar",
-  "advancements.touhou_little_maid.base.spawn_maid.title": "Kehidupan Baru"
+  "advancements.touhou_little_maid.base.spawn_maid.title": "Kehidupan Baru",
+  "advancements.touhou_little_maid.base.tamed_maid.description": "Membujuk maid dengan kue, saya tahu kalau mereka suka makanan manis",
+  "advancements.touhou_little_maid.base.tamed_maid.title": "Selamat Pulang, Master",
+  "advancements.touhou_little_maid.challenge.all_netherite_equipment.title": "Bofuri",
+  "advancements.touhou_little_maid.challenge.any_equipment.title": "Bersiap",
+  "advancements.touhou_little_maid.challenge.eat_enchanted_golden_apple.description": "Beri makan maid dengan apel emas ajaib",
+  "advancements.touhou_little_maid.challenge.eat_enchanted_golden_apple.title": "Good Apple",
+  "advancements.touhou_little_maid.challenge.kill_100.description": "Maid membasmi 100 mob",
+  "advancements.touhou_little_maid.maid_base.photo_maid.title": "Ayaya..."
 }
