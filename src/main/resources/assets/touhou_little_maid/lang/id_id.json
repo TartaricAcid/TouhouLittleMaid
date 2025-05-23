@@ -1,0 +1,6 @@
+{
+  "ai.touhou_little_maid.chat.llm.empty": "Tidak ada situs LLM yang tersedia, periksa apakah situs yang relevan dikonfigurasi",
+  "ai.touhou_little_maid.chat.tts.empty": "Tidak ada situs TTS yang tersedia, periksa apakah situs yang relevan dikonfigurasi",
+  "ai.touhou_little_maid.chat.stt.empty": "Tidak ada situs STT yang tersedia, periksa apakah situs yang relevan dikonfigurasi",
+  "ai.touhou_little_maid.chat.llm.request_sending_error": "Kesalahan dalam Pengiriman Permintaan LLM: %s"
+}
