@@ -709,7 +709,6 @@
   "config.touhou_little_maid.global_ai.stt_enable": "启用语音识别",
   "config.touhou_little_maid.global_ai.stt_enable.tooltip": "是否启用 AI 语音识别功能",
   "config.touhou_little_maid.global_ai.stt_type": "语音识别类型",
-  "config.touhou_little_maid.global_ai.stt_type.tooltip": "语音识别类型，当前支持 player2 应用程序或阿里云语音识别",
   "config.touhou_little_maid.global_ai.stt_microphone": "语言识别使用的麦克风",
   "config.touhou_little_maid.global_ai.stt_microphone.tooltip": "麦克风设备名称，留空表示选择默认设备",
   "config.touhou_little_maid.global_ai.stt_proxy_address": "语音识别代理地址",
