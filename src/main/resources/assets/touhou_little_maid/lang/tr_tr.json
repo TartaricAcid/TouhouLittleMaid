@@ -1,4 +1,5 @@
 {
+  "ai.touhou_little_maid.chat.llm.empty": "Kullanılabilir LLM sitesi yok, ilgili sitelerin yapılandırılıp yapılandırılmadığını kontrol edin",
   "entity.touhou_little_maid.chair": "Sandalye",
   "entity.touhou_little_maid.maid": "Hizmetçi",
   "entity.touhou_little_maid.fairy": "Hizmetçi Peri",
