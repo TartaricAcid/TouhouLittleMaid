@@ -225,5 +225,12 @@
   "item.touhou_little_maid.broom.tip": "Memerlukan Maid yang menaiki sapu agar dapat terbang melintasi langit. Perlu diketahui bahwa beberapa monster musuh yang terbang akan tetap dapat mencapai Anda seperti Peri Maid atau Phantom.",
   "item.touhou_little_maid.maid_backpack_small.tip": "Luaskan slot inventaris Maid Anda sampai 12.",
   "item.touhou_little_maid.maid_backpack_middle.tip": "Luaskan slot inventaris Maid Anda sampai 24.",
-  "item.touhou_little_maid.maid_backpack_big.tip": "Luaskan slot inventaris Maid Anda sampai 36."
+  "item.touhou_little_maid.maid_backpack_big.tip": "Luaskan slot inventaris Maid Anda sampai 36.",
+  "item.touhou_little_maid.explosion_protect_bauble.tip": "Memberikan Maid ketahanan terhadap luka ledakan.",
+  "item.touhou_little_maid.fall_protect_bauble.tip": "Memberikan Maid ketahanan terhadap luka jatuh.",
+  "item.touhou_little_maid.drown_protect_bauble.tip": "Memberikan Maid ketahanan terhadap luka tenggelam.",
+  "item.touhou_little_maid.fire_protect_bauble.tip": "Memberikan Maid ketahanan terhadap luka terbakar.",
+  "item.touhou_little_maid.projectile_protect_bauble.tip": "Memberikan Maid ketahanan terhadap proyektil.",
+  "item.touhou_little_maid.magic_protect_bauble.tip": "Memberikan Maid ketahanan terhadap efek-efek.",
+  "item.touhou_little_maid.item_magnet_bauble.tip": "Luaskan jangkauan Maid ambil barang."
 }
