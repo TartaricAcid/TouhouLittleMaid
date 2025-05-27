@@ -232,5 +232,21 @@
   "item.touhou_little_maid.fire_protect_bauble.tip": "Memberikan Maid ketahanan terhadap luka terbakar.",
   "item.touhou_little_maid.projectile_protect_bauble.tip": "Memberikan Maid ketahanan terhadap proyektil.",
   "item.touhou_little_maid.magic_protect_bauble.tip": "Memberikan Maid ketahanan terhadap efek-efek.",
-  "item.touhou_little_maid.item_magnet_bauble.tip": "Luaskan jangkauan Maid ambil barang."
+  "item.touhou_little_maid.item_magnet_bauble.tip": "Luaskan jangkauan Maid ambil barang.",
+  "tooltips.touhou_little_maid.chair.gui.desc": "Jongkok klik kanan untuk membuka GUI skin.",
+  "tooltips.touhou_little_maid.schedule.desc": "§7Klik untuk mengubah jadwal",
+  "tooltips.touhou_little_maid.info.title": "Maid Info Detail",
+  "tooltips.touhou_little_maid.info.owner": "Pemilik",
+  "tooltips.touhou_little_maid.info.model_name": "Nama Model",
+  "tooltips.touhou_little_maid.info.experience": "Pengalaman",
+  "tooltips.touhou_little_maid.info.favorability": "Alat Kesukaan",
+  "tooltips.touhou_little_maid.info.game_skill.gomoku": "Kalah: %d, Rank: %d",
+  "tooltips.touhou_little_maid.bauble.desc": "§a[Perhiasan Maid]",
+  "tooltips.touhou_little_maid.bauble.usage": "Gunakan dengan menaruhnya di inventaris perhiasan Maid.",
+  "tooltips.touhou_little_maid.backpack.desc": "§6[Tas Maid]",
+  "tooltips.touhou_little_maid.backpack.usage": "Gunakan barang ini dengan cara klik kanan pada Maid",
+  "tooltips.touhou_little_maid.substitute_jizo.desc": "Klik kanan pada Maid untuk membuat mereka kebal, hanya pada mode kreatif",
+  "tooltips.touhou_little_maid.photo.no_data.desc": "Foto ini Kehilangan Data Maid",
+  "tooltips.touhou_little_maid.wireless_io.filter_mode.blacklist": "Daftar Hitam",
+  "tooltips.touhou_little_maid.wireless_io.filter_mode.whitelist": "Daftar Putih"
 }
