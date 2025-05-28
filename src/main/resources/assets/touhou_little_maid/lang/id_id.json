@@ -234,6 +234,7 @@
   "item.touhou_little_maid.magic_protect_bauble.tip": "Memberikan Maid ketahanan terhadap efek-efek.",
   "item.touhou_little_maid.item_magnet_bauble.tip": "Luaskan jangkauan Maid ambil barang.",
   "item.touhou_little_maid.nimble_fabric.tip": "Memberikan Maid kemampuan untuk menghindari proyektil yang datang dengan teleport.",
+  "tooltips.touhou_little_maid.chair.destroy.desc": "Jongkok klik kiri untuk menghancurkan.",
   "tooltips.touhou_little_maid.chair.gui.desc": "Jongkok klik kanan untuk membuka GUI skin.",
   "tooltips.touhou_little_maid.schedule.desc": "§7Klik untuk mengubah jadwal",
   "tooltips.touhou_little_maid.info.title": "Maid Info Detail",
@@ -271,6 +272,12 @@
   "tooltips.touhou_little_maid.custom_sound.open_url": "Buka URL soundpack",
   "tooltips.touhou_little_maid.custom_sound.play_sound": "Klik untuk mainkan suara",
   "tooltips.touhou_little_maid.fox_scroll.dimension": "§a▍ §7Dimensi: %s",
+  "tooltips.touhou_little_maid.tank_backpack.empty_fluid": "Kosong",
+  "tooltips.touhou_little_maid.tank_backpack.fluid": "%s: %d mB",
+  "tooltips.touhou_little_maid.tank_backpack.capacity": "Kapasitas: %d mB",
+  "tooltips.touhou_little_maid.item_container.empty": "Kosong",
+  "tooltips.touhou_little_maid.servant_bell.uuid": "Maid UUID: %s",
+  "key.touhou_little_maid.stt_chat.desc": "STT Obrolan AI",
   "gui.touhou_little_maid.schedule.day": "Shift Siang",
   "gui.touhou_little_maid.schedule.night": "Shift Malam",
   "gui.touhou_little_maid.schedule.all": "Sepanjang Hari",
@@ -281,5 +288,9 @@
   "gui.touhou_little_maid.button.ysm_skin": "Gunakan Skin YSM",
   "gui.touhou_little_maid.task.next_page": "Halaman berikutnya",
   "gui.touhou_little_maid.task.previous_page": "Halaman Sebelumnya",
-  "gui.touhou_little_maid.task.close": "Tutup"
+  "gui.touhou_little_maid.task.close": "Tutup",
+  "gui.touhou_little_maid.button.home.true": "Mode Rumah Aktif",
+  "gui.touhou_little_maid.button.home.false": "Mode Rumah Tidak Aktif",
+  "gui.touhou_little_maid.button.pickup.true": "Mode Mengambil Aktif",
+  "gui.touhou_little_maid.button.pickup.false": "Mode Mengambil Tidak Aktif"
 }
