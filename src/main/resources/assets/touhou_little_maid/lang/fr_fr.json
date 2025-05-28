@@ -1,4 +1,5 @@
 {
+  "ai.touhou_little_maid.chat.download_url": "Url de téléchargement : ",
   "advancements.touhou_little_maid.base.craft_gohei.description": "Fabriquer un Gohei",
   "advancements.touhou_little_maid.base.craft_gohei.title": "La clé de Gensou ?",
   "advancements.touhou_little_maid.base.build_altar.description": "Construire un sanctuaire, le début de toute chose",
@@ -326,6 +327,7 @@
   "gui.touhou_little_maid.button.task_config.desc": " -§a Menu spécial de congifuration des tâches",
   "gui.touhou_little_maid.button.maid_config": "Paramètres Maid",
   "gui.touhou_little_maid.button.maid_config.desc": " -§a Menu pour configurer certaines fonctions de la Maid actuelle",
+  "gui.touhou_little_maid.button.maid_ai_chat_config.edit_custom_setting.save_and_quit": "Sauvegarder & Quitter",
   "gui.touhou_little_maid.button.task_book": "Mémoire de Gensokyo",
   "gui.touhou_little_maid.button.task_book.desc": " -§a Ouvre votre Mémoire de Gensokyo",
   "gui.touhou_little_maid.button.task_info": "Information Tâche",
