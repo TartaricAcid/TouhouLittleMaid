@@ -233,6 +233,7 @@
   "item.touhou_little_maid.projectile_protect_bauble.tip": "Memberikan Maid ketahanan terhadap proyektil.",
   "item.touhou_little_maid.magic_protect_bauble.tip": "Memberikan Maid ketahanan terhadap efek-efek.",
   "item.touhou_little_maid.item_magnet_bauble.tip": "Luaskan jangkauan Maid ambil barang.",
+  "item.touhou_little_maid.nimble_fabric.tip": "Memberikan Maid kemampuan untuk menghindari proyektil yang datang dengan teleport.",
   "tooltips.touhou_little_maid.chair.gui.desc": "Jongkok klik kanan untuk membuka GUI skin.",
   "tooltips.touhou_little_maid.schedule.desc": "§7Klik untuk mengubah jadwal",
   "tooltips.touhou_little_maid.info.title": "Maid Info Detail",
