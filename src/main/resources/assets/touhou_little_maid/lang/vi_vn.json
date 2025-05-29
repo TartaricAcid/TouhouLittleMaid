@@ -693,8 +693,6 @@
   "config.touhou_little_maid.global_ai.llm_temperature": "Nhiệt Độ Trò Chuyện LLM",
   "config.touhou_little_maid.global_ai.llm_temperature.tooltip": "Nhiệt độ trò chuyện LLM, giá trị càng cao, tính ngẫu nhiên càng lớn",
   "config.touhou_little_maid.global_ai.function_call_enabled": "Chức Năng Function Call",
-  "config.touhou_little_maid.global_ai.function_call_enabled.tooltip.1": "Có bật chức năng function call không?",
-  "config.touhou_little_maid.global_ai.function_call_enabled.tooltip.2": "Khi chức năng này được bật, maid có thể tương tác với trò chơi, nhưng điều này sẽ làm tăng đáng kể lượng token được sử dụng",
   "config.touhou_little_maid.global_ai.auto_gen_setting_enabled": "Tự Động Tạo Tính Cách",
   "config.touhou_little_maid.global_ai.auto_gen_setting_enabled.tooltip": "Có tự động tạo tính cách maid không",
   "config.touhou_little_maid.global_ai.llm_proxy_address": "Địa Chỉ Proxy LLM",
