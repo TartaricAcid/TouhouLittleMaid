@@ -693,8 +693,6 @@
   "config.touhou_little_maid.global_ai.llm_temperature": "大语言模型聊天温度",
   "config.touhou_little_maid.global_ai.llm_temperature.tooltip": "也就是 temperature，该数值越大，随机性越大",
   "config.touhou_little_maid.global_ai.function_call_enabled": "Function Call 功能",
-  "config.touhou_little_maid.global_ai.function_call_enabled.tooltip.1": "是否启用函数调用功能（Function Call）？",
-  "config.touhou_little_maid.global_ai.function_call_enabled.tooltip.2": "当该功能启用后，女仆能够与游戏进行交互，但是这会显著增加 token 的使用量",
   "config.touhou_little_maid.global_ai.auto_gen_setting_enabled": "自动生成人设",
   "config.touhou_little_maid.global_ai.auto_gen_setting_enabled.tooltip": "是否自动生成女仆的人设",
   "config.touhou_little_maid.global_ai.llm_proxy_address": "大语言模型代理地址",
