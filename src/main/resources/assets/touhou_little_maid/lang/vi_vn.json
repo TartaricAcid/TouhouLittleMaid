@@ -650,7 +650,7 @@
   "config.touhou_little_maid.misc.give_smart_slab": "Có cho Bùa Linh Hồn không",
   "config.touhou_little_maid.misc.give_smart_slab.tooltip": "Khi người chơi vào game lần đầu, có cho một bùa linh hồn không",
   "config.touhou_little_maid.misc.give_patchouli_book": "Có cho Sách Patchouli không",
-  "config.touhou_little_maid.misc.give_patchouli_book.tooltip": "Khi người chơi vào game lần đầu, cho một cuốn sách Hồi Ức Gensokyo",
+  "config.touhou_little_maid.misc.give_patchouli_book.tooltip": "Khi người chơi vào game lần đầu có cho sách hướng dẫn Gensokyo Ký Ức không",
   "config.touhou_little_maid.misc.shrine_lamp_effect_cost": "Giá Hiệu Ứng Đèn Điện Thờ",
   "config.touhou_little_maid.misc.shrine_lamp_effect_cost.tooltip": "Khi Đèn Điện Thờ áp dụng cho maid hiệu ứng, điểm năng lượng mất (Điểm Năng Lượng/Giờ)",
   "config.touhou_little_maid.misc.shrine_lamp_max_storage": "Dự Trữ Tối Đa Của Đèn Điện Thờ",
