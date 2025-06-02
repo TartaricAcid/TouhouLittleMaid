@@ -1,9 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.patchouli;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.datagen.tag.TagBlock;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.world.level.block.Blocks;
 import vazkii.patchouli.api.IStateMatcher;
 import vazkii.patchouli.api.PatchouliAPI;
 
@@ -20,8 +19,8 @@ public final class MultiblockRegistry {
 
     public static void init() {
         PatchouliAPI.IPatchouliAPI api = PatchouliAPI.get();
-        IStateMatcher logMatcher = api.tagMatcher(BlockTags.LOGS);
-        IStateMatcher redWoolMatcher = api.predicateMatcher(Blocks.RED_WOOL.defaultBlockState(), state -> state.is(Blocks.RED_WOOL));
-        api.registerMultiblock(ID, api.makeMultiblock(TEMPLATE, 'O', logMatcher, 'R', redWoolMatcher, ' ', api.anyMatcher()));
+        IStateMatcher pillarMatcher = api.tagMatcher(TagBlock.ALTAR_PILLAR);
+        IStateMatcher toriiMatcher = api.tagMatcher(TagBlock.ALTAR_TORII);
+        api.registerMultiblock(ID, api.makeMultiblock(TEMPLATE, 'O', pillarMatcher, 'R', toriiMatcher, ' ', api.anyMatcher()));
     }
 }

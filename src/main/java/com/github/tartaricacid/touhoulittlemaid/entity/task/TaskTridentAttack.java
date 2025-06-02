@@ -146,6 +146,11 @@ public class TaskTridentAttack implements IRangedAttackTask {
         return Lists.newArrayList(Pair.of("has_trident", this::hasTrident));
     }
 
+    @Override
+    public boolean isWeapon(EntityMaid maid, ItemStack stack) {
+        return stack.getItem() instanceof TridentItem;
+    }
+
     private boolean farAway(LivingEntity target, EntityMaid maid) {
         return maid.distanceTo(target) > this.searchRadius(maid);
     }

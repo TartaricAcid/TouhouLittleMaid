@@ -17,8 +17,8 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
 public class EasterEggModel extends BedrockModel<Mob> {
-    private static final ResourceLocation MODEL = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "models/entity/easter_egg_model.json");
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/easter_egg_model.png");
+    private static final ResourceLocation MODEL = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "models/bedrock/entity/easter_egg_model.json");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/bedrock/entity/easter_egg_model.png");
     private static EasterEggModel INSTANCE;
     private static MaidModelInfo INFO;
 
@@ -27,7 +27,7 @@ public class EasterEggModel extends BedrockModel<Mob> {
         try (InputStream stream = manager.open(MODEL)) {
             loadLegacyModel(CustomPackLoader.GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8), BedrockModelPOJO.class));
         } catch (IOException exception) {
-            exception.printStackTrace();
+            TouhouLittleMaid.LOGGER.error("Failed to load easter egg model", exception);
         }
         this.modelMap.forEach((key, model) -> modelMapWrapper.put(key, new ModelRendererWrapper(model)));
     }

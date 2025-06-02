@@ -1,0 +1,12 @@
+{
+  "type": "neoforge:add_table",
+  "conditions": [
+    {
+      "condition": "touhou_little_maid:loot_table_type",
+      "loot_table_add": "touhou_little_maid:chest/rare_bauble",
+      "loot_table_id": "minecraft:chests/jungle_temple",
+      "loot_table_type": "minecraft:chest"
+    }
+  ],
+  "table": "touhou_little_maid:chest/rare_bauble"
+}

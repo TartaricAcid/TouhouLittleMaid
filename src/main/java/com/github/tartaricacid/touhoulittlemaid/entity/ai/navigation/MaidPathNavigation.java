@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai.navigation;
 
+import com.github.tartaricacid.touhoulittlemaid.entity.ai.path.MaidWrappedPathFinder;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.level.Level;
@@ -18,6 +19,6 @@ public class MaidPathNavigation extends GroundPathNavigation {
         this.nodeEvaluator.setCanOpenDoors(true);
         this.nodeEvaluator.setCanPassDoors(true);
         this.nodeEvaluator.setCanFloat(true);
-        return new PathFinder(this.nodeEvaluator, range);
+        return new MaidWrappedPathFinder(this.nodeEvaluator, range);
     }
 }

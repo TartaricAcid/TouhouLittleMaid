@@ -1,7 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.client.model.TombstoneModel;
+import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.SimpleBedrockModel;
+import com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityTombstone;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -17,22 +18,26 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import org.joml.Matrix4f;
 
+import java.util.Objects;
+
+import static com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader.TOMBSTONE;
+
 public class EntityTombstoneRenderer extends EntityRenderer<EntityTombstone> {
-    private static final ResourceLocation DEFAULT_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/tombstone/tombstone.png");
-    private static final ResourceLocation THE_NETHER_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/tombstone/tombstone_the_nether.png");
-    private static final ResourceLocation THE_END_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/tombstone/tombstone_the_end.png");
-    private static final ResourceLocation TWILIGHT_FOREST_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/tombstone/tombstone_twilight_forest.png");
-    private static final ResourceLocation AETHER_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/tombstone/tombstone_aether.png");
+    private static final ResourceLocation DEFAULT_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/bedrock/entity/tombstone/tombstone_overworld.png");
+    private static final ResourceLocation THE_NETHER_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/bedrock/entity/tombstone/tombstone_the_nether.png");
+    private static final ResourceLocation THE_END_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/bedrock/entity/tombstone/tombstone_the_end.png");
+    private static final ResourceLocation TWILIGHT_FOREST_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/bedrock/entity/tombstone/tombstone_twilight_forest.png");
+    private static final ResourceLocation AETHER_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/bedrock/entity/tombstone/tombstone_aether.png");
 
     private static final ResourceLocation TWILIGHT_FOREST_LEVEL_ID = ResourceLocation.fromNamespaceAndPath("twilightforest", "twilight_forest");
     private final static ResourceLocation AETHER_LEVEL_ID = ResourceLocation.fromNamespaceAndPath("aether", "the_aether");
 
     private static final int NAME_SHOW_DISTANCE = 64;
-    private final TombstoneModel tombstoneModel;
+    private final SimpleBedrockModel<EntityTombstone> tombstoneModel;
 
     public EntityTombstoneRenderer(EntityRendererProvider.Context manager) {
         super(manager);
-        tombstoneModel = new TombstoneModel(manager.bakeLayer(TombstoneModel.LAYER));
+        tombstoneModel = Objects.requireNonNull(BedrockModelLoader.getModel(TOMBSTONE));
     }
 
     @Override
@@ -43,7 +48,7 @@ public class EntityTombstoneRenderer extends EntityRenderer<EntityTombstone> {
         tombstoneModel.setupAnim(tombstone, 0, 0, -0.1f, 0, 0);
         RenderType renderType = RenderType.entityCutoutNoCull(getTextureLocation(tombstone));
         VertexConsumer buffer = bufferIn.getBuffer(renderType);
-        tombstoneModel.renderToBuffer(poseStack, buffer, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        tombstoneModel.renderToBuffer(poseStack, buffer, packedLight, OverlayTexture.NO_OVERLAY);
         poseStack.popPose();
         if (this.shouldShowName(tombstone)) {
             this.renderNameTag(tombstone, Component.translatable("entity.touhou_little_maid.tombstone.display").withStyle(ChatFormatting.GOLD, ChatFormatting.UNDERLINE), 1.6f, poseStack, bufferIn, packedLight);

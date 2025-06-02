@@ -3,8 +3,8 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Point;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockGomoku;
-import com.github.tartaricacid.touhoulittlemaid.client.model.GomokuModel;
-import com.github.tartaricacid.touhoulittlemaid.client.model.PieceModel;
+import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.SimpleBedrockModel;
+import com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGomoku;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -15,27 +15,29 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 
-public class TileEntityGomokuRenderer extends TileEntityJoyRenderer<TileEntityGomoku> {
-    private static final ResourceLocation CHECKER_BOARD_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/gomoku.png");
-    private static final ResourceLocation BLACK_PIECE_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/black_piece.png");
-    private static final ResourceLocation WHITE_PIECE_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/white_piece.png");
+public class TileEntityGomokuRenderer implements BlockEntityRenderer<TileEntityGomoku> {
+    private static final ResourceLocation CHECKER_BOARD_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/bedrock/block/gomoku.png");
+    private static final ResourceLocation BLACK_PIECE_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/bedrock/block/gomoku_black_piece.png");
+    private static final ResourceLocation WHITE_PIECE_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/bedrock/block/gomoku_white_piece.png");
     private static final int TIPS_RENDER_DISTANCE = 16;
     private static final int PIECE_RENDER_DISTANCE = 24;
-    private final GomokuModel CHECKER_BOARD_MODEL;
-    private final PieceModel PIECE_MODEL;
+    private final SimpleBedrockModel<Entity> CHECKER_BOARD_MODEL;
+    private final SimpleBedrockModel<Entity> PIECE_MODEL;
     private final Font font;
     private final BlockEntityRenderDispatcher dispatcher;
 
     public TileEntityGomokuRenderer(BlockEntityRendererProvider.Context context) {
-        CHECKER_BOARD_MODEL = new GomokuModel(context.bakeLayer(GomokuModel.LAYER));
-        PIECE_MODEL = new PieceModel(context.bakeLayer(PieceModel.LAYER));
+        CHECKER_BOARD_MODEL = BedrockModelLoader.getModel(BedrockModelLoader.GOMOKU);
+        PIECE_MODEL = BedrockModelLoader.getModel(BedrockModelLoader.GOMOKU_PIECE);
         this.font = context.getFont();
         this.dispatcher = context.getBlockEntityRenderDispatcher();
     }
@@ -73,7 +75,7 @@ public class TileEntityGomokuRenderer extends TileEntityJoyRenderer<TileEntityGo
             poseStack.mulPose(Axis.YN.rotationDegrees(180));
         }
         VertexConsumer checkerBoardBuff = bufferIn.getBuffer(RenderType.entityCutoutNoCull(CHECKER_BOARD_TEXTURE));
-        CHECKER_BOARD_MODEL.renderToBuffer(poseStack, checkerBoardBuff, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
+        CHECKER_BOARD_MODEL.renderToBuffer(poseStack, checkerBoardBuff, combinedLightIn, combinedOverlayIn);
         poseStack.popPose();
     }
 
@@ -89,11 +91,11 @@ public class TileEntityGomokuRenderer extends TileEntityJoyRenderer<TileEntityGo
                     poseStack.translate(0, 0, 0.1316);
                     if (row[j] == Point.BLACK) {
                         VertexConsumer blackPieceBuff = bufferIn.getBuffer(RenderType.entityCutoutNoCull(BLACK_PIECE_TEXTURE));
-                        PIECE_MODEL.renderToBuffer(poseStack, blackPieceBuff, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
+                        PIECE_MODEL.renderToBuffer(poseStack, blackPieceBuff, combinedLightIn, combinedOverlayIn);
                     }
                     if (row[j] == Point.WHITE) {
                         VertexConsumer whitePieceBuff = bufferIn.getBuffer(RenderType.entityCutoutNoCull(WHITE_PIECE_TEXTURE));
-                        PIECE_MODEL.renderToBuffer(poseStack, whitePieceBuff, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
+                        PIECE_MODEL.renderToBuffer(poseStack, whitePieceBuff, combinedLightIn, combinedOverlayIn);
                     }
                 }
                 poseStack.translate(-0.1316, 0, -1.974);

@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.mixin.FenceGateBlockAccessor;
+import com.github.tartaricacid.touhoulittlemaid.mixin.accessor.FenceGateBlockAccessor;
 import com.google.common.collect.Sets;
 import com.mojang.datafixers.kinds.OptionalBox;
 import net.minecraft.core.BlockPos;

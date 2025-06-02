@@ -8,6 +8,7 @@ public final class DefaultPackConstant {
     public static final List<String> MAID_SORT = Lists.newArrayList(
             "touhou_little_maid",
             "touhou_little_maid_old",
+            "touhou_little_maid_seihou",
             "geckolib", "authors_and_credits",
             "minecraft_15th"
     );

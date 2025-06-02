@@ -1,9 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.network.message;
 
-import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.MaidAIDataSerializable;
+import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.MaidAIChatSerializable;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,15 +14,25 @@ import org.jetbrains.annotations.Nullable;
 
 import static com.github.tartaricacid.touhoulittlemaid.util.ResourceLocationUtil.getResourceLocation;
 
-public record SaveMaidAIDataPackage(int entityId, MaidAIDataSerializable data) implements CustomPacketPayload {
+public record SaveMaidAIDataPackage(int entityId, MaidAIChatSerializable data) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<SaveMaidAIDataPackage> TYPE = new CustomPacketPayload.Type<>(getResourceLocation("save_maid_ai_data"));
-    public static final StreamCodec<ByteBuf, SaveMaidAIDataPackage> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.VAR_INT,
-            SaveMaidAIDataPackage::entityId,
-            MaidAIDataSerializable.STREAM_CODEC,
-            SaveMaidAIDataPackage::data,
-            SaveMaidAIDataPackage::new
-    );
+    public static final StreamCodec<ByteBuf, SaveMaidAIDataPackage> STREAM_CODEC = new StreamCodec<>() {
+        @Override
+        public SaveMaidAIDataPackage decode(ByteBuf byteBuf) {
+            FriendlyByteBuf buf = new FriendlyByteBuf(byteBuf);
+            int entityId = buf.readInt();
+            MaidAIChatSerializable data = new MaidAIChatSerializable();
+            data.decode(buf);
+            return new SaveMaidAIDataPackage(entityId, data);
+        }
+
+        @Override
+        public void encode(ByteBuf byteBuf, SaveMaidAIDataPackage message) {
+            FriendlyByteBuf buf = new FriendlyByteBuf(byteBuf);
+            buf.writeInt(message.entityId);
+            message.data.encode(buf);
+        }
+    };
 
     @Override
     public @NotNull CustomPacketPayload.Type<? extends CustomPacketPayload> type() {

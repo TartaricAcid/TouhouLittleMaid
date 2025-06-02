@@ -13,6 +13,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -119,11 +121,12 @@ public class ItemHakureiGohei extends ProjectileWeaponItem {
 
             for (IMultiBlock multiBlock : multiBlockList) {
                 if (multiBlock.isCoreBlock(blockState) && multiBlock.directionIsSuitable(direction)) {
-                    if (world instanceof ServerLevel) {
+                    if (world instanceof ServerLevel serverLevel) {
                         BlockPos posStart = pos.offset(multiBlock.getCenterPos(direction));
-                        StructureTemplate template = multiBlock.getTemplate((ServerLevel) world, direction);
+                        StructureTemplate template = multiBlock.getTemplate(serverLevel, direction);
                         if (multiBlock.isMatch(world, posStart, direction, template)) {
                             multiBlock.build(world, posStart, direction, template);
+                            serverLevel.playSound(null, pos, SoundEvents.BEACON_ACTIVATE, SoundSource.BLOCKS, 1.5f, 1);
                             if (context.getPlayer() instanceof ServerPlayer serverPlayer) {
                                 InitTrigger.MAID_EVENT.get().trigger(serverPlayer, TriggerType.BUILD_ALTAR);
                             }

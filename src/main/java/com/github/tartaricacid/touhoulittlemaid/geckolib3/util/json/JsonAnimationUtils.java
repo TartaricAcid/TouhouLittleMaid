@@ -16,12 +16,12 @@ import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.molang.MolangPars
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.molang.value.IValue;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.util.AnimationUtils;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
 import net.minecraft.server.ChainedJsonException;
-import org.apache.commons.compress.utils.Lists;
 
 import java.util.*;
 

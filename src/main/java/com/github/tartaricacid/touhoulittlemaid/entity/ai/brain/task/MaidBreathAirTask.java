@@ -21,12 +21,10 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PotionItem;
 import net.minecraft.world.item.alchemy.PotionContents;
-import net.minecraft.world.level.EmptyBlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.NodeEvaluator;
-import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.neoforged.neoforge.items.wrapper.RangedWrapper;
 
 import java.util.List;
@@ -251,6 +249,6 @@ public class MaidBreathAirTask extends Behavior<EntityMaid> {
         Level level = maid.level;
         BlockState blockState = level.getBlockState(pos);
         boolean noFluid = level.getFluidState(pos).isEmpty() || blockState.is(Blocks.BUBBLE_COLUMN);
-        return noFluid && !blockState.isCollisionShapeFullBlock(EmptyBlockGetter.INSTANCE, BlockPos.ZERO);
+        return noFluid && blockState.getCollisionShape(level, pos).isEmpty();
     }
 }

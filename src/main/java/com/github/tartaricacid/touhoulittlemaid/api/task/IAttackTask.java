@@ -20,10 +20,13 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.Optional;
 
 public interface IAttackTask extends IMaidTask {
+    static String MAID_NO_ATTACK_TAG = "MaidNoAttack";
+
     /**
      * 寻找合适的第一个攻击目标
      *
@@ -52,6 +55,10 @@ public interface IAttackTask extends IMaidTask {
         }
         // 有主的宠物也不攻击
         if (target instanceof TamableAnimal tamableAnimal && tamableAnimal.getOwnerUUID() != null) {
+            return false;
+        }
+        // 特殊命名的怪物，因为有的玩家会使用怪物做刷怪塔，会被女仆误杀
+        if (target.getCustomName() != null && target.getCustomName().getString().startsWith(MAID_NO_ATTACK_TAG)) {
             return false;
         }
 
@@ -92,6 +99,17 @@ public interface IAttackTask extends IMaidTask {
      * @return 是否成功造成伤害
      */
     default boolean doExtraAttack(EntityMaid maid, Entity target) {
+        return false;
+    }
+
+    /**
+     * 是适合的攻击武器么，用于女仆 AI 判断当前武器在当前模式下是否能正常使用
+     *
+     * @param maid  女仆
+     * @param stack 检查的物品
+     * @return 在当前模式下是否能正常使用
+     */
+    default boolean isWeapon(EntityMaid maid, ItemStack stack) {
         return false;
     }
 

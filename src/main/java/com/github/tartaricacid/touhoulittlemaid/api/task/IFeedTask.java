@@ -34,7 +34,7 @@ public interface IFeedTask extends IMaidTask {
 
     enum Priority {
         /**
-         * 恢复的饱食度超过当前玩家饥饿值的食物，暂时不会进行喂食
+         * 其他暂时不会进行喂食的食物
          */
         LOWEST,
         /**
@@ -42,7 +42,7 @@ public interface IFeedTask extends IMaidTask {
          */
         LOW,
         /**
-         * 恰好匹配当前饥饿值的食物，也可用于一些具有特殊效果的东西，优先级最高
+         * 能够回满饱食度（可能会溢出）的食物，也可用于一些具有特殊效果的东西，优先级最高
          */
         HIGH,
         /**

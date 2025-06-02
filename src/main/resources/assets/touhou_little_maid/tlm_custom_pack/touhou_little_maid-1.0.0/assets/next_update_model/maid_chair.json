@@ -1,0 +1,196 @@
+{
+	"pack_name": "{chair_pack.next_update_model.name}",
+	"version": "1.0.0",
+	"author": ["pajinyi", "Succinum"],
+	"description": ["{chair_pack.next_update_model.desc}"],
+	"date": "2022-03-10",
+	"icon": "next_update_model:textures/chair_icon.png",
+	"model_list": [
+		{
+			"model_id": "next_update_model:stage",
+			"animation": [],
+			"render_item_scale": 0.2,
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "next_update_model:japanese_lottery_machine",
+			"animation": [],
+			"render_item_scale": 0.9,
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "next_update_model:fishpond",
+			"animation": [],
+			"render_item_scale": 0.2,
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "next_update_model:mine",
+			"animation": [],
+			"render_item_scale": 0.2,
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "next_update_model:logging_hut",
+			"animation": [],
+			"render_item_scale": 0.2,
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "next_update_model:kitchen",
+			"animation": [],
+			"render_item_scale": 0.25,
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "next_update_model:dining_table_default",
+			"animation": [],
+			"render_item_scale": 0.25,
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "next_update_model:dining_table_spring",
+			"name": "{model.next_update_model.dining_table_default.name}",
+			"model": "next_update_model:models/entity/dining_table_default.json",
+			"texture": "next_update_model:textures/entity/dining_table_spring.png",
+			"animation": [],
+			"render_item_scale": 0.25,
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "next_update_model:dining_table_summer",
+			"name": "{model.next_update_model.dining_table_default.name}",
+			"model": "next_update_model:models/entity/dining_table_default.json",
+			"texture": "next_update_model:textures/entity/dining_table_summer.png",
+			"animation": [],
+			"render_item_scale": 0.25,
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "next_update_model:dining_table_autumn",
+			"name": "{model.next_update_model.dining_table_default.name}",
+			"model": "next_update_model:models/entity/dining_table_default.json",
+			"texture": "next_update_model:textures/entity/dining_table_autumn.png",
+			"animation": [],
+			"render_item_scale": 0.25,
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "next_update_model:dining_table_winter",
+			"name": "{model.next_update_model.dining_table_default.name}",
+			"model": "next_update_model:models/entity/dining_table_default.json",
+			"texture": "next_update_model:textures/entity/dining_table_winter.png",
+			"animation": [],
+			"render_item_scale": 0.25,
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "next_update_model:cumin_lamb_chop",
+			"animation": [],
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "next_update_model:hot_spring",
+			"animation": [],
+			"render_item_scale": 0.1,
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "next_update_model:picnic_cloth",
+			"animation": [],
+			"render_item_scale": 0.2,
+			"mounted_height": 0
+		},
+		{
+			"model_id": "next_update_model:elite_slime",
+			"render_item_scale": 0.5,
+			"animation": [],
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "next_update_model:slime",
+			"animation": []
+		},
+		{
+			"model_id": "next_update_model:flip_phone",
+			"animation": [],
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "next_update_model:fox_demon_statue",
+			"animation": [],
+			"render_item_scale": 0.9,
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "next_update_model:fox_demon_statue_1",
+			"name": "{model.next_update_model.fox_demon_statue.name}",
+			"model": "next_update_model:models/entity/fox_demon_statue.json",
+			"texture": "next_update_model:textures/entity/fox_demon_statue_1.png",
+			"animation": [],
+			"render_item_scale": 0.9,
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "next_update_model:bathroom",
+			"animation": [],
+			"render_item_scale": 0.5,
+			"tameable_can_ride": false,
+			"render_entity_scale": 1.25
+		},
+		{
+			"model_id": "next_update_model:backpack",
+			"animation": [],
+			"render_item_scale": 0.8,
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "next_update_model:cabinet",
+			"animation": [],
+			"render_item_scale": 0.5,
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "next_update_model:single_bed",
+			"animation": [],
+			"render_item_scale": 0.9,
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "next_update_model:double_bed",
+			"animation": [],
+			"render_item_scale": 0.5,
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "next_update_model:shrine",
+			"animation": [],
+			"render_item_scale": 0.2,
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "next_update_model:3d_printer",
+			"animation": [],
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "next_update_model:doorbell_ground",
+			"animation": [],
+			"render_item_scale": 1.75,
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "next_update_model:doorbell_wall",
+			"animation": [],
+			"render_item_scale": 1.75,
+			"tameable_can_ride": false,
+			"no_gravity": true
+		},
+		{
+			"model_id": "next_update_model:exchange_machine",
+			"animation": [],
+			"render_item_scale": 0.75,
+			"tameable_can_ride": false
+		}
+	]
+}

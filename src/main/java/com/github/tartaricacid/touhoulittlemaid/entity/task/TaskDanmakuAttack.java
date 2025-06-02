@@ -181,6 +181,11 @@ public class TaskDanmakuAttack implements IRangedAttackTask {
         });
     }
 
+    @Override
+    public boolean isWeapon(EntityMaid maid, ItemStack stack) {
+        return ItemHakureiGohei.isGohei(stack);
+    }
+
     private boolean enemyEntityTest(EntityMaid shooter, LivingEntity target, LivingEntity test) {
         boolean canAttack = shooter.canAttack(test);
         boolean sameType = target.getType().equals(test.getType());

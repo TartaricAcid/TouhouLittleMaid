@@ -6326,22 +6326,7 @@
 			}
 		},
 		"parallel0": {
-			"loop": true,
-			"animation_length": 0.375,
-			"bones": {
-				"LeftEyebrow": {
-					"position": [0, "ysm.is_close_eyes ? -1 : 0", 0]
-				},
-				"RightEyebrow": {
-					"position": [0, "ysm.is_close_eyes ? -1 : 0", 0]
-				},
-				"Eyelid": {
-					"scale": "ysm.is_close_eyes ? 0 : 1"
-				},
-				"long_h1": {
-					"rotation": ["(ysm.head_pitch>0)?(0.9*ysm.head_pitch):(0.2*ysm.head_pitch)", 0, 0]
-				}
-			}
+			"loop": true
 		},
 		"parallel1": {
 			"loop": true,
@@ -6381,7 +6366,22 @@
 			"loop": true
 		},
 		"pre_parallel0": {
-			"loop": true
+			"loop": true,
+			"animation_length": 0.375,
+			"bones": {
+				"LeftEyebrow": {
+					"position": [0, "ysm.is_close_eyes ? -1 : 0", 0]
+				},
+				"RightEyebrow": {
+					"position": [0, "ysm.is_close_eyes ? -1 : 0", 0]
+				},
+				"Eyelid": {
+					"scale": "ysm.is_close_eyes ? 0 : 1"
+				},
+				"long_h1": {
+					"rotation": ["(ysm.head_pitch>0)?(0.9*ysm.head_pitch):(0.2*ysm.head_pitch)", 0, 0]
+				}
+			}
 		},
 		"pre_parallel1": {
 			"loop": true

@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.mixin.client;
 
-import com.github.tartaricacid.touhoulittlemaid.extended.LivingEntityRendererAccessor;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.extended.LivingEntityRendererAccessor;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;

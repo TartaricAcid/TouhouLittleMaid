@@ -187,10 +187,10 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
 
     // 拆分出来的基岩版模型加载库
-    implementation jarJar("libs:simplebedrockmodel-1.21.1-release:1.1.0") {
+    implementation jarJar("libs:simplebedrockmodel-1.21.1-release:1.2.0") {
         version {
-            strictly '[1.1.0,)'
-            prefer '1.1.0'
+            strictly '[1.2.0,)'
+            prefer '1.2.0'
         }
     }
 
@@ -216,6 +216,10 @@ dependencies {
     compileOnly "maven.modrinth:sodium:mc1.21-0.6.0-beta.2-neoforge"
     compileOnly "maven.modrinth:iris:1.8.0-beta.5+1.21-neoforge"
     implementation "maven.modrinth:embeddium:1.0.11+mc1.21.1-neoforge"
+
+    runtimeOnly "curse.maven:placebo-283644:6446766"
+    runtimeOnly "curse.maven:hostile-neural-networks-552574:6430289"
+    runtimeOnly "maven.modrinth:camerapture:1.10.1+mc1.21.1-neoforge"
 }
 
 tasks.compileJava {

@@ -140,6 +140,11 @@ public class TaskBowAttack implements IRangedAttackTask {
         return Lists.newArrayList(Pair.of("has_bow", this::hasBow), Pair.of("has_arrow", this::hasArrow));
     }
 
+    @Override
+    public boolean isWeapon(EntityMaid maid, ItemStack stack) {
+        return stack.getItem() instanceof BowItem;
+    }
+
     private boolean hasBow(EntityMaid maid) {
         return maid.getMainHandItem().getItem() instanceof BowItem;
     }

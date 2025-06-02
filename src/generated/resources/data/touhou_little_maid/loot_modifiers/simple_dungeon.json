@@ -1,0 +1,12 @@
+{
+  "type": "neoforge:add_table",
+  "conditions": [
+    {
+      "condition": "touhou_little_maid:loot_table_type",
+      "loot_table_add": "touhou_little_maid:chest/furnace_or_crafting_table_backpack",
+      "loot_table_id": "minecraft:chests/simple_dungeon",
+      "loot_table_type": "minecraft:chest"
+    }
+  ],
+  "table": "touhou_little_maid:chest/furnace_or_crafting_table_backpack"
+}

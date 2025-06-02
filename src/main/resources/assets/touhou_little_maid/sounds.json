@@ -279,13 +279,13 @@
       "minecraft:mob/rabbit/idle3",
       "minecraft:mob/rabbit/idle4"
     ],
-    "subtitle": "touhou_little_maid.subtitles.entity.fairy.ambient"
+    "subtitle": "subtitle.touhou_little_maid.entity.fairy.ambient"
   },
   "entity.fairy.death": {
     "sounds": [
       "minecraft:mob/rabbit/bunnymurder"
     ],
-    "subtitle": "touhou_little_maid.subtitles.entity.fairy.death"
+    "subtitle": "subtitle.touhou_little_maid.entity.fairy.death"
   },
   "entity.fairy.hurt": {
     "sounds": [
@@ -294,6 +294,18 @@
       "minecraft:mob/rabbit/hurt3",
       "minecraft:mob/rabbit/hurt4"
     ],
-    "subtitle": "touhou_little_maid.subtitles.entity.fairy.hurt"
+    "subtitle": "subtitle.touhou_little_maid.entity.fairy.hurt"
+  },
+  "ui.recording_start": {
+    "sounds": [
+      "touhou_little_maid:ui/recording_start"
+    ],
+    "subtitle": "subtitle.touhou_little_maid.ui.recording_start"
+  },
+  "ui.recording_end": {
+    "sounds": [
+      "touhou_little_maid:ui/recording_end"
+    ],
+    "subtitle": "subtitle.touhou_little_maid.ui.recording_end"
   }
 }

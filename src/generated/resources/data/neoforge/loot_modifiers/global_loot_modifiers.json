@@ -1,6 +1,23 @@
 {
   "entries": [
-    "touhou_little_maid:additional"
+    "touhou_little_maid:woodland_mansion_gift",
+    "touhou_little_maid:chest_power_point",
+    "touhou_little_maid:fishing_power_point",
+    "touhou_little_maid:spawn_bonus_chest",
+    "touhou_little_maid:abandoned_mineshaft",
+    "touhou_little_maid:maid_buried_treasure",
+    "touhou_little_maid:desert_pyramid",
+    "touhou_little_maid:bastion_treasure",
+    "touhou_little_maid:end_city_treasure",
+    "touhou_little_maid:nether_bridge",
+    "touhou_little_maid:stronghold_library",
+    "touhou_little_maid:jungle_temple",
+    "touhou_little_maid:stronghold_corridor",
+    "touhou_little_maid:woodland_mansion_bauble",
+    "touhou_little_maid:village_temple",
+    "touhou_little_maid:simple_dungeon",
+    "touhou_little_maid:ancient_city",
+    "touhou_little_maid:pillager_outpost_gift"
   ],
   "replace": false
 }

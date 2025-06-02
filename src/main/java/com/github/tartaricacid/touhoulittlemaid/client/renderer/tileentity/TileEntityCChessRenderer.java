@@ -3,8 +3,9 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.game.xqwlight.Position;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockGomoku;
-import com.github.tartaricacid.touhoulittlemaid.client.model.CChessModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.CChessPiecesModel;
+import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.SimpleBedrockModel;
+import com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityCChess;
 import com.github.tartaricacid.touhoulittlemaid.util.CChessUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -23,20 +24,21 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 
 public class TileEntityCChessRenderer implements BlockEntityRenderer<TileEntityCChess> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/cchess.png");
-    private static final ResourceLocation PIECES_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/cchess_pieces.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/bedrock/block/cchess.png");
+    private static final ResourceLocation PIECES_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/bedrock/block/cchess_pieces.png");
     private static final int TIPS_RENDER_DISTANCE = 16;
     private static final int PIECE_RENDER_DISTANCE = 24;
     private final Font font;
     private final BlockEntityRenderDispatcher dispatcher;
-    private final CChessModel chessModel;
+    private final SimpleBedrockModel<Entity> chessModel;
     private final CChessPiecesModel[] chessPiecesModels;
     private final CChessPiecesModel selectedModels;
 
     public TileEntityCChessRenderer(BlockEntityRendererProvider.Context context) {
-        chessModel = new CChessModel(context.bakeLayer(CChessModel.LAYER));
+        chessModel = BedrockModelLoader.getModel(BedrockModelLoader.CCHESS);
         chessPiecesModels = CChessPiecesModel.initModel();
         selectedModels = CChessPiecesModel.getSelectedModel();
         dispatcher = context.getBlockEntityRenderDispatcher();

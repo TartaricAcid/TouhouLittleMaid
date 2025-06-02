@@ -5,10 +5,8 @@ import com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.SettingReader
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.ChairModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.CustomModelPack;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
-import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatText;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.models.ServerChairModels;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.models.ServerMaidModels;
-import com.github.tartaricacid.touhoulittlemaid.util.GetJarResources;
 import com.github.tartaricacid.touhoulittlemaid.util.ZipFileCheck;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
@@ -40,13 +38,11 @@ import static com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid.LOGGER;
 public final class ServerCustomPackLoader {
     public static final Gson GSON = new GsonBuilder()
             .registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer())
-            .registerTypeAdapter(ChatText.class, new ChatText.Serializer())
             .create();
     public static final ServerMaidModels SERVER_MAID_MODELS = ServerMaidModels.getInstance();
     public static final ServerChairModels SERVER_CHAIR_MODELS = ServerChairModels.getInstance();
     private static final Map<Long, Path> CRC32_FILE_MAP = Maps.newHashMap();
     private static final String CUSTOM_PACK_DIR_NAME = "tlm_custom_pack";
-    private static final String DEFAULT_PACK_NAME = "touhou_little_maid-1.0.0.zip";
     private static final Path PACK_FOLDER = Paths.get(CUSTOM_PACK_DIR_NAME);
     private static final Marker MARKER = MarkerManager.getMarker("ServerCustomPackLoader");
     private static final Pattern DOMAIN = Pattern.compile("^assets/([\\w.]+)/$");
@@ -57,7 +53,6 @@ public final class ServerCustomPackLoader {
         SERVER_CHAIR_MODELS.clearAll();
         CRC32_FILE_MAP.clear();
         initPacks();
-        SettingReader.reloadSettings();
     }
 
     private static void initPacks() {
@@ -70,14 +65,7 @@ public final class ServerCustomPackLoader {
                 return;
             }
         }
-        checkDefaultPack();
         loadPacks(packFolder);
-    }
-
-    private static void checkDefaultPack() {
-        // 不管存不存在，强行覆盖
-        String jarDefaultPackPath = String.format("/assets/%s/%s/%s", TouhouLittleMaid.MOD_ID, CUSTOM_PACK_DIR_NAME, DEFAULT_PACK_NAME);
-        GetJarResources.copyTouhouLittleMaidFile(jarDefaultPackPath, PACK_FOLDER, DEFAULT_PACK_NAME);
     }
 
     private static void loadPacks(File packFolder) {

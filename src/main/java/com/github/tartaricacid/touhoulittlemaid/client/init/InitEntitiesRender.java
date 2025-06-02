@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.init;
 
-import com.github.tartaricacid.touhoulittlemaid.client.model.*;
-import com.github.tartaricacid.touhoulittlemaid.client.model.backpack.*;
+import com.github.tartaricacid.touhoulittlemaid.client.model.DebugFloorModel;
+import com.github.tartaricacid.touhoulittlemaid.client.model.NewEntityFairyModel;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.*;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.*;
@@ -57,33 +57,8 @@ public final class InitEntitiesRender {
 
     @SubscribeEvent
     public static void onRegisterLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
-        event.registerLayerDefinition(AltarModel.LAYER, AltarModel::createBodyLayer);
         event.registerLayerDefinition(DebugFloorModel.LAYER, DebugFloorModel::createBodyLayer);
-        event.registerLayerDefinition(EntityBoxModel.LAYER, EntityBoxModel::createBodyLayer);
-        event.registerLayerDefinition(EntityFairyModel.LAYER, EntityFairyModel::createBodyLayer);
+        // 为了别的模组兼容，暂时保留
         event.registerLayerDefinition(NewEntityFairyModel.LAYER, NewEntityFairyModel::createBodyLayer);
-        event.registerLayerDefinition(BigBackpackModel.LAYER, BigBackpackModel::createBodyLayer);
-        event.registerLayerDefinition(MiddleBackpackModel.LAYER, MiddleBackpackModel::createBodyLayer);
-        event.registerLayerDefinition(SmallBackpackModel.LAYER, SmallBackpackModel::createBodyLayer);
-        event.registerLayerDefinition(StatueBaseModel.LAYER, StatueBaseModel::createBodyLayer);
-        event.registerLayerDefinition(EntityYukkuriModel.LAYER, EntityYukkuriModel::createBodyLayer);
-        event.registerLayerDefinition(EntityMarisaYukkuriModel.LAYER, EntityMarisaYukkuriModel::createBodyLayer);
-        event.registerLayerDefinition(GomokuModel.LAYER, GomokuModel::createBodyLayer);
-        event.registerLayerDefinition(CChessModel.LAYER, CChessModel::createBodyLayer);
-        event.registerLayerDefinition(WChessModel.LAYER, WChessModel::createBodyLayer);
-        event.registerLayerDefinition(PieceModel.LAYER, PieceModel::createBodyLayer);
-        event.registerLayerDefinition(CraftingTableBackpackModel.LAYER, CraftingTableBackpackModel::createBodyLayer);
-        event.registerLayerDefinition(EnderChestBackpackModel.LAYER, EnderChestBackpackModel::createBodyLayer);
-        event.registerLayerDefinition(FurnaceBackpackModel.LAYER, FurnaceBackpackModel::createBodyLayer);
-        event.registerLayerDefinition(TankBackpackModel.LAYER, TankBackpackModel::createBodyLayer);
-        event.registerLayerDefinition(TombstoneModel.LAYER, TombstoneModel::createBodyLayer);
-        event.registerLayerDefinition(KeyboardModel.LAYER, KeyboardModel::createBodyLayer);
-        event.registerLayerDefinition(BookshelfModel.LAYER, BookshelfModel::createBodyLayer);
-        event.registerLayerDefinition(ComputerModel.LAYER, ComputerModel::createBodyLayer);
-        event.registerLayerDefinition(ShrineModel.LAYER, ShrineModel::createBodyLayer);
-        event.registerLayerDefinition(MaidBannerModel.LAYER, MaidBannerModel::createBodyLayer);
-        event.registerLayerDefinition(BroomModel.LAYER, BroomModel::createBodyLayer);
-        event.registerLayerDefinition(PicnicBasketModel.LAYER, PicnicBasketModel::createBodyLayer);
-        event.registerLayerDefinition(PicnicMatModel.LAYER, PicnicMatModel::createBodyLayer);
     }
 }

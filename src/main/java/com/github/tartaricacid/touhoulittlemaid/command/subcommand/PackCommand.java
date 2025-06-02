@@ -2,7 +2,6 @@ package com.github.tartaricacid.touhoulittlemaid.command.subcommand;
 
 import com.github.tartaricacid.touhoulittlemaid.client.event.ReloadResourceEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.ServerCustomPackLoader;
-import com.github.tartaricacid.touhoulittlemaid.network.message.SyncAiSettingPackage;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -11,7 +10,6 @@ import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.loading.FMLLoader;
-import net.neoforged.neoforge.network.PacketDistributor;
 
 public final class PackCommand {
     private static final String PACK_NAME = "pack";
@@ -30,7 +28,6 @@ public final class PackCommand {
             ReloadResourceEvent.asyncReloadAllPack();
         }
         ServerCustomPackLoader.reloadPacks();
-        PacketDistributor.sendToAllPlayers(SyncAiSettingPackage.getInstance());
         return Command.SINGLE_SUCCESS;
     }
 }

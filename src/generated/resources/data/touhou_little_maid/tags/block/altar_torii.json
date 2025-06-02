@@ -1,0 +1,10 @@
+{
+  "values": [
+    "minecraft:red_wool",
+    "minecraft:red_concrete",
+    {
+      "id": "biomesoplenty:redwood_planks",
+      "required": false
+    }
+  ]
+}

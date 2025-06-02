@@ -1,80 +1,76 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.manager.setting;
 
+import com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.bean.MetaData;
+import com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.bean.Setting;
+import com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.papi.PapiReplacer;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import org.apache.commons.lang3.StringUtils;
+import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.Constructor;
+import org.yaml.snakeyaml.nodes.Tag;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class CharacterSetting {
+    private static final Yaml YAML = new Yaml(new Constructor(Setting.class, new LoaderOptions()));
     private static final String COMMENTS = "#";
-    private static final String META = "meta";
-    private static final String SETTING = "setting";
-    private static final String AUTHOR = "author";
-    private static final String MODEL_ID = "model_id";
-    private static final Yaml YAML = new Yaml();
 
-    private final String author;
-    private final List<String> modelId;
+    private final MetaData data;
     private final String rawSetting;
 
-    @SuppressWarnings("unchecked")
-    public CharacterSetting(File settingFile) throws IOException {
+    public CharacterSetting(MetaData data, String rawSetting) {
+        this.data = data;
+        this.rawSetting = rawSetting;
+    }
+
+    public CharacterSetting(File settingFile) throws Exception {
         try (FileReader reader = new FileReader(settingFile, StandardCharsets.UTF_8)) {
-            Map<String, Object> result = YAML.load(reader);
-            if (result == null) {
-                throw new IOException("Failed to load setting file");
+            Setting setting = YAML.load(reader);
+            if (setting == null) {
+                throw new IOException(settingFile.getAbsolutePath() + " is not a valid setting");
             }
-            if (!result.containsKey(META) || !result.containsKey(SETTING)) {
-                throw new IOException("Setting file must contain meta and setting key");
-            }
-            Map<String, Object> meta = (Map<String, Object>) result.get(META);
-            if (!meta.containsKey(AUTHOR) || !meta.containsKey(MODEL_ID)) {
-                throw new IOException("Meta must contain author and model_id key");
-            }
-            StringBuilder builder = new StringBuilder();
-            processText((String) result.get(SETTING)).forEach(value -> builder.append(value).append("\n"));
-
-            this.author = (String) meta.get(AUTHOR);
-            this.modelId = (List<String>) meta.get(MODEL_ID);
-            this.rawSetting = builder.toString();
+            this.data = setting.getMeta();
+            this.rawSetting = processText(setting.getSetting());
         }
     }
 
-    @SuppressWarnings("unchecked")
-    public CharacterSetting(InputStream stream) throws IOException {
+    public CharacterSetting(InputStream stream) throws Exception {
         try (InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8)) {
-            Map<String, Object> result = YAML.load(reader);
-            if (result == null) {
-                throw new IOException("Failed to load setting file");
+            Setting setting = YAML.load(reader);
+            if (setting == null) {
+                throw new IOException("InputStream is not a valid setting");
             }
-            if (!result.containsKey(META) || !result.containsKey(SETTING)) {
-                throw new IOException("Setting file must contain meta and setting key");
-            }
-            Map<String, Object> meta = (Map<String, Object>) result.get(META);
-            if (!meta.containsKey(AUTHOR) || !meta.containsKey(MODEL_ID)) {
-                throw new IOException("Meta must contain author and model_id key");
-            }
-            StringBuilder builder = new StringBuilder();
-            processText((String) result.get(SETTING)).forEach(value -> builder.append(value).append("\n"));
-
-            this.author = (String) meta.get(AUTHOR);
-            this.modelId = (List<String>) meta.get(MODEL_ID);
-            this.rawSetting = builder.toString();
+            this.data = setting.getMeta();
+            this.rawSetting = processText(setting.getSetting());
         }
     }
 
-    private static List<String> processText(String text) {
-        return Arrays.stream(StringUtils.split(text, "\n"))
+    public void save(File settingFile) throws IOException {
+        try (FileWriter writer = new FileWriter(settingFile, StandardCharsets.UTF_8)) {
+            DumperOptions options = new DumperOptions();
+            options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+            options.setExplicitStart(false);
+            options.setExplicitEnd(false);
+            options.setIndent(2);
+            Yaml yaml = new Yaml(options);
+            Setting setting = new Setting(data, rawSetting);
+            writer.write(yaml.dumpAs(setting, Tag.MAP, null));
+        }
+    }
+
+    private String processText(String text) {
+        StringBuilder builder = new StringBuilder();
+        Arrays.stream(StringUtils.split(text, "\n"))
                 .map(StringUtils::trim)
                 .filter(s -> !s.startsWith(COMMENTS))
-                .filter(StringUtils::isNotEmpty)
-                .collect(Collectors.toList());
+                .filter(StringUtils::isNotEmpty).toList()
+                .forEach(value -> builder.append(value).append("\n"));
+        return builder.toString();
     }
 
     public String getSetting(EntityMaid maid, String language) {
@@ -82,10 +78,10 @@ public class CharacterSetting {
     }
 
     public String getAuthor() {
-        return author;
+        return this.data.getAuthor();
     }
 
     public List<String> getModelId() {
-        return modelId;
+        return this.data.getModelId();
     }
 }

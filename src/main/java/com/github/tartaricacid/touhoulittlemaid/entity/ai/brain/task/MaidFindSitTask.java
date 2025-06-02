@@ -1,6 +1,5 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task;
 
-import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManger;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.ImmutableMap;
@@ -16,6 +15,7 @@ public class MaidFindSitTask extends MaidCheckRateTask {
     private static final int MAX_DELAY_TIME = 12;
     private final float speedModifier;
     private Entity sitEntity = null;
+    private long chatBubbleKey = -1;
 
     public MaidFindSitTask(float speedModifier) {
         super(ImmutableMap.of(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryStatus.VALUE_PRESENT,
@@ -38,7 +38,10 @@ public class MaidFindSitTask extends MaidCheckRateTask {
                 .ifPresentOrElse(entity -> {
                     this.sitEntity = entity;
                     BehaviorUtils.setWalkAndLookTargetMemories(maid, this.sitEntity, this.speedModifier, 0);
-                }, () -> ChatBubbleManger.addInnerChatText(maid, "chat_bubble.touhou_little_maid.inner.fishing.no_sit"));
+                }, () -> {
+                    String langKey = "chat_bubble.touhou_little_maid.inner.fishing.no_sit";
+                    this.chatBubbleKey = maid.getChatBubbleManager().addTextChatBubbleIfTimeout(langKey, this.chatBubbleKey);
+                });
 
         if (sitEntity != null && sitEntity.isAlive() && sitEntity.closerThan(maid, 2)) {
             if (sitEntity.getPassengers().isEmpty()) {

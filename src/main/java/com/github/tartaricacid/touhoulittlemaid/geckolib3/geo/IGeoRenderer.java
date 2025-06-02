@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.geckolib3.geo;
 
+import com.github.tartaricacid.touhoulittlemaid.compat.embeddium.EmbeddiumCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.sodium.SodiumCompat;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.util.Color;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated.AnimatedGeoBone;
@@ -73,7 +74,9 @@ public interface IGeoRenderer<T> {
         }
         poseStack.pushPose();
         RenderUtils.prepMatrixForBone(poseStack, bone);
-        if (!SodiumCompat.sodiumRenderCubesOfBone(bone, poseStack, buffer, cubePackedLight, packedOverlay, red, green, blue, alpha)) {
+        if (!SodiumCompat.sodiumRenderCubesOfBone(bone, poseStack, buffer, cubePackedLight, packedOverlay, red, green, blue, alpha)
+            && !EmbeddiumCompat.embeddiumRenderCubesOfBone(bone, poseStack, buffer, cubePackedLight, packedOverlay, red, green, blue, alpha)
+        ) {
             renderCubesOfBone(bone, poseStack, buffer, cubePackedLight, packedOverlay, red, green, blue, alpha);
         }
         renderChildBones(bone, poseStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
@@ -122,142 +125,175 @@ public interface IGeoRenderer<T> {
                 nz.mul(normal).normalize();
             }
 
-            if (!mirrored) {
-                if ((faces & 0b000001) != 0) // DOWN
-                {
-                    buffer.addVertex(C101.x, C101.y, C101.z).setColor(red, green, blue, alpha).setUv(mesh.downU0(i), mesh.downV1(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(-ny.x, -ny.y, -ny.z);
-                    buffer.addVertex(C001.x, C001.y, C001.z).setColor(red, green, blue, alpha).setUv(mesh.downU1(i), mesh.downV1(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(-ny.x, -ny.y, -ny.z);
-                    buffer.addVertex(C000.x, C000.y, C000.z).setColor(red, green, blue, alpha).setUv(mesh.downU1(i), mesh.downV0(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(-ny.x, -ny.y, -ny.z);
-                    buffer.addVertex(C100.x, C100.y, C100.z).setColor(red, green, blue, alpha).setUv(mesh.downU0(i), mesh.downV0(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(-ny.x, -ny.y, -ny.z);
-                }
-                if ((faces & 0b000010) != 0) // UP
-                {
-                    buffer.addVertex(C110.x, C110.y, C110.z).setColor(red, green, blue, alpha).setUv(mesh.upU0(i), mesh.upV1(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(ny.x, ny.y, ny.z);
-                    buffer.addVertex(C010.x, C010.y, C010.z).setColor(red, green, blue, alpha).setUv(mesh.upU1(i), mesh.upV1(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(ny.x, ny.y, ny.z);
-                    buffer.addVertex(C011.x, C011.y, C011.z).setColor(red, green, blue, alpha).setUv(mesh.upU1(i), mesh.upV0(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(ny.x, ny.y, ny.z);
-                    buffer.addVertex(C111.x, C111.y, C111.z).setColor(red, green, blue, alpha).setUv(mesh.upU0(i), mesh.upV0(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(ny.x, ny.y, ny.z);
-                }
-                if ((faces & 0b000100) != 0) // NORTH
-                {
-                    buffer.addVertex(C100.x, C100.y, C100.z).setColor(red, green, blue, alpha).setUv(mesh.northU0(i), mesh.northV1(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(-nz.x, -nz.y, -nz.z);
-                    buffer.addVertex(C000.x, C000.y, C000.z).setColor(red, green, blue, alpha).setUv(mesh.northU1(i), mesh.northV1(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(-nz.x, -nz.y, -nz.z);
-                    buffer.addVertex(C010.x, C010.y, C010.z).setColor(red, green, blue, alpha).setUv(mesh.northU1(i), mesh.northV0(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(-nz.x, -nz.y, -nz.z);
-                    buffer.addVertex(C110.x, C110.y, C110.z).setColor(red, green, blue, alpha).setUv(mesh.northU0(i), mesh.northV0(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(-nz.x, -nz.y, -nz.z);
-                }
-                if ((faces & 0b001000) != 0) // SOUTH
-                {
-                    buffer.addVertex(C001.x, C001.y, C001.z).setColor(red, green, blue, alpha).setUv(mesh.southU0(i), mesh.southV1(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(nz.x, nz.y, nz.z);
-                    buffer.addVertex(C101.x, C101.y, C101.z).setColor(red, green, blue, alpha).setUv(mesh.southU1(i), mesh.southV1(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(nz.x, nz.y, nz.z);
-                    buffer.addVertex(C111.x, C111.y, C111.z).setColor(red, green, blue, alpha).setUv(mesh.southU1(i), mesh.southV0(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(nz.x, nz.y, nz.z);
-                    buffer.addVertex(C011.x, C011.y, C011.z).setColor(red, green, blue, alpha).setUv(mesh.southU0(i), mesh.southV0(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(nz.x, nz.y, nz.z);
-                }
-                if ((faces & 0b010000) != 0) // WEST
-                {
-                    // FIXME 你问我为什么 WEST 是 EAST 的 UV，我也不知道，但是游戏内就是好的
-                    buffer.addVertex(C101.x, C101.y, C101.z).setColor(red, green, blue, alpha).setUv(mesh.eastU0(i), mesh.eastV1(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(nx.x, nx.y, nx.z);
-                    buffer.addVertex(C100.x, C100.y, C100.z).setColor(red, green, blue, alpha).setUv(mesh.eastU1(i), mesh.eastV1(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(nx.x, nx.y, nx.z);
-                    buffer.addVertex(C110.x, C110.y, C110.z).setColor(red, green, blue, alpha).setUv(mesh.eastU1(i), mesh.eastV0(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(nx.x, nx.y, nx.z);
-                    buffer.addVertex(C111.x, C111.y, C111.z).setColor(red, green, blue, alpha).setUv(mesh.eastU0(i), mesh.eastV0(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(nx.x, nx.y, nx.z);
-                }
-                if ((faces & 0b100000) != 0) // EAST
-                {
-                    // FIXME 你问我为什么 EAST 是 WEST 的 UV，我也不知道，但是游戏内就是好的
-                    buffer.addVertex(C000.x, C000.y, C000.z).setColor(red, green, blue, alpha).setUv(mesh.westU0(i), mesh.westV1(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(-nx.x, -nx.y, -nx.z);
-                    buffer.addVertex(C001.x, C001.y, C001.z).setColor(red, green, blue, alpha).setUv(mesh.westU1(i), mesh.westV1(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(-nx.x, -nx.y, -nx.z);
-                    buffer.addVertex(C011.x, C011.y, C011.z).setColor(red, green, blue, alpha).setUv(mesh.westU1(i), mesh.westV0(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(-nx.x, -nx.y, -nx.z);
-                    buffer.addVertex(C010.x, C010.y, C010.z).setColor(red, green, blue, alpha).setUv(mesh.westU0(i), mesh.westV0(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(-nx.x, -nx.y, -nx.z);
-                }
-            } else {
-                if ((faces & 0b000001) != 0) // DOWN
-                {
-                    buffer.addVertex(C101.x, C101.y, C101.z).setColor(red, green, blue, alpha).setUv(mesh.downU1(i), mesh.downV0(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(-ny.x, -ny.y, -ny.z);
-                    buffer.addVertex(C001.x, C001.y, C001.z).setColor(red, green, blue, alpha).setUv(mesh.downU0(i), mesh.downV0(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(-ny.x, -ny.y, -ny.z);
-                    buffer.addVertex(C000.x, C000.y, C000.z).setColor(red, green, blue, alpha).setUv(mesh.downU0(i), mesh.downV1(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(-ny.x, -ny.y, -ny.z);
-                    buffer.addVertex(C100.x, C100.y, C100.z).setColor(red, green, blue, alpha).setUv(mesh.downU1(i), mesh.downV1(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(-ny.x, -ny.y, -ny.z);
-                }
-                if ((faces & 0b000010) != 0) // UP
-                {
-                    buffer.addVertex(C110.x, C110.y, C110.z).setColor(red, green, blue, alpha).setUv(mesh.upU1(i), mesh.upV0(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(ny.x, ny.y, ny.z);
-                    buffer.addVertex(C010.x, C010.y, C010.z).setColor(red, green, blue, alpha).setUv(mesh.upU0(i), mesh.upV0(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(ny.x, ny.y, ny.z);
-                    buffer.addVertex(C011.x, C011.y, C011.z).setColor(red, green, blue, alpha).setUv(mesh.upU0(i), mesh.upV1(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(ny.x, ny.y, ny.z);
-                    buffer.addVertex(C111.x, C111.y, C111.z).setColor(red, green, blue, alpha).setUv(mesh.upU1(i), mesh.upV1(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(ny.x, ny.y, ny.z);
-                }
-                if ((faces & 0b000100) != 0) // NORTH
-                {
-                    buffer.addVertex(C100.x, C100.y, C100.z).setColor(red, green, blue, alpha).setUv(mesh.northU1(i), mesh.northV0(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(-nz.x, -nz.y, -nz.z);
-                    buffer.addVertex(C000.x, C000.y, C000.z).setColor(red, green, blue, alpha).setUv(mesh.northU0(i), mesh.northV0(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(-nz.x, -nz.y, -nz.z);
-                    buffer.addVertex(C010.x, C010.y, C010.z).setColor(red, green, blue, alpha).setUv(mesh.northU0(i), mesh.northV1(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(-nz.x, -nz.y, -nz.z);
-                    buffer.addVertex(C110.x, C110.y, C110.z).setColor(red, green, blue, alpha).setUv(mesh.northU1(i), mesh.northV1(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(-nz.x, -nz.y, -nz.z);
-                }
-                if ((faces & 0b001000) != 0) // SOUTH
-                {
-                    buffer.addVertex(C001.x, C001.y, C001.z).setColor(red, green, blue, alpha).setUv(mesh.southU1(i), mesh.southV0(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(nz.x, nz.y, nz.z);
-                    buffer.addVertex(C101.x, C101.y, C101.z).setColor(red, green, blue, alpha).setUv(mesh.southU0(i), mesh.southV0(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(nz.x, nz.y, nz.z);
-                    buffer.addVertex(C111.x, C111.y, C111.z).setColor(red, green, blue, alpha).setUv(mesh.southU0(i), mesh.southV1(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(nz.x, nz.y, nz.z);
-                    buffer.addVertex(C011.x, C011.y, C011.z).setColor(red, green, blue, alpha).setUv(mesh.southU1(i), mesh.southV1(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(nz.x, nz.y, nz.z);
-                }
-                if ((faces & 0b010000) != 0) // WEST
-                {
-                    buffer.addVertex(C101.x, C101.y, C101.z).setColor(red, green, blue, alpha).setUv(mesh.westU1(i), mesh.westV0(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(-nx.x, -nx.y, -nx.z);
-                    buffer.addVertex(C100.x, C100.y, C100.z).setColor(red, green, blue, alpha).setUv(mesh.westU0(i), mesh.westV0(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(-nx.x, -nx.y, -nx.z);
-                    buffer.addVertex(C110.x, C110.y, C110.z).setColor(red, green, blue, alpha).setUv(mesh.westU0(i), mesh.westV1(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(-nx.x, -nx.y, -nx.z);
-                    buffer.addVertex(C111.x, C111.y, C111.z).setColor(red, green, blue, alpha).setUv(mesh.westU1(i), mesh.westV1(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(-nx.x, -nx.y, -nx.z);
-                }
-                if ((faces & 0b100000) != 0) // EAST
-                {
-                    buffer.addVertex(C000.x, C000.y, C000.z).setColor(red, green, blue, alpha).setUv(mesh.eastU1(i), mesh.eastV0(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(nx.x, nx.y, nx.z);
-                    buffer.addVertex(C001.x, C001.y, C001.z).setColor(red, green, blue, alpha).setUv(mesh.eastU0(i), mesh.eastV0(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(nx.x, nx.y, nx.z);
-                    buffer.addVertex(C011.x, C011.y, C011.z).setColor(red, green, blue, alpha).setUv(mesh.eastU0(i), mesh.eastV1(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(nx.x, nx.y, nx.z);
-                    buffer.addVertex(C010.x, C010.y, C010.z).setColor(red, green, blue, alpha).setUv(mesh.eastU1(i), mesh.eastV1(i))
-                            .setOverlay(packedOverlay).setLight(packedLight).setNormal(nx.x, nx.y, nx.z);
-                }
+            if (mirrored) {
+                nx.mul(-1);
+                ny.mul(-1);
+                nz.mul(-1);
+            }
+
+            if ((faces & 0b000001) != 0) // DOWN
+            {
+                buffer.addVertex(C101.x, C101.y, C101.z)
+                        .setColor(red, green, blue, alpha)
+                        .setUv(mesh.downU0(i), mesh.downV1(i))
+                        .setOverlay(packedOverlay)
+                        .setLight(packedLight)
+                        .setNormal(-ny.x, -ny.y, -ny.z);
+                buffer.addVertex(C001.x, C001.y, C001.z)
+                        .setColor(red, green, blue, alpha)
+                        .setUv(mesh.downU1(i), mesh.downV1(i))
+                        .setOverlay(packedOverlay)
+                        .setLight(packedLight)
+                        .setNormal(-ny.x, -ny.y, -ny.z);
+                buffer.addVertex(C000.x, C000.y, C000.z)
+                        .setColor(red, green, blue, alpha)
+                        .setUv(mesh.downU1(i), mesh.downV0(i))
+                        .setOverlay(packedOverlay)
+                        .setLight(packedLight)
+                        .setNormal(-ny.x, -ny.y, -ny.z);
+                buffer.addVertex(C100.x, C100.y, C100.z)
+                        .setColor(red, green, blue, alpha)
+                        .setUv(mesh.downU0(i), mesh.downV0(i))
+                        .setOverlay(packedOverlay)
+                        .setLight(packedLight)
+                        .setNormal(-ny.x, -ny.y, -ny.z);
+            }
+            if ((faces & 0b000010) != 0) // UP
+            {
+                buffer.addVertex(C110.x, C110.y, C110.z)
+                        .setColor(red, green, blue, alpha)
+                        .setUv(mesh.upU0(i), mesh.upV1(i))
+                        .setOverlay(packedOverlay)
+                        .setLight(packedLight)
+                        .setNormal(ny.x, ny.y, ny.z);
+                buffer.addVertex(C010.x, C010.y, C010.z)
+                        .setColor(red, green, blue, alpha)
+                        .setUv(mesh.upU1(i), mesh.upV1(i))
+                        .setOverlay(packedOverlay)
+                        .setLight(packedLight)
+                        .setNormal(ny.x, ny.y, ny.z);
+                buffer.addVertex(C011.x, C011.y, C011.z)
+                        .setColor(red, green, blue, alpha)
+                        .setUv(mesh.upU1(i), mesh.upV0(i))
+                        .setOverlay(packedOverlay)
+                        .setLight(packedLight)
+                        .setNormal(ny.x, ny.y, ny.z);
+                buffer.addVertex(C111.x, C111.y, C111.z)
+                        .setColor(red, green, blue, alpha)
+                        .setUv(mesh.upU0(i), mesh.upV0(i))
+                        .setOverlay(packedOverlay)
+                        .setLight(packedLight)
+                        .setNormal(ny.x, ny.y, ny.z);
+            }
+            if ((faces & 0b000100) != 0) // NORTH
+            {
+                buffer.addVertex(C100.x, C100.y, C100.z)
+                        .setColor(red, green, blue, alpha)
+                        .setUv(mesh.northU0(i), mesh.northV1(i))
+                        .setOverlay(packedOverlay)
+                        .setLight(packedLight)
+                        .setNormal(-nz.x, -nz.y, -nz.z);
+                buffer.addVertex(C000.x, C000.y, C000.z)
+                        .setColor(red, green, blue, alpha)
+                        .setUv(mesh.northU1(i), mesh.northV1(i))
+                        .setOverlay(packedOverlay)
+                        .setLight(packedLight)
+                        .setNormal(-nz.x, -nz.y, -nz.z);
+                buffer.addVertex(C010.x, C010.y, C010.z)
+                        .setColor(red, green, blue, alpha)
+                        .setUv(mesh.northU1(i), mesh.northV0(i))
+                        .setOverlay(packedOverlay)
+                        .setLight(packedLight)
+                        .setNormal(-nz.x, -nz.y, -nz.z);
+                buffer.addVertex(C110.x, C110.y, C110.z)
+                        .setColor(red, green, blue, alpha)
+                        .setUv(mesh.northU0(i), mesh.northV0(i))
+                        .setOverlay(packedOverlay)
+                        .setLight(packedLight)
+                        .setNormal(-nz.x, -nz.y, -nz.z);
+            }
+            if ((faces & 0b001000) != 0) // SOUTH
+            {
+                buffer.addVertex(C001.x, C001.y, C001.z)
+                        .setColor(red, green, blue, alpha)
+                        .setUv(mesh.southU0(i), mesh.southV1(i))
+                        .setOverlay(packedOverlay)
+                        .setLight(packedLight)
+                        .setNormal(nz.x, nz.y, nz.z);
+                buffer.addVertex(C101.x, C101.y, C101.z)
+                        .setColor(red, green, blue, alpha)
+                        .setUv(mesh.southU1(i), mesh.southV1(i))
+                        .setOverlay(packedOverlay)
+                        .setLight(packedLight)
+                        .setNormal(nz.x, nz.y, nz.z);
+                buffer.addVertex(C111.x, C111.y, C111.z)
+                        .setColor(red, green, blue, alpha)
+                        .setUv(mesh.southU1(i), mesh.southV0(i))
+                        .setOverlay(packedOverlay)
+                        .setLight(packedLight)
+                        .setNormal(nz.x, nz.y, nz.z);
+                buffer.addVertex(C011.x, C011.y, C011.z)
+                        .setColor(red, green, blue, alpha)
+                        .setUv(mesh.southU0(i), mesh.southV0(i))
+                        .setOverlay(packedOverlay)
+                        .setLight(packedLight)
+                        .setNormal(nz.x, nz.y, nz.z);
+            }
+            if ((faces & 0b010000) != 0) // WEST
+            {
+                // FIXME 你问我为什么 WEST 是 EAST 的 UV，我也不知道，但是游戏内就是好的
+                buffer.addVertex(C101.x, C101.y, C101.z)
+                        .setColor(red, green, blue, alpha)
+                        .setUv(mesh.eastU0(i), mesh.eastV1(i))
+                        .setOverlay(packedOverlay)
+                        .setLight(packedLight)
+                        .setNormal(nx.x, nx.y, nx.z);
+                buffer.addVertex(C100.x, C100.y, C100.z)
+                        .setColor(red, green, blue, alpha)
+                        .setUv(mesh.eastU1(i), mesh.eastV1(i))
+                        .setOverlay(packedOverlay)
+                        .setLight(packedLight)
+                        .setNormal(nx.x, nx.y, nx.z);
+                buffer.addVertex(C110.x, C110.y, C110.z)
+                        .setColor(red, green, blue, alpha)
+                        .setUv(mesh.eastU1(i), mesh.eastV0(i))
+                        .setOverlay(packedOverlay)
+                        .setLight(packedLight)
+                        .setNormal(nx.x, nx.y, nx.z);
+                buffer.addVertex(C111.x, C111.y, C111.z)
+                        .setColor(red, green, blue, alpha)
+                        .setUv(mesh.eastU0(i), mesh.eastV0(i))
+                        .setOverlay(packedOverlay)
+                        .setLight(packedLight)
+                        .setNormal(nx.x, nx.y, nx.z);
+            }
+            if ((faces & 0b100000) != 0) // EAST
+            {
+                // FIXME 你问我为什么 EAST 是 WEST 的 UV，我也不知道，但是游戏内就是好的
+                buffer.addVertex(C000.x, C000.y, C000.z)
+                        .setColor(red, green, blue, alpha)
+                        .setUv(mesh.westU0(i), mesh.westV1(i))
+                        .setOverlay(packedOverlay)
+                        .setLight(packedLight)
+                        .setNormal(-nx.x, -nx.y, -nx.z);
+                buffer.addVertex(C001.x, C001.y, C001.z)
+                        .setColor(red, green, blue, alpha)
+                        .setUv(mesh.westU1(i), mesh.westV1(i))
+                        .setOverlay(packedOverlay)
+                        .setLight(packedLight)
+                        .setNormal(-nx.x, -nx.y, -nx.z);
+                buffer.addVertex(C011.x, C011.y, C011.z)
+                        .setColor(red, green, blue, alpha)
+                        .setUv(mesh.westU1(i), mesh.westV0(i))
+                        .setOverlay(packedOverlay)
+                        .setLight(packedLight)
+                        .setNormal(-nx.x, -nx.y, -nx.z);
+                buffer.addVertex(C010.x, C010.y, C010.z)
+                        .setColor(red, green, blue, alpha)
+                        .setUv(mesh.westU0(i), mesh.westV0(i))
+                        .setOverlay(packedOverlay)
+                        .setLight(packedLight)
+                        .setNormal(-nx.x, -nx.y, -nx.z);
             }
         }
     }

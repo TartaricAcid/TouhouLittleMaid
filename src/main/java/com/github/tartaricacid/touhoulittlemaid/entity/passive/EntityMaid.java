@@ -4,6 +4,7 @@ import com.github.tartaricacid.simplebedrockmodel.client.bedrock.model.BedrockPa
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.MaidAIChatManager;
+import com.github.tartaricacid.touhoulittlemaid.ai.manager.site.ClientAvailableSitesSync;
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IBackpackData;
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.api.client.render.MaidRenderState;
@@ -19,17 +20,18 @@ import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelIn
 import com.github.tartaricacid.touhoulittlemaid.compat.ysm.YsmCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.ysm.event.YsmMaidClientTickEvent;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
+import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MiscConfig;
 import com.github.tartaricacid.touhoulittlemaid.data.MaidNumAttachment;
+import com.github.tartaricacid.touhoulittlemaid.datagen.tag.EntityTypeGenerator;
 import com.github.tartaricacid.touhoulittlemaid.datagen.tag.TagItem;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidBrain;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.control.MaidMoveControl;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.navigation.MaidPathNavigation;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.*;
-import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManger;
-import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatText;
-import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.MaidChatBubbles;
-import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.MaidScriptBookManager;
+import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleDataCollection;
+import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManager;
+import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleRegister;
 import com.github.tartaricacid.touhoulittlemaid.entity.data.MaidTaskDataMaps;
 import com.github.tartaricacid.touhoulittlemaid.entity.favorability.FavorabilityManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Type;
@@ -40,14 +42,16 @@ import com.github.tartaricacid.touhoulittlemaid.entity.projectile.MaidFishingHoo
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskIdle;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
+import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
+import com.github.tartaricacid.touhoulittlemaid.inventory.container.config.MaidAIChatConfigContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.config.MaidConfigContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.BaubleItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.MaidBackpackHandler;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.MaidHandsInvWrapper;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemFilm;
-import com.github.tartaricacid.touhoulittlemaid.mixin.MixinArrowEntity;
+import com.github.tartaricacid.touhoulittlemaid.mixin.accessor.ArrowAccessor;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.ItemBreakPackage;
 import com.github.tartaricacid.touhoulittlemaid.network.message.PlayMaidSoundPackage;
@@ -111,10 +115,10 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.enchantment.EnchantedItemInUse;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.BaseFireBlock;
@@ -134,7 +138,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.NeoForge;
@@ -210,7 +213,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     private static final EntityDataAccessor<MaidSchedule> SCHEDULE_MODE = SynchedEntityData.defineId(EntityMaid.class, MaidSchedule.DATA);
     private static final EntityDataAccessor<BlockPos> RESTRICT_CENTER = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.BLOCK_POS);
     private static final EntityDataAccessor<Float> RESTRICT_RADIUS = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.FLOAT);
-    private static final EntityDataAccessor<MaidChatBubbles> CHAT_BUBBLE = SynchedEntityData.defineId(EntityMaid.class, MaidChatBubbles.DATA);
+    private static final EntityDataAccessor<ChatBubbleDataCollection> CHAT_BUBBLE = SynchedEntityData.defineId(EntityMaid.class, ChatBubbleRegister.INSTANCE);
     private static final EntityDataAccessor<String> BACKPACK_TYPE = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<ItemStack> BACKPACK_ITEM_SHOW = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.ITEM_STACK);
     private static final EntityDataAccessor<String> BACKPACK_FLUID = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.STRING);
@@ -246,7 +249,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     private static final String STRUCTURE_SPAWN_TAG = "StructureSpawn";
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
 
-    // 启用数据，仅用于旧版存档的迁移
+    // 弃用数据，仅用于旧版存档的迁移
     private static final @Deprecated String BACKPACK_LEVEL_TAG = "MaidBackpackLevel";
     private static final @Deprecated String RESTRICT_CENTER_TAG = "MaidRestrictCenter";
 
@@ -263,9 +266,9 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     private final ItemStackHandler taskInv = new ItemStackHandler(9);
 
     private final MaidKillRecordManager killRecordManager = new MaidKillRecordManager();
+    private final ChatBubbleManager chatBubbleManager = new ChatBubbleManager(this);
     private final MaidTaskDataMaps taskDataMaps = new MaidTaskDataMaps();
     private final FavorabilityManager favorabilityManager;
-    private final MaidScriptBookManager scriptBookManager;
     private final MaidSwimManager swimManager;
     // 控制不同的 navigation 切换的条件以及切换后变更女仆相关的 AI 控制参数
     private final MaidNavigationManager navigationManager;
@@ -316,7 +319,6 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     protected EntityMaid(EntityType<EntityMaid> type, Level world) {
         super(type, world);
         this.favorabilityManager = new FavorabilityManager(this);
-        this.scriptBookManager = new MaidScriptBookManager();
         this.aiChatManager = new MaidAIChatManager(this);
 
         // 尝试修复 https://github.com/TartaricAcid/TouhouLittleMaid/issues/631
@@ -351,23 +353,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         return stack.getItem().canFitInsideContainerItems();
     }
 
-    @SuppressWarnings("all")
-    public static Ingredient getNtrItem() {
-        return getConfigIngredient(MaidConfig.MAID_NTR_ITEM.get(), Items.STRUCTURE_VOID);
-    }
-
-    private static Ingredient getConfigIngredient(String config, Item defaultItem) {
-        if (config.startsWith(MaidConfig.TAG_PREFIX)) {
-            ResourceLocation key = ResourceLocation.parse(config.substring(1));
-            TagKey<Item> tagKey = TagKey.create(BuiltInRegistries.ITEM.key(), key);
-            return Ingredient.of(tagKey);
-        } else {
-            ResourceLocation key = ResourceLocation.parse(config);
-            if (BuiltInRegistries.ITEM.containsKey(key)) {
-                return Ingredient.of(BuiltInRegistries.ITEM.get(key));
-            }
-        }
-        return Ingredient.of(defaultItem);
+    public static EntityDataAccessor<ChatBubbleDataCollection> getChatBubbleKey() {
+        return CHAT_BUBBLE;
     }
 
     @Override
@@ -393,7 +380,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         builder.define(SCHEDULE_MODE, MaidSchedule.DAY);
         builder.define(RESTRICT_CENTER, BlockPos.ZERO);
         builder.define(RESTRICT_RADIUS, MaidConfig.MAID_NON_HOME_RANGE.get().floatValue());
-        builder.define(CHAT_BUBBLE, MaidChatBubbles.DEFAULT);
+        builder.define(CHAT_BUBBLE, ChatBubbleDataCollection.getEmptyCollection());
         builder.define(BACKPACK_TYPE, EmptyBackpack.ID.toString());
         builder.define(BACKPACK_ITEM_SHOW, ItemStack.EMPTY);
         builder.define(BACKPACK_FLUID, StringUtils.EMPTY);
@@ -545,8 +532,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     @Override
     public void rideTick() {
         super.rideTick();
-        if (this.getVehicle() != null) {
-            Entity vehicle = this.getVehicle();
+        Entity vehicle = this.getVehicle();
+        if (vehicle != null && !vehicle.getType().is(EntityTypeGenerator.MAID_VEHICLE_ROTATE_BLOCKLIST)) {
             this.setYHeadRot(vehicle.getYRot());
             this.setYBodyRot(vehicle.getYRot());
         }
@@ -564,7 +551,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     private void onMaidSleep() {
         if (isSleeping()) {
-            getSleepingPos().ifPresent(pos -> setPos(pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5));
+            getSleepingPos().ifPresent(pos -> setPos(pos.getX() + 0.5, pos.getY() + 0.5625, pos.getZ() + 0.5));
             setDeltaMovement(Vec3.ZERO);
             if (!isSilent()) {
                 this.setSilent(true);
@@ -582,7 +569,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         this.updateSwingTime();
         this.navigationManager.tick();
         if (!level.isClientSide) {
-            ChatBubbleManger.tick(this);
+            this.chatBubbleManager.tick();
             if (this.backpackData != null) {
                 this.level.getProfiler().push("maidBackpackData");
                 this.backpackData.serverTick(this);
@@ -697,6 +684,10 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     }
 
     public boolean pickupItem(ItemEntity entityItem, boolean simulate) {
+        MaidPickupEvent.ItemResultPre event = new MaidPickupEvent.ItemResultPre(this, entityItem, simulate);
+        if (NeoForge.EVENT_BUS.post(event).isCanceled()) {
+            return event.isCanPickup();
+        }
         if (!level.isClientSide && entityItem.isAlive() && !entityItem.hasPickUpDelay()) {
             // 获取实体的物品堆
             ItemStack itemstack = entityItem.getItem();
@@ -720,6 +711,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
                         pickupSoundCount = 5;
                     }
                 }
+                ItemStack copy = new ItemStack(itemstack.getItem(), count - itemstack.getCount());
                 // 如果遍历塞完后发现为空了
                 if (itemstack.isEmpty()) {
                     // 清除这个实体
@@ -728,6 +720,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
                     // 将物品数量同步到客户端
                     entityItem.setItem(itemstack);
                 }
+                NeoForge.EVENT_BUS.post(new MaidPickupEvent.ItemResultPost(this, copy));
             }
             return true;
         }
@@ -735,6 +728,10 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     }
 
     public void pickupXPOrb(ExperienceOrb entityXPOrb) {
+        MaidPickupEvent.ExperienceResult event = new MaidPickupEvent.ExperienceResult(this, entityXPOrb, false);
+        if (NeoForge.EVENT_BUS.post(event).isCanceled()) {
+            return;
+        }
         if (!this.level.isClientSide && entityXPOrb.isAlive() && entityXPOrb.tickCount > 2) {
             // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画和音效
             this.take(entityXPOrb, 1);
@@ -747,14 +744,12 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             }
 
             // 对经验修补的应用，因为全部来自于原版，所以效果也是相同的
-            Optional<EnchantedItemInUse> entry = EnchantmentHelper.getRandomItemWith(EnchantmentEffectComponents.REPAIR_WITH_XP, this, ItemStack::isDamaged);
-            if (entry.isPresent()) {
-                ItemStack itemstack = entry.get().itemStack();
-                if (!itemstack.isEmpty() && itemstack.isDamaged()) {
-                    int i = Math.min((int) (entityXPOrb.value * itemstack.getXpRepairRatio()), itemstack.getDamageValue());
-                    entityXPOrb.value -= (i / 2);
-                    itemstack.setDamageValue(itemstack.getDamageValue() - i);
-                }
+            IItemHandler allItems = new CombinedInvWrapper(armorInvWrapper, handsInvWrapper, maidBauble);
+            ItemStack itemstack = this.getRandomItemWithMendingEnchantments(allItems);
+            if (!itemstack.isEmpty() && itemstack.isDamaged()) {
+                int i = Math.min((int) (entityXPOrb.value * itemstack.getXpRepairRatio()), itemstack.getDamageValue());
+                entityXPOrb.value -= (i / 2);
+                itemstack.setDamageValue(itemstack.getDamageValue() - i);
             }
             if (entityXPOrb.value > 0) {
                 this.setExperience(getExperience() + entityXPOrb.value);
@@ -764,6 +759,10 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     }
 
     public void pickupPowerPoint(EntityPowerPoint powerPoint) {
+        MaidPickupEvent.PowerPointResult event = new MaidPickupEvent.PowerPointResult(this, powerPoint, false);
+        if (NeoForge.EVENT_BUS.post(event).isCanceled()) {
+            return;
+        }
         if (!this.level.isClientSide && powerPoint.isAlive() && powerPoint.throwTime == 0) {
             // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画和音效
             powerPoint.take(this, 1);
@@ -776,7 +775,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             }
 
             // 对经验修补的应用，因为全部来自于原版，所以效果也是相同的
-            ItemStack itemstack = this.getRandomItemWithMendingEnchantments();
+            CombinedInvWrapper allItems = this.getAllInv();
+            ItemStack itemstack = this.getRandomItemWithMendingEnchantments(allItems);
             int xpValue = EntityPowerPoint.transPowerValueToXpValue(powerPoint.getValue());
             if (!itemstack.isEmpty() && itemstack.isDamaged()) {
                 int i = Math.min((int) (xpValue * itemstack.getXpRepairRatio()), itemstack.getDamageValue());
@@ -790,22 +790,24 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         }
     }
 
-    private ItemStack getRandomItemWithMendingEnchantments() {
-        List<ItemStack> stacks = Lists.newArrayList();
+    private ItemStack getRandomItemWithMendingEnchantments(IItemHandler handler) {
         RegistryAccess access = this.level.registryAccess();
-        IItemHandler itemHandler = this.getCapability(Capabilities.ItemHandler.ENTITY, null);
-        if (itemHandler != null) {
-            for (int i = 0; i < itemHandler.getSlots(); i++) {
-                ItemStack itemstack = itemHandler.getStackInSlot(i);
-                if (!itemstack.isEmpty() && getEnchantmentLevel(access, Enchantments.MENDING, itemstack) > 0 && itemstack.isDamaged()) {
-                    stacks.add(itemstack);
-                }
+        List<ItemStack> stacks = Lists.newArrayList();
+        for (int i = 0; i < handler.getSlots(); i++) {
+            ItemStack stackInSlot = handler.getStackInSlot(i);
+            if (!stackInSlot.isEmpty() && getEnchantmentLevel(access, Enchantments.MENDING, stackInSlot) > 0
+                && stackInSlot.isDamaged() && !stackInSlot.is(TagItem.MAID_MENDING_BLOCKLIST_ITEM)) {
+                stacks.add(stackInSlot);
             }
         }
         return stacks.isEmpty() ? ItemStack.EMPTY : stacks.get(this.getRandom().nextInt(stacks.size()));
     }
 
     public boolean pickupArrow(AbstractArrow arrow, boolean simulate) {
+        MaidPickupEvent.ArrowResult event = new MaidPickupEvent.ArrowResult(this, arrow, simulate);
+        if (NeoForge.EVENT_BUS.post(event).isCanceled()) {
+            return event.isCanPickup();
+        }
         if (!this.level.isClientSide && arrow.isAlive() && arrow.shakeTime <= 0) {
             // 先判断箭是否处于可以拾起的状态
             if (arrow.pickup != AbstractArrow.Pickup.ALLOWED) {
@@ -839,7 +841,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     @SuppressWarnings("ReferenceToMixin")
     private ItemStack getArrowFromEntity(AbstractArrow entity) {
-        if (entity instanceof MixinArrowEntity mixinArrow) {
+        if (entity instanceof ArrowAccessor mixinArrow) {
             if (mixinArrow.tlmInGround() || entity.isNoPhysics()) {
                 return mixinArrow.getTlmPickupItem();
             }
@@ -1097,7 +1099,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     @Override
     public boolean canAttackType(EntityType<?> typeIn) {
-        return typeIn != EntityType.ARMOR_STAND && super.canAttackType(typeIn);
+        return typeIn != EntityType.ARMOR_STAND;
     }
 
     @Override
@@ -1125,7 +1127,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     }
 
     private void spawnPortalParticle() {
-        if (this.level.isClientSide && this.getIsInvulnerable() && this.getOwner() != null) {
+        if (this.level.isClientSide && this.getIsInvulnerable() && MiscConfig.INVULNERABLE_PARTICLE_EFFECT.get() && this.getOwner() != null) {
             this.level.addParticle(ParticleTypes.PORTAL,
                     this.getX() + (this.random.nextDouble() - 0.5D) * (double) this.getBbWidth(),
                     this.getY() + this.random.nextDouble() * (double) this.getBbHeight() - 0.25D,
@@ -1243,7 +1245,6 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         this.configManager.addAdditionalSaveData(compound);
         this.gameRecordManager.addAdditionalSaveData(compound);
         this.favorabilityManager.addAdditionalSaveData(compound);
-        this.scriptBookManager.addAdditionalSaveData(compound);
         this.schedulePos.save(compound);
         if (this.backpackData != null) {
             CompoundTag tag = new CompoundTag();
@@ -1359,7 +1360,6 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         this.configManager.readAdditionalSaveData(compound);
         this.gameRecordManager.readAdditionalSaveData(compound);
         this.favorabilityManager.readAdditionalSaveData(compound);
-        this.scriptBookManager.readAdditionalSaveData(compound);
         this.schedulePos.load(compound, this);
         this.setBackpackShowItem(maidInv.getStackInSlot(MaidBackpackHandler.BACKPACK_ITEM_SLOT));
         this.killRecordManager.readAdditionalSaveData(compound);
@@ -1371,9 +1371,20 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     }
 
     public boolean openMaidGui(Player player, int tabIndex) {
-        if (player instanceof ServerPlayer && !this.isSleeping()) {
+        if (player instanceof ServerPlayer serverPlayer && !this.isSleeping()) {
             this.navigation.stop();
-            player.openMenu(getGuiProvider(tabIndex), (buffer) -> buffer.writeInt(getId()));
+            MenuProvider guiProvider = getGuiProvider(tabIndex);
+            int id = getId();
+            if (tabIndex == TabIndex.MAID_AI_CHAT_CONFIG) {
+                CompoundTag configData = this.getAiChatManager().writeToTag(new CompoundTag());
+                serverPlayer.openMenu(guiProvider, buffer -> {
+                    buffer.writeInt(id);
+                    buffer.writeNbt(configData);
+                    ClientAvailableSitesSync.writeToNetwork(buffer);
+                });
+            } else {
+                serverPlayer.openMenu(guiProvider, buffer -> buffer.writeInt(id));
+            }
         }
         return true;
     }
@@ -1382,6 +1393,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         return switch (tabIndex) {
             case TabIndex.TASK_CONFIG -> task.getTaskConfigGuiProvider(this);
             case TabIndex.MAID_CONFIG -> MaidConfigContainer.create(getId());
+            case TabIndex.MAID_AI_CHAT_CONFIG -> MaidAIChatConfigContainer.create(this);
             default -> this.getMaidBackpackType().getGuiProvider(getId());
         };
     }
@@ -1403,6 +1415,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
             // 女仆物品栏
             CombinedInvWrapper invWrapper = new CombinedInvWrapper(armorInvWrapper, handsInvWrapper, maidInv, maidBauble, hideInv, taskInv);
+            // 需要考虑消失诅咒附魔
+            destroyVanishingCursedItems(invWrapper);
             for (int i = 0; i < invWrapper.getSlots(); i++) {
                 int size = invWrapper.getSlotLimit(i);
                 tombstone.insertItem(invWrapper.extractItem(i, size, false));
@@ -1423,6 +1437,18 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             // 记录墓碑已经生成，避免重复生成
             alreadyDropped = true;
             level.addFreshEntity(tombstone);
+        }
+    }
+
+    private void destroyVanishingCursedItems(CombinedInvWrapper invWrapper) {
+        if (this.level.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) {
+            return;
+        }
+        for (int i = 0; i < invWrapper.getSlots(); ++i) {
+            ItemStack stack = invWrapper.getStackInSlot(i);
+            if (!stack.isEmpty() && EnchantmentHelper.has(stack, EnchantmentEffectComponents.PREVENT_EQUIPMENT_DROP) && !stack.is(TagItem.MAID_VANISHING_BLOCKLIST_ITEM)) {
+                invWrapper.setStackInSlot(i, ItemStack.EMPTY);
+            }
         }
     }
 
@@ -1915,26 +1941,6 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         return !this.isMaidInSittingPose() && !this.isPassenger() && !this.isSleeping() && !this.isLeashed();
     }
 
-    public MaidChatBubbles getChatBubble() {
-        return this.entityData.get(CHAT_BUBBLE);
-    }
-
-    public void setChatBubble(MaidChatBubbles bubbles) {
-        this.entityData.set(CHAT_BUBBLE, bubbles);
-    }
-
-    public void addChatBubble(long endTime, ChatText text) {
-        ChatBubbleManger.addChatBubble(endTime, text, this);
-    }
-
-    public int getChatBubbleCount() {
-        return ChatBubbleManger.getChatBubbleCount(this);
-    }
-
-    public MaidScriptBookManager getScriptBookManager() {
-        return scriptBookManager;
-    }
-
     public boolean isPickup() {
         return this.configManager.isPickup();
     }
@@ -2274,6 +2280,25 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         return getConfigIngredient(MaidConfig.MAID_TEMPTATION_ITEM.get(), Items.CAKE);
     }
 
+    @SuppressWarnings("all")
+    public static Ingredient getNtrItem() {
+        return Ingredient.of(InitItems.OWNER_CONVERSION_TOOL.get());
+    }
+
+    private static Ingredient getConfigIngredient(String config, Item defaultItem) {
+        if (config.startsWith(MaidConfig.TAG_PREFIX)) {
+            ResourceLocation key = ResourceLocation.parse(config.substring(1));
+            TagKey<Item> tagKey = TagKey.create(BuiltInRegistries.ITEM.key(), key);
+            return Ingredient.of(tagKey);
+        } else {
+            ResourceLocation key = ResourceLocation.parse(config);
+            if (BuiltInRegistries.ITEM.containsKey(key)) {
+                return Ingredient.of(BuiltInRegistries.ITEM.get(key));
+            }
+        }
+        return Ingredient.of(defaultItem);
+    }
+
     @Override
     public EntityMaid asStrictMaid() {
         return this;
@@ -2537,5 +2562,9 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     private int randomIntInclusive(RandomSource random, int min, int max) {
         return random.nextInt(max - min + 1) + min;
+    }
+
+    public ChatBubbleManager getChatBubbleManager() {
+        return chatBubbleManager;
     }
 }

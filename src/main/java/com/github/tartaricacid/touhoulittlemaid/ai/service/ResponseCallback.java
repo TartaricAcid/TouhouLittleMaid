@@ -1,16 +1,28 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.service;
 
+import javax.annotation.Nullable;
 import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.function.Consumer;
 
+/**
+ * 响应回调接口
+ * 用于处理异步请求的响应
+ *
+ * @param <T> 响应数据类型
+ */
 public interface ResponseCallback<T> {
-    void onFailure(HttpRequest request, Throwable e);
+    /**
+     * 请求失败时调用
+     *
+     * @param request   请求对象
+     * @param throwable 异常信息
+     * @param errorCode 错误代码
+     */
+    void onFailure(@Nullable HttpRequest request, Throwable throwable, int errorCode);
 
-    void onResponse(HttpResponse<T> response, Consumer<Throwable> failConsumer);
-
-    default boolean isSuccessful(HttpResponse<T> response) {
-        int statusCode = response.statusCode();
-        return 200 <= statusCode && statusCode < 300;
-    }
+    /**
+     * 请求成功时调用
+     *
+     * @param response 响应数据
+     */
+    void onSuccess(T response);
 }

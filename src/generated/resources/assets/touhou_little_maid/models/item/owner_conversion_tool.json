@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "touhou_little_maid:item/owner_conversion_tool"
+  }
+}

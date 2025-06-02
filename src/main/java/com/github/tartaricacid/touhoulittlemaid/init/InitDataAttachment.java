@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.init;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.data.ChatTokensAttachment;
 import com.github.tartaricacid.touhoulittlemaid.data.MaidNumAttachment;
 import com.github.tartaricacid.touhoulittlemaid.data.PowerAttachment;
 import net.neoforged.neoforge.attachment.AttachmentType;
@@ -13,4 +14,5 @@ public class InitDataAttachment {
     public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister.create(NeoForgeRegistries.Keys.ATTACHMENT_TYPES, TouhouLittleMaid.MOD_ID);
     public static final Supplier<AttachmentType<MaidNumAttachment>> MAID_NUM = ATTACHMENT_TYPES.register("maid_num", () -> MaidNumAttachment.TYPE);
     public static final Supplier<AttachmentType<PowerAttachment>> POWER_NUM = ATTACHMENT_TYPES.register("power", () -> PowerAttachment.TYPE);
+    public static final Supplier<AttachmentType<ChatTokensAttachment>> CHAT_TOKENS = ATTACHMENT_TYPES.register("chat_tokens", () -> ChatTokensAttachment.TYPE);
 }

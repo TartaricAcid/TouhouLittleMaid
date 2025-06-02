@@ -1,0 +1,26 @@
+{
+	"pack_name": "{maid_pack.minecraft_15th.name}",
+	"model_list": [
+		{
+			"model_id": "minecraft_15th:alex",
+			"description": ["{model.minecraft_15th.alex.desc}"]
+		},
+		{
+			"model_id": "minecraft_15th:rana",
+			"description": ["{model.minecraft_15th.rana.desc}"]
+		},
+		{
+			"model_id": "minecraft_15th:natalie",
+			"description": ["{model.minecraft_15th.minecraft_movie.desc}", "{model.minecraft_15th.natalie.desc}"]
+		},
+		{
+			"model_id": "minecraft_15th:dawn",
+			"description": ["{model.minecraft_15th.minecraft_movie.desc}", "{model.minecraft_15th.dawn.desc}"]
+		}
+	],
+	"version": "1.0.0",
+	"author": ["CrystalizedSun"],
+	"date": "2024-07-01",
+	"icon": "minecraft_15th:textures/maid_icon.png",
+	"description": ["{maid_pack.minecraft_15th.desc}"]
+}

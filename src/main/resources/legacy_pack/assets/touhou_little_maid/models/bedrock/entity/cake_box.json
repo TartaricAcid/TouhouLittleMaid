@@ -1,0 +1,58 @@
+{
+	"format_version": "1.10.0",
+	"geometry.model": {
+		"texturewidth": 256,
+		"textureheight": 256,
+		"visible_bounds_width": 3,
+		"visible_bounds_height": 3.5,
+		"visible_bounds_offset": [0, 1.25, 0],
+		"bones": [
+			{
+				"name": "bottom",
+				"pivot": [0, 0, 0],
+				"cubes": [
+					{"origin": [-15, 0, -15], "size": [30, 1, 30], "uv": [0, 0]}
+				]
+			},
+			{
+				"name": "x1",
+				"pivot": [0, 0.5, -14.5],
+				"cubes": [
+					{"origin": [-14, 1, -15], "size": [28, 30, 1], "uv": [64, 31]}
+				]
+			},
+			{
+				"name": "x2",
+				"pivot": [0, 0.5, 14.5],
+				"cubes": [
+					{"origin": [-14, 1, 14], "size": [28, 30, 1], "uv": [64, 31]}
+				]
+			},
+			{
+				"name": "z1",
+				"pivot": [14.5, 0.5, 0],
+				"cubes": [
+					{"origin": [14, 1, -15], "size": [1, 30, 30], "uv": [0, 31]}
+				]
+			},
+			{
+				"name": "z2",
+				"pivot": [-14.5, 0.5, 0],
+				"cubes": [
+					{"origin": [-15, 1, -15], "size": [1, 30, 30], "uv": [0, 31]}
+				]
+			},
+			{
+				"name": "top",
+				"pivot": [0, 0, 0],
+				"cubes": [
+					{"origin": [-15, 31, -15], "size": [30, 1, 30], "uv": [0, 0]},
+					{"origin": [-16, 26, -16], "size": [32, 6, 1], "uv": [64, 64]},
+					{"origin": [-16, 26, 15], "size": [32, 6, 1], "uv": [64, 64]},
+					{"origin": [-16, 26, -15], "size": [1, 6, 30], "uv": [32, 61]},
+					{"origin": [15, 26, -15], "size": [1, 6, 30], "uv": [32, 61]}
+				]
+			}
+		]
+	}
+}

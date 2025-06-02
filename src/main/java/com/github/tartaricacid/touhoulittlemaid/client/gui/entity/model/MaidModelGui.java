@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelIn
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MiscConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.network.message.MaidModelPackage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.OpenMaidGuiPackage;
 import com.github.tartaricacid.touhoulittlemaid.network.message.SetMaidSoundIdPackage;
 import com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil;
 import net.minecraft.ChatFormatting;
@@ -162,5 +163,12 @@ public class MaidModelGui extends AbstractModelGui<EntityMaid, MaidModelInfo> {
                 posX + 25,
                 posY + 5,
                 maid);
+    }
+
+    @Override
+    protected void onClickCloseButton() {
+        if (this.entity != null) {
+            PacketDistributor.sendToServer(new OpenMaidGuiPackage(this.entity.getId()));
+        }
     }
 }

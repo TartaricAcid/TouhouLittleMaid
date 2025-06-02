@@ -112,11 +112,6 @@ public class EntityDanmaku extends ThrowableProjectile {
     }
 
     @Override
-    public boolean isInWater() {
-        return super.isInWater();
-    }
-
-    @Override
     public double getGravity() {
         return this.entityData.get(GRAVITY);
     }

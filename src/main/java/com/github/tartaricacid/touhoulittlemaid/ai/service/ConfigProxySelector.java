@@ -15,7 +15,7 @@ public class ConfigProxySelector extends ProxySelector {
 
     private final ModConfigSpec.ConfigValue<String> config;
 
-    ConfigProxySelector(ModConfigSpec.ConfigValue<String> config) {
+    public ConfigProxySelector(ModConfigSpec.ConfigValue<String> config) {
         this.config = config;
     }
 

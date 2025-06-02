@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.resource;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.event.client.DefaultGeckoAnimationEvent;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.condition.ConditionManager;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.Animation;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.molang.MolangParser;
@@ -19,6 +20,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.ChainedJsonException;
 import net.minecraft.util.GsonHelper;
+import net.neoforged.neoforge.common.NeoForge;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -122,5 +124,6 @@ public class GeckoModelLoader {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        NeoForge.EVENT_BUS.post(new DefaultGeckoAnimationEvent(DEFAULT_MAID_ANIMATION_FILE, DEFAULT_TAC_ANIMATION_FILE, DEFAULT_CHAIR_ANIMATION_FILE));
     }
 }

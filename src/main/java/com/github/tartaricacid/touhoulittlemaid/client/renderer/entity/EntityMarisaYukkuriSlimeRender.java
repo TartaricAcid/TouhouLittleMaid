@@ -1,7 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.client.model.EntityMarisaYukkuriModel;
+import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.SimpleBedrockModel;
+import com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.VanillaConfig;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -13,12 +14,16 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.monster.MagmaCube;
 
-public class EntityMarisaYukkuriSlimeRender extends MobRenderer<MagmaCube, EntityMarisaYukkuriModel> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/marisa_yukkuri.png");
+import java.util.Objects;
+
+import static com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader.MARISA_YUKKURI;
+
+public class EntityMarisaYukkuriSlimeRender extends MobRenderer<MagmaCube, SimpleBedrockModel<MagmaCube>> {
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/bedrock/entity/marisa_yukkuri.png");
     private final MagmaCubeRenderer vanillaRender;
 
     public EntityMarisaYukkuriSlimeRender(EntityRendererProvider.Context context) {
-        super(context, new EntityMarisaYukkuriModel(context.bakeLayer(EntityMarisaYukkuriModel.LAYER)), 0.25F);
+        super(context, Objects.requireNonNull(BedrockModelLoader.getModel(MARISA_YUKKURI)), 0.25F);
         this.vanillaRender = new MagmaCubeRenderer(context);
     }
 

@@ -1,40 +1,23 @@
 package com.github.tartaricacid.touhoulittlemaid.client.model;
 
 import com.github.tartaricacid.simplebedrockmodel.client.bedrock.model.BedrockPart;
-import com.github.tartaricacid.simplebedrockmodel.client.bedrock.pojo.BedrockModelPOJO;
-import com.github.tartaricacid.simplebedrockmodel.client.bedrock.pojo.BedrockVersion;
-import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
-import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
+import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.SimpleBedrockModel;
+import com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Entity;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 public class WChessPiecesModel {
-    private static final ResourceLocation MODEL = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "models/entity/wchess_pieces.json");
-    private static BedrockModel<LivingEntity> bedrockModel;
     private final BedrockPart main;
 
     public WChessPiecesModel(String name) {
-        this.main = bedrockModel.getModelMap().get(name);
+        SimpleBedrockModel<Entity> model = BedrockModelLoader.getModel(BedrockModelLoader.WCHESS_PIECES);
+        this.main = Objects.requireNonNull(model).getPart(name);
     }
 
     public static WChessPiecesModel[] initModel() {
-        Minecraft.getInstance().getResourceManager().getResource(MODEL).ifPresent(res -> {
-            try (InputStream stream = res.open()) {
-                BedrockModelPOJO pojo = CustomPackLoader.GSON.fromJson(new InputStreamReader(stream, StandardCharsets.UTF_8), BedrockModelPOJO.class);
-                bedrockModel = new BedrockModel<>(pojo, BedrockVersion.NEW);
-            } catch (IOException ignore) {
-            }
-        });
-
         WChessPiecesModel[] models = new WChessPiecesModel[23];
 
         models[8] = new WChessPiecesModel("KING_W");
@@ -58,11 +41,11 @@ public class WChessPiecesModel {
         return new WChessPiecesModel("SELECT");
     }
 
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay) {
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         poseStack.pushPose();
         poseStack.scale(0.9f, 0.9f, 0.9f);
         poseStack.translate(0, 0.175, 0);
-        main.render(poseStack, vertexConsumer, packedLight, packedOverlay);
+        main.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
         poseStack.popPose();
     }
 }

@@ -118,8 +118,8 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
         }
 
         // 关闭当前界面的按键
-        this.addRenderableWidget(new TouhouImageButton(startX + 122, startY - 97, 21, 17, 58, 201, 18, BG,
-                (b) -> getMinecraft().submit(() -> getMinecraft().setScreen(null))));
+        this.addRenderableWidget(new TouhouImageButton(startX + 122, startY - 97, 21, 17,
+                58, 201, 18, BG, b -> this.onClickCloseButton()));
 
         // 添加切换页面的按钮
         addPageButton(startX, startY);
@@ -529,5 +529,9 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
     @Override
     public boolean isPauseScreen() {
         return false;
+    }
+
+    protected void onClickCloseButton() {
+        this.onClose();
     }
 }

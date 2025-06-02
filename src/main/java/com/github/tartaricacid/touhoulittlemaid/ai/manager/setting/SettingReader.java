@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.ai.manager.setting;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.google.common.collect.Maps;
+import net.neoforged.fml.loading.FMLPaths;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -14,7 +15,7 @@ import java.util.zip.ZipFile;
 
 public class SettingReader {
     private static final String SETTING_FOLDER_NAME = "settings";
-    private static final Path SETTINGS_FOLDER = Paths.get("config", TouhouLittleMaid.MOD_ID, SETTING_FOLDER_NAME);
+    private static final Path SETTINGS_FOLDER = FMLPaths.CONFIGDIR.get().resolve(TouhouLittleMaid.MOD_ID).resolve(SETTING_FOLDER_NAME);
     private static final Map<String, CharacterSetting> SETTINGS = Maps.newHashMap();
     private static final String YAML = ".yml";
 
@@ -47,7 +48,7 @@ public class SettingReader {
             // 模型包里只能读一层
             readConfigSetting(folder, 1);
         } catch (IOException e) {
-            TouhouLittleMaid.LOGGER.error("Failed to read settings from " + folder, e);
+            TouhouLittleMaid.LOGGER.error("Failed to read settings from {}", folder, e);
         }
     }
 
@@ -62,7 +63,7 @@ public class SettingReader {
                 try (InputStream inputStream = zipFile.getInputStream(entry)) {
                     CharacterSetting setting = new CharacterSetting(inputStream);
                     setting.getModelId().forEach(id -> SETTINGS.put(id, setting));
-                } catch (IOException e) {
+                } catch (Exception e) {
                     TouhouLittleMaid.LOGGER.error("Failed to read settings from {}", entryName, e);
                 }
             }
@@ -72,11 +73,16 @@ public class SettingReader {
     private static void readConfigSetting(Path settingFolder, int maxDepth) throws IOException {
         Files.walkFileTree(settingFolder, EnumSet.noneOf(FileVisitOption.class), maxDepth, new SimpleFileVisitor<>() {
             @Override
-            public FileVisitResult visitFile(@NotNull Path file, BasicFileAttributes attributes) throws IOException {
+            @NotNull
+            public FileVisitResult visitFile(@NotNull Path file, @NotNull BasicFileAttributes attributes) throws IOException {
                 String fileName = file.getFileName().toString();
                 if (fileName.endsWith(YAML)) {
-                    CharacterSetting setting = new CharacterSetting(file.toFile());
-                    setting.getModelId().forEach(id -> SETTINGS.put(id, setting));
+                    try {
+                        CharacterSetting setting = new CharacterSetting(file.toFile());
+                        setting.getModelId().forEach(id -> SETTINGS.put(id, setting));
+                    } catch (Exception e) {
+                        TouhouLittleMaid.LOGGER.error("Failed to read settings from {}", file, e);
+                    }
                 }
                 return super.visitFile(file, attributes);
             }
@@ -89,5 +95,9 @@ public class SettingReader {
 
     public static Set<String> getAllSettingKeys() {
         return SETTINGS.keySet();
+    }
+
+    public static Path getSettingsFolder() {
+        return SETTINGS_FOLDER;
     }
 }

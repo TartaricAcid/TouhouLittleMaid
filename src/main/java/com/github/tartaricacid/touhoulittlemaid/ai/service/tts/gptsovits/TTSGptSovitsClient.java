@@ -1,9 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.service.tts.gptsovits;
 
-import com.github.tartaricacid.touhoulittlemaid.ai.service.Service;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.ResponseCallback;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSClient;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.gptsovits.request.TTSGptSovitsRequest;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.gptsovits.response.TTSGptSovitsCallback;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSConfig;
 import com.google.common.net.HttpHeaders;
 import com.google.common.net.MediaType;
 
@@ -12,58 +11,39 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
-import java.util.function.Consumer;
 
-public class TTSGptSovitsClient implements TTSClient<TTSGptSovitsRequest> {
+public class TTSGptSovitsClient implements TTSClient {
+    private static final Duration MAX_TIMEOUT = Duration.ofSeconds(20);
+
     private final HttpClient httpClient;
-    private String baseUrl = "";
-    private String apiKey = "";
-    private TTSGptSovitsRequest request;
+    private final TTSGptSovitsSite site;
 
-    public static TTSGptSovitsClient create(final HttpClient httpClient) {
-        return new TTSGptSovitsClient(httpClient);
-    }
-
-    private TTSGptSovitsClient(HttpClient httpClient) {
+    public TTSGptSovitsClient(HttpClient httpClient, TTSGptSovitsSite site) {
         this.httpClient = httpClient;
+        this.site = site;
     }
 
-    public TTSGptSovitsClient baseUrl(final String baseUrl) {
-        if (baseUrl.endsWith("/")) {
-            this.baseUrl = baseUrl.substring(0, baseUrl.length() - 1);
-        } else {
-            this.baseUrl = baseUrl;
-        }
-        return this;
-    }
+    @Override
+    public void play(String message, TTSConfig config, ResponseCallback<byte[]> callback) {
+        URI uri = URI.create(this.site.url());
+        TTSGptSovitsRequest request = TTSGptSovitsRequest.create()
+                .setText(message)
+                .setTextLang(config.language())
+                .setRefAudioPath(this.site.refAudioPath())
+                .setPromptText(this.site.promptText())
+                .setPromptLang(this.site.promptLang())
+                .setAuxRefAudioPaths(this.site.auxRefAudioPaths())
+                .setTextSplitMethod(this.site.textSplitMethod());
 
-    public TTSGptSovitsClient apiKey(final String apiKey) {
-        this.apiKey = apiKey;
-        return this;
-    }
-
-    public TTSGptSovitsClient request(TTSGptSovitsRequest request) {
-        this.request = request;
-        return this;
-    }
-
-    public void handle(Consumer<byte[]> consumer, Consumer<Throwable> failConsumer) {
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.JSON_UTF_8.toString())
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + this.apiKey)
-                .POST(HttpRequest.BodyPublishers.ofString(Service.GSON.toJson(request)))
-                .timeout(Duration.ofSeconds(20))
-                .uri(URI.create(baseUrl))
-                .build();
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + this.site.secretKey())
+                .POST(HttpRequest.BodyPublishers.ofString(GSON.toJson(request)))
+                .timeout(MAX_TIMEOUT)
+                .uri(uri).build();
+
         httpClient.sendAsync(httpRequest, HttpResponse.BodyHandlers.ofByteArray())
-                .whenComplete((response, throwable) -> {
-                    TTSGptSovitsCallback callback = new TTSGptSovitsCallback(consumer);
-                    if (throwable != null) {
-                        callback.onFailure(httpRequest, throwable);
-                        failConsumer.accept(throwable);
-                    } else {
-                        callback.onResponse(response, failConsumer);
-                    }
-                });
+                .whenComplete((response, throwable) ->
+                        handleResponse(callback, response, throwable, httpRequest));
     }
 }

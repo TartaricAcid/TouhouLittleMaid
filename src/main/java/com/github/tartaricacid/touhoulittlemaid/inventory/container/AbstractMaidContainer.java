@@ -46,6 +46,9 @@ public abstract class AbstractMaidContainer extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player playerIn) {
+        if (this.maid == null) {
+            return false;
+        }
         return maid.isOwnedBy(playerIn) && !maid.isSleeping() && maid.isAlive() && maid.distanceTo(playerIn) < 5.0F;
     }
 }

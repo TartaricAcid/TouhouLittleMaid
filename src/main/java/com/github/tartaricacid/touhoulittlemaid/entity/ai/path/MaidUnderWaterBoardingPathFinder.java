@@ -2,12 +2,11 @@ package com.github.tartaricacid.touhoulittlemaid.entity.ai.path;
 
 import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.NodeEvaluator;
-import net.minecraft.world.level.pathfinder.PathFinder;
 import net.minecraft.world.level.pathfinder.Target;
 
 import java.util.Set;
 
-public class MaidUnderWaterBoardingPathFinder extends PathFinder {
+public class MaidUnderWaterBoardingPathFinder extends MaidWrappedPathFinder {
     public MaidUnderWaterBoardingPathFinder(NodeEvaluator pNodeEvaluator, int pMaxVisitedNodes) {
         super(pNodeEvaluator, pMaxVisitedNodes);
     }

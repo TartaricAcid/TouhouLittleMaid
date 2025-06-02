@@ -111,6 +111,10 @@ public class TaskCrossBowAttack implements IRangedAttackTask {
         return Lists.newArrayList(Pair.of("has_crossbow", this::hasCrossBow), Pair.of("has_ammunition", this::hasAmmunition));
     }
 
+    @Override
+    public boolean isWeapon(EntityMaid maid, ItemStack stack) {
+        return stack.getItem() instanceof CrossbowItem;
+    }
 
     private boolean hasCrossBow(EntityMaid maid) {
         return maid.getMainHandItem().getItem() instanceof CrossbowItem;

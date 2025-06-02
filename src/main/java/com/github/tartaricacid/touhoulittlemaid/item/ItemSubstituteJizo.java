@@ -8,6 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -20,7 +21,7 @@ import java.util.List;
 @EventBusSubscriber
 public class ItemSubstituteJizo extends Item {
     public ItemSubstituteJizo() {
-        super((new Properties()).stacksTo(1));
+        super((new Properties()).stacksTo(1).rarity(Rarity.EPIC));
     }
 
     @SubscribeEvent

@@ -2,7 +2,8 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.client.render.MaidRenderState;
-import com.github.tartaricacid.touhoulittlemaid.client.model.StatueBaseModel;
+import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.SimpleBedrockModel;
+import com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
@@ -37,22 +38,25 @@ import static com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent.EN
 import static com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil.clearMaidDataResidue;
 
 public class TileEntityItemStackGarageKitRenderer extends BlockEntityWithoutLevelRenderer {
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/statue_base.png");
-    private static StatueBaseModel BASE_MODEL;
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/bedrock/block/statue_base.png");
+    private static SimpleBedrockModel<Entity> BASE_MODEL;
 
     public TileEntityItemStackGarageKitRenderer(BlockEntityRenderDispatcher dispatcher, EntityModelSet modelSet) {
         super(dispatcher, modelSet);
-        BASE_MODEL = new StatueBaseModel(modelSet.bakeLayer(StatueBaseModel.LAYER));
+        BASE_MODEL = BedrockModelLoader.getModel(BedrockModelLoader.STATUE_BASE);
     }
 
     @Override
     public void renderByItem(ItemStack stack, ItemDisplayContext transformType, PoseStack poseStack, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
+        if (BASE_MODEL == null) {
+            return;
+        }
         poseStack.pushPose();
         poseStack.scale(0.5f, 0.5f, 0.5f);
-        poseStack.translate(1, 0.5, 1);
+        poseStack.translate(1, 1.5, 1);
         poseStack.mulPose(Axis.ZN.rotationDegrees(180));
         VertexConsumer buffer = bufferIn.getBuffer(RenderType.entityCutoutNoCull(TEXTURE));
-        BASE_MODEL.renderToBuffer(poseStack, buffer, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
+        BASE_MODEL.renderToBuffer(poseStack, buffer, combinedLightIn, combinedOverlayIn);
         poseStack.popPose();
 
         CustomData data = ItemGarageKit.getMaidData(stack);

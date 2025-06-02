@@ -1,0 +1,98 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.unknown",
+				"texture_width": 128,
+				"texture_height": 64,
+				"visible_bounds_width": 5,
+				"visible_bounds_height": 3,
+				"visible_bounds_offset": [0, 0.5, 0]
+			},
+			"bones": [
+				{
+					"name": "body",
+					"pivot": [0, 17, -10],
+					"rotation": [90, 0, 0],
+					"cubes": [
+						{"origin": [-9.5, -6, -20], "size": [19, 20, 6], "uv": [7, 37]},
+						{"origin": [-8.5, -5, -19], "size": [17, 18, 6], "uv": [10, 39]},
+						{"origin": [-5.5, -4, -23], "size": [11, 18, 3], "uv": [31, 1]}
+					]
+				},
+				{
+					"name": "eggbelly",
+					"parent": "body",
+					"pivot": [0, 17, -10],
+					"cubes": [
+						{"origin": [-4.5, -4, -24], "size": [9, 18, 1], "uv": [70, 33]}
+					]
+				},
+				{
+					"name": "tail",
+					"pivot": [0.5, 5, 11],
+					"cubes": [
+						{"origin": [-5.96585, 4.91974, 9.06469], "size": [11, 0, 18], "pivot": [0, 6, 13], "rotation": [-19.92327, 9.96156, 0.88045], "uv": [88, 13]}
+					]
+				},
+				{
+					"name": "sittingHiddenSkirt",
+					"pivot": [0, 3, 0]
+				},
+				{
+					"name": "head",
+					"parent": "sittingHiddenSkirt",
+					"pivot": [0, 9, -10],
+					"cubes": [
+						{"origin": [-3, 5, -13], "size": [6, 5, 6], "uv": [3, 0]}
+					]
+				},
+				{
+					"name": "bone",
+					"parent": "head",
+					"pivot": [0, 4, 0],
+					"cubes": [
+						{"origin": [-3, 1, -13.1], "size": [6, 5, 0], "pivot": [0, 6, -13], "rotation": [-35, 0, 0], "uv": [116, 59]}
+					]
+				},
+				{
+					"name": "legRight",
+					"parent": "sittingHiddenSkirt",
+					"pivot": [-7, 6, -5],
+					"rotation": [0, 10, 0],
+					"cubes": [
+						{"origin": [-13.03038, 4, -5.6527], "size": [9, 3, 4], "pivot": [-7.03038, 6, -3.6527], "rotation": [0, 0, -90], "uv": [97, 1], "mirror": true}
+					]
+				},
+				{
+					"name": "legLeft2",
+					"parent": "sittingHiddenSkirt",
+					"pivot": [-6, 6, 8],
+					"rotation": [0, 10, 0],
+					"cubes": [
+						{"origin": [-13.01519, 4, 7.17365], "size": [9, 3, 4], "pivot": [-7.01519, 6, 9.17365], "rotation": [0, 0, -90], "uv": [97, 1], "mirror": true}
+					]
+				},
+				{
+					"name": "legLeft",
+					"parent": "sittingHiddenSkirt",
+					"pivot": [6, 5, -4],
+					"rotation": [0, -10, 0],
+					"cubes": [
+						{"origin": [2.95442, 5, -5.52094], "size": [9, 3, 4], "pivot": [5.95442, 6, -3.52094], "rotation": [0, 0, 90], "uv": [97, 1]}
+					]
+				},
+				{
+					"name": "legRight2",
+					"parent": "sittingHiddenSkirt",
+					"pivot": [8, 6, 8],
+					"rotation": [0, -10, 0],
+					"cubes": [
+						{"origin": [2.98481, 3, 6.82635], "size": [9, 3, 4], "pivot": [6.98481, 5, 9.82635], "rotation": [0, 0, 90], "uv": [97, 1]}
+					]
+				}
+			]
+		}
+	]
+}

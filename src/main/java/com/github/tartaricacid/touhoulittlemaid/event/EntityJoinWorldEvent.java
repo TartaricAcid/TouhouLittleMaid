@@ -16,6 +16,8 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
+import java.util.List;
+
 import static com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment.POWER_NUM;
 
 @EventBusSubscriber
@@ -30,9 +32,12 @@ public class EntityJoinWorldEvent {
     @SubscribeEvent
     public static void onAnimalJoinWorld(EntityJoinLevelEvent event) {
         if (event.getEntity() instanceof Animal animal) {
-            animal.goalSelector.getAvailableGoals().stream().filter(goal -> goal.getGoal() instanceof TemptGoal).findFirst().ifPresent(g -> {
+            // 先复制一遍进行遍历，避免出现 ConcurrentModificationException
+            var goals = List.copyOf(animal.goalSelector.getAvailableGoals());
+            goals.stream().filter(goal -> goal.getGoal() instanceof TemptGoal).findFirst().ifPresent(g -> {
                 if (g.getGoal() instanceof TemptGoal temptGoal) {
-                    animal.goalSelector.addGoal(g.getPriority(), new MaidTemptGoal(temptGoal.mob, temptGoal.speedModifier, temptGoal.items, temptGoal.canScare));
+                    MaidTemptGoal maidTemptGoal = new MaidTemptGoal(temptGoal.mob, temptGoal.speedModifier, temptGoal.items, temptGoal.canScare);
+                    animal.goalSelector.addGoal(g.getPriority(), maidTemptGoal);
                 }
             });
         }

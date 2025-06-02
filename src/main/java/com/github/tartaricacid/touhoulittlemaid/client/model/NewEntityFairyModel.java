@@ -1,48 +1,73 @@
 package com.github.tartaricacid.touhoulittlemaid.client.model;
 
 
+import com.github.tartaricacid.simplebedrockmodel.client.bedrock.model.BedrockPart;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.SimpleBedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityFairy;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-public class NewEntityFairyModel extends EntityModel<EntityFairy> {
-    public static ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "main"), "new_fairy");
-    private final ModelPart head;
-    private final ModelPart blink;
-    private final ModelPart armLeft;
-    private final ModelPart body;
-    private final ModelPart skirt;
-    private final ModelPart apron2;
-    private final ModelPart legLeft;
-    private final ModelPart legRight;
-    private final ModelPart wingLeft;
-    private final ModelPart wingRight;
-    private final ModelPart armRight;
+import java.io.InputStream;
 
-    public NewEntityFairyModel(ModelPart root) {
-        super(RenderType::entityTranslucent);
-        this.head = root.getChild("head");
-        this.blink = this.head.getChild("blink");
-        this.armLeft = root.getChild("armLeft");
-        this.body = root.getChild("body");
-        this.skirt = this.body.getChild("skirt");
-        this.apron2 = this.skirt.getChild("apron2");
-        this.legLeft = root.getChild("legLeft");
-        this.legRight = root.getChild("legRight");
-        this.wingLeft = root.getChild("wingLeft");
-        this.wingRight = root.getChild("wingRight");
-        this.armRight = root.getChild("armRight");
+public class NewEntityFairyModel extends SimpleBedrockModel<EntityFairy> {
+    // 为了别的模组兼容，暂时保留
+    @Deprecated
+    public static ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "main"), "new_fairy");
+
+    private final BedrockPart head;
+    private final BedrockPart blink;
+    private final BedrockPart armLeft;
+    private final BedrockPart legLeft;
+    private final BedrockPart legRight;
+    private final BedrockPart wingLeft;
+    private final BedrockPart wingRight;
+    private final BedrockPart armRight;
+
+    public NewEntityFairyModel(InputStream stream) {
+        super(stream);
+        this.head = this.getPart("head");
+        this.blink = this.getPart("blink");
+        this.armLeft = this.getPart("armLeft");
+        this.legLeft = this.getPart("legLeft");
+        this.legRight = this.getPart("legRight");
+        this.wingLeft = this.getPart("wingLeft");
+        this.wingRight = this.getPart("wingRight");
+        this.armRight = this.getPart("armRight");
     }
 
+    @Override
+    public void setupAnim(EntityFairy entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        head.xRot = headPitch * 0.017453292F;
+        head.yRot = netHeadYaw * 0.017453292F;
+        armLeft.zRot = Mth.cos(ageInTicks * 0.05f) * 0.05f - 0.4f;
+        armRight.zRot = -Mth.cos(ageInTicks * 0.05f) * 0.05f + 0.4f;
+        if (entityIn.onGround()) {
+            legLeft.xRot = Mth.cos(limbSwing * 0.67f) * 0.3f * limbSwingAmount;
+            legRight.xRot = -Mth.cos(limbSwing * 0.67f) * 0.3f * limbSwingAmount;
+            armLeft.xRot = -Mth.cos(limbSwing * 0.67f) * 0.7F * limbSwingAmount;
+            armRight.xRot = Mth.cos(limbSwing * 0.67f) * 0.7F * limbSwingAmount;
+            wingLeft.yRot = -Mth.cos(ageInTicks * 0.3f) * 0.2f + 1.0f;
+            wingRight.yRot = Mth.cos(ageInTicks * 0.3f) * 0.2f - 1.0f;
+        } else {
+            legLeft.xRot = 0f;
+            legRight.xRot = 0f;
+            armLeft.xRot = -0.17453292F;
+            armRight.xRot = -0.17453292F;
+            head.xRot = head.xRot - 8 * 0.017453292F;
+            wingLeft.yRot = -Mth.cos(ageInTicks * 0.5f) * 0.4f + 1.2f;
+            wingRight.yRot = Mth.cos(ageInTicks * 0.5f) * 0.4f - 1.2f;
+        }
+        float remainder = ageInTicks % 60;
+        // 0-10 显示眨眼贴图
+        blink.visible = (55 < remainder && remainder < 60);
+    }
+
+    // 为了别的模组兼容，暂时保留
+    @Deprecated
     public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
@@ -178,44 +203,5 @@ public class NewEntityFairyModel extends EntityModel<EntityFairy> {
                 .texOffs(24, 33).addBox(-2.2887F, -1.0469F, -1.5F, 3.0F, 4.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-2.5341F, 7.7588F, 0.0F, 0.0F, 0.0F, 0.2618F));
 
         return LayerDefinition.create(meshdefinition, 128, 128);
-    }
-
-    @Override
-    public void setupAnim(EntityFairy entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        head.xRot = headPitch * 0.017453292F;
-        head.yRot = netHeadYaw * 0.017453292F;
-        armLeft.zRot = Mth.cos(ageInTicks * 0.05f) * 0.05f - 0.4f;
-        armRight.zRot = -Mth.cos(ageInTicks * 0.05f) * 0.05f + 0.4f;
-        if (entityIn.onGround()) {
-            legLeft.xRot = Mth.cos(limbSwing * 0.67f) * 0.3f * limbSwingAmount;
-            legRight.xRot = -Mth.cos(limbSwing * 0.67f) * 0.3f * limbSwingAmount;
-            armLeft.xRot = -Mth.cos(limbSwing * 0.67f) * 0.7F * limbSwingAmount;
-            armRight.xRot = Mth.cos(limbSwing * 0.67f) * 0.7F * limbSwingAmount;
-            wingLeft.yRot = -Mth.cos(ageInTicks * 0.3f) * 0.2f + 1.0f;
-            wingRight.yRot = Mth.cos(ageInTicks * 0.3f) * 0.2f - 1.0f;
-        } else {
-            legLeft.xRot = 0f;
-            legRight.xRot = 0f;
-            armLeft.xRot = -0.17453292F;
-            armRight.xRot = -0.17453292F;
-            head.xRot = head.xRot - 8 * 0.017453292F;
-            wingLeft.yRot = -Mth.cos(ageInTicks * 0.5f) * 0.4f + 1.2f;
-            wingRight.yRot = Mth.cos(ageInTicks * 0.5f) * 0.4f - 1.2f;
-        }
-        float remainder = ageInTicks % 60;
-        // 0-10 显示眨眼贴图
-        blink.visible = (55 < remainder && remainder < 60);
-    }
-
-    @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
-        head.render(poseStack, vertexConsumer, packedLight, packedOverlay);
-        armRight.render(poseStack, vertexConsumer, packedLight, packedOverlay);
-        armLeft.render(poseStack, vertexConsumer, packedLight, packedOverlay);
-        body.render(poseStack, vertexConsumer, packedLight, packedOverlay);
-        legLeft.render(poseStack, vertexConsumer, packedLight, packedOverlay);
-        legRight.render(poseStack, vertexConsumer, packedLight, packedOverlay);
-        wingLeft.render(poseStack, vertexConsumer, packedLight, packedOverlay);
-        wingRight.render(poseStack, vertexConsumer, packedLight, packedOverlay);
     }
 }

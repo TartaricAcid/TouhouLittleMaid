@@ -48,8 +48,7 @@ public class TaskAttack implements IAttackTask {
     @Override
     public List<Pair<Integer, BehaviorControl<? super EntityMaid>>> createBrainTasks(EntityMaid maid) {
         BehaviorControl<EntityMaid> supplementedTask = StartAttacking.create(this::hasAssaultWeapon, IAttackTask::findFirstValidAttackTarget);
-        BehaviorControl<EntityMaid> findTargetTask = StopAttackingIfTargetInvalid.create(
-                (target) -> !hasAssaultWeapon(maid) || farAway(target, maid));
+        BehaviorControl<EntityMaid> findTargetTask = StopAttackingIfTargetInvalid.create(target -> !hasAssaultWeapon(maid) || farAway(target, maid));
         BehaviorControl<Mob> moveToTargetTask = SetWalkTargetFromAttackTargetIfTargetOutOfReach.create(0.6f);
         BehaviorControl<Mob> attackTargetTask = MeleeAttack.create(20);
         MaidUseShieldTask maidUseShieldTask = new MaidUseShieldTask();
@@ -58,6 +57,21 @@ public class TaskAttack implements IAttackTask {
                 Pair.of(5, supplementedTask),
                 Pair.of(5, findTargetTask),
                 Pair.of(5, moveToTargetTask),
+                Pair.of(5, attackTargetTask),
+                Pair.of(5, maidUseShieldTask)
+        );
+    }
+
+    @Override
+    public List<Pair<Integer, BehaviorControl<? super EntityMaid>>> createRideBrainTasks(EntityMaid maid) {
+        BehaviorControl<EntityMaid> supplementedTask = StartAttacking.create(this::hasAssaultWeapon, IAttackTask::findFirstValidAttackTarget);
+        BehaviorControl<EntityMaid> findTargetTask = StopAttackingIfTargetInvalid.create(target -> !hasAssaultWeapon(maid) || farAway(target, maid));
+        BehaviorControl<Mob> attackTargetTask = MeleeAttack.create(20);
+        MaidUseShieldTask maidUseShieldTask = new MaidUseShieldTask();
+
+        return Lists.newArrayList(
+                Pair.of(5, supplementedTask),
+                Pair.of(5, findTargetTask),
                 Pair.of(5, attackTargetTask),
                 Pair.of(5, maidUseShieldTask)
         );
@@ -86,10 +100,15 @@ public class TaskAttack implements IAttackTask {
         return Lists.newArrayList(Pair.of("assault_weapon", this::hasAssaultWeapon), Pair.of("extinguisher", this::hasExtinguisher));
     }
 
-    private boolean hasAssaultWeapon(EntityMaid maid) {
-        return maid.getMainHandItem().getAttributeModifiers().modifiers()
+    @Override
+    public boolean isWeapon(EntityMaid maid, ItemStack stack) {
+        return stack.getAttributeModifiers().modifiers()
                 .stream()
                 .anyMatch(modifier -> modifier.attribute().is(Attributes.ATTACK_DAMAGE));
+    }
+
+    private boolean hasAssaultWeapon(EntityMaid maid) {
+        return isWeapon(maid, maid.getMainHandItem());
     }
 
     private boolean hasExtinguisher(EntityMaid maid) {

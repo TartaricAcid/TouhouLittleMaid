@@ -23,6 +23,7 @@ public final class MiscConfig {
     public static ModConfigSpec.IntValue SCARECROW_RANGE;
     public static ModConfigSpec.BooleanValue USE_NEW_MAID_FAIRY_MODEL;
     public static ModConfigSpec.BooleanValue MODEL_ICON_CACHE;
+    public static ModConfigSpec.BooleanValue INVULNERABLE_PARTICLE_EFFECT;
 
     public static void init(ModConfigSpec.Builder builder) {
         builder.translation(TRANSLATE_KEY).push("misc");
@@ -77,8 +78,13 @@ public final class MiscConfig {
                 .translation(translateKey("use_new_maid_fairy_model"));
         USE_NEW_MAID_FAIRY_MODEL = builder.define("UseNewMaidFairyModel", true);
 
-        builder.comment("Whether to enable model icon caching");
-        MODEL_ICON_CACHE = builder.define("ModelIconCache", true);
+        builder.comment("Whether to enable model icon caching")
+                .translation(translateKey("model_icon_cache"));
+        MODEL_ICON_CACHE = builder.define("EnableModelIconCache", false);
+
+        builder.comment("Does an invulnerable maid have a particle effect?")
+                .translation(translateKey("invulnerable_particle_effect"));
+        INVULNERABLE_PARTICLE_EFFECT = builder.define("InvulnerableParticleEffect", true);
 
         builder.pop();
     }

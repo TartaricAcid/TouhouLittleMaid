@@ -2,7 +2,6 @@ package com.github.tartaricacid.touhoulittlemaid.client.resource.pojo;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.GeckoModelLoader;
-import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManger;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.Expose;
@@ -27,9 +26,6 @@ public class MaidModelInfo implements IModelInfo {
 
     @SerializedName("description")
     private List<String> description;
-
-    @SerializedName("chat_bubble")
-    private ChatBubbleInfo chatBubble = ChatBubbleManger.DEFAULT_CHAT_BUBBLE;
 
     @SerializedName("model")
     private ResourceLocation model;
@@ -100,10 +96,6 @@ public class MaidModelInfo implements IModelInfo {
     @Override
     public List<String> getDescription() {
         return description;
-    }
-
-    public ChatBubbleInfo getChatBubble() {
-        return chatBubble;
     }
 
     @Override
@@ -187,7 +179,6 @@ public class MaidModelInfo implements IModelInfo {
         cloneInfo.cacheIconId = IModelInfo.createCacheIconId(newModelId);
         cloneInfo.name = this.name;
         cloneInfo.description = this.description;
-        cloneInfo.chatBubble = this.chatBubble;
         cloneInfo.model = this.model;
         cloneInfo.useSoundPackId = this.useSoundPackId;
         cloneInfo.renderItemScale = this.renderItemScale;
@@ -263,11 +254,6 @@ public class MaidModelInfo implements IModelInfo {
             }
         }
         renderEntityScale = Mth.clamp(renderEntityScale, RENDER_ENTITY_SCALE_MIN, RENDER_ENTITY_SCALE_MAX);
-        if (chatBubble == null) {
-            chatBubble = ChatBubbleManger.DEFAULT_CHAT_BUBBLE;
-        } else if (chatBubble != ChatBubbleManger.DEFAULT_CHAT_BUBBLE) {
-            chatBubble.decorate();
-        }
         return this;
     }
 

@@ -1,7 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.client.model.AltarModel;
+import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.SimpleBedrockModel;
+import com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityAltar;
 import com.github.tartaricacid.touhoulittlemaid.util.RenderHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -13,16 +14,17 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 
 public class TileEntityAltarRenderer implements BlockEntityRenderer<TileEntityAltar> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/altar.png");
-    private final AltarModel MODEL;
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/bedrock/block/altar.png");
+    private final SimpleBedrockModel<? extends Entity> model;
 
     public TileEntityAltarRenderer(BlockEntityRendererProvider.Context render) {
-        MODEL = new AltarModel(render.bakeLayer(AltarModel.LAYER));
+        this.model = BedrockModelLoader.getModel(BedrockModelLoader.ALTAR);
     }
 
     @Override
@@ -32,14 +34,16 @@ public class TileEntityAltarRenderer implements BlockEntityRenderer<TileEntityAl
             this.setTranslateAndPose(te, poseStack);
             poseStack.mulPose(Axis.ZN.rotationDegrees(180));
             VertexConsumer buffer = bufferIn.getBuffer(RenderType.entityTranslucent(TEXTURE));
-            MODEL.renderToBuffer(poseStack, buffer, combinedLightIn, combinedOverlayIn);
+            model.renderToBuffer(poseStack, buffer, combinedLightIn, combinedOverlayIn);
             poseStack.popPose();
         }
 
         if (te.isCanPlaceItem() && !te.handler.getStackInSlot(0).isEmpty()) {
             ItemStack stack = te.handler.getStackInSlot(0);
             poseStack.pushPose();
-            poseStack.translate(0.5, 1.25, 0.5);
+            double time = (System.currentTimeMillis() + te.getBlockPos().asLong()) % 3600;
+            poseStack.translate(0.5, 1.25 + Math.sin(time / 1800 * Math.PI) * 0.1, 0.5);
+            poseStack.mulPose(Axis.YP.rotationDegrees((float) time / 10));
             Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemDisplayContext.GROUND, combinedLightIn, combinedOverlayIn, poseStack, bufferIn, te.getLevel(), 0);
             poseStack.popPose();
         }

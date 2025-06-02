@@ -2,7 +2,8 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.client.render.MaidRenderState;
-import com.github.tartaricacid.touhoulittlemaid.client.model.StatueBaseModel;
+import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.SimpleBedrockModel;
+import com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGarageKit;
@@ -25,24 +26,25 @@ import net.minecraft.world.level.Level;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
+import static com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader.STATUE_BASE;
 import static com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil.clearMaidDataResidue;
 
 public class TileEntityGarageKitRenderer implements BlockEntityRenderer<TileEntityGarageKit> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/statue_base.png");
-    private final StatueBaseModel BASE_MODEL;
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/bedrock/block/statue_base.png");
+    private final SimpleBedrockModel<Entity> BASE_MODEL;
 
     public TileEntityGarageKitRenderer(BlockEntityRendererProvider.Context context) {
-        BASE_MODEL = new StatueBaseModel(context.bakeLayer(StatueBaseModel.LAYER));
+        BASE_MODEL = BedrockModelLoader.getModel(STATUE_BASE);
     }
 
     @Override
     public void render(TileEntityGarageKit te, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         poseStack.pushPose();
         poseStack.scale(0.5f, 0.5f, 0.5f);
-        poseStack.translate(1, 0.5, 1);
+        poseStack.translate(1, 1.5, 1);
         poseStack.mulPose(Axis.ZN.rotationDegrees(180));
         VertexConsumer buffer = bufferIn.getBuffer(RenderType.entityCutoutNoCull(TEXTURE));
-        BASE_MODEL.renderToBuffer(poseStack, buffer, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
+        BASE_MODEL.renderToBuffer(poseStack, buffer, combinedLightIn, combinedOverlayIn);
         poseStack.popPose();
 
         CompoundTag data = te.getExtraData();

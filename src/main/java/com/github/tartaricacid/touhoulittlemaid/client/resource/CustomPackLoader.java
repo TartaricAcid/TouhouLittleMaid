@@ -13,14 +13,11 @@ import com.github.tartaricacid.touhoulittlemaid.client.renderer.texture.ZipPackT
 import com.github.tartaricacid.touhoulittlemaid.client.resource.models.ChairModels;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.models.MaidModels;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.ChairModelInfo;
-import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.ChatBubbleInfo;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.CustomModelPack;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.client.sound.CustomSoundLoader;
-import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatText;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.file.AnimationFile;
-import com.github.tartaricacid.touhoulittlemaid.util.GetJarResources;
 import com.github.tartaricacid.touhoulittlemaid.util.ZipFileCheck;
 import com.google.common.collect.Sets;
 import com.google.gson.Gson;
@@ -60,14 +57,12 @@ public class CustomPackLoader {
     public static final Gson GSON = new GsonBuilder()
             .registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer())
             .registerTypeAdapter(CubesItem.class, new CubesItem.Deserializer())
-            .registerTypeAdapter(ChatText.class, new ChatText.Serializer())
             .create();
     public static final MaidModels MAID_MODELS = MaidModels.getInstance();
     public static final ChairModels CHAIR_MODELS = ChairModels.getInstance();
     private static final Set<ResourceLocation> TMP_REGISTER_TEXTURE = Sets.newHashSet();
     private static final String CUSTOM_PACK_DIR_NAME = "tlm_custom_pack";
     public static final Path PACK_FOLDER = Paths.get(Minecraft.getInstance().gameDirectory.toURI()).resolve(CUSTOM_PACK_DIR_NAME);
-    private static final String DEFAULT_PACK_NAME = "touhou_little_maid-1.0.0.zip";
     private static final Marker MARKER = MarkerManager.getMarker("CustomPackLoader");
     private static final Pattern DOMAIN = Pattern.compile("^assets/([\\w.]+)/$");
 
@@ -83,34 +78,14 @@ public class CustomPackLoader {
         CacheIconManager.clearCache();
 
         // 读取
-        initPacks();
+        loadPacks(PACK_FOLDER.toFile());
+        LanguageLoader.loadDownloadInfoLanguages();
 
         // 对读取的列表进行排序，把默认模型包排在最前面
         // 其他模型包按照 namespace 字典排序
         MAID_MODELS.sortPackList();
         CHAIR_MODELS.sortPackList();
         CustomSoundLoader.sortSoundPack();
-    }
-
-    private static void initPacks() {
-        File packFolder = PACK_FOLDER.toFile();
-        if (!packFolder.isDirectory()) {
-            try {
-                Files.createDirectories(packFolder.toPath());
-            } catch (IOException e) {
-                e.printStackTrace();
-                return;
-            }
-        }
-        checkDefaultPack();
-        loadPacks(packFolder);
-        LanguageLoader.loadDownloadInfoLanguages();
-    }
-
-    private static void checkDefaultPack() {
-        // 不管存不存在，强行覆盖
-        String jarDefaultPackPath = String.format("/assets/%s/%s/%s", TouhouLittleMaid.MOD_ID, CUSTOM_PACK_DIR_NAME, DEFAULT_PACK_NAME);
-        GetJarResources.copyTouhouLittleMaidFile(jarDefaultPackPath, PACK_FOLDER, DEFAULT_PACK_NAME);
     }
 
     private static void loadPacks(File packFolder) {
@@ -194,7 +169,6 @@ public class CustomPackLoader {
                 registerFilePackTexture(rootPath, pack.getIcon());
             }
             for (MaidModelInfo maidModelItem : pack.getModelList()) {
-                loadChatBubble(rootPath, maidModelItem);
                 if (maidModelItem.isGeckoModel()) {
                     loadGeckoMaidModelElement(rootPath, maidModelItem);
                 } else {
@@ -228,20 +202,6 @@ public class CustomPackLoader {
             // 打印日志
             LOGGER.debug(MARKER, "Loaded model: {}", maidModelItem.getModel());
         }
-    }
-
-    private static void loadChatBubble(Path rootPath, MaidModelInfo maidModelItem) {
-        // 加载聊天气泡背景
-        ChatBubbleInfo chatBubble = maidModelItem.getChatBubble();
-        registerFilePackTexture(rootPath, chatBubble.getBg());
-        // 加载聊聊天气泡图标
-        ChatBubbleInfo.Text text = chatBubble.getText();
-        text.getMain().values().forEach(chatTexts -> chatTexts.stream().filter(ChatText::isIcon)
-                .forEach(chatText -> registerFilePackTexture(rootPath, chatText.getIconPath())));
-        text.getSpecial().values().forEach(chatTexts -> chatTexts.stream().filter(ChatText::isIcon)
-                .forEach(chatText -> registerFilePackTexture(rootPath, chatText.getIconPath())));
-        text.getOther().values().forEach(chatTexts -> chatTexts.stream().filter(ChatText::isIcon)
-                .forEach(chatText -> registerFilePackTexture(rootPath, chatText.getIconPath())));
     }
 
     private static void loadGeckoMaidModelElement(Path rootPath, MaidModelInfo maidModelItem) throws IOException {
@@ -339,7 +299,6 @@ public class CustomPackLoader {
                 registerZipPackTexture(zipFile.getName(), pack.getIcon());
             }
             for (MaidModelInfo maidModelItem : pack.getModelList()) {
-                loadCharBubble(zipFile, maidModelItem);
                 if (maidModelItem.isGeckoModel()) {
                     loadGeckoMaidModelElement(zipFile, maidModelItem);
                 } else {
@@ -373,20 +332,6 @@ public class CustomPackLoader {
             // 打印日志
             LOGGER.debug(MARKER, "Loaded model: {}", maidModelItem.getModel());
         }
-    }
-
-    private static void loadCharBubble(ZipFile zipFile, MaidModelInfo maidModelItem) {
-        // 加载聊天气泡背景
-        ChatBubbleInfo chatBubble = maidModelItem.getChatBubble();
-        registerZipPackTexture(zipFile.getName(), chatBubble.getBg());
-        // 加载聊聊天气泡图标
-        ChatBubbleInfo.Text text = chatBubble.getText();
-        text.getMain().values().forEach(chatTexts -> chatTexts.stream().filter(ChatText::isIcon)
-                .forEach(chatText -> registerZipPackTexture(zipFile.getName(), chatText.getIconPath())));
-        text.getSpecial().values().forEach(chatTexts -> chatTexts.stream().filter(ChatText::isIcon)
-                .forEach(chatText -> registerZipPackTexture(zipFile.getName(), chatText.getIconPath())));
-        text.getOther().values().forEach(chatTexts -> chatTexts.stream().filter(ChatText::isIcon)
-                .forEach(chatText -> registerZipPackTexture(zipFile.getName(), chatText.getIconPath())));
     }
 
     private static void loadGeckoMaidModelElement(ZipFile zipFile, MaidModelInfo maidModelItem) throws IOException {

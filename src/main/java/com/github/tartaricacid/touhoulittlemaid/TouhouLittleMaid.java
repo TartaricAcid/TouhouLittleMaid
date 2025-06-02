@@ -4,7 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.compat.aquaculture.AquacultureCompat;
 import com.github.tartaricacid.touhoulittlemaid.config.GeneralConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.ServerConfig;
-import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManger;
+import com.github.tartaricacid.touhoulittlemaid.entity.info.CommonDefaultPack;
 import com.github.tartaricacid.touhoulittlemaid.init.*;
 import com.github.tartaricacid.touhoulittlemaid.init.registry.CommandRegistry;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
@@ -13,6 +13,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,12 +25,12 @@ public final class TouhouLittleMaid {
     public static final String MOD_ID = "touhou_little_maid";
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
     public static List<ILittleMaid> EXTENSIONS = Lists.newArrayList();
+    public static boolean DEBUG = !FMLEnvironment.production;
 
     public TouhouLittleMaid(IEventBus modEventBus, ModContainer modContainer) {
         initRegister(modEventBus);
-        ChatBubbleManger.initDefaultChat();
         registerConfiguration(modContainer);
-
+        CommonDefaultPack.initCommonDefaultPack();
         AquacultureCompat.init(modEventBus);
     }
 
@@ -55,6 +56,7 @@ public final class TouhouLittleMaid {
         InitDataAttachment.ATTACHMENT_TYPES.register(eventBus);
         InitDataComponent.DATA_COMPONENTS.register(eventBus);
         InitLootCondition.LOOT_CONDITION_TYPES.register(eventBus);
+        InitLootCondition.LOOT_CONDITION_FUNCTIONS.register(eventBus);
 
         eventBus.addListener(NetworkHandler::registerPacket);
         eventBus.addListener(InitCapabilities::registerGenericItemHandlers);

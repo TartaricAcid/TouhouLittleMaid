@@ -1,0 +1,145 @@
+{
+	"pack_name": "{maid_pack.authors_and_credits.name}",
+	"author": ["TartaricAcid"],
+	"description": ["{maid_pack.authors_and_credits.desc}"],
+	"date": "2021-11-10",
+	"icon": "authors_and_credits:textures/maid_icon.png",
+	"version": "1.0.0",
+	"model_list": [
+		{
+			"model_id": "authors_and_credits:wine_fox_maid",
+			"description": ["{model.authors_and_credits.wine_fox_maid.desc}", "{model.authors_and_credits.wine_fox_maid.author.desc}"],
+			"animation": [
+				"touhou_little_maid:animation/maid/default/head/default.js",
+				"touhou_little_maid:animation/maid/default/head/beg.js",
+				"touhou_little_maid:animation/maid/default/head/music_shake.js",
+				"touhou_little_maid:animation/maid/default/arm/default.js",
+				"touhou_little_maid:animation/maid/default/arm/swing.js",
+				"touhou_little_maid:animation/maid/default/leg/default.js",
+				"touhou_little_maid:animation/maid/default/sit/default.js",
+				"touhou_little_maid:animation/maid/default/head/blink.js",
+				"touhou_little_maid:animation/maid/default/tail/default.js",
+				"touhou_little_maid:animation/maid/default/sit/skirt_rotation.js"
+			]
+		},
+		{
+			"model_id": "authors_and_credits:sazuki",
+			"description": ["{model.authors_and_credits.sazuki.desc}", "{model.authors_and_credits.sazuki.author.desc}"],
+			"animation": [
+				"touhou_little_maid:animation/maid/default/head/default.js",
+				"touhou_little_maid:animation/maid/default/head/beg.js",
+				"touhou_little_maid:animation/maid/default/head/music_shake.js",
+				"touhou_little_maid:animation/maid/default/arm/default.js",
+				"touhou_little_maid:animation/maid/default/arm/swing.js",
+				"touhou_little_maid:animation/maid/default/leg/default.js",
+				"touhou_little_maid:animation/maid/default/sit/default.js",
+				"touhou_little_maid:animation/maid/default/head/blink.js",
+				"touhou_little_maid:animation/maid/default/tail/default.js",
+				"touhou_little_maid:animation/maid/default/sit/skirt_rotation.js"
+			],
+			"render_item_scale": 1.1
+		},
+		{
+			"model_id": "authors_and_credits:pajinyi",
+			"description": ["{model.authors_and_credits.pajinyi.desc}"],
+			"can_hold_trolley": false,
+			"show_hata": false,
+			"can_hold_vehicle": false,
+			"can_riding_broom": false,
+			"animation": [
+				"touhou_little_maid:animation/maid/default/head/default.js",
+				"touhou_little_maid:animation/maid/default/head/beg.js",
+				"touhou_little_maid:animation/maid/default/head/music_shake.js",
+				"touhou_little_maid:animation/maid/default/head/blink.js",
+				"touhou_little_maid:animation/maid/default/head/ear_shake.js",
+				"touhou_little_maid:animation/maid/default/tail/default.js",
+				"touhou_little_maid:animation/base/float/default.js",
+				"touhou_little_maid:animation/maid/default/arm/swing.js",
+				"authors_and_credits:animation/arm.js",
+				"authors_and_credits:animation/float.js"
+			],
+			"render_item_scale": 0.9
+		},
+		{
+			"model_id": "authors_and_credits:fledge",
+			"description": ["{model.authors_and_credits.fledge.desc}"],
+			"animation": [
+				"touhou_little_maid:animation/maid/default/head/default.js",
+				"touhou_little_maid:animation/maid/default/head/beg.js",
+				"touhou_little_maid:animation/maid/default/head/music_shake.js",
+				"touhou_little_maid:animation/maid/default/head/blink.js",
+				"touhou_little_maid:animation/maid/default/sit/skirt_rotation.js",
+				"touhou_little_maid:animation/maid/default/arm/default.js",
+				"touhou_little_maid:animation/maid/default/arm/swing.js",
+				"touhou_little_maid:animation/maid/default/leg/default.js",
+				"touhou_little_maid:animation/maid/default/sit/default.js"
+			]
+		},
+		{
+			"model_id": "authors_and_credits:clocklalier",
+			"description": ["{model.authors_and_credits.clocklalier.desc}", "{model.authors_and_credits.clocklalier.author.desc}"],
+			"animation": [
+				"touhou_little_maid:animation/maid/default/head/default.js",
+				"touhou_little_maid:animation/maid/default/head/beg.js",
+				"touhou_little_maid:animation/maid/default/head/music_shake.js",
+				"touhou_little_maid:animation/maid/default/head/blink.js",
+				"touhou_little_maid:animation/maid/default/arm/default.js",
+				"touhou_little_maid:animation/maid/default/arm/swing.js",
+				"touhou_little_maid:animation/maid/default/leg/default.js",
+				"touhou_little_maid:animation/maid/default/sit/skirt_rotation.js",
+				"touhou_little_maid:animation/maid/default/sit/default.js",
+				"touhou_little_maid:animation/maid/default/wing/default.js",
+				"touhou_little_maid:animation/maid/default/tail/default.js"
+			]
+		},
+		{
+			"model_id": "authors_and_credits:cyra",
+			"extra_textures": ["authors_and_credits:textures/entity/cyra2.png"],
+			"description": ["{model.authors_and_credits.cyra.desc}", "{model.authors_and_credits.cyra.author.desc}"],
+			"animation": [
+				"touhou_little_maid:animation/maid/default/head/default.js",
+				"touhou_little_maid:animation/maid/default/head/beg.js",
+				"touhou_little_maid:animation/maid/default/head/music_shake.js",
+				"touhou_little_maid:animation/maid/default/task/farm.js",
+				"touhou_little_maid:animation/maid/default/task/extinguishing.js",
+				"touhou_little_maid:animation/maid/default/head/blink.js",
+				"touhou_little_maid:animation/maid/default/task/danmaku_attack.js",
+				"touhou_little_maid:animation/maid/default/task/ranged_attack.js",
+				"touhou_little_maid:animation/maid/default/task/attack.js",
+				"touhou_little_maid:animation/maid/default/health/less_show.js",
+				"touhou_little_maid:animation/maid/default/sleep/default.js",
+				"touhou_little_maid:animation/maid/default/armor/default.js",
+				"touhou_little_maid:animation/maid/default/wing/default.js",
+				"touhou_little_maid:animation/maid/default/arm/default.js",
+				"touhou_little_maid:animation/maid/default/arm/swing.js",
+				"touhou_little_maid:animation/maid/default/leg/default.js",
+				"touhou_little_maid:animation/maid/default/sit/default.js"
+			],
+			"render_entity_scale": 0.8,
+			"render_item_scale": 1.2
+		},
+		{
+			"model_id": "authors_and_credits:mory_chan",
+			"description": ["{model.authors_and_credits.mory_chan.desc}"],
+			"render_entity_scale": 0.8
+		},
+		{
+			"model_id": "authors_and_credits:flower_candy",
+			"description": ["{model.authors_and_credits.flower_candy.desc}"],
+			"animation": [
+				"touhou_little_maid:animation/maid/default/head/default.js",
+				"touhou_little_maid:animation/maid/default/head/beg.js",
+				"touhou_little_maid:animation/maid/default/head/music_shake.js",
+				"touhou_little_maid:animation/maid/default/head/blink.js",
+				"touhou_little_maid:animation/maid/default/arm/default.js",
+				"touhou_little_maid:animation/maid/default/arm/swing.js",
+				"touhou_little_maid:animation/maid/default/leg/default.js",
+				"touhou_little_maid:animation/maid/default/sit/skirt_rotation_swing.js",
+				"touhou_little_maid:animation/maid/default/sit/default.js",
+				"touhou_little_maid:animation/maid/default/wing/default.js",
+				"touhou_little_maid:animation/maid/default/task/grass.js",
+				"touhou_little_maid:animation/base/float/default.js"
+			]
+		}
+	]
+}

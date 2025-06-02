@@ -7,6 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.item.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -63,13 +64,14 @@ public final class InitItems {
     public static DeferredItem<Item> FAVORABILITY_TOOL_ADD = ITEMS.register("favorability_tool_add", () -> new ItemFavorabilityTool("add"));
     public static DeferredItem<Item> FAVORABILITY_TOOL_REDUCE = ITEMS.register("favorability_tool_reduce", () -> new ItemFavorabilityTool("reduce"));
     public static DeferredItem<Item> FAVORABILITY_TOOL_FULL = ITEMS.register("favorability_tool_full", () -> new ItemFavorabilityTool("full"));
-    public static DeferredItem<Item> SHRINE = ITEMS.register("shrine", () -> new BlockItem(InitBlocks.SHRINE.get(), new Item.Properties()));
+    public static DeferredItem<Item> SHRINE = ITEMS.register("shrine", () -> new BlockItem(InitBlocks.SHRINE.get(), new Item.Properties().rarity(Rarity.RARE)));
     public static DeferredItem<Item> KAPPA_COMPASS = ITEMS.register("kappa_compass", ItemKappaCompass::new);
     public static DeferredItem<Item> BROOM = ITEMS.register("broom", ItemBroom::new);
     public static DeferredItem<Item> PICNIC_BASKET = ITEMS.register("picnic_basket", () -> new ItemPicnicBasket(InitBlocks.PICNIC_MAT.get()));
     public static DeferredItem<Item> SCARECROW = ITEMS.register("scarecrow", () -> new BlockItem(InitBlocks.SCARECROW.get(), new Item.Properties()));
     public static DeferredItem<Item> SERVANT_BELL = ITEMS.register("servant_bell", ItemServantBell::new);
     public static DeferredItem<Item> ENTITY_ID_COPY = ITEMS.register("entity_id_copy", ItemEntityIdCopy::new);
+    public static DeferredItem<Item> OWNER_CONVERSION_TOOL = ITEMS.register("owner_conversion_tool", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
     @SuppressWarnings("deprecation")
     public static DeferredItem<Item> MONSTER_LIST = ITEMS.register("monster_list", ItemMonsterList::new);
 

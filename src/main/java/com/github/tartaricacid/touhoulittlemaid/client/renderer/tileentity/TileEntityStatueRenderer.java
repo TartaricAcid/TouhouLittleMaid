@@ -2,12 +2,12 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.client.render.MaidRenderState;
-import com.github.tartaricacid.touhoulittlemaid.client.model.StatueBaseModel;
+import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.SimpleBedrockModel;
+import com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityStatue;
 import com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil;
-import com.github.tartaricacid.touhoulittlemaid.util.RenderHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -22,19 +22,19 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
 
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
+import static com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader.STATUE_BASE;
 import static com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil.clearMaidDataResidue;
 
 public class TileEntityStatueRenderer implements BlockEntityRenderer<TileEntityStatue> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/entity/statue_base.png");
-    private final StatueBaseModel BASE_MODEL;
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/bedrock/block/statue_base.png");
+    private final SimpleBedrockModel<Entity> BASE_MODEL;
 
     public TileEntityStatueRenderer(BlockEntityRendererProvider.Context context) {
-        BASE_MODEL = new StatueBaseModel(context.bakeLayer(StatueBaseModel.LAYER));
+        BASE_MODEL = BedrockModelLoader.getModel(STATUE_BASE);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class TileEntityStatueRenderer implements BlockEntityRenderer<TileEntityS
         this.setTranslateAndPose(te, poseStack);
         poseStack.mulPose(Axis.ZN.rotationDegrees(180));
         VertexConsumer buffer = bufferIn.getBuffer(RenderType.entityCutoutNoCull(TEXTURE));
-        BASE_MODEL.renderToBuffer(poseStack, buffer, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
+        BASE_MODEL.renderToBuffer(poseStack, buffer, combinedLightIn, combinedOverlayIn);
         poseStack.popPose();
 
         CompoundTag data = te.getExtraMaidData();
@@ -143,11 +143,6 @@ public class TileEntityStatueRenderer implements BlockEntityRenderer<TileEntityS
                 poseStack.translate(0, 0, 0);
         }
         poseStack.scale(size, size, size);
-        poseStack.translate(0.5 / size, 0.5, 0.5 / size);
-    }
-
-    @Override
-    public AABB getRenderBoundingBox(TileEntityStatue te) {
-        return RenderHelper.getAABB(te.getWorldPosition().offset(-5, -1, -5), te.getWorldPosition().offset(5, 10, 5));
+        poseStack.translate(0.5 / size, 1.5, 0.5 / size);
     }
 }

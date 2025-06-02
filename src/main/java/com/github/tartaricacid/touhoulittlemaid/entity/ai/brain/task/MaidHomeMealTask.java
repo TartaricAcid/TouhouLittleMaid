@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task;
 import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.api.task.meal.IMaidMeal;
 import com.github.tartaricacid.touhoulittlemaid.api.task.meal.MaidMealType;
-import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManger;
 import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Type;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySit;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -28,6 +27,8 @@ import java.util.List;
 public class MaidHomeMealTask extends MaidCheckRateTask {
     private static final int MAX_DELAY_TIME = 50;
     private @Nullable TileEntityPicnicMat tmpPicnicMat = null;
+    private long handFullBubbleKey = -1;
+    private long mealEmptyBubbleKey = -1;
 
     public MaidHomeMealTask() {
         super(ImmutableMap.of());
@@ -75,7 +76,7 @@ public class MaidHomeMealTask extends MaidCheckRateTask {
         ItemStack handItemCopy = itemInHand.copy();
         ItemStack leftoverStack = ItemHandlerHelper.insertItemStacked(availableInv, handItemCopy, true);
         if (!leftoverStack.isEmpty()) {
-            ChatBubbleManger.addInnerChatText(maid, "chat_bubble.touhou_little_maid.inner.home_meal.two_hand_is_full");
+            this.handFullBubbleKey = maid.getChatBubbleManager().addTextChatBubbleIfTimeout("chat_bubble.touhou_little_maid.inner.home_meal.two_hand_is_full", handFullBubbleKey);
             return;
         }
 
@@ -97,7 +98,7 @@ public class MaidHomeMealTask extends MaidCheckRateTask {
         // 如果没搜索到，不执行后续吃的逻辑
         int size = candidateFood.size();
         if (size == 0) {
-            ChatBubbleManger.addInnerChatText(maid, "chat_bubble.touhou_little_maid.inner.home_meal.meal_is_empty");
+            this.mealEmptyBubbleKey = maid.getChatBubbleManager().addTextChatBubbleIfTimeout("chat_bubble.touhou_little_maid.inner.home_meal.meal_is_empty", this.mealEmptyBubbleKey);
             return;
         }
 

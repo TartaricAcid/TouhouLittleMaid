@@ -1,0 +1,12 @@
+{
+  "type": "neoforge:add_table",
+  "conditions": [
+    {
+      "condition": "touhou_little_maid:loot_table_type",
+      "loot_table_add": "touhou_little_maid:chest/normal_backpack",
+      "loot_table_id": "minecraft:chests/abandoned_mineshaft",
+      "loot_table_type": "minecraft:chest"
+    }
+  ],
+  "table": "touhou_little_maid:chest/normal_backpack"
+}

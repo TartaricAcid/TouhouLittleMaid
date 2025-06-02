@@ -7,6 +7,8 @@ import com.github.tartaricacid.touhoulittlemaid.api.event.client.RenderMaidEvent
 import com.github.tartaricacid.touhoulittlemaid.client.animation.HardcodedAnimationManger;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.GlWrapper;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.chatbubble.ChatBubbleRenderer;
+import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.chatbubble.EntityGraphics;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layer.*;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.models.MaidModels;
@@ -20,13 +22,16 @@ import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.IGeoEntityRenderer
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityAttachment;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.NeoForge;
@@ -52,6 +57,7 @@ public class EntityMaidRenderer extends MobRenderer<Mob, BedrockModel<Mob>> {
      * YSM 借用的渲染类型，和上述互斥
      */
     private @Nullable IGeoEntityRenderer<Mob> ysmMaidRenderer;
+    private ChatBubbleRenderer chatBubbleRenderer2;
     private MaidModelInfo mainInfo;
     private List<Object> mainAnimations = Lists.newArrayList();
 
@@ -65,6 +71,7 @@ public class EntityMaidRenderer extends MobRenderer<Mob, BedrockModel<Mob>> {
         this.addAdditionMaidLayer(manager);
         this.geckoEntityMaidRenderer = new GeckoEntityMaidRenderer<>(manager);
         this.initYsmModelRenderer(manager);
+        this.chatBubbleRenderer2 = new ChatBubbleRenderer(this);
     }
 
     /**
@@ -118,7 +125,21 @@ public class EntityMaidRenderer extends MobRenderer<Mob, BedrockModel<Mob>> {
         EntityMaid maidEntity = maid.asStrictMaid();
         // 暂定只能女仆显示
         if (maidEntity != null && MaidConfig.GLOBAL_MAID_SHOW_CHAT_BUBBLE.get() && maidEntity.getConfigManager().isChatBubbleShow()) {
-            ChatBubbleRenderer.renderChatBubble(this, maidEntity, poseStack, bufferIn, packedLightIn);
+            Vec3 vec3 = entity.getAttachments().getNullable(EntityAttachment.NAME_TAG, 0, entity.getViewYRot(partialTicks));
+            if (vec3 != null) {
+                poseStack.pushPose();
+                double offsetY = vec3.y() + 0.5f;
+                if (maidEntity.isMaidInSittingPose()) {
+                    offsetY -= 0.25f;
+                }
+                poseStack.translate(vec3.x, offsetY, vec3.z);
+                poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
+                poseStack.mulPose(Axis.YP.rotationDegrees(180));
+                poseStack.scale(-0.025F, -0.025F, 0.025F);
+                EntityGraphics graphics = new EntityGraphics(Minecraft.getInstance(), poseStack, maidEntity, packedLightIn, partialTicks);
+                this.chatBubbleRenderer2.render(graphics);
+                poseStack.popPose();
+            }
         }
 
         // YSM 接管渲染

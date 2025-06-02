@@ -18,7 +18,6 @@ public final class MaidConfig {
 
     public static ModConfigSpec.ConfigValue<String> MAID_TAMED_ITEM;
     public static ModConfigSpec.ConfigValue<String> MAID_TEMPTATION_ITEM;
-    public static ModConfigSpec.ConfigValue<String> MAID_NTR_ITEM;
 
     public static ModConfigSpec.IntValue MAID_WORK_RANGE;
     public static ModConfigSpec.IntValue MAID_IDLE_RANGE;
@@ -53,11 +52,11 @@ public final class MaidConfig {
         builder.translation(TRANSLATE_KEY).push("maid");
 
         builder.comment("This is a global config that applies to all maids: how often maids speak")
-                .translation(translateKey("global_maid_sound_frequency"));;
+                .translation(translateKey("global_maid_sound_frequency"));
         GLOBAL_MAID_SOUND_FREQUENCY = builder.defineInRange("GlobalMaidSoundFrequency", 100, 0, 100);
 
         builder.comment("This is a global config that applies to all maids: Whether or not to display chat bubbles")
-                .translation(translateKey("global_maid_show_chat_bubble"));;
+                .translation(translateKey("global_maid_show_chat_bubble"));
         GLOBAL_MAID_SHOW_CHAT_BUBBLE = builder.define("GlobalMaidShowChatBubble", true);
 
         builder.comment("The item that can tamed maid", "Use the registered name of the item directly or write tag name with # as prefix")
@@ -67,10 +66,6 @@ public final class MaidConfig {
         builder.comment("The item that can temptation maid", "Use the registered name of the item directly or write tag name with # as prefix")
                 .translation(translateKey("maid_temptation_item"));
         MAID_TEMPTATION_ITEM = builder.define("MaidTemptationItem", "minecraft:cake", MaidConfig::checkItemAndTag);
-
-        builder.comment("The item that can NTR maid", "Use the registered name of the item directly or write tag name with # as prefix")
-                .translation(translateKey("maid_ntr_item"));
-        MAID_NTR_ITEM = builder.define("MaidNtrItem", "minecraft:structure_void", MaidConfig::checkItemAndTag);
 
         builder.comment("The max range of maid work mode")
                 .translation(translateKey("maid_work_range"));

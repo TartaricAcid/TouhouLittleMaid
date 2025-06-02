@@ -1,6 +1,7 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "touhou_little_maid:item/nimble_fabric"
-  }
+	"credit": "Made with Blockbench",
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "touhou_little_maid:item/nimble_fabric"
+	}
 }

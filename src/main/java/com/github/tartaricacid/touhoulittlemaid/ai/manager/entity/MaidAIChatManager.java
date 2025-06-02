@@ -1,165 +1,181 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.manager.entity;
 
-import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.ai.manager.response.ResponseChat;
-import com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.Site;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.Service;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.chat.openai.ChatClient;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.chat.openai.request.ChatCompletion;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.chat.openai.response.ChatCompletionResponse;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSApiType;
+import com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.papi.PapiReplacer;
+import com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.papi.StringConstant;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.*;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSClient;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSRequest;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSConfig;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSSite;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSSystemServices;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.AIConfig;
-import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManger;
+import com.github.tartaricacid.touhoulittlemaid.data.ChatTokensAttachment;
+import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManager;
+import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.IChatBubbleData;
+import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.implement.TextChatBubbleData;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.TTSAudioToClientPackage;
+import com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment;
 import com.github.tartaricacid.touhoulittlemaid.network.message.TTSSystemAudioToClientPackage;
+import com.github.tartaricacid.touhoulittlemaid.util.CappedQueue;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.core.lookup.StrSubstitutor;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+import java.util.Map;
+
+import static com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.papi.StringConstant.AUTO_GEN_SETTING;
 
 public final class MaidAIChatManager extends MaidAIChatData {
     public MaidAIChatManager(EntityMaid maid) {
         super(maid);
     }
 
-    public void chat(String message, String language) {
-        if (AIConfig.CHAT_ENABLED.get()) {
-            @Nullable Site site = this.getChatSite();
-            if (site == null || StringUtils.isBlank(site.getApiKey())) {
-                ChatBubbleManger.addInnerChatText(maid, "ai.touhou_little_maid.chat.api_key.empty");
-            } else {
-                ChatClient chatClient = Service.getChatClient(site);
-                ChatCompletion chatCompletion = Service.getChatCompletion(this, language);
-                if (chatCompletion != null) {
-                    chatCompletion.userChat(message);
-                    chatClient.chat(chatCompletion).handle(this::onShowChatSync, this::onChatFailSync);
-                    this.addUserHistory(message);
-                } else {
-                    ChatBubbleManger.addInnerChatText(maid, "ai.touhou_little_maid.chat.no_setting");
-                }
-            }
+    public void chat(String message, ChatClientInfo clientInfo, ServerPlayer sender) {
+        if (!AIConfig.LLM_ENABLED.get()) {
+            sender.sendSystemMessage(Component.translatable("ai.touhou_little_maid.chat.disable")
+                    .withStyle(ChatFormatting.RED));
+            return;
+        }
+        ChatTokensAttachment chatTokens = sender.getData(InitDataAttachment.CHAT_TOKENS);
+        if (chatTokens.get() >= AIConfig.MAX_TOKENS_PER_PLAYER.get()) {
+            sender.sendSystemMessage(Component.translatable("message.touhou_little_maid.ai_chat.max_tokens_limit")
+                    .withStyle(ChatFormatting.RED));
+            return;
+        }
+        @Nullable LLMSite site = this.getLLMSite();
+        if (site == null || !site.enabled()) {
+            sender.sendSystemMessage(Component.translatable("ai.touhou_little_maid.chat.llm.empty")
+                    .withStyle(ChatFormatting.RED));
+            return;
+        }
+        // 如果检测到是 player2，那么大概率是新手玩家，给他提示下载 player2
+        if (site.id().equals(DefaultLLMSite.PLAYER2.id())) {
+            Player2AppCheck.checkPlayer2App(sender, () -> this.tryToChat(message, clientInfo, site));
         } else {
-            ChatBubbleManger.addInnerChatText(maid, "ai.touhou_little_maid.chat.disable");
+            this.tryToChat(message, clientInfo, site);
+        }
+    }
+
+    private void tryToChat(String message, ChatClientInfo clientInfo, @NotNull LLMSite site) {
+        LLMClient chatClient = site.client();
+        List<LLMMessage> chatCompletion = getChatCompletion(this, clientInfo.language());
+        if (chatCompletion.isEmpty()) {
+            this.onSettingIsEmpty(message, clientInfo, chatCompletion, chatClient);
+        } else {
+            this.normalChat(message, chatCompletion, chatClient);
+        }
+    }
+
+    private void normalChat(String message, List<LLMMessage> chatCompletion, LLMClient chatClient) {
+        ChatBubbleManager bubbleManager = this.maid.getChatBubbleManager();
+        chatCompletion.add(LLMMessage.userChat(maid, message));
+        LLMConfig config = LLMConfig.normalChat(this.getLLMModel(), this.maid);
+        long key = bubbleManager.addThinkingText("ai.touhou_little_maid.chat.chat_bubble_waiting");
+        LLMCallback callback = new LLMCallback(this, message, key);
+        chatClient.chat(chatCompletion, config, callback);
+    }
+
+    private void onSettingIsEmpty(String message, ChatClientInfo clientInfo, List<LLMMessage> chatCompletion, LLMClient chatClient) {
+        ChatBubbleManager bubbleManager = this.maid.getChatBubbleManager();
+        if (AIConfig.AUTO_GEN_SETTING_ENABLED.get()) {
+            LLMMessage llmMessage = autoGenSetting(maid, clientInfo);
+            chatCompletion.add(llmMessage);
+            LLMConfig config = new LLMConfig(this.getLLMModel(), this.maid, ChatType.AUTO_GEN_SETTING);
+            MutableComponent component = Component.translatable("ai.touhou_little_maid.chat.llm.role_no_setting_and_gen_setting");
+            TextChatBubbleData bubbleData = TextChatBubbleData.create(30 * 20, component, IChatBubbleData.TYPE_2, IChatBubbleData.DEFAULT_PRIORITY);
+            long key = bubbleManager.addChatBubble(bubbleData);
+            AutoGenSettingCallback callback = new AutoGenSettingCallback(this, message, key);
+            chatClient.chat(chatCompletion, config, callback);
+        } else {
+            bubbleManager.addTextChatBubble("ai.touhou_little_maid.chat.llm.role_no_setting");
         }
     }
 
     @SuppressWarnings("all")
-    private void tts(Site site, String chatText, String ttsText) {
+    public void tts(TTSSite site, String chatText, String ttsText, long waitingChatBubbleId) {
         // 调用系统 TTS，那么此时就只需要发送给指定的玩家即可
-        if (TTSApiType.SYSTEM.getName().equals(site.getApiType())) {
-            onPlaySoundLocal(chatText, ttsText);
+        TTSClient ttsClient = site.client();
+        String ttsModel = getTTSModel();
+
+        String ttsLang = "en";
+        String[] split = this.getTTSLanguage().split("_");
+        if (split.length >= 2) {
+            ttsLang = split[0];
+        }
+        TTSConfig config = new TTSConfig(ttsModel, ttsLang);
+
+        if (ttsClient instanceof TTSSystemServices services) {
+            onPlaySoundLocal(site.id(), chatText, ttsText, config, services, waitingChatBubbleId);
         } else {
-            TTSClient ttsClient = Service.getTtsClient(site);
-            String ttsLang = "en";
-            String[] split = this.getTtsLanguage().split("_");
-            if (split.length >= 2) {
-                ttsLang = split[0];
-            }
-            TTSRequest ttsRequest = Service.getTtsRequest(site, ttsText, ttsLang, this.getTtsModel());
-            ttsClient.request(ttsRequest).handle(data -> onPlaySoundSync(chatText, (byte[]) data),
-                    throwable -> onTtsFailSync(chatText, (Throwable) throwable));
+            TTSCallback callback = new TTSCallback(maid, chatText, waitingChatBubbleId);
+            ttsClient.play(ttsText, config, callback);
         }
     }
 
-    private void onShowChatSync(ChatCompletionResponse result) {
-        String rawMessage = result.getFirstChoiceMessage();
-        try {
-            ResponseChat responseChat = Service.GSON.fromJson(rawMessage, ResponseChat.class);
-            if (responseChat == null) {
-                TouhouLittleMaid.LOGGER.error("Error in Response Chat: {}", rawMessage);
-                onChatFailSync(Component.translatable("ai.touhou_little_maid.chat.format.json_format_error", rawMessage));
-                return;
-            }
-            String chatText = responseChat.getChatText();
-            String ttsText = responseChat.getTtsText();
-            if (StringUtils.isBlank(chatText) || StringUtils.isBlank(ttsText)) {
-                TouhouLittleMaid.LOGGER.error("Error in Response Chat: {}", rawMessage);
-                onChatFailSync(Component.translatable("ai.touhou_little_maid.chat.format.text_is_empty", rawMessage));
-                return;
-            }
-            this.addAssistantHistory(rawMessage);
-            Site site = this.getTtsSite();
-            if (AIConfig.TTS_ENABLED.get() && site != null && StringUtils.isNotBlank(site.getApiKey())) {
-                this.tts(site, chatText, ttsText);
-            } else {
-                ChatBubbleManger.addAiChatTextSync(maid, chatText);
-            }
-        } catch (Exception e) {
-            TouhouLittleMaid.LOGGER.error(e.getMessage());
+    private List<LLMMessage> getChatCompletion(MaidAIChatManager chatManager, String language) {
+        // 如果含有自定义设定，则直接使用自定义设定
+        if (StringUtils.isNotBlank(chatManager.customSetting)) {
+            EntityMaid maid = chatManager.getMaid();
+            String setting = PapiReplacer.replace(chatManager.customSetting, maid, language);
+            CappedQueue<LLMMessage> history = chatManager.getHistory();
+            List<LLMMessage> chatList = Lists.newArrayList();
+            chatList.add(LLMMessage.systemChat(maid, setting));
+            // 倒序遍历，将历史对话加载进去
+            history.getDeque().descendingIterator().forEachRemaining(chatList::add);
+            return chatList;
         }
+
+        // 其他情况下，获取默认设定文件
+        return chatManager.getSetting().map(s -> {
+            EntityMaid maid = chatManager.getMaid();
+            String setting = s.getSetting(maid, language);
+            CappedQueue<LLMMessage> history = chatManager.getHistory();
+            List<LLMMessage> chatList = Lists.newArrayList();
+            chatList.add(LLMMessage.systemChat(maid, setting));
+            // 倒序遍历，将历史对话加载进去
+            history.getDeque().descendingIterator().forEachRemaining(chatList::add);
+            return chatList;
+        }).orElse(Lists.newArrayList());
     }
 
-    private void onChatFailSync(Throwable throwable) {
+    private LLMMessage autoGenSetting(EntityMaid maid, ChatClientInfo clientInfo) {
+        Map<String, String> valueMap = Maps.newHashMap();
+        valueMap.put("model_name", clientInfo.name());
+        valueMap.put("chat_language", clientInfo.language());
+        String setting = new StrSubstitutor(valueMap).replace(AUTO_GEN_SETTING);
+
+        // 如果有描述文本，那么就将描述文本也加入到设定中
+        if (!clientInfo.description().isEmpty()) {
+            String join = StringUtils.join(clientInfo.description(), "\n");
+            valueMap.put("model_desc", join);
+            String desc = new StrSubstitutor(valueMap).replace(StringConstant.AUTO_GEN_SETTING_DESC);
+            setting = setting + desc;
+        }
+
+        return LLMMessage.userChat(maid, setting);
+    }
+
+    private void onPlaySoundLocal(String name, String chatText, String ttsText, TTSConfig config, TTSSystemServices services, long waitingChatBubbleId) {
         if (!(maid.level instanceof ServerLevel serverLevel)) {
             return;
         }
         MinecraftServer server = serverLevel.getServer();
         server.submit(() -> {
             if (maid.getOwner() instanceof ServerPlayer player) {
-                String cause = throwable.getLocalizedMessage();
-                player.sendSystemMessage(Component.translatable("ai.touhou_little_maid.chat.connect.fail")
-                        .append(cause).withStyle(ChatFormatting.RED));
+                TTSSystemAudioToClientPackage message = new TTSSystemAudioToClientPackage(name, ttsText, config, services);
+                PacketDistributor.sendToPlayer(player, message);
             }
-        });
-    }
-
-    private void onChatFailSync(Component message) {
-        if (!(maid.level instanceof ServerLevel serverLevel)) {
-            return;
-        }
-        MinecraftServer server = serverLevel.getServer();
-        server.submit(() -> {
-            if (maid.getOwner() instanceof ServerPlayer player) {
-                player.sendSystemMessage(Component.translatable("ai.touhou_little_maid.chat.connect.fail")
-                        .append(message).withStyle(ChatFormatting.RED));
-            }
-        });
-    }
-
-    private void onPlaySoundLocal(String chatText, String ttsText) {
-        if (!(maid.level instanceof ServerLevel serverLevel)) {
-            return;
-        }
-        MinecraftServer server = serverLevel.getServer();
-        server.submit(() -> {
-            if (maid.getOwner() instanceof ServerPlayer player) {
-                PacketDistributor.sendToPlayer(player, new TTSSystemAudioToClientPackage(ttsText));
-            }
-            ChatBubbleManger.addAiChatText(maid, chatText);
-        });
-    }
-
-    private void onPlaySoundSync(String chatText, byte[] data) {
-        if (!(maid.level instanceof ServerLevel serverLevel)) {
-            return;
-        }
-        MinecraftServer server = serverLevel.getServer();
-        server.submit(() -> {
-            NetworkHandler.sendToNearby(maid, new TTSAudioToClientPackage(this.maid.getId(), data));
-            ChatBubbleManger.addAiChatText(maid, chatText);
-        });
-    }
-
-    private void onTtsFailSync(String chatText, Throwable throwable) {
-        if (!(maid.level instanceof ServerLevel serverLevel)) {
-            return;
-        }
-        MinecraftServer server = serverLevel.getServer();
-        server.submit(() -> {
-            ChatBubbleManger.addAiChatText(maid, chatText);
-            if (maid.getOwner() instanceof ServerPlayer player) {
-                String cause = throwable.getLocalizedMessage();
-                player.sendSystemMessage(Component.translatable("ai.touhou_little_maid.tts.connect.fail")
-                        .append(cause).withStyle(ChatFormatting.RED));
-            }
+            maid.getChatBubbleManager().addLLMChatText(chatText, waitingChatBubbleId);
         });
     }
 }

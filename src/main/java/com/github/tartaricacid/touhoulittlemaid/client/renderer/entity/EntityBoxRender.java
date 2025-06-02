@@ -1,8 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.client.model.AbstractModel;
-import com.github.tartaricacid.touhoulittlemaid.client.model.EntityBoxModel;
+import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.SimpleBedrockModel;
+import com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityBox;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -17,13 +17,15 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import static com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader.CAKE_BOX;
+
 public class EntityBoxRender extends EntityRenderer<EntityBox> {
     private final List<ResourceLocation> texturesGroup = Lists.newArrayList();
-    private final AbstractModel<EntityBox> boxModel;
+    private final SimpleBedrockModel<EntityBox> boxModel;
 
     public EntityBoxRender(EntityRendererProvider.Context manager) {
         super(manager);
-        boxModel = new EntityBoxModel(manager.bakeLayer(EntityBoxModel.LAYER));
+        boxModel = BedrockModelLoader.getModel(CAKE_BOX);
         IntStream.range(0, EntityBox.MAX_TEXTURE_SIZE).forEach(this::addBoxTexture);
     }
 
@@ -35,7 +37,7 @@ public class EntityBoxRender extends EntityRenderer<EntityBox> {
         boxModel.setupAnim(entityBox, 0, 0, -0.1f, 0, 0);
         RenderType renderType = RenderType.entityCutoutNoCull(getTextureLocation(entityBox));
         VertexConsumer buffer = bufferIn.getBuffer(renderType);
-        boxModel.renderToBuffer(poseStack, buffer, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        boxModel.renderToBuffer(poseStack, buffer, packedLight, OverlayTexture.NO_OVERLAY);
         poseStack.popPose();
     }
 
@@ -45,7 +47,7 @@ public class EntityBoxRender extends EntityRenderer<EntityBox> {
     }
 
     private void addBoxTexture(int index) {
-        String fileName = String.format("textures/entity/box/cake_box_%s.png", index);
+        String fileName = String.format("textures/bedrock/entity/cake_box/cake_box_%s.png", index);
         texturesGroup.add(ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, fileName));
     }
 }

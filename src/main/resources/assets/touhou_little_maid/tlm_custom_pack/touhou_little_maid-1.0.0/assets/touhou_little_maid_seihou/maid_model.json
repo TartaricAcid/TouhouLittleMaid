@@ -1,0 +1,36 @@
+{
+	"pack_name": "{maid_pack.touhou_little_maid_seihou.name}",
+	"version": "1.0.0",
+	"icon": "touhou_little_maid_seihou:textures/maid_icon.png",
+	"description": ["{maid_pack.touhou_little_maid_seihou.desc}"],
+	"author": ["TartaricAcid", "CrystalizedSun"],
+	"model_list": [
+		{
+			"model_id": "touhou_little_maid_seihou:vivit",
+			"description": ["{model.touhou_little_maid_seihou.vivit.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_seihou:vivit_2",
+			"model": "touhou_little_maid_seihou:models/entity/vivit.json",
+			"name": "{model.touhou_little_maid_seihou.vivit.name}",
+			"description": ["{model.touhou_little_maid_seihou.vivit.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_seihou:milia",
+			"description": ["{model.touhou_little_maid_seihou.milia.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid_seihou:mei",
+			"description": ["{model.touhou_little_maid_seihou.mei.desc}"],
+			"render_item_scale": 1.4,
+			"render_entity_scale": 0.85
+		},
+		{
+			"model_id": "touhou_little_maid_seihou:mai",
+			"description": ["{model.touhou_little_maid_seihou.mei.desc}"],
+			"render_item_scale": 1.4,
+			"render_entity_scale": 0.85
+		}
+	],
+	"date": "2025-05-04"
+}
