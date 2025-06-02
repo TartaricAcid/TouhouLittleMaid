@@ -267,6 +267,8 @@
   "tooltips.touhou_little_maid.wireless_io.binding_pos.has": "Binding Pos: %d, %d, %d",
   "tooltips.touhou_little_maid.wireless_io.binding_pos.none": "Unbound Chest",
   "tooltips.touhou_little_maid.maid_beacon.desc": "Storage Power: %s",
+  "tooltips.touhou_little_maid.hakurei_gohei.bind_beacon": "Bind to a maid beacon",
+  "tooltips.touhou_little_maid.hakurei_gohei.bind_altar": "Beacon pos has been bound to a maid altar",
   "tooltips.touhou_little_maid.chair_show.desc": "Hold this item and sneak to see the hit box of a chair",
   "tooltips.touhou_little_maid.model_switcher.bounded": "Already bound to the maid",
   "tooltips.touhou_little_maid.custom_sound.credit": "Play a credit sound",

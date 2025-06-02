@@ -7,6 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.init.InitRecipes;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityAltar;
+import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityMaidBeacon;
 import com.github.tartaricacid.touhoulittlemaid.util.PosListData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -127,11 +128,11 @@ public class BlockAltar extends Block implements EntityBlock {
 
     @Override
     public ItemInteractionResult useItemOn(ItemStack itemStack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
-        return this.getAltar(worldIn, pos).filter(altar -> handIn == InteractionHand.MAIN_HAND).map(altar -> {
+        return getAltar(worldIn, pos).filter(altar -> handIn == InteractionHand.MAIN_HAND).map(altar -> {
             if (player.isShiftKeyDown() || player.getMainHandItem().isEmpty()) {
-                takeOutItem(worldIn, altar, player);
+                takeOutItem(worldIn, altar, player, pos);
             } else {
-                takeInOrCraft(worldIn, altar, player);
+                takeInOrCraft(worldIn, altar, player, pos);
             }
             altar.refresh();
             return ItemInteractionResult.sidedSuccess(worldIn.isClientSide);
@@ -141,7 +142,7 @@ public class BlockAltar extends Block implements EntityBlock {
     @Override
     public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if (!worldIn.isClientSide) {
-            this.getAltar(worldIn, pos).ifPresent(altar -> {
+            getAltar(worldIn, pos).ifPresent(altar -> {
                 ItemStack stack = altar.handler.getStackInSlot(0);
                 if (!stack.isEmpty()) {
                     Block.popResource(worldIn, pos.offset(0, 1, 0), stack);
@@ -154,7 +155,7 @@ public class BlockAltar extends Block implements EntityBlock {
     @Override
     public void onBlockExploded(BlockState state, Level world, BlockPos pos, Explosion explosion) {
         if (!world.isClientSide) {
-            this.getAltar(world, pos).ifPresent(altar -> this.restoreStorageBlock(world, pos, altar.getBlockPosList()));
+            getCoreAltar(world, pos).ifPresent(altar -> this.restoreStorageBlock(world, pos, altar.getBlockPosList()));
         }
         super.onBlockExploded(state, world, pos, explosion);
     }
@@ -162,7 +163,7 @@ public class BlockAltar extends Block implements EntityBlock {
     @Override
     public BlockState playerWillDestroy(Level worldIn, BlockPos pos, BlockState state, Player player) {
         if (!worldIn.isClientSide) {
-            this.getAltar(worldIn, pos).ifPresent(altar -> {
+            getCoreAltar(worldIn, pos).ifPresent(altar -> {
                 this.restoreStorageBlock(worldIn, pos, altar.getBlockPosList());
                 if (!player.isCreative()) {
                     Block block = altar.getStorageState().getBlock();
@@ -175,14 +176,14 @@ public class BlockAltar extends Block implements EntityBlock {
 
     @Override
     public ItemStack getCloneItemStack(@NotNull BlockState state, @NotNull HitResult target, @NotNull LevelReader world, @NotNull BlockPos pos, @NotNull Player player) {
-        return this.getAltar(world, pos)
+        return getCoreAltar(world, pos)
                 .map(altar -> new ItemStack(altar.getStorageState().getBlock()))
                 .orElse(super.getCloneItemStack(state, target, world, pos, player));
     }
 
     @Override
     public SoundType getSoundType(BlockState state, LevelReader world, BlockPos pos, @Nullable Entity entity) {
-        return this.getAltar(world, pos)
+        return getCoreAltar(world, pos)
                 .map(altar -> altar.getStorageState().getSoundType())
                 .orElse(super.getSoundType(state, world, pos, entity));
     }
@@ -203,27 +204,27 @@ public class BlockAltar extends Block implements EntityBlock {
             if (storagePos.equals(currentPos)) {
                 continue;
             }
-            this.getAltar(worldIn, storagePos).ifPresent(altar -> worldIn.setBlock(storagePos, altar.getStorageState(), Block.UPDATE_ALL));
+            getAltar(worldIn, storagePos).ifPresent(altar -> worldIn.setBlock(storagePos, altar.getStorageState(), Block.UPDATE_ALL));
         }
     }
 
-    private void takeOutItem(Level world, TileEntityAltar altar, Player player) {
+    private void takeOutItem(Level world, TileEntityAltar altar, Player player, BlockPos pos) {
         if (altar.isCanPlaceItem()) {
             if (!altar.handler.getStackInSlot(0).isEmpty()) {
                 ItemStack extractItem = altar.handler.extractItem(0, 1, false);
                 ItemHandlerHelper.giveItemToPlayer(player, extractItem);
-                altarCraft(world, altar, player);
+                getCoreAltar(world, pos).ifPresent(coreAltar -> altarCraft(world, coreAltar, player));
             }
         }
     }
 
-    private void takeInOrCraft(Level world, TileEntityAltar altar, Player playerIn) {
+    private void takeInOrCraft(Level world, TileEntityAltar altar, Player player, BlockPos pos) {
         if (altar.isCanPlaceItem() && altar.handler.getStackInSlot(0).isEmpty()) {
-            altar.handler.setStackInSlot(0, playerIn.getMainHandItem().copyWithCount(1));
-            if (!playerIn.isCreative()) {
-                playerIn.getMainHandItem().shrink(1);
+            altar.handler.setStackInSlot(0, player.getMainHandItem().copyWithCount(1));
+            if (!player.isCreative()) {
+                player.getMainHandItem().shrink(1);
             }
-            altarCraft(world, altar, playerIn);
+            getCoreAltar(world, pos).ifPresent(coreAltar -> altarCraft(world, coreAltar, player));
         }
     }
 
@@ -245,32 +246,68 @@ public class BlockAltar extends Block implements EntityBlock {
                 .ifPresent(recipe -> spawnResultEntity(world, playerIn, powerAttachment, recipe.id(), recipe.value(), arrayList, altar));
     }
 
-    private Optional<TileEntityAltar> getAltar(BlockGetter world, BlockPos pos) {
+    public static Optional<TileEntityAltar> getAltar(BlockGetter world, BlockPos pos) {
         BlockEntity te = world.getBlockEntity(pos);
-        if (te instanceof TileEntityAltar) {
-            return Optional.of((TileEntityAltar) te);
+        if (te instanceof TileEntityAltar tileEntityAltar) {
+            return Optional.of(tileEntityAltar);
+        }
+        return Optional.empty();
+    }
+
+    public static Optional<TileEntityAltar> getCoreAltar(BlockGetter world, BlockPos pos) {
+        BlockEntity te = world.getBlockEntity(pos);
+        if (te instanceof TileEntityAltar tileEntityAltar) {
+            if (tileEntityAltar.isRender()) {
+                // 如果是核心方块，直接返回
+                return Optional.of(tileEntityAltar);
+            } else {
+                BlockPos coreBlockPos = tileEntityAltar.getCoreBlockPos();
+                BlockEntity blockEntity = world.getBlockEntity(coreBlockPos);
+                if (blockEntity instanceof TileEntityAltar coreAltar) {
+                    return Optional.of(coreAltar);
+                }
+            }
         }
         return Optional.empty();
     }
 
     private void spawnResultEntity(Level world, Player playerIn, PowerAttachment power, ResourceLocation altarId,
                                    AltarRecipe altarRecipe, List<ItemStack> inventory, TileEntityAltar altar) {
-        if (power.get() >= altarRecipe.getPower()) {
-            power.min(altarRecipe.getPower());
-            playerIn.setData(InitDataAttachment.POWER_NUM, new PowerAttachment(power.get()));
-            BlockPos centrePos = getCentrePos(altar.getBlockPosList(), altar.getBlockPos());
-            if (world instanceof ServerLevel) {
-                altarRecipe.spawnOutputEntity((ServerLevel) world, centrePos.above(2), inventory);
-            }
-            removeAllAltarItem(world, altar);
-            spawnParticleInCentre(world, centrePos);
-            world.playSound(null, centrePos, InitSounds.ALTAR_CRAFT.get(), SoundSource.VOICE, 1.0f, 1.0f);
-            if (playerIn instanceof ServerPlayer serverPlayer) {
-                InitTrigger.ALTAR_CRAFT.get().trigger(serverPlayer, altarId);
+        BlockPos maidBeaconPos = altar.getMaidBeaconPos();
+        BlockEntity blockEntity = world.getBlockEntity(maidBeaconPos);
+        if (blockEntity instanceof TileEntityMaidBeacon maidBeacon) {
+            float storagePower = maidBeacon.getStoragePower();
+            if (storagePower >= altarRecipe.getPower()) {
+                maidBeacon.setStoragePower(storagePower - altarRecipe.getPower());
+                BlockPos centrePos = getCentrePos(altar.getBlockPosList(), altar.getBlockPos());
+                if (world instanceof ServerLevel) {
+                    altarRecipe.spawnOutputEntity((ServerLevel) world, centrePos.above(2), inventory);
+                }
+                removeAllAltarItem(world, altar);
+                spawnParticleInCentre(world, centrePos);
+                world.playSound(null, centrePos, InitSounds.ALTAR_CRAFT.get(), SoundSource.VOICE, 1.0f, 1.0f);
+                if (playerIn instanceof ServerPlayer serverPlayer) {
+                    InitTrigger.ALTAR_CRAFT.get().trigger(serverPlayer, altarId);
+                }
             }
         } else {
-            if (!world.isClientSide) {
-                playerIn.sendSystemMessage(Component.translatable("message.touhou_little_maid.altar.not_enough_power"));
+            if (power.get() >= altarRecipe.getPower()) {
+                power.min(altarRecipe.getPower());
+                playerIn.setData(InitDataAttachment.POWER_NUM, new PowerAttachment(power.get()));
+                BlockPos centrePos = getCentrePos(altar.getBlockPosList(), altar.getBlockPos());
+                if (world instanceof ServerLevel) {
+                    altarRecipe.spawnOutputEntity((ServerLevel) world, centrePos.above(2), inventory);
+                }
+                removeAllAltarItem(world, altar);
+                spawnParticleInCentre(world, centrePos);
+                world.playSound(null, centrePos, InitSounds.ALTAR_CRAFT.get(), SoundSource.VOICE, 1.0f, 1.0f);
+                if (playerIn instanceof ServerPlayer serverPlayer) {
+                    InitTrigger.ALTAR_CRAFT.get().trigger(serverPlayer, altarId);
+                }
+            } else {
+                if (!world.isClientSide) {
+                    playerIn.sendSystemMessage(Component.translatable("message.touhou_little_maid.altar.not_enough_power"));
+                }
             }
         }
     }
@@ -290,7 +327,7 @@ public class BlockAltar extends Block implements EntityBlock {
 
     private void removeAllAltarItem(Level world, TileEntityAltar altar) {
         for (BlockPos pos : altar.getCanPlaceItemPosList().getData()) {
-            this.getAltar(world, pos).ifPresent(te -> {
+            getAltar(world, pos).ifPresent(te -> {
                 te.handler.setStackInSlot(0, ItemStack.EMPTY);
                 te.refresh();
                 spawnParticleInCentre(world, te.getBlockPos());

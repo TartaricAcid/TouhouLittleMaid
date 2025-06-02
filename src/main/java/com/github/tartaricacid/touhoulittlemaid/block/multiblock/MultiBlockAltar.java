@@ -72,10 +72,16 @@ public class MultiBlockAltar implements IMultiBlock {
             worldIn.setBlock(currentPos, InitBlocks.ALTAR.get().defaultBlockState(), Block.UPDATE_ALL);
             BlockEntity te = worldIn.getBlockEntity(currentPos);
             if (te instanceof TileEntityAltar) {
+                // 设置核心数据，核心方块渲染
                 boolean isRender = currentPos.equals(currentCenterPos);
                 boolean canPlaceItem = blockInfo.pos().getY() == 2 && blockInfo.state().is(BlockTags.LOGS);
-                ((TileEntityAltar) te).setForgeData(currentState, isRender,
-                        canPlaceItem, direction, posList, canPlaceItemPosList);
+                if (isRender) {
+                    ((TileEntityAltar) te).setCoreData(currentState,
+                            canPlaceItem, direction, posList, canPlaceItemPosList);
+                } else {
+                    // 设置外围数据，外围方块不渲染
+                    ((TileEntityAltar) te).setOuterData(currentState, canPlaceItem, currentCenterPos);
+                }
             }
         }
     }

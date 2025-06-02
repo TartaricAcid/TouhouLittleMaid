@@ -2,11 +2,15 @@ package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.api.block.IMultiBlock;
+import com.github.tartaricacid.touhoulittlemaid.block.BlockMaidBeacon;
 import com.github.tartaricacid.touhoulittlemaid.block.multiblock.MultiBlockManager;
 import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
 import com.google.common.base.Predicates;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -16,18 +20,23 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ProjectileWeaponItem;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Predicate;
+
+import static com.github.tartaricacid.touhoulittlemaid.block.BlockAltar.getCoreAltar;
+import static com.github.tartaricacid.touhoulittlemaid.block.BlockMaidBeacon.POSITION;
+import static com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent.BINDING_POS;
 
 public class ItemHakureiGohei extends ProjectileWeaponItem {
     public ItemHakureiGohei() {
@@ -72,6 +81,36 @@ public class ItemHakureiGohei extends ProjectileWeaponItem {
     @Override
     public InteractionResult useOn(UseOnContext context) {
         if (context.getHand() == InteractionHand.MAIN_HAND) {
+            BlockPos clickedPos = context.getClickedPos();
+            Level level = context.getLevel();
+            BlockState state = level.getBlockState(clickedPos);
+            Block block = state.getBlock();
+            ItemStack itemInHand = context.getItemInHand();
+            // 判定是否为神社庭灯
+            if (block instanceof BlockMaidBeacon) {
+                BlockMaidBeacon.Position value = state.getValue(POSITION);
+                if (value == BlockMaidBeacon.Position.DOWN) {
+                    itemInHand.set(BINDING_POS, clickedPos.above());
+                } else {
+                    itemInHand.set(BINDING_POS, clickedPos);
+                }
+                if (context.getPlayer() instanceof ServerPlayer serverPlayer) {
+                    serverPlayer.sendSystemMessage(Component.translatable("tooltips.touhou_little_maid.hakurei_gohei.bind_beacon"));
+                }
+                return InteractionResult.SUCCESS;
+            }
+            // 如果是神社祭坛，则绑定御币的祭坛位置
+            getCoreAltar(level, clickedPos).ifPresent(coreAltar -> {
+                BlockPos blockPos = itemInHand.get(BINDING_POS);
+                if (blockPos != null) {
+                    coreAltar.setMaidBeaconPos(blockPos);
+                    itemInHand.set(BINDING_POS, null);
+                    if (context.getPlayer() instanceof ServerPlayer serverPlayer) {
+                        serverPlayer.sendSystemMessage(Component.translatable("tooltips.touhou_little_maid.hakurei_gohei.bind_altar"));
+                    }
+                }
+            });
+
             List<IMultiBlock> multiBlockList = MultiBlockManager.getMultiBlockList();
             BlockState blockState = context.getLevel().getBlockState(context.getClickedPos());
             Level world = context.getLevel();
@@ -106,5 +145,16 @@ public class ItemHakureiGohei extends ProjectileWeaponItem {
     @Override
     public boolean isEnchantable(ItemStack pStack) {
         return super.isEnchantable(pStack);
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void appendHoverText(ItemStack stack, @Nullable Item.TooltipContext worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+        BlockPos pos = stack.get(BINDING_POS);
+        if (pos != null) {
+            String posString = I18n.get("tooltips.touhou_little_maid.wireless_io.binding_pos.has",
+                    pos.getX(), pos.getY(), pos.getZ());
+            tooltip.add(Component.literal(posString).withStyle(ChatFormatting.GRAY));
+        }
     }
 }
