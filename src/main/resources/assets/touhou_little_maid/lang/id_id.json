@@ -234,6 +234,8 @@
   "item.touhou_little_maid.magic_protect_bauble.tip": "Memberikan Maid ketahanan terhadap efek-efek.",
   "item.touhou_little_maid.item_magnet_bauble.tip": "Luaskan jangkauan Maid ambil barang.",
   "item.touhou_little_maid.nimble_fabric.tip": "Memberikan Maid kemampuan untuk menghindari proyektil yang datang dengan teleport.",
+  "item.touhou_little_maid.crafting_table_backpack.tip": "Luaskan slot inventaris Maid Anda sampai 18. Membuat Maid Anda sebagai Meja Kerajinan portabel.",
+  "item.touhou_little_maid.furnace_backpack.tip": "Luaskan slot inventaris Maid Anda sampai 18. Membuat Maid Anda sebagai Tungku portabel.",
   "tooltips.touhou_little_maid.chair.destroy.desc": "Jongkok klik kiri untuk menghancurkan.",
   "tooltips.touhou_little_maid.chair.gui.desc": "Jongkok klik kanan untuk membuka GUI skin.",
   "tooltips.touhou_little_maid.schedule.desc": "§7Klik untuk mengubah jadwal",
