@@ -283,6 +283,8 @@
   "tooltips.touhou_little_maid.wireless_io.binding_pos.has": "绑定坐标：%d，%d，%d",
   "tooltips.touhou_little_maid.wireless_io.binding_pos.none": "未绑定箱子",
   "tooltips.touhou_little_maid.maid_beacon.desc": "存储P点：%s",
+  "tooltips.touhou_little_maid.hakurei_gohei.bind_beacon": "已绑定神社庭灯坐标",
+  "tooltips.touhou_little_maid.hakurei_gohei.bind_altar": "神社庭灯坐标已被绑定到祭坛",
   "tooltips.touhou_little_maid.chair_show.desc": "潜行时手持此物品可以查看坐垫的碰撞箱",
   "tooltips.touhou_little_maid.model_switcher.bounded": "已经绑定女仆",
   "tooltips.touhou_little_maid.custom_sound.credit": "播放一个声音包的备注说明",
