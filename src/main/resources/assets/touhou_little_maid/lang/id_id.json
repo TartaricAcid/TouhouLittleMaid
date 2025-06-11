@@ -655,6 +655,11 @@
   "patchouli.touhou_little_maid.book.entries.maid.spawn_maid.name": "Munculkan Maid",
   "patchouli.touhou_little_maid.book.entries.maid.substitute_jizo.name": "Jizo Substitusi",
   "patchouli.touhou_little_maid.book.entries.maid.maid_home.name": "Rumah Maid",
+  "patchouli.touhou_little_maid.book.entries.maid.film.name": "Film",
+  "patchouli.touhou_little_maid.book.entries.maid.gap.name": "Gap",
+  "patchouli.touhou_little_maid.book.entries.maid.chat_bubbles.name": "Balon Obrolan",
+  "patchouli.touhou_little_maid.book.entries.maid.other_backpack.name": "Tas Lain",
+  "patchouli.touhou_little_maid.book.entries.maid.kappa_compass.name": "Area Tugas Maid",
   "patchouli.touhou_little_maid.book.entries.maid.last_slot.name": "Slot Spesial Terakhir",
   "patchouli.touhou_little_maid.book.entries.maid.maid_meal.name": "Makanan Maid",
   "patchouli.touhou_little_maid.book.entries.maid.servant_bell.name": "Lonceng Maid",
@@ -674,6 +679,7 @@
   "patchouli.touhou_little_maid.book.entries.other.granite_inari_fox.name": "Granite Inari Fox",
   "patchouli.touhou_little_maid.book.entries.other.gomoku.name": "Gomoku",
   "patchouli.touhou_little_maid.book.entries.other.shrine.name": "Kuil",
+  "patchouli.touhou_little_maid.book.entries.other.broom.name": "Sapu",
   "patchouli.touhou_little_maid.book.entries.overview.make_custom_model.pages.1.link_text": "Buka Tautan",
   "patchouli.touhou_little_maid.book.entries.overview.download_custom_model.pages.2.link_text": "Tautan Discord"
 }
