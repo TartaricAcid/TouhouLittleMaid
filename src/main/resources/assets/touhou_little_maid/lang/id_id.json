@@ -797,6 +797,7 @@
   "patchouli.touhou_little_maid.book.entries.maid.item_magnet.pages.0.text": "Sebuah perhiasan yang dapat memperluas jarak ambil barang. $(br2)Setelah dipakai, jarak ambil Maid untuk barang, anak panah, bola XP dan Power Point akan meningkat secara drastis.",
   "patchouli.touhou_little_maid.book.entries.maid.maid_base.name": "Basis Maid",
   "patchouli.touhou_little_maid.book.entries.maid.maid_base.pages.0.text": "Ada banyak fungsi yang bisa dilakukan oleh Maid, seperti: $(li)secara bawaan, Maid akan secara aktif mengambil barang-barang, anak panah dan bola XP di sekitarnya. GUI utama memiliki tombol untuk mengganti mode; $(li)secara bawaan, Maid akan selalu mengikuti sang pemain.",
+  "patchouli.touhou_little_maid.book.entries.maid.maid_base.pages.1.text": "$(li)Jongkok klik kanan pada Maid dengan tangan kosong dapat menukar mode duduk. Dalam mode ini, Maid tidak melakukan apa pun, termasuk menjauhi bahaya. $(li)Saat maid mengendarai suatu benda lain, Jongkok klik kanan dengan tangan kosong dapat menurunkan mereka. $(li)Pemain dapat menggunakan Apel Emas atau ramuan pada Maid dengan jangkok klik kanan ke mereka sambil memegang barangnya.",
   "patchouli.touhou_little_maid.book.entries.maid.maid_bauble.name": "Perhiasan Maid",
   "patchouli.touhou_little_maid.book.entries.maid.maid_config.name": "Konfigurasi Maid",
   "patchouli.touhou_little_maid.book.entries.maid.maid_skin.name": "Skin Maid",
