@@ -216,25 +216,82 @@ public class InfoGetManager {
     public static void onClientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(InfoGetManager::checkInfoJsonFile);
     }
+    /**
+     * 2025-6-25 SoF__kYouNvidia
+     *
+     * 修改原因：
+     * 原代码无法正确处理自http/https的资源下载请求导致反复下载
+     *
+     * 修改内容：
+     * 1. 原有逻辑：从CDN/file下载
+     * 2. 新增：判断是否是HTTP/HTTPS直链
+     *
+     * 影响范围：
+     * 无
+     *
+     * 测试建议：
+     * 推测更多稀奇古怪的资源提供方式
+     */
 
     public static void downloadPack(DownloadInfo info) {
         try {
             Proxy proxy = Minecraft.getInstance().getProxy();
             // 状态设置为下载
             info.setStatus(DownloadStatus.DOWNLOADING);
-            // 依据先前情况，选择线路
-            String rootUrl = USE_BACKUP_URL ? ROOT_URL_BACKUP : ROOT_URL;
-            URL url = new URL(new URL(rootUrl), info.getUrl());
-            // 文件先下载到缓存文件夹，然后才复制到模型文件夹中
-            File fileInTlmModel = CustomPackLoader.PACK_FOLDER.resolve(info.getFileName()).toFile();
-            File fileInCache = PACK_FOLDER.resolve(info.getFileName()).toFile();
-            // 缓存文件不存在，或者需要更新
-            if (!fileInCache.isFile() || FileUtils.checksumCRC32(fileInCache) != info.getChecksum()) {
-                downloadPack(info, fileInCache, url, proxy, fileInTlmModel);
+            // 2025-6-25新增：判断是否是HTTP/HTTPS直链
+            if (info.getUrl().startsWith("http://") || info.getUrl().startsWith("https://")) {
+                File fileInTlmModel = CustomPackLoader.PACK_FOLDER.resolve(info.getFileName()).toFile();
+                File tempFile = Files.createTempFile("tlm-download-", ".tmp").toFile();
+
+                sendDownloadMessage(Component.translatable("gui.touhou_little_maid.resources_download.state.downloading", info.getFileName()));
+                StopWatch stopWatch = StopWatch.createStarted();
+
+                HttpUtil.downloadTo(tempFile, new URL(info.getUrl()), getDownloadHeaders(), PACK_MAX_FILE_SIZE, info, proxy)
+                        .thenRun(() -> {
+                            stopWatch.stop();
+                            try {
+                                // 强制校验CRC32
+                                long actualChecksum = FileUtils.checksumCRC32(tempFile);
+                                if (actualChecksum != info.getChecksum()) {
+                                    throw new IOException("Checksum mismatch");
+                                }
+
+                                if (ZipFileCheck.isZipFile(tempFile)) {
+                                    Files.copy(tempFile.toPath(), fileInTlmModel.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                                    CustomPackLoader.readModelFromZipFile(fileInTlmModel);
+                                    ServerCustomPackLoader.reloadPacks();
+                                    info.setStatus(DownloadStatus.DOWNLOADED);
+                                    sendDownloadMessage(Component.translatable("gui.touhou_little_maid.resources_download.state.downloaded",
+                                            info.getFileName(), stopWatch.getTime(TimeUnit.MILLISECONDS) / 1000.0));
+                                } else {
+                                    throw new IOException("Not a valid ZIP file");
+                                }
+                            } catch (IOException e) {
+                                info.setStatus(DownloadStatus.NOT_DOWNLOAD);
+                                TouhouLittleMaid.LOGGER.error("Failed to load external pack: {}", info.getUrl(), e);
+                            } finally {
+                                FileUtils.deleteQuietly(tempFile);
+                            }
+                        })
+                        .exceptionally(error -> {
+                            stopWatch.stop();
+                            info.setStatus(DownloadStatus.NOT_DOWNLOAD);
+                            TouhouLittleMaid.LOGGER.warn("Failed to download external pack: {}", info.getUrl());
+                            return null;
+                        });
             } else {
-                // 存在？那就直接复制加载即可
-                reloadPack(info, fileInCache, fileInTlmModel);
-                sendDownloadMessage(Component.translatable("gui.touhou_little_maid.resources_download.state.downloaded", info.getFileName(), 0.943));
+                // 2025-6-25原有逻辑：从CDN/file下载
+                String rootUrl = USE_BACKUP_URL ? ROOT_URL_BACKUP : ROOT_URL;
+                URL url = new URL(new URL(rootUrl), info.getUrl());
+                File fileInTlmModel = CustomPackLoader.PACK_FOLDER.resolve(info.getFileName()).toFile();
+                File fileInCache = PACK_FOLDER.resolve(info.getFileName()).toFile();
+
+                if (!fileInCache.isFile() || FileUtils.checksumCRC32(fileInCache) != info.getChecksum()) {
+                    downloadPack(info, fileInCache, url, proxy, fileInTlmModel);
+                } else {
+                    reloadPack(info, fileInCache, fileInTlmModel);
+                    sendDownloadMessage(Component.translatable("gui.touhou_little_maid.resources_download.state.downloaded", info.getFileName(), 0.943));
+                }
             }
         } catch (IOException e) {
             e.fillInStackTrace();
