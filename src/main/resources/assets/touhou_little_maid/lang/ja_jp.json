@@ -500,6 +500,7 @@
   "config.touhou_little_maid.vanilla.replace_totem_texture.tooltip": "不死のトーテムのテクスチャを1UPアイテムに置き換えるかどうか",
   "config.touhou_little_maid.vanilla.replace_xp_bottle_texture": "エンチャントの瓶のテクスチャの置き換え",
   "config.touhou_little_maid.vanilla.replace_xp_bottle_texture.tooltip": "エンチャントの瓶のテクスチャを得点アイテムに置き換えるか",
+  "config.touhou_little_maid.render.enable_compass_tip": "コンパスを持った時のヒントを有効にする",
   "task.touhou_little_maid.idle": "待機",
   "task.touhou_little_maid.attack": "近接攻撃",
   "task.touhou_little_maid.ranged_attack": "遠隔攻撃",
