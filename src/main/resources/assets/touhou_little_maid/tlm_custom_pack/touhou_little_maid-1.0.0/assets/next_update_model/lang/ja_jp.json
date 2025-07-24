@@ -1,1 +1,8 @@
-{}
+{
+    "model.next_update_model.stage.name": "ステージ",
+    "model.next_update_model.japanese_lottery_machine.name": "ガラガラ抽選器",
+    "model.next_update_model.fishpond.name": "生け簀",
+    "model.next_update_model.mine.name": "坑道",
+    "model.next_update_model.logging_hut.name": "木工小屋",
+    "model.next_update_model.kitchen.name": "キッチン"
+}
