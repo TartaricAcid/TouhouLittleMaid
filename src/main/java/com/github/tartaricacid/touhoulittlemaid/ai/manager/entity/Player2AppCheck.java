@@ -25,7 +25,9 @@ import java.time.Duration;
 public class Player2AppCheck {
     private static final Duration MAX_TIMEOUT = Duration.ofSeconds(15);
     private static final HttpClient HTTP_CLIENT = HttpClient.newBuilder()
-            .connectTimeout(MAX_TIMEOUT).build();
+            .connectTimeout(MAX_TIMEOUT)
+            .version(HttpClient.Version.HTTP_1_1)
+            .build();
     private static final HttpRequest REQUEST = HttpRequest.newBuilder()
             .uri(URI.create("http://127.0.0.1:4315/v1/health"))
             .header(HttpHeaders.ACCEPT, MediaType.JSON_UTF_8.toString())

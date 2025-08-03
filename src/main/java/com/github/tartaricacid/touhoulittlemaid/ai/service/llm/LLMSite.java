@@ -25,6 +25,7 @@ public interface LLMSite extends Site {
     HttpClient LLM_HTTP_CLIENT = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(10))
             .proxy(new ConfigProxySelector(AIConfig.LLM_PROXY_ADDRESS))
+            .version(HttpClient.Version.HTTP_1_1)
             .build();
 
     static Map<String, LLMSite> readSites(Path file) {
