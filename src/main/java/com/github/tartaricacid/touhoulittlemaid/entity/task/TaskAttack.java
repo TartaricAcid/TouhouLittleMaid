@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -20,10 +21,12 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.behavior.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
 public class TaskAttack implements IAttackTask {
@@ -49,7 +52,7 @@ public class TaskAttack implements IAttackTask {
         BehaviorControl<EntityMaid> supplementedTask = StartAttacking.create(this::hasAssaultWeapon, IAttackTask::findFirstValidAttackTarget);
         BehaviorControl<EntityMaid> findTargetTask = StopAttackingIfTargetInvalid.create(target -> !hasAssaultWeapon(maid) || farAway(target, maid));
         BehaviorControl<Mob> moveToTargetTask = SetWalkTargetFromAttackTargetIfTargetOutOfReach.create(0.6f);
-        BehaviorControl<Mob> attackTargetTask = MeleeAttack.create(20);
+        BehaviorControl<Mob> attackTargetTask = MeleeAttack.create(calculateCooldown(maid));
         MaidUseShieldTask maidUseShieldTask = new MaidUseShieldTask();
 
         return Lists.newArrayList(
@@ -65,7 +68,7 @@ public class TaskAttack implements IAttackTask {
     public List<Pair<Integer, BehaviorControl<? super EntityMaid>>> createRideBrainTasks(EntityMaid maid) {
         BehaviorControl<EntityMaid> supplementedTask = StartAttacking.create(this::hasAssaultWeapon, IAttackTask::findFirstValidAttackTarget);
         BehaviorControl<EntityMaid> findTargetTask = StopAttackingIfTargetInvalid.create(target -> !hasAssaultWeapon(maid) || farAway(target, maid));
-        BehaviorControl<Mob> attackTargetTask = MeleeAttack.create(20);
+        BehaviorControl<Mob> attackTargetTask = MeleeAttack.create(calculateCooldown(maid));
         MaidUseShieldTask maidUseShieldTask = new MaidUseShieldTask();
 
         return Lists.newArrayList(
@@ -124,5 +127,41 @@ public class TaskAttack implements IAttackTask {
             return maid.getOwner().distanceTo(target) > radius;
         }
         return maid.distanceTo(target) > radius;
+    }
+
+    private int calculateCooldown(EntityMaid maid){
+        // 1. 基础攻击速度
+        double attackSpeed = 4;
+
+        // 2. 叠加手持武器的攻击速度修正
+        ItemStack weapon = maid.getMainHandItem();
+        if(!weapon.isEmpty()){
+            AtomicReference<Double> itemSpeed = new AtomicReference<>((double) 0);
+            ItemAttributeModifiers attributeModifiers = weapon.getAttributeModifiers();
+            attributeModifiers.forEach(EquipmentSlot.MAINHAND,(a,b)->{
+                if(b.is(ResourceLocation.fromNamespaceAndPath("minecraft","base_attack_speed"))){
+                    itemSpeed.set(b.amount());
+                }
+            });
+            attackSpeed+=itemSpeed.get();
+        }
+        // 3. 叠加状态效果的影响（急迫/挖掘疲劳）
+        // 急迫：每级增加10%攻击速度（公式：1 + 0.1 * 等级）
+        if (maid.hasEffect(MobEffects.DIG_SPEED)) {
+            int amplifier = maid.getEffect(MobEffects.DIG_SPEED).getAmplifier();
+            attackSpeed *= (1.0 + 0.1 * (amplifier + 1));
+        }
+
+        // 挖掘疲劳：每级降低10%攻击速度（公式：1 - 0.1 * 等级）
+        if (maid.hasEffect(MobEffects.DIG_SLOWDOWN)) {
+            int amplifier = maid.getEffect(MobEffects.DIG_SLOWDOWN).getAmplifier();
+            attackSpeed *= (1.0 - 0.1 * (amplifier + 1));
+        }
+
+        // 防御性处理：确保攻击速度不会低于极小值（避免后续除零）
+        attackSpeed=Math.max(attackSpeed,0.1);
+        int result = (int) Math.round(20.0 / attackSpeed);
+        //TouhouLittleMaid.LOGGER.info("计算结果:"+result);
+        return result;
     }
 }
