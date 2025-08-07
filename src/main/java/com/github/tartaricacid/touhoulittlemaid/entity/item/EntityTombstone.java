@@ -1,8 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.item;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.world.data.MaidWorldData;
 import net.minecraft.Util;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -24,6 +26,8 @@ import net.neoforged.neoforge.items.ItemStackHandler;
 import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.UUID;
+
+import static com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil.canItemInsert;
 
 public class EntityTombstone extends Entity {
     public static final EntityType<EntityTombstone> TYPE = EntityType.Builder.<EntityTombstone>of(EntityTombstone::new, MobCategory.MISC)
@@ -53,17 +57,45 @@ public class EntityTombstone extends Entity {
     public InteractionResult interact(Player player, InteractionHand hand) {
         ItemStack itemInHand = player.getItemInHand(hand);
         Ingredient ntrItem = EntityMaid.getNtrItem();
+
         // NTR 工具可以收回墓碑
         if (player.getUUID().equals(this.ownerId) || ntrItem.test(itemInHand)) {
+            boolean canTakeAll = true;
+            boolean isShiftDown = player.isShiftKeyDown();
+
+            // 第一步：预检查所有物品是否能被玩家容纳（不实际提取物品）
+            for (int i = 0; i < this.items.getSlots(); i++) {
+                ItemStack stack = this.items.getStackInSlot(i);
+                if (stack.isEmpty()) continue;
+
+                // 如果玩家没按Shift，且物品无法插入背包，则标记为不能全部取出
+                if (!isShiftDown && !canItemInsert(player, stack)) {
+                    canTakeAll = false;
+                    break; // 一旦发现有物品不能插入，立即中断检查
+                }
+            }
+
+            // 如果不能全部取出且没按Shift，直接返回失败（不处理任何物品）
+            if (!canTakeAll && !isShiftDown) {
+                TouhouLittleMaid.LOGGER.info("背包已满,物品插入失败");
+                return InteractionResult.FAIL;
+            }
+
+            // 第二步：确认可以处理后，才实际提取并给予物品
             for (int i = 0; i < this.items.getSlots(); i++) {
                 int size = this.items.getSlotLimit(i);
                 ItemStack extractItem = this.items.extractItem(i, size, false);
-                ItemHandlerHelper.giveItemToPlayer(player, extractItem);
+                if (!extractItem.isEmpty()) {
+                    ItemHandlerHelper.giveItemToPlayer(player, extractItem);
+                }
             }
+
+            // 所有物品处理完毕后，再销毁实体
             this.discard();
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
 
+        // 其他逻辑...
         if (!player.level.isClientSide && hand == InteractionHand.MAIN_HAND) {
             ItemStack stack = Arrays.stream(ntrItem.getItems()).findFirst().orElse(ItemStack.EMPTY);
             Component displayName = stack.getDisplayName();
