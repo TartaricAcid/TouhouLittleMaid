@@ -23,6 +23,12 @@ public class TileEntityShrine extends BlockEntity {
     private static final String STORAGE_ITEM = "StorageItem";
     private final ItemStackHandler handler = new ItemStackHandler() {
         @Override
+        protected void onContentsChanged(int slot) {
+            // 当物品栏内容发生变化时，这个方法会被调用
+            // 我们需要在这里调用 setChanged() 来通知Minecraft该方块实体的数据已更新，需要保存
+            setChanged();
+        }
+        @Override
         public boolean isItemValid(int slot, @NotNull ItemStack stack) {
             return stack.getItem() == InitItems.FILM.get();
         }
