@@ -543,6 +543,8 @@
   "message.touhou_little_maid.saddle.how_to_eject": "Right click again with the saddle in hand to eject the maid",
   "message.touhou_little_maid.tombstone.not_yours.1": "This maid tombstone is not yours!",
   "message.touhou_little_maid.tombstone.not_yours.2": "if you are a server admin, please right click with the item: ",
+  "message.touhou_little_maid.tombstone.player_inventory_full.1": "Player's inventory is full, please clear some space before retrieving maid's items",
+  "message.touhou_little_maid.tombstone.player_inventory_full.2": "You can sneak & right click to force retrieving maid's items",
   "message.touhou_little_maid.servant_bell.show_pos": "The maid is on an unloaded chunk, please follow the position hint to find it",
   "message.touhou_little_maid.servant_bell.not_same_dimension": "You are not in the same dimension as your maid. The maid is in the %s dimension",
   "message.touhou_little_maid.servant_bell.no_result": "No maids were found",

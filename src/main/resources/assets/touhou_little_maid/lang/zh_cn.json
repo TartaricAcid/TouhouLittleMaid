@@ -543,6 +543,8 @@
   "message.touhou_little_maid.saddle.how_to_eject": "使用鞍再次右击即可放下女仆",
   "message.touhou_little_maid.tombstone.not_yours.1": "这个女仆墓碑不是你的！",
   "message.touhou_little_maid.tombstone.not_yours.2": "如果你是服务器管理员，请使用这个物品来右击移除：",
+  "message.touhou_little_maid.tombstone.player_inventory_full.1": "玩家的物品栏已满，请在取回女仆物品之前清出一些空间",
+  "message.touhou_little_maid.tombstone.player_inventory_full.2": "你也可以潜行右击来强制取回女仆物品",
   "message.touhou_little_maid.servant_bell.show_pos": "女仆在卸载区块上，请遵循坐标指引来找到她",
   "message.touhou_little_maid.servant_bell.not_same_dimension": "女仆和你不在同一维度，女仆在%s维度",
   "message.touhou_little_maid.servant_bell.no_result": "找不到女仆",
