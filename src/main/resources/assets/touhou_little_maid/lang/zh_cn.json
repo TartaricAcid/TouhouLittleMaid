@@ -567,6 +567,8 @@
   "commands.touhou_little_maid.power.get.info": "%s：%.2f",
   "commands.touhou_little_maid.maid_num.get.info": "%s：%d",
   "commands.touhou_little_maid.chat_tokens.get.info": "%s: %d",
+  "commands.touhou_little_maid.maid.no_ai.success": "成功将女仆的的 No AI 属性设置为 %s",
+  "commands.touhou_little_maid.maid.no_ai.fail": "目标实体不是女仆",
   "argument.touhou_little_maid.handle_type.invalid": "不合法的Handle类型",
   "debug.touhou_little_maid.enable.true": "Touhou Little Maid 调试功能已开启",
   "debug.touhou_little_maid.enable.false": "Touhou Little Maid 调试功能已关闭",
