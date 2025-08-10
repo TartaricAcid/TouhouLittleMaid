@@ -68,7 +68,8 @@ public class MaidSwimManager {
         } else {
             maid.setSwimming(false);
             // 也许有更好的方式?
-            if (!maid.isSleeping()) {
+            // 不要覆盖坐姿或睡姿
+            if (!maid.isSleeping() && !maid.isMaidInSittingPose()) {
                 maid.setPose(Pose.STANDING);
             }
         }
