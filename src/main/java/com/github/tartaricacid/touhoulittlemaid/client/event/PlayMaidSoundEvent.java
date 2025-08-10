@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.event;
 
 import com.github.tartaricacid.touhoulittlemaid.client.sound.data.MaidSoundInstance;
+import com.github.tartaricacid.touhoulittlemaid.client.sound.data.MaidSoundInstanceAtPos;
 import com.mojang.blaze3d.audio.SoundBuffer;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -12,6 +13,12 @@ public class PlayMaidSoundEvent {
     @SubscribeEvent
     public static void onPlaySoundSource(PlaySoundSourceEvent event) {
         if (event.getSound() instanceof MaidSoundInstance instance) {
+            SoundBuffer soundBuffer = instance.getSoundBuffer();
+            if (soundBuffer != null) {
+                event.getChannel().attachStaticBuffer(soundBuffer);
+                event.getChannel().play();
+            }
+        } else if (event.getSound() instanceof MaidSoundInstanceAtPos instance) {
             SoundBuffer soundBuffer = instance.getSoundBuffer();
             if (soundBuffer != null) {
                 event.getChannel().attachStaticBuffer(soundBuffer);

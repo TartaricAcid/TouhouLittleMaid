@@ -37,6 +37,7 @@ public class NetworkHandler {
         registrar.playToServer(RequestEffectPackage.TYPE, RequestEffectPackage.STREAM_CODEC, RequestEffectPackage::handle);
         registrar.playToClient(SendEffectPackage.TYPE, SendEffectPackage.STREAM_CODEC, SendEffectPackage::handle);
         registrar.playToClient(PlayMaidSoundPackage.TYPE, PlayMaidSoundPackage.STREAM_CODEC, PlayMaidSoundPackage::handle);
+        registrar.playToClient(PlayMaidSoundAtPosPackage.TYPE, PlayMaidSoundAtPosPackage.STREAM_CODEC, PlayMaidSoundAtPosPackage::handle);
         registrar.playToServer(SetMaidSoundIdPackage.TYPE, SetMaidSoundIdPackage.STREAM_CODEC, SetMaidSoundIdPackage::handle);
         registrar.playToClient(GomokuClientPackage.TYPE, GomokuClientPackage.STREAM_CODEC, GomokuClientPackage::handle);
         registrar.playToServer(GomokuServerPackage.TYPE, GomokuServerPackage.STREAM_CODEC, GomokuServerPackage::handle);
