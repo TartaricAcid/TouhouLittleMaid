@@ -46,8 +46,8 @@ public class ItemMaidBeacon extends DoubleHighBlockItem {
 
     public static void itemStackToTileEntity(ItemStack stack, TileEntityMaidBeacon beacon) {
         CompoundTag tag = stack.get(STORAGE_DATA_TAG);
-        if (tag != null&& tag.contains(NEO_FORGE_DATA_TAG, Tag.TAG_COMPOUND)) {
-            //正确读取tag数据
+        if (tag != null && tag.contains(NEO_FORGE_DATA_TAG, Tag.TAG_COMPOUND)) {
+            // 正确读取tag数据
             CompoundTag forgeTag = tag.getCompound(NEO_FORGE_DATA_TAG);
             beacon.loadData(forgeTag);
         }
