@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
+import com.github.tartaricacid.touhoulittlemaid.api.event.MaidAndItemTransformEvent;
 import com.github.tartaricacid.touhoulittlemaid.capability.MaidNumCapabilityProvider;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
@@ -25,6 +26,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -41,7 +43,10 @@ public class ItemSmartSlab extends AbstractStoreMaidItem {
     }
 
     public static void storeMaidData(ItemStack stack, EntityMaid maid) {
-        maid.saveWithoutId(stack.getOrCreateTagElement(MAID_INFO));
+        CompoundTag data = stack.getOrCreateTagElement(MAID_INFO);
+        maid.saveWithoutId(data);
+        var event = new MaidAndItemTransformEvent.ToItem(maid, stack, data);
+        MinecraftForge.EVENT_BUS.post(event);
     }
 
     @Override
@@ -85,6 +90,10 @@ public class ItemSmartSlab extends AbstractStoreMaidItem {
             if (!player.getUUID().equals(ownerUid)) {
                 return InteractionResult.FAIL;
             }
+
+            var event = new MaidAndItemTransformEvent.ToMaid(maid, stack, maidData);
+            MinecraftForge.EVENT_BUS.post(event);
+
             maid.load(maidData);
             maid.moveTo(context.getClickedPos().above(), 0, 0);
             if (worldIn instanceof ServerLevel) {

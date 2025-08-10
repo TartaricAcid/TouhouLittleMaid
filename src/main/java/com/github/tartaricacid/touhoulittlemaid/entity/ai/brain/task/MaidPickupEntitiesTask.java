@@ -37,10 +37,16 @@ public class MaidPickupEntitiesTask extends Behavior<EntityMaid> {
 
     @Override
     protected void start(ServerLevel worldIn, EntityMaid maid, long gameTimeIn) {
-        getItems(maid).stream()
-                .filter(e -> maid.isWithinRestriction(e.blockPosition()) && e.isAlive() && !e.isInWater())
-                .filter(maid::canPathReach).findFirst()
-                .ifPresent(e -> BehaviorUtils.setWalkAndLookTargetMemories(maid, e, this.speedModifier, 0));
+        List<Entity> items = this.getItems(maid);
+        for (Entity entity : items) {
+            if (maid.isWithinRestriction(entity.blockPosition())
+                && entity.isAlive()
+                && !entity.isInWater()
+                && maid.canPathReach(entity)) {
+                BehaviorUtils.setWalkAndLookTargetMemories(maid, entity, this.speedModifier, 0);
+                return;
+            }
+        }
     }
 
     private List<Entity> getItems(EntityMaid maid) {

@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.mod.ClothConfigScreen
 import com.github.tartaricacid.touhoulittlemaid.compat.carryon.BlackList;
 import com.github.tartaricacid.touhoulittlemaid.compat.cloth.MenuIntegration;
 import com.github.tartaricacid.touhoulittlemaid.compat.patchouli.PatchouliCompat;
+import com.github.tartaricacid.touhoulittlemaid.compat.sbackpack.SBackpackCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.top.TheOneProbeInfo;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -20,6 +21,7 @@ public final class CompatRegistry {
     public static final String PATCHOULI = "patchouli";
     public static final String CLOTH_CONFIG = "cloth_config";
     public static final String CARRY_ON_ID = "carryon";
+    public static final String SBACKPACK = "sophisticatedbackpacks";
 
     @SubscribeEvent
     public static void onEnqueue(final InterModEnqueueEvent event) {
@@ -36,6 +38,7 @@ public final class CompatRegistry {
             }
         });
         event.enqueueWork(() -> checkModLoad(CARRY_ON_ID, BlackList::addBlackList));
+        event.enqueueWork(() -> checkModLoad(SBACKPACK, SBackpackCompat::init));
     }
 
     private static void checkModLoad(String modId, Runnable runnable) {

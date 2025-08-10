@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
+import com.github.tartaricacid.touhoulittlemaid.api.event.MaidAndItemTransformEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
@@ -17,6 +18,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
@@ -38,6 +40,10 @@ public class ItemFilm extends AbstractStoreMaidItem {
         maid.saveWithoutId(maidTag);
         removeMaidSomeData(maidTag);
         maidTag.putString(ID_TAG, Objects.requireNonNull(ForgeRegistries.ENTITY_TYPES.getKey(InitEntities.MAID.get())).toString());
+
+        var event = new MaidAndItemTransformEvent.ToItem(maid, film, maidTag);
+        MinecraftForge.EVENT_BUS.post(event);
+
         filmTag.put(MAID_INFO, maidTag);
         film.setTag(filmTag);
         return film;
@@ -50,6 +56,10 @@ public class ItemFilm extends AbstractStoreMaidItem {
 
         if (entityId.equals(maidId)) {
             EntityMaid maid = new EntityMaid(worldIn);
+
+            var event = new MaidAndItemTransformEvent.ToMaid(maid, film, data);
+            MinecraftForge.EVENT_BUS.post(event);
+
             maid.readAdditionalSaveData(data);
             maid.setPos(pos.getX(), pos.getY(), pos.getZ());
             // 实体生成必须在服务端应用

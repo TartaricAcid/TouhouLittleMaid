@@ -32,14 +32,16 @@ public class MaidPathFindingBFS {
         this(nodeEvaluator, level, maid, maid.searchRadius(), 7);
     }
 
-    public MaidPathFindingBFS(NodeEvaluator nodeEvaluator, ServerLevel level, EntityMaid maid, int verticalSearchRange) {
-        this(nodeEvaluator, level, maid, maid.searchRadius(), verticalSearchRange);
+    public MaidPathFindingBFS(NodeEvaluator nodeEvaluator, ServerLevel level, EntityMaid maid, float maxDistance, int verticalSearchRange) {
+        this(nodeEvaluator, level, maid,
+                maid.hasRestriction() ? maid.getRestrictCenter() : maid.blockPosition(),
+                maxDistance, verticalSearchRange);
     }
 
     @SuppressWarnings("all")
-    public MaidPathFindingBFS(NodeEvaluator nodeEvaluator, ServerLevel level, EntityMaid maid, float maxDistance, int verticalSearchRange) {
+    public MaidPathFindingBFS(NodeEvaluator nodeEvaluator, ServerLevel level, EntityMaid maid, BlockPos centerPos, float maxDistance, int verticalSearchRange) {
         this.nodeEvaluator = nodeEvaluator;
-        this.centerPos = maid.blockPosition();
+        this.centerPos = centerPos;
         this.maxDistance = maxDistance;
         this.verticalSearchRange = verticalSearchRange;
 

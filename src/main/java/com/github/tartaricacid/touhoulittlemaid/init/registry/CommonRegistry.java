@@ -12,6 +12,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleRegister;
 import com.github.tartaricacid.touhoulittlemaid.entity.data.TaskDataRegister;
 import com.github.tartaricacid.touhoulittlemaid.entity.info.ServerCustomPackLoader;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.control.BroomControlManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.meal.MaidMealManager;
 import com.github.tartaricacid.touhoulittlemaid.inventory.chest.ChestManager;
@@ -47,5 +48,6 @@ public final class CommonRegistry {
         FunctionCallRegister.init();
         ChatBubbleRegister.init();
         DebugMaidManager.init();
+        BroomControlManager.init();
     }
 }

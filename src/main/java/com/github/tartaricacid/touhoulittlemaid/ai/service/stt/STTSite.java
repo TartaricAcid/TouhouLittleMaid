@@ -25,6 +25,7 @@ public interface STTSite extends Site {
     HttpClient STT_HTTP_CLIENT = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(10))
             .proxy(new ConfigProxySelector(AIConfig.STT_PROXY_ADDRESS))
+            .version(HttpClient.Version.HTTP_1_1)
             .build();
 
     static Map<String, STTSite> readSites(Path file) {

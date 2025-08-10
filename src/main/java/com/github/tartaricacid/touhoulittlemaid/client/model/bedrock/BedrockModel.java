@@ -69,15 +69,6 @@ public class BedrockModel<T extends LivingEntity> extends AbstractBedrockEntityM
         }
     }
 
-    @Override
-    @ParametersAreNonnullByDefault
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        for (BedrockPart model : shouldRender) {
-            model.render(poseStack, buffer, packedLight, packedOverlay);
-        }
-    }
-
-
     @SuppressWarnings("unchecked")
     private void setupMaidAnim(IMaid entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, Invocable invocable) {
         try {

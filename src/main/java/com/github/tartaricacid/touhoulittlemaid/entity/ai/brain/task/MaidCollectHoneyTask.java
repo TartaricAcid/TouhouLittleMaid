@@ -66,6 +66,9 @@ public class MaidCollectHoneyTask extends MaidCheckRateTask {
         maid.getBrain().getMemory(InitEntities.TARGET_POS.get()).ifPresent(target -> {
             BlockPos hivePos = target.currentBlockPosition();
             BlockState hiveBlockState = level.getBlockState(hivePos);
+            if (!hiveBlockState.hasProperty(BeehiveBlock.HONEY_LEVEL)) {
+                return;
+            }
             if (hiveBlockState.getValue(BeehiveBlock.HONEY_LEVEL) < 5) {
                 return;
             }
@@ -126,10 +129,16 @@ public class MaidCollectHoneyTask extends MaidCheckRateTask {
     }
 
     private boolean canCollectHoney(ServerLevel world, BlockPos hivePos) {
-        return world.getBlockState(hivePos).getValue(BeehiveBlock.HONEY_LEVEL) >= 5;
+        BlockState state = world.getBlockState(hivePos);
+        if (state.hasProperty(BeehiveBlock.HONEY_LEVEL)) {
+            return state.getValue(BeehiveBlock.HONEY_LEVEL) >= 5;
+        }
+        return false;
     }
 
     public void resetHoneyLevel(Level level, BlockState state, BlockPos pos) {
-        level.setBlock(pos, state.setValue(BeehiveBlock.HONEY_LEVEL, 0), Block.UPDATE_ALL);
+        if (state.hasProperty(BeehiveBlock.HONEY_LEVEL)) {
+            level.setBlock(pos, state.setValue(BeehiveBlock.HONEY_LEVEL, 0), Block.UPDATE_ALL);
+        }
     }
 }

@@ -42,4 +42,5 @@ public final class InitBlocks {
     public static RegistryObject<BlockEntityType<TileEntityComputer>> COMPUTER_TE = TILE_ENTITIES.register("computer", () -> TileEntityComputer.TYPE);
     public static RegistryObject<BlockEntityType<TileEntityShrine>> SHRINE_TE = TILE_ENTITIES.register("shrine", () -> TileEntityShrine.TYPE);
     public static RegistryObject<BlockEntityType<TileEntityPicnicMat>> PICNIC_MAT_TE = TILE_ENTITIES.register("picnic_mat", () -> TileEntityPicnicMat.TYPE);
+    public static RegistryObject<BlockEntityType<TileEntityMaidBed>> MAID_BED_TE = TILE_ENTITIES.register("maid_bed", () -> TileEntityMaidBed.TYPE);
 }

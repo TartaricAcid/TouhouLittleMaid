@@ -74,7 +74,8 @@ public class MaidSnowballTargetTask extends Behavior<EntityMaid> {
     }
 
     private void performRangedAttack(EntityMaid shooter, LivingEntity target) {
-        Snowball snowball = new Snowball(shooter.level(), shooter);
+        // 发射的是无 shooter 雪球，避免打中其他生物惹来攻击
+        Snowball snowball = new Snowball(shooter.level(), shooter.getX(), shooter.getY(), shooter.getZ());
         double x = target.getX() - shooter.getX();
         double y = target.getBoundingBox().minY + target.getBbHeight() / 3.0F - snowball.position().y;
         double z = target.getZ() - shooter.getZ();

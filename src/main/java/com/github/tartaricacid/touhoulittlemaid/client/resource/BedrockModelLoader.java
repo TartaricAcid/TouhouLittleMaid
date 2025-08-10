@@ -64,6 +64,14 @@ public class BedrockModelLoader {
     public static final ResourceLocation SMALL_BACKPACK = registerSimpleEntityModel("backpack/small_backpack");
     public static final ResourceLocation TANK_BACKPACK = registerSimpleEntityModel("backpack/tank_backpack");
 
+    public static final ResourceLocation PINK_MAID_BED = registerSimpleBlockModel("maid_bed/pink");
+    public static final ResourceLocation WHITE_MAID_BED = registerSimpleBlockModel("maid_bed/white");
+    public static final ResourceLocation BLACK_MAID_BED = registerSimpleBlockModel("maid_bed/black");
+    public static final ResourceLocation YELLOW_MAID_BED = registerSimpleBlockModel("maid_bed/yellow");
+    public static final ResourceLocation BLUE_MAID_BED = registerSimpleBlockModel("maid_bed/blue");
+    public static final ResourceLocation GREEN_MAID_BED = registerSimpleBlockModel("maid_bed/green");
+    public static final ResourceLocation PURPLE_MAID_BED = registerSimpleBlockModel("maid_bed/purple");
+
     public static ResourceLocation registerSimpleBlockModel(String name) {
         ResourceLocation location = new ResourceLocation(TouhouLittleMaid.MOD_ID, "bedrock/block/" + name);
         return registerSimpleModel(location);

@@ -7,19 +7,14 @@ import com.google.common.collect.Lists;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
-import me.shedaniel.clothconfig2.impl.builders.DropdownMenuBuilder;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MenuIntegration {
     public static ConfigBuilder getConfigBuilder() {
@@ -49,19 +44,17 @@ public class MenuIntegration {
                 .setDefaultValue(true).setTooltip(Component.translatable("config.touhou_little_maid.maid.global_maid_show_chat_bubble.tooltip"))
                 .setSaveConsumer(MaidConfig.GLOBAL_MAID_SHOW_CHAT_BUBBLE::set).build());
 
-        maid.addEntry(entryBuilder.startDropdownMenu(Component.translatable("config.touhou_little_maid.maid.maid_tamed_item"),
-                        DropdownMenuBuilder.TopCellElementBuilder.ofItemObject(ForgeRegistries.ITEMS.getValue(new ResourceLocation(MaidConfig.MAID_TAMED_ITEM.get()))),
-                        DropdownMenuBuilder.CellCreatorBuilder.ofItemObject())
-                .setSelections(BuiltInRegistries.ITEM.stream().sorted(Comparator.comparing(Item::toString)).collect(Collectors.toCollection(LinkedHashSet::new)))
-                .setDefaultValue(Items.CAKE).setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_tamed_item.tooltip"))
-                .setSaveConsumer(s -> MaidConfig.MAID_TAMED_ITEM.set(ForgeRegistries.ITEMS.getKey(s).toString())).build());
+        maid.addEntry(entryBuilder.startTextField(Component.translatable("config.touhou_little_maid.maid.maid_tamed_item"),
+                        MaidConfig.MAID_TAMED_ITEM.get())
+                .setDefaultValue(MaidConfig.MAID_TAMED_ITEM.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_tamed_item.tooltip"))
+                .setSaveConsumer(s -> MaidConfig.MAID_TAMED_ITEM.set(s)).build());
 
-        maid.addEntry(entryBuilder.startDropdownMenu(Component.translatable("config.touhou_little_maid.maid.maid_temptation_item"),
-                        DropdownMenuBuilder.TopCellElementBuilder.ofItemObject(ForgeRegistries.ITEMS.getValue(new ResourceLocation(MaidConfig.MAID_TEMPTATION_ITEM.get()))),
-                        DropdownMenuBuilder.CellCreatorBuilder.ofItemObject())
-                .setSelections(BuiltInRegistries.ITEM.stream().sorted(Comparator.comparing(Item::toString)).collect(Collectors.toCollection(LinkedHashSet::new)))
-                .setDefaultValue(Items.CAKE).setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_temptation_item.tooltip"))
-                .setSaveConsumer(s -> MaidConfig.MAID_TEMPTATION_ITEM.set(ForgeRegistries.ITEMS.getKey(s).toString())).build());
+        maid.addEntry(entryBuilder.startTextField(Component.translatable("config.touhou_little_maid.maid.maid_tamed_item"),
+                        MaidConfig.MAID_TEMPTATION_ITEM.get())
+                .setDefaultValue(MaidConfig.MAID_TEMPTATION_ITEM.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_temptation_item.tooltip"))
+                .setSaveConsumer(s -> MaidConfig.MAID_TEMPTATION_ITEM.set(s)).build());
 
         maid.addEntry(entryBuilder.startIntSlider(Component.translatable("config.touhou_little_maid.maid.maid_work_range"), MaidConfig.MAID_WORK_RANGE.get(), 3, 64)
                 .setDefaultValue(12).setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_work_range.tooltip"))

@@ -28,6 +28,8 @@ import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.UUID;
 
+import static com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil.canItemInsert;
+
 public class EntityTombstone extends Entity {
     public static final EntityType<EntityTombstone> TYPE = EntityType.Builder.<EntityTombstone>of(EntityTombstone::new, MobCategory.MISC)
             .sized(0.8f, 1.2f).clientTrackingRange(10).build("tombstone");
@@ -56,18 +58,47 @@ public class EntityTombstone extends Entity {
     public InteractionResult interact(Player player, InteractionHand hand) {
         ItemStack itemInHand = player.getItemInHand(hand);
         Ingredient ntrItem = EntityMaid.getNtrItem();
+
+        // 只能主手触发
+        if (hand != InteractionHand.MAIN_HAND) {
+            return InteractionResult.PASS;
+        }
+
         // NTR 工具可以收回墓碑
         if (player.getUUID().equals(this.ownerId) || ntrItem.test(itemInHand)) {
+            // 第一步：预检查所有物品是否能被玩家容纳（不实际提取物品）
+            // 如果玩家按下了 Shift 键，则强制取出
+            if (!player.isSecondaryUseActive()) {
+                for (int i = 0; i < this.items.getSlots(); i++) {
+                    ItemStack stack = this.items.getStackInSlot(i);
+                    if (stack.isEmpty() || canItemInsert(player, stack)) {
+                        continue;
+                    }
+                    // 一旦发现有物品不能插入，立即中断检查
+                    if (!player.level.isClientSide) {
+                        player.sendSystemMessage(Component.translatable("message.touhou_little_maid.tombstone.player_inventory_full.1"));
+                        player.sendSystemMessage(Component.translatable("message.touhou_little_maid.tombstone.player_inventory_full.2"));
+                    }
+                    return InteractionResult.FAIL;
+                }
+            }
+
+            // 第二步：确认可以处理后，才实际提取并给予物品
             for (int i = 0; i < this.items.getSlots(); i++) {
                 int size = this.items.getSlotLimit(i);
                 ItemStack extractItem = this.items.extractItem(i, size, false);
-                ItemHandlerHelper.giveItemToPlayer(player, extractItem);
+                if (!extractItem.isEmpty()) {
+                    ItemHandlerHelper.giveItemToPlayer(player, extractItem);
+                }
             }
+
+            // 所有物品处理完毕后，再销毁实体
             this.discard();
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
 
-        if (!player.level.isClientSide && hand == InteractionHand.MAIN_HAND) {
+        // 其他逻辑...
+        if (!player.level.isClientSide) {
             ItemStack stack = Arrays.stream(ntrItem.getItems()).findFirst().orElse(ItemStack.EMPTY);
             Component displayName = stack.getDisplayName();
             player.sendSystemMessage(Component.translatable("message.touhou_little_maid.tombstone.not_yours.1"));

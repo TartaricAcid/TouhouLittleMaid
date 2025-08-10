@@ -53,6 +53,7 @@ public final class InitEntitiesRender {
         BlockEntityRenderers.register(TileEntityShrine.TYPE, TileEntityShrineRenderer::new);
         BlockEntityRenderers.register(TileEntityShrine.TYPE, TileEntityShrineRenderer::new);
         BlockEntityRenderers.register(TileEntityPicnicMat.TYPE, PicnicMatRender::new);
+        BlockEntityRenderers.register(TileEntityMaidBed.TYPE, TileEntityMaidBedRenderer::new);
     }
 
     @SubscribeEvent

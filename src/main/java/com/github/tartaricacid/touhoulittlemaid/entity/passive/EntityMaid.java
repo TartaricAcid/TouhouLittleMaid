@@ -996,6 +996,13 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     @Override
     public void die(DamageSource cause) {
         if (!MinecraftForge.EVENT_BUS.post(new MaidDeathEvent(this, cause))) {
+            // 清除死亡时需要清除的内容
+            this.clearFire();
+            this.setTicksFrozen(0);
+            this.setSharedFlagOnFire(false);
+            this.getCombatTracker().recheckStatus();
+            this.removeAllEffects();
+            // 最后父类方法
             super.die(cause);
         }
     }

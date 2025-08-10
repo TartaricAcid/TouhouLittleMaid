@@ -11,9 +11,10 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '[6.0,6.2)', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '[6.0.16,6.2)', changing: true
         classpath 'org.parchmentmc:librarian:1.+'
         classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
+        classpath 'gradle.plugin.com.github.johnrengelman:shadow:7.1.2'
     }
 }
 
@@ -23,6 +24,7 @@ apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'java'
 apply plugin: 'idea'
+apply plugin: 'com.github.johnrengelman.shadow'
 
 version = mod_version
 group = 'com.github.tartaricacid'
@@ -34,12 +36,13 @@ minecraft {
     mappings channel: 'parchment', version: '2023.08.20-1.20.1'
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     runs {
-        client {
-            jvmArgs "-XX:+AllowEnhancedClassRedefinition"
-            workingDirectory project.file('run/client_a')
+        configureEach {
+            jvmArgs = [
+                    "-XX:+IgnoreUnrecognizedVMOptions",
+                    "-XX:+AllowEnhancedClassRedefinition"
+            ]
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
-            property 'fml.earlyprogresswindow', 'false'
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             mods {
@@ -47,46 +50,27 @@ minecraft {
                     source sourceSets.main
                 }
             }
+        }
+
+        client {
+            workingDirectory project.file('run/client_a')
+            property 'fml.earlyprogresswindow', 'false'
         }
 
         client2 {
             parent minecraft.runs.client
             workingDirectory project.file('run/client_b')
             args '--username', 'tartaric_acid'
-            mods {
-                touhou_little_maid {
-                    source sourceSets.main
-                }
-            }
         }
 
         server {
-            jvmArgs "-XX:+AllowEnhancedClassRedefinition"
             workingDirectory project.file('run/server')
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
             property 'forge.enabledGameTestNamespaces', 'touhou_little_maid'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            mods {
-                touhou_little_maid {
-                    source sourceSets.main
-                }
-            }
         }
 
         data {
             workingDirectory project.file('run/data')
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             args '--mod', 'touhou_little_maid', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-            mods {
-                touhou_little_maid {
-                    source sourceSets.main
-                }
-            }
         }
     }
 }
@@ -99,6 +83,14 @@ sourceSets.main.resources {
 mixin {
     add sourceSets.main, "touhou_little_maid.refmap.json"
     config "touhou_little_maid.mixins.json"
+}
+
+configurations {
+    // 自定义一个 minecraftLibrary，方便引入需要 Shadow 的库
+    mcLib
+    minecraftLibrary {
+        extendsFrom mcLib
+    }
 }
 
 repositories {
@@ -150,30 +142,24 @@ repositories {
             includeGroup "dev.architectury"
         }
     }
+    maven {
+        url = "https://maven.createmod.net"
+        content {
+            includeGroup "net.createmod.ponder"
+            includeGroup "dev.engine-room.flywheel"
+        }
+    }
 }
-
-jarJar.enable()
 
 dependencies {
     minecraft "net.minecraftforge:forge:${forge_version}"
 
     // Opus 音频解码库
-    jarJar(minecraftLibrary("org.gagravarr:vorbis-java-core:0.8")) {
-        jarJar.ranged(it, "[0.8,)")
-    }
-    jarJar(minecraftLibrary("io.github.jaredmdobson:concentus:1.0.2")) {
-        jarJar.ranged(it, "[1.0.2,)")
-    }
+    mcLib "org.gagravarr:vorbis-java-core:0.8"
+    mcLib "io.github.jaredmdobson:concentus:1.0.2"
 
     // YAML 库
-    jarJar(minecraftLibrary("org.yaml:snakeyaml:2.4")) {
-        jarJar.ranged(it, "[2.4,)")
-    }
-
-    // 拆分出来的基岩版模型加载库
-    jarJar(implementation(fg.deobf("libs:simplebedrockmodel-1.20.1-release:1.2.1"))) {
-        jarJar.ranged(it, "[1.2.1,)")
-    }
+    mcLib "org.yaml:snakeyaml:2.4"
 
     // 单元测试
     testImplementation 'junit:junit:4.13.2'
@@ -185,45 +171,40 @@ dependencies {
     runtimeOnly fg.deobf("maven.modrinth:probejs:6.0.0")
 
     // compile against the JEI API but do not include it at runtime
-    compileOnly(fg.deobf("mezz.jei:jei-1.20.1-common-api:${jei_version}"))
-    compileOnly(fg.deobf("mezz.jei:jei-1.20.1-forge-api:${jei_version}"))
+    compileOnly(fg.deobf("mezz.jei:jei-1.20.1-common-api:15.20.0.106"))
+    compileOnly(fg.deobf("mezz.jei:jei-1.20.1-forge-api:15.20.0.106"))
     // at runtime, use the full JEI jar for Forge
-    runtimeOnly(fg.deobf("mezz.jei:jei-1.20.1-forge:${jei_version}"))
+    runtimeOnly(fg.deobf("mezz.jei:jei-1.20.1-forge:15.20.0.106"))
 
     // rei
-    compileOnly fg.deobf("curse.maven:architectury-api-419699:${architectury_api_id}")
-    compileOnly fg.deobf("libs:RoughlyEnoughItems-forge:${rei_version}")
+    compileOnly fg.deobf("curse.maven:architectury-api-419699:5137938")
+    compileOnly fg.deobf("libs:RoughlyEnoughItems-forge:12.1.725")
 
     // emi
     // Forge (see below block as well if you use Forge Gradle)
-    compileOnly fg.deobf("libs:emi-forge:${emi_version}:api")
-    compileOnly fg.deobf("libs:emi-forge:${emi_version}")
+    compileOnly fg.deobf("libs:emi-forge:1.1.6+1.20.1:api")
+    compileOnly fg.deobf("libs:emi-forge:1.1.6+1.20.1")
 
-    compileOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
-    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${patchouli_version}")
+    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.20.1-80-FORGE")
+    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.20.1-80-FORGE")
 
-    implementation fg.deobf("curse.maven:jade-324717:${jade_id}")
-    implementation fg.deobf("curse.maven:the-one-probe-245211:${top_id}")
+    implementation fg.deobf("curse.maven:jade-324717:5072729")
+    implementation fg.deobf("curse.maven:the-one-probe-245211:4629624")
 
-    implementation fg.deobf("libs:cloth-config-forge:${cloth_config_forge}")
+    implementation fg.deobf("libs:cloth-config-forge:11.1.106")
 
     runtimeOnly fg.deobf("maven.modrinth:citadel:2.4.9-forge")
-    implementation fg.deobf("curse.maven:domestication-innovation-591149:${domestication_innovation_id}")
+    implementation fg.deobf("curse.maven:domestication-innovation-591149:4911955")
 
     implementation fg.deobf("maven.modrinth:slashblade-resharped:1.1.6-1.20.1")
 
-    implementation fg.deobf("curse.maven:iron-chests-228756:${iron_chests_id}")
+    implementation fg.deobf("curse.maven:iron-chests-228756:4614852")
 
-    compileOnly fg.deobf("maven.modrinth:immersive-melodies:${immersive_melodies_version}")
+    compileOnly fg.deobf("maven.modrinth:immersive-melodies:0.3.0+1.20.1-forge")
 
-    runtimeOnly fg.deobf("curse.maven:carry-on-274259:${carry_on_id}")
-
-    runtimeOnly "curse.maven:kotlin-for-forge-351264:${kotlin_id}"
-    runtimeOnly fg.deobf("curse.maven:libipn-679177:${libipn_id}")
-    implementation fg.deobf("curse.maven:inventory-profiles-next-495267:${ipn_id}")
-
-    runtimeOnly fg.deobf("curse.maven:bookshelf-228525:${bookshelf_id}")
-    runtimeOnly fg.deobf("curse.maven:enchantment-descriptions-250419:${enchantment_descriptions_id}")
+    runtimeOnly "curse.maven:kotlin-for-forge-351264:4983659"
+    runtimeOnly fg.deobf("curse.maven:libipn-679177:4870127")
+    implementation fg.deobf("curse.maven:inventory-profiles-next-495267:4813458")
 
     implementation fg.deobf("curse.maven:timeless-and-classics-zero-1028108:6518539-sources-6518544")
 
@@ -237,10 +218,20 @@ dependencies {
     runtimeOnly fg.deobf("maven.modrinth:embeddium:0.3.31+mc1.20.1")
     compileOnly fg.deobf("maven.modrinth:embeddium:0.3.31+mc1.20.1")
 
-    runtimeOnly fg.deobf("maven.modrinth:lootr:0.7.35.90-forge")
+    implementation fg.deobf("maven.modrinth:inventory-tweaks-refoxed:1.20.1-1.2.0")
+
+    implementation fg.deobf("net.createmod.ponder:Ponder-Forge-1.20.1:1.0.80")
+    runtimeOnly fg.deobf("maven.modrinth:create:1.20.1-6.0.6")
+
+    implementation fg.deobf("maven.modrinth:sophisticated-core:1.20.1-1.2.80.1073")
+    implementation fg.deobf("maven.modrinth:sophisticated-backpacks:1.20.1-3.23.23.1297")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
+    // runtimeOnly fg.deobf("curse.maven:carry-on-274259:4882500")
+    // runtimeOnly fg.deobf("curse.maven:bookshelf-228525:5084135")
+    // runtimeOnly fg.deobf("curse.maven:enchantment-descriptions-250419:5136988")
+    // runtimeOnly fg.deobf("maven.modrinth:lootr:0.7.35.90-forge")
     // runtimeOnly fg.deobf("maven.modrinth:industrial-foregoing:1.20.1-3.5.19")
     // runtimeOnly fg.deobf("maven.modrinth:titanium:1.20.1-3.8.32")
     // runtimeOnly fg.deobf("maven.modrinth:geckolib:4.4.5-forge,1.20.1")
@@ -255,7 +246,34 @@ dependencies {
     // runtimeOnly fg.deobf('curse.maven:placebo-283644:6274231')
     // runtimeOnly fg.deobf("curse.maven:maid-storage-manager-1210244:6315697")
     // runtimeOnly fg.deobf("curse.maven:lavafishing-1035887:5432767")
-    // runtimeOnly fg.deobf("curse.maven:catalogue-459701:${catalogue_id}")
+    // runtimeOnly fg.deobf("curse.maven:catalogue-459701:4766090")
+}
+
+shadowJar {
+    configurations = [project.configurations.mcLib]
+
+    // MP3 音频库 居然会把 junit 打包进去……
+    dependencies {
+        exclude(dependency('junit:junit'))
+    }
+
+    // 包重定向
+    relocate 'io.github.jaredmdobson.concentus', 'com.github.tartaricacid.touhoulittlemaid.libs.concentus'
+    relocate 'org.gagravarr', 'com.github.tartaricacid.touhoulittlemaid.libs.gagravarr'
+    relocate 'org.yaml.snakeyaml', 'com.github.tartaricacid.touhoulittlemaid.libs.snakeyaml'
+
+    // 排除不需要的依赖项和资源
+    exclude 'META-INF/maven/**/*'
+    exclude 'META-INF/versions/**/*'
+    // 这个版权许可都已经手动添加进 licenses 里了
+    exclude 'META-INF/LICENSE'
+
+    mergeServiceFiles()
+    minimize()
+}
+
+reobf {
+    shadowJar {}
 }
 
 tasks.compileJava {

@@ -1,6 +1,6 @@
 modLoader = "javafml"
 loaderVersion = "[46,)"
-license = "CC BY-NC-SA 4.0"
+license = "MIT / CC BY-NC-SA 4.0"
 
 [[mods]]
 modId = "touhou_little_maid"
