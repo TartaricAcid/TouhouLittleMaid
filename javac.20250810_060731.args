@@ -1,5 +1,0 @@
--cp
-src/main/java
--sourcepath
-src/main/java
-src/main/java/com/github/tartaricacid/touhoulittlemaid/entity/passive/MaidSwimManager.java
