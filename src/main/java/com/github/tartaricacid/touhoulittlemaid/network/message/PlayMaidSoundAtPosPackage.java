@@ -3,6 +3,8 @@ package com.github.tartaricacid.touhoulittlemaid.network.message;
 import com.github.tartaricacid.touhoulittlemaid.client.sound.data.MaidSoundInstanceAtPos;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
@@ -21,7 +23,7 @@ public record PlayMaidSoundAtPosPackage(ResourceLocation soundEvent, String id,
     public static final StreamCodec<ByteBuf, PlayMaidSoundAtPosPackage> STREAM_CODEC = StreamCodec.of(
             (buf, msg) -> {
                 ResourceLocation.STREAM_CODEC.encode(buf, msg.soundEvent);
-                net.minecraft.network.codec.ByteBufCodecs.STRING_UTF8.encode(buf, msg.id);
+                ByteBufCodecs.STRING_UTF8.encode(buf, msg.id);
                 buf.writeDouble(msg.x);
                 buf.writeDouble(msg.y);
                 buf.writeDouble(msg.z);
@@ -30,7 +32,7 @@ public record PlayMaidSoundAtPosPackage(ResourceLocation soundEvent, String id,
             },
             buf -> new PlayMaidSoundAtPosPackage(
                     ResourceLocation.STREAM_CODEC.decode(buf),
-                    net.minecraft.network.codec.ByteBufCodecs.STRING_UTF8.decode(buf),
+                    ByteBufCodecs.STRING_UTF8.decode(buf),
                     buf.readDouble(),
                     buf.readDouble(),
                     buf.readDouble(),
@@ -48,12 +50,15 @@ public record PlayMaidSoundAtPosPackage(ResourceLocation soundEvent, String id,
     @OnlyIn(Dist.CLIENT)
     private static void playSound(PlayMaidSoundAtPosPackage message) {
         Minecraft mc = Minecraft.getInstance();
-        if (mc.level != null) {
-            SoundEvent event = net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.get(message.soundEvent);
-            if (event != null) {
-                mc.getSoundManager().play(new MaidSoundInstanceAtPos(event, message.id, message.x, message.y, message.z, message.volume, message.pitch));
-            }
+        if (mc.level == null) {
+            return;
         }
+        SoundEvent event = BuiltInRegistries.SOUND_EVENT.get(message.soundEvent);
+        if (event == null) {
+            return;
+        }
+        mc.getSoundManager().play(new MaidSoundInstanceAtPos(event, message.id,
+                message.x, message.y, message.z, message.volume, message.pitch));
     }
 
     @Override

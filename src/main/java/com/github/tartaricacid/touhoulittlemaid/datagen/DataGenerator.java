@@ -58,5 +58,6 @@ public class DataGenerator {
         generator.addProvider(event.includeServer(), datapackProvider);
 
         generator.addProvider(event.includeClient(), new ItemModelGenerator(pack, existingFileHelper));
+        generator.addProvider(event.includeServer(), new DataMapGenerator(pack, registries));
     }
 }

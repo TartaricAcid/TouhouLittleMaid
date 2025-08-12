@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.util.SoundUtil;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.PlayMaidSoundAtPosPackage;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -32,64 +33,28 @@ import java.util.function.Predicate;
 import static net.minecraft.world.entity.animal.Parrot.getPitch;
 
 @Mixin(Parrot.class)
-public abstract class ParrotMixin extends ShoulderRidingEntity implements VariantHolder<Parrot.Variant>, FlyingAnimal {
-
-    private static Logger logger = TouhouLittleMaid.LOGGER;
-
-    @Shadow @Final
-    private static Predicate<Mob> NOT_PARROT_PREDICATE;
-
-    @Shadow
-    private static SoundEvent getImitatedSound(EntityType<?> type) {
-        throw new AssertionError("Shadow method not implemented");
-    }
-
-
-    protected ParrotMixin(EntityType<? extends ShoulderRidingEntity> entityType, Level level) {
-        super(entityType, level);
-    }
-
-    @Shadow @Final
-    static Map<EntityType<?>, SoundEvent> MOB_SOUND_MAP;
-
-    @Inject(method = "<clinit>", at = @At("RETURN"))
-    private static void onClassInit(CallbackInfo ci) {
-        //maidSound实际上不会被访问
-        EntityType<EntityMaid> maid = EntityMaid.TYPE;
-        SoundEvent maidSound = InitSounds.MAID_IDLE.get();
-
-        MOB_SOUND_MAP.put(maid, maidSound);
-    }
-
-
-    @Inject(method = "imitateNearbyMobs", at = @At("HEAD"), cancellable = true)
-    private static void imitateNearbyMobs(Level level, Entity parrot,CallbackInfoReturnable<Boolean> cir) {
-        if (parrot.isAlive() && !parrot.isSilent() && level.random.nextInt(2) == 0) {
-            List<Mob> list = level.getEntitiesOfClass(Mob.class, parrot.getBoundingBox().inflate((double) 20.0F), NOT_PARROT_PREDICATE);
-            if (!list.isEmpty()) {
-                Mob mob = (Mob) list.get(level.random.nextInt(list.size()));
-                if (!mob.isSilent()) {
-                    if(mob instanceof EntityMaid maid){
-                        SoundEvent soundevent = SoundUtil.environmentSound(maid, InitSounds.MAID_IDLE.get(), 0.5f);
-                        // 服务端发送在鹦鹉坐标播放女仆语音的包
-                        if (!level.isClientSide) {
-                            NetworkHandler.sendToNearby(parrot, new PlayMaidSoundAtPosPackage(
-                                    soundevent.getLocation(), maid.getSoundPackId(),
-                                    parrot.getX(), parrot.getY(), parrot.getZ(),
-                                    0.7F, getPitch(level.random)
-                            ), 16);
-                        }
-                        cir.setReturnValue(true);
-                    } else {
-                        SoundEvent soundevent = getImitatedSound(mob.getType());
-                        level.playSound((Player) null, parrot.getX(), parrot.getY(), parrot.getZ(), soundevent, parrot.getSoundSource(), 0.7F, getPitch(level.random));
-                        cir.setReturnValue(true);
-                    }
-                }
+public abstract class ParrotMixin {
+    @Inject(
+            method = "imitateNearbyMobs",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/entity/Mob;isSilent()Z"
+            ),
+            cancellable = true
+    )
+    private static void mobIsSilent(Level level, Entity parrot, CallbackInfoReturnable<Boolean> cir, @Local Mob mob) {
+        // 因为女仆模组对应的客户端 Sound Instance 非常特殊，需要自行处理发包
+        if (mob instanceof EntityMaid maid) {
+            SoundEvent soundevent = SoundUtil.environmentSound(maid, InitSounds.MAID_IDLE.get(), 0.5f);
+            // 服务端发送在鹦鹉坐标播放女仆语音的包
+            if (!level.isClientSide) {
+                NetworkHandler.sendToNearby(parrot, new PlayMaidSoundAtPosPackage(
+                        soundevent.getLocation(), maid.getSoundPackId(),
+                        parrot.getX(), parrot.getY(), parrot.getZ(),
+                        0.7F, getPitch(level.random)
+                ), 16);
             }
-            cir.setReturnValue(false);
-        } else {
-            cir.setReturnValue(false);
+            cir.setReturnValue(true);
         }
     }
 }

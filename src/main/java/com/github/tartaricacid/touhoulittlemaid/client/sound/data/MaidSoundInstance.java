@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.sound.data;
 
+import com.github.tartaricacid.touhoulittlemaid.api.client.sound.ICustomSoundBuffer;
 import com.github.tartaricacid.touhoulittlemaid.client.sound.CustomSoundLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.blaze3d.audio.SoundBuffer;
@@ -10,7 +11,7 @@ import net.minecraft.sounds.SoundSource;
 
 import javax.annotation.Nullable;
 
-public class MaidSoundInstance extends AbstractTickableSoundInstance {
+public class MaidSoundInstance extends AbstractTickableSoundInstance implements ICustomSoundBuffer {
     private final String id;
     private final EntityMaid maid;
     private final boolean testSound;
@@ -58,6 +59,7 @@ public class MaidSoundInstance extends AbstractTickableSoundInstance {
     }
 
     @Nullable
+    @Override
     public SoundBuffer getSoundBuffer() {
         SoundCache soundCache = CustomSoundLoader.getSoundCache(id);
         if (soundCache != null) {
