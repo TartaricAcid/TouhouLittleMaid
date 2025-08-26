@@ -29,6 +29,11 @@ public final class InitSpecialItemRender {
     private static final ResourceLocation LIFE_POINT = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "life_point");
     private static final ResourceLocation POINT_ITEM = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "point_item");
 
+    // 祭坛合成占位符的物品模型
+    private static final ModelResourceLocation SPAWN_BOX = standalone("item/spawn_box");
+    private static final ModelResourceLocation REBORN_MAID = standalone("item/reborn_maid");
+    private static final ModelResourceLocation SPAWN_LIGHTNING_BOLT = standalone("item/spawn_lightning_bolt");
+
     @SubscribeEvent
     public static void register(RegisterEvent event) {
         if (event.getRegistryKey().equals(Registries.ITEM)) {
@@ -49,6 +54,11 @@ public final class InitSpecialItemRender {
     @SubscribeEvent
     public static void registerModels(ModelEvent.RegisterAdditional event) {
         REPLACEABLE_MODEL_LIST.forEach((triple) -> event.register(triple.getMiddle()));
+
+        // 特殊需要额外注册的模型
+        event.register(SPAWN_BOX);
+        event.register(REBORN_MAID);
+        event.register(SPAWN_LIGHTNING_BOLT);
     }
 
     public static void addReplaceableModel(Item item, ResourceLocation replacedModel, Supplier<Boolean> isReplace) {
@@ -58,5 +68,10 @@ public final class InitSpecialItemRender {
             ModelResourceLocation replacedModelResourceLocation = ModelResourceLocation.standalone(ResourceLocation.fromNamespaceAndPath(replacedModel.getNamespace(), "item/" + replacedModel.getPath()));
             REPLACEABLE_MODEL_LIST.add(Triple.of(rawModelResourceLocation, replacedModelResourceLocation, isReplace));
         }
+    }
+
+    private static ModelResourceLocation standalone(String path) {
+        ResourceLocation loc = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, path);
+        return ModelResourceLocation.standalone(loc);
     }
 }

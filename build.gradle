@@ -8,6 +8,9 @@ plugins {
 
     // NeoForged 开发插件
     id 'net.neoforged.moddev' version '2.0.95'
+
+    // shadow 插件
+    id 'com.gradleup.shadow' version '8.3.6'
 }
 
 // ALL 为下载 gradle 源码，方便查看调试
@@ -15,9 +18,17 @@ tasks.named('wrapper', Wrapper).configure {
     distributionType = Wrapper.DistributionType.ALL
 }
 
+// 需要 Java 21 版本
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
 // 模组相关信息
 version = mod_version
 group = mod_group_id
+
+// 打包成 jar 时的名称
+base {
+    archivesName = 'touhoulittlemaid'
+}
 
 // 需要的前置库
 repositories {
@@ -93,15 +104,15 @@ repositories {
             includeGroup "com.github.rtyley"
         }
     }
+    maven {
+        url = "https://maven.createmod.net"
+        content {
+            includeGroup "net.createmod.ponder"
+            includeGroup "dev.engine-room.flywheel"
+        }
+    }
+    maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" }
 }
-
-// 打包成 jar 时的名称
-base {
-    archivesName = 'touhoulittlemaid-' + minecraft_version + '-release'
-}
-
-// 需要 Java 21 版本
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 neoForge {
     // NeoForge 版本信息
@@ -186,64 +197,96 @@ configurations {
     }
 }
 
-jarJar.setEnabled(true)
-
 dependencies {
-    // MP3 音频解码库，暂时不需要
-    // mcLib "com.googlecode.soundlibs:mp3spi:1.9.5.4"
-    // mcLib "com.googlecode.soundlibs:jlayer:1.0.1.4"
-    // mcLib "com.googlecode.soundlibs:tritonus-share:0.3.7.4"
-
     // Opus 音频解码库
-    mcLib jarJar("org.gagravarr:vorbis-java-core:0.8")
-    mcLib jarJar("io.github.jaredmdobson:concentus:1.0.2")
+    mcLib "org.gagravarr:vorbis-java-core:0.8"
+    mcLib "io.github.jaredmdobson:concentus:1.0.2"
 
     // YAML 库
-    mcLib jarJar("org.yaml:snakeyaml:2.4")
+    mcLib "org.yaml:snakeyaml:2.4"
 
     // 单元测试
     testImplementation 'junit:junit:4.13.2'
 
-    // 拆分出来的基岩版模型加载库
-    implementation jarJar("maven.modrinth:simplebedrockmodel:1.3.0-neoforge+mc1.21.1") {
-        version {
-            strictly '[1.3.0-neoforge+mc1.21.1,)'
-            prefer '1.3.0-neoforge+mc1.21.1'
-        }
-    }
-
     // JEI
-    implementation "maven.modrinth:jei:19.7.0.92-neoforge"
+    implementation "maven.modrinth:jei:19.21.0.247-neoforge"
+
     // REI
-    compileOnly "maven.modrinth:architectury-api:13.0.6+neoforge"
-    compileOnly "maven.modrinth:rei:16.0.744+neoforge"
+    compileOnly "maven.modrinth:architectury-api:13.0.8+neoforge"
+    compileOnly "maven.modrinth:rei:16.0.788+neoforge"
+
     // EMI
-    compileOnly "maven.modrinth:emi:1.1.10+1.21+neoforge"
-    implementation "maven.modrinth:jade:15.0.5+neoforge"
-    compileOnly "maven.modrinth:the-one-probe:1.21_neo-12.0.3"
-    implementation "maven.modrinth:cloth-config:15.0.128+neoforge"
-    implementation "maven.modrinth:iron-chests:1.21-neoforge-16.0.7"
-    implementation "maven.modrinth:carry-on:2.2.1-neoforge"
-    implementation "maven.modrinth:patchouli:1.21-87-neoforge"
+    compileOnly "maven.modrinth:emi:1.1.22+1.21.1+neoforge"
+
     // IPN
-    runtimeOnly "maven.modrinth:kotlin-for-forge:5.4.0"
-    runtimeOnly "maven.modrinth:libipn:neoforge-1.21-6.0.2"
-    implementation "maven.modrinth:inventory-profiles-next:neoforge-1.21-2.0.4"
-    implementation "curse.maven:aquaculture-60028:5713551"
+    runtimeOnly "maven.modrinth:kotlin-for-forge:5.9.0"
+    runtimeOnly "maven.modrinth:libipn:neoforge-1.21.1-6.5.0"
+    implementation "maven.modrinth:inventory-profiles-next:neoforge-1.21.1-2.1.9"
+    implementation "curse.maven:aquaculture-60028:6357106"
 
     // KubeJS
-    implementation "dev.latvian.mods:rhino:2101.2.7-build.72"
-    implementation "dev.latvian.mods:kubejs-neoforge:2101.7.1-build.181"
-    runtimeOnly "com.github.rtyley:animated-gif-lib-for-java:animated-gif-lib-1.7"
-    runtimeOnly "curse.maven:probejs-585406:5820894"
+    compileOnly "dev.latvian.mods:rhino:2101.2.7-build.72"
+    compileOnly "dev.latvian.mods:kubejs-neoforge:2101.7.1-build.181"
+    // runtimeOnly "com.github.rtyley:animated-gif-lib-for-java:animated-gif-lib-1.7"
 
-    compileOnly "maven.modrinth:sodium:mc1.21-0.6.0-beta.2-neoforge"
-    compileOnly "maven.modrinth:iris:1.8.0-beta.5+1.21-neoforge"
-    implementation "maven.modrinth:embeddium:1.0.11+mc1.21.1-neoforge"
+    compileOnly "maven.modrinth:sodium:mc1.21.1-0.6.13-neoforge"
+    compileOnly "maven.modrinth:iris:1.8.8+1.21.1-neoforge"
+    implementation "maven.modrinth:embeddium:1.0.15+mc1.21.1-neoforge"
 
+    implementation "maven.modrinth:jade:15.10.2+neoforge"
+    compileOnly "maven.modrinth:the-one-probe:1.21_neo-12.0.6"
+    implementation "maven.modrinth:cloth-config:15.0.140+neoforge"
+    implementation "maven.modrinth:patchouli:1.21-88-neoforge"
+
+    implementation "maven.modrinth:iron-chests:1.21-neoforge-16.0.7"
+    implementation "maven.modrinth:carry-on:2.2.2-neoforge"
+    implementation "maven.modrinth:inventory-tweaks-refoxed:1.21.1-1.2.0"
+
+    implementation "net.createmod.ponder:Ponder-NeoForge-1.21.1:1.0.56"
+    runtimeOnly "maven.modrinth:create:1.21.1-6.0.6"
+
+    implementation "maven.modrinth:sophisticated-core:1.21.1-1.3.50.1004"
+    implementation "maven.modrinth:sophisticated-backpacks:1.21.1-3.24.15.1250"
+
+    implementation "maven.modrinth:kaleidoscope-cookery:1.0.1-neoforge+mc1.21.1"
+
+    // 目前无法在开发环境使用，会崩
+    compileOnly "maven.modrinth:immersive-melodies:0.6.2+1.21.1-neoforge"
+    compileOnly "maven.modrinth:simple-hats:1.21.1-0.4.0-neoforge"
+    compileOnly "maven.modrinth:owo-lib:0.12.15.5-beta.1+1.21"
+    compileOnly "maven.modrinth:accessories:1.1.0-beta.48+1.21.1"
+
+    // runtimeOnly "curse.maven:probejs-585406:5820894"
     // runtimeOnly "curse.maven:placebo-283644:6446766"
     // runtimeOnly "curse.maven:hostile-neural-networks-552574:6430289"
     // runtimeOnly "maven.modrinth:camerapture:1.10.1+mc1.21.1-neoforge"
+}
+
+shadowJar {
+    configurations = [project.configurations.mcLib]
+
+    // MP3 音频库 居然会把 junit 打包进去……
+    dependencies {
+        exclude(dependency('junit:junit'))
+    }
+
+    // 包重定向
+    relocate 'io.github.jaredmdobson.concentus', 'com.github.tartaricacid.touhoulittlemaid.libs.concentus'
+    relocate 'org.gagravarr', 'com.github.tartaricacid.touhoulittlemaid.libs.gagravarr'
+    relocate 'org.yaml.snakeyaml', 'com.github.tartaricacid.touhoulittlemaid.libs.snakeyaml'
+
+    // 排除不需要的依赖项和资源
+    exclude 'META-INF/maven/**/*'
+    exclude 'META-INF/versions/**/*'
+    // 这个版权许可都已经手动添加进 licenses 里了
+    exclude 'META-INF/LICENSE'
+
+    mergeServiceFiles()
+    minimize()
+}
+
+assemble {
+    dependsOn shadowJar
 }
 
 tasks.compileJava {
@@ -275,6 +318,7 @@ tasks.withType(ProcessResources).configureEach {
 
 // 生成 manifest 内容，用于填充版本信息等内容
 jar {
+    enabled = false // 禁用默认的 jar 任务
     manifest {
         attributes([
                 "Implementation-Title"  : project.name,

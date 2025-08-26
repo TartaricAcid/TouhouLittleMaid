@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.item.bauble;
 import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.api.bauble.IChestType;
 import com.github.tartaricacid.touhoulittlemaid.api.bauble.IMaidBauble;
+import com.github.tartaricacid.touhoulittlemaid.api.event.MaidWirelessIOEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
 import com.github.tartaricacid.touhoulittlemaid.inventory.chest.ChestManager;
@@ -12,6 +13,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 
@@ -119,9 +121,15 @@ public class WirelessIOBauble implements IMaidBauble {
                     IItemHandler filterList = ItemWirelessIO.getFilterList(maid.registryAccess(), baubleItem);
 
                     if (isMaidToChest) {
-                        maidToChest(maidInv, chestInv, isBlacklist, filterList, slotConfigData);
+                        var event = new MaidWirelessIOEvent.MaidToChest(maid, maidInv, chestInv, filterList, isBlacklist, slotConfigData);
+                        if (!NeoForge.EVENT_BUS.post(event).isCanceled()) {
+                            maidToChest(maidInv, chestInv, isBlacklist, filterList, slotConfigData);
+                        }
                     } else {
-                        chestToMaid(chestInv, maidInv, isBlacklist, filterList, slotConfigData);
+                        var event = new MaidWirelessIOEvent.ChestToMaid(maid, maidInv, chestInv, filterList, isBlacklist, slotConfigData);
+                        if (!NeoForge.EVENT_BUS.post(event).isCanceled()) {
+                            chestToMaid(chestInv, maidInv, isBlacklist, filterList, slotConfigData);
+                        }
                     }
                 }
                 if (maid.getOwner() instanceof ServerPlayer serverPlayer) {

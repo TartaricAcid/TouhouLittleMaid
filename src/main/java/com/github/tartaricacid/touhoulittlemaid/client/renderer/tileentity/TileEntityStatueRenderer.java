@@ -8,6 +8,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityStatue;
 import com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil;
+import com.github.tartaricacid.touhoulittlemaid.util.RenderHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -17,11 +18,13 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
@@ -144,5 +147,14 @@ public class TileEntityStatueRenderer implements BlockEntityRenderer<TileEntityS
         }
         poseStack.scale(size, size, size);
         poseStack.translate(0.5 / size, 1.5, 0.5 / size);
+    }
+
+    @Override
+    public AABB getRenderBoundingBox(TileEntityStatue blockEntity) {
+        BlockPos pos = blockEntity.getBlockPos();
+        float scale = blockEntity.getSize().getScale();
+        int size = Math.round(2 * scale);
+        int height = Math.round(3 * scale);
+        return RenderHelper.getAABB(pos.offset(-size, -1, -size), pos.offset(size, height, size));
     }
 }

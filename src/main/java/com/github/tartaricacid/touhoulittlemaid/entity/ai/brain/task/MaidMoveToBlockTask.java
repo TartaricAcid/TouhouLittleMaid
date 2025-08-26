@@ -11,6 +11,8 @@ import net.minecraft.world.entity.ai.behavior.BlockPosTracker;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 
+import java.util.Map;
+
 public abstract class MaidMoveToBlockTask extends MaidCheckRateTask {
     private static final int MAX_DELAY_TIME = 120;
     private final float movementSpeed;
@@ -26,8 +28,17 @@ public abstract class MaidMoveToBlockTask extends MaidCheckRateTask {
     }
 
     public MaidMoveToBlockTask(float movementSpeed, int verticalSearchRange) {
-        super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT,
-                InitEntities.TARGET_POS.get(), MemoryStatus.VALUE_ABSENT));
+        this(
+                ImmutableMap.of(
+                        MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT,
+                        InitEntities.TARGET_POS.get(), MemoryStatus.VALUE_ABSENT
+                ),
+                movementSpeed, verticalSearchRange
+        );
+    }
+
+    public MaidMoveToBlockTask(Map<MemoryModuleType<?>, MemoryStatus> requiredMemoryStateIn, float movementSpeed, int verticalSearchRange) {
+        super(requiredMemoryStateIn);
         this.movementSpeed = movementSpeed;
         this.verticalSearchRange = verticalSearchRange;
         this.setMaxCheckRate(MAX_DELAY_TIME);

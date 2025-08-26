@@ -1,1 +1,13 @@
-{}
+{
+    "maid_pack.minecraft_15th.name": "Minecraft モデル",
+    "maid_pack.minecraft_15th.desc": "さまざまな Minecraft 関連のモデル",
+    "model.minecraft_15th.alex.name": "Alex",
+    "model.minecraft_15th.alex.desc": "§7メイド体型のMinecraftのAlexのモデル",
+    "model.minecraft_15th.rana.name": "Rana",
+    "model.minecraft_15th.rana.desc": "§7RanaはJava Edition Indev 0.31で削除済みの友好Mobでした",
+    "model.minecraft_15th.minecraft_movie.desc": "§7Minecraft Movieで登場",
+    "model.minecraft_15th.natalie.name": "Natalie",
+    "model.minecraft_15th.natalie.desc": "§7Emma Myersが彼女を演じました",
+    "model.minecraft_15th.dawn.name": "Dawn",
+    "model.minecraft_15th.dawn.desc": "§7Danielle Brooksが彼女を演じました"
+}

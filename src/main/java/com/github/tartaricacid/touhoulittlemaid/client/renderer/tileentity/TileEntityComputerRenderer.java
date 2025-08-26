@@ -10,13 +10,12 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
-public class TileEntityComputerRenderer implements BlockEntityRenderer<TileEntityComputer> {
+public class TileEntityComputerRenderer extends TileEntityJoyRenderer<TileEntityComputer> {
     private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/bedrock/block/computer.png");
     private final SimpleBedrockModel<Entity> model;
 
@@ -34,10 +33,5 @@ public class TileEntityComputerRenderer implements BlockEntityRenderer<TileEntit
         VertexConsumer buffer = bufferIn.getBuffer(RenderType.entityCutoutNoCull(TEXTURE));
         model.renderToBuffer(poseStack, buffer, combinedLightIn, combinedOverlayIn);
         poseStack.popPose();
-    }
-
-    @Override
-    public boolean shouldRenderOffScreen(TileEntityComputer te) {
-        return true;
     }
 }

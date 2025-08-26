@@ -1,4 +1,5 @@
 {
+    "chair_pack.next_update_model.desc": "一些目前計劃中但尚未實現的模型",
     "chair_pack.next_update_model.name": "下次更新的模型包",
     "model.next_update_model.stage.name": "舞臺",
     "model.next_update_model.japanese_lottery_machine.name": "日式搖獎機",

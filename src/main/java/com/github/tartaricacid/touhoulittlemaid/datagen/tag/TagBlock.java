@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.datagen.tag;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -21,6 +22,8 @@ public class TagBlock extends BlockTagsProvider {
     public static final TagKey<Block> ALTAR_TORII = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "altar_torii"));
     public static final TagKey<Block> ALTAR_PILLAR = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "altar_pillar"));
 
+    public static final TagKey<Block> CARRYON_BLOCK_BLACKLIST = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("carryon", "block_blacklist"));
+
     public TagBlock(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, String modId, @Nullable ExistingFileHelper existingFileHelper) {
         super(output, lookupProvider, modId, existingFileHelper);
     }
@@ -34,5 +37,9 @@ public class TagBlock extends BlockTagsProvider {
 
         tag(ALTAR_TORII).add(Blocks.RED_WOOL, Blocks.RED_CONCRETE).addOptional(ResourceLocation.parse("biomesoplenty:redwood_planks"));
         tag(ALTAR_PILLAR).addTag(BlockTags.LOGS);
+
+        var blacklist = tag(CARRYON_BLOCK_BLACKLIST);
+        BuiltInRegistries.BLOCK.keySet().stream().filter(id -> id.getNamespace().equals(TouhouLittleMaid.MOD_ID))
+                .forEach(id -> blacklist.add(BuiltInRegistries.BLOCK.get(id)));
     }
 }

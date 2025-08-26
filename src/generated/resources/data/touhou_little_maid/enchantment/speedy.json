@@ -4,12 +4,12 @@
     "translate": "enchantment.touhou_little_maid.speedy"
   },
   "max_cost": {
-    "base": 20,
+    "base": 30,
     "per_level_above_first": 10
   },
   "max_level": 2,
   "min_cost": {
-    "base": 15,
+    "base": 25,
     "per_level_above_first": 10
   },
   "slots": [

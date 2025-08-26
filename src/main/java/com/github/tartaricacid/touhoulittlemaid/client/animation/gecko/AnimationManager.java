@@ -12,6 +12,7 @@ import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.Animation
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.ILoopType;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.event.predicate.AnimationEvent;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.resource.GeckoLibCache;
+import com.github.tartaricacid.touhoulittlemaid.network.message.MaidAnimationPackage;
 import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
@@ -247,6 +248,19 @@ public final class AnimationManager {
         // 祈求动画
         if (maid.isBegging()) {
             return playAnimation(event, "beg", ILoopType.EDefaultLoopTypes.LOOP);
+        }
+        // 其他杂项动画，目前仅捡雪球
+        if (maid instanceof EntityMaid entityMaid) {
+            if (entityMaid.animationId == MaidAnimationPackage.PICK_UP_SNOWBALL) {
+                // 捡雪球动画默认 1750 毫秒
+                if (System.currentTimeMillis() - entityMaid.animationRecordTime > 1750) {
+                    entityMaid.animationId = MaidAnimationPackage.NONE;
+                    entityMaid.animationRecordTime = -1L;
+                    // 利用空动画重置 PLAY_ONCE 动画
+                    return playAnimation(event, "empty", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
+                }
+                return playAnimation(event, "pick_up_snowball", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
+            }
         }
         return PlayState.STOP;
     }

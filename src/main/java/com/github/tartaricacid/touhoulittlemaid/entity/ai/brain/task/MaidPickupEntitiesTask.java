@@ -1,10 +1,12 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.MaidPathFindingBFS;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.google.common.base.Predicates;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.behavior.Behavior;
@@ -37,10 +39,19 @@ public class MaidPickupEntitiesTask extends Behavior<EntityMaid> {
 
     @Override
     protected void start(ServerLevel worldIn, EntityMaid maid, long gameTimeIn) {
-        getItems(maid).stream()
-                .filter(e -> maid.isWithinRestriction(e.blockPosition()) && e.isAlive() && !e.isInWater())
-                .filter(maid::canPathReach).findFirst()
-                .ifPresent(e -> BehaviorUtils.setWalkAndLookTargetMemories(maid, e, this.speedModifier, 0));
+        List<Entity> items = this.getItems(maid);
+        var pathFinding = new MaidPathFindingBFS(maid.getNavigation().getNodeEvaluator(), worldIn, maid);
+        for (Entity entity : items) {
+            BlockPos blockPos = entity.blockPosition();
+            if (maid.isWithinRestriction(blockPos)
+                    && entity.isAlive()
+                    && !entity.isInWater()
+                    && pathFinding.canPathReach(blockPos)) {
+                BehaviorUtils.setWalkAndLookTargetMemories(maid, entity, this.speedModifier, 0);
+                break;
+            }
+        }
+        pathFinding.finish();
     }
 
     private List<Entity> getItems(EntityMaid maid) {

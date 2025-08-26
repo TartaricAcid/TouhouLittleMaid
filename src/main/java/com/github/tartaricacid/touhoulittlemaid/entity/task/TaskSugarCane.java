@@ -49,7 +49,8 @@ public class TaskSugarCane implements IFarmTask {
     public boolean canPlant(EntityMaid maid, BlockPos basePos, BlockState baseState, ItemStack seed) {
         Level world = maid.level();
         BlockPos cropPos = basePos.above();
-        if (!world.getBlockState(cropPos).canBeReplaced() || world.getBlockState(cropPos).liquid()) {
+        BlockState blockState = world.getBlockState(cropPos);
+        if (!blockState.canBeReplaced() || !blockState.getFluidState().isEmpty()) {
             return false;
         }
         return canSustainSugarCane(baseState) && hasWaterSourceBlock(maid.level, basePos);

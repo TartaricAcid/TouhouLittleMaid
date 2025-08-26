@@ -8,6 +8,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.SimpleBedro
 import com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityCChess;
 import com.github.tartaricacid.touhoulittlemaid.util.CChessUtil;
+import com.github.tartaricacid.touhoulittlemaid.util.RenderHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -25,6 +26,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.AABB;
 
 public class TileEntityCChessRenderer implements BlockEntityRenderer<TileEntityCChess> {
     private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/bedrock/block/cchess.png");
@@ -162,5 +164,11 @@ public class TileEntityCChessRenderer implements BlockEntityRenderer<TileEntityC
     @Override
     public boolean shouldRenderOffScreen(TileEntityCChess te) {
         return true;
+    }
+
+    @Override
+    public AABB getRenderBoundingBox(TileEntityCChess blockEntity) {
+        BlockPos pos = blockEntity.getBlockPos();
+        return RenderHelper.getAABB(pos.offset(-3, 0, -3), pos.offset(3, 1, 3));
     }
 }

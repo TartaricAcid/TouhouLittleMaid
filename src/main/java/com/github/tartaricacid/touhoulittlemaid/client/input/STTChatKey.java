@@ -69,6 +69,7 @@ public class STTChatKey {
         }
     }
 
+    @SuppressWarnings("removal")
     private static boolean keyIsMatch(InputEvent.Key event) {
         return STT_CHAT_KEY.matches(event.getKey(), event.getScanCode())
                && STT_CHAT_KEY.getKeyModifier().equals(KeyModifier.getActiveModifier());

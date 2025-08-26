@@ -286,6 +286,12 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     public int roamingVarsUpdateFlag = 0;
     public Object2FloatOpenHashMap<String> roamingVars = new Object2FloatOpenHashMap<>();
 
+    /**
+     * 用于方便特殊动画播放的变量，目前仅支持捡雪球
+     */
+    public int animationId = 0;
+    public long animationRecordTime = -1L;
+
     private List<SendEffectPackage.EffectData> effects = Lists.newArrayList();
     private IMaidTask task = TaskManager.getIdleTask();
     private IMaidBackpack backpack = BackpackManager.getEmptyBackpack();
@@ -1009,6 +1015,13 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     @Override
     public void die(DamageSource cause) {
         if (!NeoForge.EVENT_BUS.post(new MaidDeathEvent(this, cause)).isCanceled()) {
+            // 清除死亡时需要清除的内容
+            this.clearFire();
+            this.setTicksFrozen(0);
+            this.setSharedFlagOnFire(false);
+            this.getCombatTracker().recheckStatus();
+            this.removeAllEffects();
+            // 最后父类方法
             super.die(cause);
         }
     }
@@ -1435,6 +1448,14 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             // 胶片
             ItemStack filmItem = ItemFilm.maidToFilm(this);
             tombstone.insertItem(filmItem);
+
+            // 事件触发，既可以阻断墓碑生成，也可以修改墓碑内容
+            MaidTombstoneEvent tombstoneEvent = new MaidTombstoneEvent(this, tombstone);
+            if (NeoForge.EVENT_BUS.post(tombstoneEvent).isCanceled()) {
+                // 如果事件被取消了，那么就不生成墓碑了
+                return;
+            }
+
             // 全局记录
             MaidWorldData maidWorldData = MaidWorldData.get(level);
             if (maidWorldData != null) {
@@ -1687,14 +1708,6 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return false;
-    }
-
-    /**
-     * 女仆不能被栓绳拴住
-     */
-    @Override
-    public boolean canHaveALeashAttachedToIt() {
         return false;
     }
 

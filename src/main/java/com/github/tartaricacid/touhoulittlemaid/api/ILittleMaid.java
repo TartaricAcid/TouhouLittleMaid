@@ -12,8 +12,10 @@ import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.ExtraMaidBrainMa
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleRegister;
 import com.github.tartaricacid.touhoulittlemaid.entity.data.TaskDataRegister;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.control.BroomControlManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
+import com.github.tartaricacid.touhoulittlemaid.entity.task.crop.SpecialCropManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.meal.MaidMealManager;
 import com.github.tartaricacid.touhoulittlemaid.inventory.chest.ChestManager;
 import com.github.tartaricacid.touhoulittlemaid.item.bauble.BaubleManager;
@@ -112,6 +114,18 @@ public interface ILittleMaid {
      * 注册一个自己的 function call
      */
     default void registerAIFunctionCall(FunctionCallRegister register) {
+    }
+
+    /**
+     * 注册一个扫帚的控制器
+     */
+    default void registerBroomControl(BroomControlManager register) {
+    }
+
+    /**
+     * 给女仆模组的作物模式添加特判
+     */
+    default void registerSpecialCropHandler(SpecialCropManager register) {
     }
 
     /**

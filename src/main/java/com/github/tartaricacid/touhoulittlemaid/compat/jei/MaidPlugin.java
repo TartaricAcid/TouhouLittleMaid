@@ -43,6 +43,7 @@ public class MaidPlugin implements IModPlugin {
     }
 
     @Override
+    @SuppressWarnings("removal")
     public void registerItemSubtypes(ISubtypeRegistration registration) {
         registration.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, InitItems.ENTITY_PLACEHOLDER.get(), new EntityPlaceholderSubtype());
     }

@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
+import com.github.tartaricacid.touhoulittlemaid.api.event.MaidAndItemTransformEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
@@ -20,6 +21,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.common.NeoForge;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -38,7 +40,11 @@ public class ItemFilm extends AbstractStoreMaidItem {
         maid.setHomeModeEnable(false);
         maid.saveWithoutId(maidTag);
         removeMaidSomeData(maidTag);
-        maidTag.putString("id", Objects.requireNonNull(BuiltInRegistries.ENTITY_TYPE.getKey(InitEntities.MAID.get())).toString());
+        maidTag.putString(ID_TAG, Objects.requireNonNull(BuiltInRegistries.ENTITY_TYPE.getKey(InitEntities.MAID.get())).toString());
+
+        var event = new MaidAndItemTransformEvent.ToItem(maid, film, maidTag);
+        NeoForge.EVENT_BUS.post(event);
+
         film.set(InitDataComponent.MAID_INFO, CustomData.of(maidTag));
         return film;
     }
@@ -54,6 +60,10 @@ public class ItemFilm extends AbstractStoreMaidItem {
 
         if (entityId != null && entityId.equals(maidId)) {
             EntityMaid maid = new EntityMaid(worldIn);
+
+            var event = new MaidAndItemTransformEvent.ToMaid(maid, film, data);
+            NeoForge.EVENT_BUS.post(event);
+
             maid.readAdditionalSaveData(data);
             maid.setPos(pos.getX(), pos.getY(), pos.getZ());
             // 实体生成必须在服务端应用

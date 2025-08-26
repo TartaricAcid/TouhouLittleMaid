@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MiscConfig;
 import com.github.tartaricacid.touhoulittlemaid.data.MaidNumAttachment;
 import com.github.tartaricacid.touhoulittlemaid.data.PowerAttachment;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameRules;
@@ -19,7 +20,11 @@ import static com.github.tartaricacid.touhoulittlemaid.init.InitDataAttachment.P
 public class EntityDeathEvent {
     @SubscribeEvent
     public static void onEntityDeath(LivingDeathEvent event) {
-        Entity causingEntity = event.getSource().getEntity();
+        DamageSource source = event.getSource();
+        if (source == null) {
+            return;
+        }
+        Entity causingEntity = source.getEntity();
         if (causingEntity instanceof EntityMaid maid) {
             maid.getKillRecordManager().onTargetDeath(maid, event.getEntity());
         }

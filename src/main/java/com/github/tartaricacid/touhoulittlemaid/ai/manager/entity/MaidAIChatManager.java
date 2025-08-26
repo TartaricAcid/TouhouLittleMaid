@@ -72,8 +72,29 @@ public final class MaidAIChatManager extends MaidAIChatData {
         if (chatCompletion.isEmpty()) {
             this.onSettingIsEmpty(message, clientInfo, chatCompletion, chatClient);
         } else {
+            this.filterConsecutiveToolMessages(chatCompletion);
             this.normalChat(message, chatCompletion, chatClient);
         }
+    }
+
+    // 对话起始第二个如果是 tool，剔除，确保第二个为 user 或者 assistant
+    private void filterConsecutiveToolMessages(List<LLMMessage> chatCompletion) {
+        if (chatCompletion.size() <= 1) {
+            return;
+        }
+
+        // 保留第一个 system 消息，然后从第二个开始过滤连续的 tool 消息
+        LLMMessage firstMessage = chatCompletion.getFirst();
+        List<LLMMessage> filteredMessages = chatCompletion.stream()
+                // 跳过第一个消息
+                .skip(1)
+                // 丢弃开头连续的 tool 消息
+                .dropWhile(msg -> Role.TOOL.equals(msg.role()))
+                .toList();
+
+        chatCompletion.clear();
+        chatCompletion.add(firstMessage);
+        chatCompletion.addAll(filteredMessages);
     }
 
     private void normalChat(String message, List<LLMMessage> chatCompletion, LLMClient chatClient) {

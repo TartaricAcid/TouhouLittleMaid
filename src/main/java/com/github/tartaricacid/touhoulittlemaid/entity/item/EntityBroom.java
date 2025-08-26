@@ -1,8 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.item;
 
+import com.github.tartaricacid.touhoulittlemaid.api.entity.IBroomControl;
+import com.github.tartaricacid.touhoulittlemaid.entity.item.control.BroomControlManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
-import net.minecraft.client.Minecraft;
+import com.github.tartaricacid.touhoulittlemaid.network.message.OpenPlayerInventoryPackage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -16,14 +18,15 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -42,38 +45,18 @@ public class EntityBroom extends AbstractEntityFromItem implements OwnableEntity
 
     private static final EntityDataAccessor<Optional<UUID>> OWNER_ID = SynchedEntityData.defineId(EntityBroom.class, EntityDataSerializers.OPTIONAL_UUID);
 
-    private boolean keyForward = false;
-    private boolean keyBack = false;
-    private boolean keyLeft = false;
-    private boolean keyRight = false;
+    private final List<IBroomControl> broomControls;
+    public boolean inPhysicalCheck = false;
+    private AABB physicalBoundingBox = new AABB(Vec3.ZERO, Vec3.ZERO);
 
     public EntityBroom(EntityType<EntityBroom> entityType, Level worldIn) {
         super(entityType, worldIn);
         this.setNoGravity(true);
+        this.broomControls = BroomControlManager.onBroomInit(this);
     }
 
     public EntityBroom(Level worldIn) {
         this(TYPE, worldIn);
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    private static boolean keyForward() {
-        return Minecraft.getInstance().options.keyUp.isDown();
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    private static boolean keyBack() {
-        return Minecraft.getInstance().options.keyDown.isDown();
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    private static boolean keyLeft() {
-        return Minecraft.getInstance().options.keyLeft.isDown();
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    private static boolean keyRight() {
-        return Minecraft.getInstance().options.keyRight.isDown();
     }
 
     @Override
@@ -97,24 +80,29 @@ public class EntityBroom extends AbstractEntityFromItem implements OwnableEntity
     }
 
     @Override
+    protected AABB makeBoundingBox() {
+        AABB aabb = super.makeBoundingBox();
+        if (this.getPassengers().size() > 1) {
+            // 如果有乘客，扫帚的碰撞盒就变大一点
+            this.physicalBoundingBox = new AABB(aabb.minX, aabb.minY, aabb.minZ,
+                    aabb.maxX, aabb.maxY + 1, aabb.maxZ);
+        } else {
+            this.physicalBoundingBox = aabb;
+        }
+        return aabb;
+    }
+
+    @Override
     public void travel(Vec3 vec3) {
         Entity entity = this.getControllingPassenger();
-        if (entity instanceof Player player && this.isVehicle() && this.hasPassenger(e -> e instanceof EntityMaid)) {
-            if (level.isClientSide) {
-                // 不要问我为什么客户端数据能跑到服务端来
-                // 一定是玄学
-                keyForward = keyForward();
-                keyBack = keyBack();
-                keyLeft = keyLeft();
-                keyRight = keyRight();
+        Entity secondPassenger = this.getPassengers().size() >= 2 ? this.getPassengers().get(1) : null;
+        if (entity instanceof Player player && secondPassenger instanceof EntityMaid maid) {
+            for (IBroomControl broomControl : this.broomControls) {
+                if (broomControl.inControl(player, maid)) {
+                    broomControl.travel(player, maid);
+                    break;
+                }
             }
-
-            // 按键控制扫帚各个方向速度
-            float strafe = keyLeft ? 0.5f : (keyRight ? -0.5f : 0);
-            float vertical = keyForward ? -(player.getXRot() - 10) / 22.5f : 0;
-            float forward = keyForward ? 3 : (keyBack ? -0.5f : 0);
-
-            this.moveRelative(0.02f, new Vec3(strafe, vertical, forward));
             this.move(MoverType.SELF, this.getDeltaMovement());
             return;
         }
@@ -124,6 +112,11 @@ public class EntityBroom extends AbstractEntityFromItem implements OwnableEntity
             return;
         }
         super.travel(vec3);
+    }
+
+    @Override
+    public float getRiddenSpeed(Player player) {
+        return (float) player.getAttributeValue(Attributes.MOVEMENT_SPEED);
     }
 
     @Override
@@ -155,19 +148,34 @@ public class EntityBroom extends AbstractEntityFromItem implements OwnableEntity
     }
 
     @Override
-    protected void tickRidden(Player player, Vec3 pTravelVector) {
+    protected void tickRidden(Player player, Vec3 travelVector) {
         // 记得将 fall distance 设置为 0，否则会摔死
         this.fallDistance = 0;
 
         // 施加上下晃动
         if (!this.onGround()) {
-            this.addDeltaMovement(new Vec3(0, 0.01 * Math.sin(this.tickCount * Math.PI / 18), 0));
+            this.addDeltaMovement(new Vec3(0, 0.003 * Math.sin(this.tickCount * Math.PI / 18), 0));
         }
 
         // 与旋转有关系的一堆东西，用来控制扫帚朝向
-        this.yRotO = this.yBodyRot = this.yHeadRot = this.getYRot();
-        this.setRot(player.getYRot(), player.getXRot());
-        super.tickRidden(player, pTravelVector);
+        Entity secondPassenger = this.getPassengers().size() >= 2 ? this.getPassengers().get(1) : null;
+        if (secondPassenger instanceof EntityMaid maid) {
+            for (IBroomControl broomControl : this.broomControls) {
+                if (broomControl.inControl(player, maid)) {
+                    broomControl.tickRot(player, maid);
+                    break;
+                }
+            }
+        } else {
+            this.yRotO = this.yBodyRot = this.yHeadRot = this.getYRot();
+            this.setRot(player.getYRot(), player.getXRot());
+        }
+        super.tickRidden(player, travelVector);
+    }
+
+    @Override
+    public void setRot(float pYRot, float pXRot) {
+        super.setRot(pYRot, pXRot);
     }
 
     @Override
@@ -216,7 +224,7 @@ public class EntityBroom extends AbstractEntityFromItem implements OwnableEntity
         List<Entity> passengers = this.getPassengers();
         boolean hasPlayer = false;
         EntityMaid maidOpen = null;
-        for (int i = 0; i < Math.max(passengers.size(), 2); i++) {
+        for (int i = 0; i < Math.min(passengers.size(), 2); i++) {
             Entity entity = passengers.get(i);
             if (entity.equals(player)) {
                 hasPlayer = true;
@@ -225,8 +233,12 @@ public class EntityBroom extends AbstractEntityFromItem implements OwnableEntity
                 maidOpen = maid;
             }
         }
-        if (hasPlayer && maidOpen != null) {
-            maidOpen.openMaidGui(serverPlayer);
+        if (hasPlayer) {
+            if (maidOpen == null) {
+                PacketDistributor.sendToPlayer(serverPlayer, new OpenPlayerInventoryPackage(OpenPlayerInventoryPackage.OPEN_PLAYER_INVENTORY));
+            } else {
+                maidOpen.openMaidGui(serverPlayer);
+            }
         }
     }
 
@@ -278,5 +290,9 @@ public class EntityBroom extends AbstractEntityFromItem implements OwnableEntity
 
     public void setOwnerUUID(@Nullable UUID uuid) {
         this.entityData.set(OWNER_ID, Optional.ofNullable(uuid));
+    }
+
+    public AABB getPhysicalBoundingBox() {
+        return physicalBoundingBox;
     }
 }

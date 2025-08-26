@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "kaleidoscope_cookery:red_chili",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:green_chili",
+      "required": false
+    }
+  ]
+}

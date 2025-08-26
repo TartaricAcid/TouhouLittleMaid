@@ -1,1 +1,26 @@
-{}
+{
+    "chair_pack.next_update_model.name": "Next Update モデル",
+    "model.next_update_model.stage.name": "ステージ",
+    "model.next_update_model.japanese_lottery_machine.name": "ガラガラ抽選器",
+    "model.next_update_model.fishpond.name": "生け簀",
+    "model.next_update_model.mine.name": "坑道",
+    "model.next_update_model.logging_hut.name": "木工小屋",
+    "model.next_update_model.kitchen.name": "キッチン",
+    "model.next_update_model.dining_table_default.name": "ダイニングテーブル",
+    "model.next_update_model.cumin_lamb_chop.name": "クミン風味のラムチョップ",
+    "model.next_update_model.hot_spring.name": "温泉",
+    "model.next_update_model.picnic_cloth.name": "ピクニッククロス",
+    "model.next_update_model.elite_slime.name": "エリートスライム",
+    "model.next_update_model.slime.name": "スライム",
+    "model.next_update_model.flip_phone.name": "はたてのカメラ",
+    "model.next_update_model.shrine.name": "神社",
+    "model.next_update_model.fox_demon_statue.name": "狐像",
+    "model.next_update_model.bathroom.name": "ぼっとん便所",
+    "model.next_update_model.backpack.name": "バックパックを背負ったスティーブ",
+    "model.next_update_model.single_bed.name": "シングルベッド",
+    "model.next_update_model.double_bed.name": "ダブルベッド",
+    "model.next_update_model.3d_printer.name": "3Dプリンター",
+    "model.next_update_model.doorbell_ground.name": "設置式ドアベル",
+    "model.next_update_model.doorbell_wall.name": "壁掛け式ドアベル",
+    "model.next_update_model.exchange_machine.name": "ATM"
+}

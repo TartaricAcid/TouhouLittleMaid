@@ -13,4 +13,9 @@ public abstract class TileEntityJoyRenderer<T extends TileEntityJoy> implements 
     public AABB getRenderBoundingBox(T te) {
         return RenderHelper.getAABB(te.getWorldPosition().offset(-2, 0, -2), te.getWorldPosition().offset(2, 1, 2));
     }
+
+    @Override
+    public boolean shouldRenderOffScreen(T te) {
+        return true;
+    }
 }

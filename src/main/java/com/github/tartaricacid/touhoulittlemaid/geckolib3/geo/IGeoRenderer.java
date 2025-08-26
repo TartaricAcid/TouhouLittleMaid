@@ -75,7 +75,7 @@ public interface IGeoRenderer<T> {
         poseStack.pushPose();
         RenderUtils.prepMatrixForBone(poseStack, bone);
         if (!SodiumCompat.sodiumRenderCubesOfBone(bone, poseStack, buffer, cubePackedLight, packedOverlay, red, green, blue, alpha)
-            && !EmbeddiumCompat.embeddiumRenderCubesOfBone(bone, poseStack, buffer, cubePackedLight, packedOverlay, red, green, blue, alpha)
+                && !EmbeddiumCompat.embeddiumRenderCubesOfBone(bone, poseStack, buffer, cubePackedLight, packedOverlay, red, green, blue, alpha)
         ) {
             renderCubesOfBone(bone, poseStack, buffer, cubePackedLight, packedOverlay, red, green, blue, alpha);
         }
@@ -239,37 +239,7 @@ public interface IGeoRenderer<T> {
                         .setLight(packedLight)
                         .setNormal(nz.x, nz.y, nz.z);
             }
-            if ((faces & 0b010000) != 0) // WEST
-            {
-                // FIXME 你问我为什么 WEST 是 EAST 的 UV，我也不知道，但是游戏内就是好的
-                buffer.addVertex(C101.x, C101.y, C101.z)
-                        .setColor(red, green, blue, alpha)
-                        .setUv(mesh.eastU0(i), mesh.eastV1(i))
-                        .setOverlay(packedOverlay)
-                        .setLight(packedLight)
-                        .setNormal(nx.x, nx.y, nx.z);
-                buffer.addVertex(C100.x, C100.y, C100.z)
-                        .setColor(red, green, blue, alpha)
-                        .setUv(mesh.eastU1(i), mesh.eastV1(i))
-                        .setOverlay(packedOverlay)
-                        .setLight(packedLight)
-                        .setNormal(nx.x, nx.y, nx.z);
-                buffer.addVertex(C110.x, C110.y, C110.z)
-                        .setColor(red, green, blue, alpha)
-                        .setUv(mesh.eastU1(i), mesh.eastV0(i))
-                        .setOverlay(packedOverlay)
-                        .setLight(packedLight)
-                        .setNormal(nx.x, nx.y, nx.z);
-                buffer.addVertex(C111.x, C111.y, C111.z)
-                        .setColor(red, green, blue, alpha)
-                        .setUv(mesh.eastU0(i), mesh.eastV0(i))
-                        .setOverlay(packedOverlay)
-                        .setLight(packedLight)
-                        .setNormal(nx.x, nx.y, nx.z);
-            }
-            if ((faces & 0b100000) != 0) // EAST
-            {
-                // FIXME 你问我为什么 EAST 是 WEST 的 UV，我也不知道，但是游戏内就是好的
+            if ((faces & 0b010000) != 0) { // WEST
                 buffer.addVertex(C000.x, C000.y, C000.z)
                         .setColor(red, green, blue, alpha)
                         .setUv(mesh.westU0(i), mesh.westV1(i))
@@ -294,6 +264,32 @@ public interface IGeoRenderer<T> {
                         .setOverlay(packedOverlay)
                         .setLight(packedLight)
                         .setNormal(-nx.x, -nx.y, -nx.z);
+            }
+            if ((faces & 0b100000) != 0) { // EAST
+                buffer.addVertex(C101.x, C101.y, C101.z)
+                        .setColor(red, green, blue, alpha)
+                        .setUv(mesh.eastU0(i), mesh.eastV1(i))
+                        .setOverlay(packedOverlay)
+                        .setLight(packedLight)
+                        .setNormal(nx.x, nx.y, nx.z);
+                buffer.addVertex(C100.x, C100.y, C100.z)
+                        .setColor(red, green, blue, alpha)
+                        .setUv(mesh.eastU1(i), mesh.eastV1(i))
+                        .setOverlay(packedOverlay)
+                        .setLight(packedLight)
+                        .setNormal(nx.x, nx.y, nx.z);
+                buffer.addVertex(C110.x, C110.y, C110.z)
+                        .setColor(red, green, blue, alpha)
+                        .setUv(mesh.eastU1(i), mesh.eastV0(i))
+                        .setOverlay(packedOverlay)
+                        .setLight(packedLight)
+                        .setNormal(nx.x, nx.y, nx.z);
+                buffer.addVertex(C111.x, C111.y, C111.z)
+                        .setColor(red, green, blue, alpha)
+                        .setUv(mesh.eastU0(i), mesh.eastV0(i))
+                        .setOverlay(packedOverlay)
+                        .setLight(packedLight)
+                        .setNormal(nx.x, nx.y, nx.z);
             }
         }
     }

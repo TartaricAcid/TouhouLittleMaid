@@ -34,7 +34,8 @@ public class EntityTombstone extends Entity {
     private static final String TOMBSTONE_ITEMS_TAG = "TombstoneItems";
     private static final String MAID_NAME_TAG = "MaidName";
     private static final EntityDataAccessor<Component> MAID_NAME = SynchedEntityData.defineId(EntityTombstone.class, EntityDataSerializers.COMPONENT);
-    private final ItemStackHandler items = new ItemStackHandler(72);
+    // 考虑其他模组会添加额外的存储内容，故将墓碑存储上限修改为 108 组
+    private final ItemStackHandler items = new ItemStackHandler(108);
     private UUID ownerId = Util.NIL_UUID;
 
     public EntityTombstone(EntityType<?> entityTypeIn, Level worldIn) {

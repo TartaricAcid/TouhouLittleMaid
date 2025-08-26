@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.block.BlockGomoku;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.SimpleBedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGomoku;
+import com.github.tartaricacid.touhoulittlemaid.util.RenderHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -23,6 +24,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.AABB;
 
 public class TileEntityGomokuRenderer implements BlockEntityRenderer<TileEntityGomoku> {
     private static final ResourceLocation CHECKER_BOARD_TEXTURE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/bedrock/block/gomoku.png");
@@ -142,5 +144,11 @@ public class TileEntityGomokuRenderer implements BlockEntityRenderer<TileEntityG
     @Override
     public boolean shouldRenderOffScreen(TileEntityGomoku te) {
         return true;
+    }
+
+    @Override
+    public AABB getRenderBoundingBox(TileEntityGomoku blockEntity) {
+        BlockPos pos = blockEntity.getBlockPos();
+        return RenderHelper.getAABB(pos.offset(-3, 0, -3), pos.offset(3, 1, 3));
     }
 }

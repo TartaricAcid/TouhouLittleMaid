@@ -7,18 +7,14 @@ import com.google.common.collect.Lists;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
-import me.shedaniel.clothconfig2.impl.builders.DropdownMenuBuilder;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MenuIntegration {
     public static ConfigBuilder getConfigBuilder() {
@@ -54,23 +50,21 @@ public class MenuIntegration {
                     MaidConfig.GLOBAL_MAID_SHOW_CHAT_BUBBLE.save();
                 }).build());
 
-        maid.addEntry(entryBuilder.startDropdownMenu(Component.translatable("config.touhou_little_maid.maid.maid_tamed_item"),
-                        DropdownMenuBuilder.TopCellElementBuilder.ofItemObject(BuiltInRegistries.ITEM.get(ResourceLocation.parse(MaidConfig.MAID_TAMED_ITEM.get()))),
-                        DropdownMenuBuilder.CellCreatorBuilder.ofItemObject())
-                .setSelections(BuiltInRegistries.ITEM.stream().sorted(Comparator.comparing(Item::toString)).collect(Collectors.toCollection(LinkedHashSet::new)))
-                .setDefaultValue(Items.CAKE).setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_tamed_item.tooltip"))
+        maid.addEntry(entryBuilder.startTextField(Component.translatable("config.touhou_little_maid.maid.maid_tamed_item"),
+                        MaidConfig.MAID_TAMED_ITEM.get())
+                .setDefaultValue(MaidConfig.MAID_TAMED_ITEM.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_tamed_item.tooltip"))
                 .setSaveConsumer(s -> {
-                    MaidConfig.MAID_TAMED_ITEM.set(BuiltInRegistries.ITEM.getKey(s).toString());
+                    MaidConfig.MAID_TAMED_ITEM.set(s);
                     MaidConfig.MAID_TAMED_ITEM.save();
                 }).build());
 
-        maid.addEntry(entryBuilder.startDropdownMenu(Component.translatable("config.touhou_little_maid.maid.maid_temptation_item"),
-                        DropdownMenuBuilder.TopCellElementBuilder.ofItemObject(BuiltInRegistries.ITEM.get(ResourceLocation.parse(MaidConfig.MAID_TEMPTATION_ITEM.get()))),
-                        DropdownMenuBuilder.CellCreatorBuilder.ofItemObject())
-                .setSelections(BuiltInRegistries.ITEM.stream().sorted(Comparator.comparing(Item::toString)).collect(Collectors.toCollection(LinkedHashSet::new)))
-                .setDefaultValue(Items.CAKE).setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_temptation_item.tooltip"))
+        maid.addEntry(entryBuilder.startTextField(Component.translatable("config.touhou_little_maid.maid.maid_temptation_item"),
+                        MaidConfig.MAID_TEMPTATION_ITEM.get())
+                .setDefaultValue(MaidConfig.MAID_TEMPTATION_ITEM.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_temptation_item.tooltip"))
                 .setSaveConsumer(s -> {
-                    MaidConfig.MAID_TEMPTATION_ITEM.set(BuiltInRegistries.ITEM.getKey(s).toString());
+                    MaidConfig.MAID_TEMPTATION_ITEM.set(s);
                     MaidConfig.MAID_TEMPTATION_ITEM.save();
                 }).build());
 

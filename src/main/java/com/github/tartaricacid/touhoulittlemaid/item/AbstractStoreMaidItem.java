@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
+import com.github.tartaricacid.touhoulittlemaid.api.event.MaidAndItemTransformEvent;
 import com.github.tartaricacid.touhoulittlemaid.compat.ysm.YsmCompat;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent;
@@ -7,6 +8,7 @@ import com.github.tartaricacid.touhoulittlemaid.inventory.tooltip.ItemMaidToolti
 import com.github.tartaricacid.touhoulittlemaid.inventory.tooltip.YsmMaidInfo;
 import com.mojang.serialization.Codec;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionResult;
@@ -19,6 +21,7 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.common.NeoForge;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;
@@ -39,6 +42,10 @@ public abstract class AbstractStoreMaidItem extends Item {
         if (compoundData == null) {
             CompoundTag tag = new CompoundTag();
             maid.saveWithoutId(tag);
+
+            var event = new MaidAndItemTransformEvent.ToItem(maid, stack, tag);
+            NeoForge.EVENT_BUS.post(event);
+
             stack.set(InitDataComponent.MAID_INFO, CustomData.of(tag));
         }
     }
@@ -86,6 +93,10 @@ public abstract class AbstractStoreMaidItem extends Item {
             if (!player.getUUID().equals(ownerUid)) {
                 return InteractionResult.FAIL;
             }
+
+            var event = new MaidAndItemTransformEvent.ToMaid(maid, stack, maidCompound);
+            NeoForge.EVENT_BUS.post(event);
+
             maid.load(maidCompound);
             maid.moveTo(context.getClickedPos().above(), 0, 0);
             if (worldIn instanceof ServerLevel) {
@@ -95,6 +106,10 @@ public abstract class AbstractStoreMaidItem extends Item {
             maid.playSound(SoundEvents.PLAYER_SPLASH, 1.0F, worldIn.random.nextFloat() * 0.1F + 0.9F);
             runnable.run();
             return InteractionResult.sidedSuccess(worldIn.isClientSide);
+        } else {
+            if (worldIn.isClientSide) {
+                player.sendSystemMessage(Component.translatable("message.touhou_little_maid.photo.have_no_nbt_data"));
+            }
         }
         return super.useOn(context);
     }

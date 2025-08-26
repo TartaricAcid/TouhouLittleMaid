@@ -46,7 +46,7 @@ public class TaskIdle implements IMaidTask {
     @Override
     public List<Pair<Integer, BehaviorControl<? super EntityMaid>>> createBrainTasks(EntityMaid maid) {
         Pair<Integer, BehaviorControl<? super EntityMaid>> findSnowballTarget = Pair.of(6, new MaidStartSnowballAttacking<>(this::canSnowballFight, this::findFirstValidSnowballTarget));
-        Pair<Integer, BehaviorControl<? super EntityMaid>> snowballFight = Pair.of(7, new MaidSnowballTargetTask(40));
+        Pair<Integer, BehaviorControl<? super EntityMaid>> snowballFight = Pair.of(7, new MaidSnowballTargetTask(50));
         return Lists.newArrayList(findSnowballTarget, snowballFight);
     }
 

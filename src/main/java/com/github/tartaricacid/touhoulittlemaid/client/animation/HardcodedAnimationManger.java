@@ -7,6 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.ModelRendererWrapper;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.special.SwimAnimation;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.special.TridentAnimation;
+import com.github.tartaricacid.touhoulittlemaid.compat.immersivemelodies.ImmersiveMelodiesCompat;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated.AnimatedGeoModel;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -33,7 +34,7 @@ public final class HardcodedAnimationManger {
         manager.addMaidAnimation(new TridentAnimation());
 
         // Immersive Melodies 乐器模组兼容
-        // ImmersiveMelodiesCompat.addAnimation(manager);
+        ImmersiveMelodiesCompat.addAnimation(manager);
 
         for (ILittleMaid littleMaid : TouhouLittleMaid.EXTENSIONS) {
             littleMaid.addHardcodeAnimation(manager);

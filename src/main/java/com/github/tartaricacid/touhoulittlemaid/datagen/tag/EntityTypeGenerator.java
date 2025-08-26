@@ -17,6 +17,7 @@ import java.util.concurrent.CompletableFuture;
 public class EntityTypeGenerator extends NeoForgeEntityTypeTagsProvider {
     public static TagKey<EntityType<?>> MAID_FAIRY_ATTACK_GOAL = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "maid_fairy_attack_goal"));
     public static TagKey<EntityType<?>> MAID_VEHICLE_ROTATE_BLOCKLIST = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "maid_vehicle_rotate_blocklist"));
+    public static TagKey<EntityType<?>> CARRYON_ENTITY_BLACKLIST = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath("carryon", "entity_blacklist"));
 
     public EntityTypeGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, ExistingFileHelper existingFileHelper) {
         super(output, lookupProvider, existingFileHelper);
@@ -39,6 +40,11 @@ public class EntityTypeGenerator extends NeoForgeEntityTypeTagsProvider {
                 .addOptional(id("alexsmobs:bunfungus"));
 
         tag(MAID_VEHICLE_ROTATE_BLOCKLIST).addOptional(id("create:carriage_contraption"));
+
+        tag(CARRYON_ENTITY_BLACKLIST).add(
+                InitEntities.TOMBSTONE.get(),
+                InitEntities.SIT.get(),
+                InitEntities.BROOM.get());
     }
 
     private ResourceLocation id(String name) {

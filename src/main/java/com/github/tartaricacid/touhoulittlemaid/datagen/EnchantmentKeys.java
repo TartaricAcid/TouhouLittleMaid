@@ -32,11 +32,10 @@ public class EnchantmentKeys {
         HolderGetter<Item> items = context.lookup(Registries.ITEM);
         HolderGetter<Block> blocks = context.lookup(Registries.BLOCK);
 
-        // TODO 附魔的参数可能会需要调
         register(context, IMPEDING, new Enchantment.Builder(
                 Enchantment.definition(
                         items.getOrThrow(TagItem.GOHEI_ENCHANTABLE),
-                        4,
+                        5,
                         4,
                         Enchantment.dynamicCost(10, 8),
                         Enchantment.dynamicCost(15, 8),
@@ -50,8 +49,8 @@ public class EnchantmentKeys {
                         items.getOrThrow(TagItem.GOHEI_ENCHANTABLE),
                         2,
                         2,
-                        Enchantment.dynamicCost(15, 10),
-                        Enchantment.dynamicCost(20, 10),
+                        Enchantment.dynamicCost(25, 10),
+                        Enchantment.dynamicCost(30, 10),
                         2,
                         EquipmentSlotGroup.MAINHAND
                 )

@@ -1,1 +1,11 @@
-{}
+{
+  "maid_pack.touhou_little_maid_seihou.name": "西方 プロジェクト モデル",
+  "maid_pack.touhou_little_maid_seihou.desc": "西方プロジェクトのキャラクター",
+  "model.touhou_little_maid_seihou.vivit.name": "VIVIT",
+  "model.touhou_little_maid_seihou.vivit.desc": "汎用アンドロイド",
+  "model.touhou_little_maid_seihou.milia.name": "ミリア",
+  "model.touhou_little_maid_seihou.milia.desc": "§7疾風の乙女",
+  "model.touhou_little_maid_seihou.mei.name": "めい",
+  "model.touhou_little_maid_seihou.mei.desc": "§7デス・ツインズ",
+  "model.touhou_little_maid_seihou.mai.name": "まい"
+}
