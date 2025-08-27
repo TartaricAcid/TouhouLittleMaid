@@ -164,6 +164,8 @@ dependencies {
     // 单元测试
     testImplementation 'junit:junit:4.13.2'
 
+    compileOnly fg.deobf("libs:patpat:1.2.1+1.20.1")
+
     // KubeJS
     implementation fg.deobf("dev.latvian.mods:kubejs-forge:2001.6.5-build.16")
     implementation fg.deobf("dev.latvian.mods:rhino-forge:2001.2.3-build.10")
