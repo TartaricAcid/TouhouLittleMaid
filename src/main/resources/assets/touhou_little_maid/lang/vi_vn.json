@@ -359,7 +359,7 @@
   "gui.touhou_little_maid.button.maid_config": "Giao Diện Cấu Hình Maid",
   "gui.touhou_little_maid.button.maid_config.desc": " -§a Cấu hình một số chức năng của maid hiện tại",
   "gui.touhou_little_maid.button.maid_ai_chat_config": "Cài Đặt Trò Chuyện AI Của Maid",
-  "gui.touhou_little_maid.button.maid_ai_chat_config.desc": " -§a Cấu hình thông tin liên quan trang web AI được maid hiện tại sử dụng",
+  "gui.touhou_little_maid.button.maid_ai_chat_config.desc": " -§a Cấu hình thông tin liên quan đến trang web AI được maid hiện tại sử dụng",
   "gui.touhou_little_maid.button.maid_ai_chat_config.llm_site": "Trang Web LLM",
   "gui.touhou_little_maid.button.maid_ai_chat_config.llm_model": "Model LLM",
   "gui.touhou_little_maid.button.maid_ai_chat_config.tts_site": "Trang Web TTS",
