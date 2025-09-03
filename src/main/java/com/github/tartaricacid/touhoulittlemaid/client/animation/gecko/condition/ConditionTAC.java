@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.condition;
 
-import com.github.tartaricacid.touhoulittlemaid.compat.tacz.TacCompat;
+import com.github.tartaricacid.touhoulittlemaid.compat.gun.swarfare.SWarfareCompat;
+import com.github.tartaricacid.touhoulittlemaid.compat.gun.tacz.TacCompat;
 import com.google.common.collect.Lists;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -34,7 +35,10 @@ public class ConditionTAC {
         }
         ResourceLocation gunId = TacCompat.getGunId(itemInHand);
         if (gunId == null) {
-            return EMPTY;
+            gunId = SWarfareCompat.getGunId(itemInHand);
+            if (gunId == null) {
+                return EMPTY;
+            }
         }
         if (idTest.contains(gunId)) {
             String animationName = prefix.substring(0, prefix.length() - 1) + "$" + gunId;

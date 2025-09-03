@@ -3,7 +3,8 @@ package com.github.tartaricacid.touhoulittlemaid.client.animation.gecko;
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.condition.*;
 import com.github.tartaricacid.touhoulittlemaid.client.entity.GeckoMaidEntity;
-import com.github.tartaricacid.touhoulittlemaid.compat.tacz.TacCompat;
+import com.github.tartaricacid.touhoulittlemaid.compat.gun.swarfare.SWarfareCompat;
+import com.github.tartaricacid.touhoulittlemaid.compat.gun.tacz.TacCompat;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySit;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -96,6 +97,11 @@ public final class AnimationManager {
                     String animationName = state.getAnimationName();
                     ILoopType loopType = state.getLoopType();
                     PlayState gunMainAnimation = TacCompat.playGunMainAnimation(maid, event, animationName, loopType);
+                    if (gunMainAnimation != null) {
+                        return gunMainAnimation;
+                    } else {
+                        gunMainAnimation = SWarfareCompat.playGunMainAnimation(maid, event, animationName, loopType);
+                    }
                     return Objects.requireNonNullElseGet(gunMainAnimation, () -> playAnimation(event, animationName, loopType));
                 }
             }
@@ -108,14 +114,15 @@ public final class AnimationManager {
         if (maid == null) {
             return PlayState.STOP;
         }
-        if (!maid.asEntity().swinging && !maid.asEntity().isUsingItem()) {
-            ItemStack offhandItem = maid.asEntity().getItemInHand(InteractionHand.OFF_HAND);
+        Mob entity = maid.asEntity();
+        if (!entity.swinging && !entity.isUsingItem()) {
+            ItemStack offhandItem = entity.getItemInHand(InteractionHand.OFF_HAND);
             if (offhandItem.is(Items.CROSSBOW) && CrossbowItem.isCharged(offhandItem)) {
                 return playAnimation(event, "hold_offhand:charged_crossbow", ILoopType.EDefaultLoopTypes.LOOP);
             }
         }
         if (checkSwingAndUse(maid, InteractionHand.OFF_HAND)) {
-            ItemStack offhandItem = maid.asEntity().getItemInHand(InteractionHand.OFF_HAND);
+            ItemStack offhandItem = entity.getItemInHand(InteractionHand.OFF_HAND);
             if (!isSameItem(maid, offhandItem, InteractionHand.OFF_HAND)) {
                 maid.getHandItemsForAnimation()[InteractionHand.OFF_HAND.ordinal()] = offhandItem;
                 playAnimation(event, "empty", ILoopType.EDefaultLoopTypes.LOOP);
@@ -141,6 +148,10 @@ public final class AnimationManager {
         if (!maid.asEntity().swinging && !maid.asEntity().isUsingItem()) {
             ItemStack mainHandItem = maid.asEntity().getItemInHand(InteractionHand.MAIN_HAND);
             PlayState gunHoldAnimation = TacCompat.playGunHoldAnimation(mainHandItem, event);
+            if (gunHoldAnimation != null) {
+                return gunHoldAnimation;
+            }
+            gunHoldAnimation = SWarfareCompat.playGunHoldAnimation(mainHandItem, event);
             if (gunHoldAnimation != null) {
                 return gunHoldAnimation;
             }

@@ -1,0 +1,134 @@
+package com.github.tartaricacid.touhoulittlemaid.compat.gun.tacz;
+
+import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
+import com.github.tartaricacid.touhoulittlemaid.client.animation.script.ModelRendererWrapper;
+import com.github.tartaricacid.touhoulittlemaid.client.entity.GeckoMaidEntity;
+import com.github.tartaricacid.touhoulittlemaid.compat.gun.tacz.client.GunBaseAnimation;
+import com.github.tartaricacid.touhoulittlemaid.compat.gun.tacz.client.GunGeckoAnimation;
+import com.github.tartaricacid.touhoulittlemaid.compat.gun.tacz.client.GunMaidRender;
+import com.github.tartaricacid.touhoulittlemaid.compat.gun.tacz.event.GunHurtMaidEvent;
+import com.github.tartaricacid.touhoulittlemaid.compat.gun.tacz.event.MaidGunEquipEvent;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.PlayState;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.ILoopType;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.event.predicate.AnimationEvent;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.animated.ILocationModel;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.ModList;
+
+import javax.annotation.Nullable;
+
+public class TacCompat {
+    public static final ResourceLocation MINIGUN_ID = new ResourceLocation("tacz", "minigun");
+    private static final String TACZ_ID = "tacz";
+    private static boolean INSTALLED = false;
+
+    public static boolean init() {
+        if (ModList.get().isLoaded(TACZ_ID)) {
+            MinecraftForge.EVENT_BUS.register(new GunHurtMaidEvent());
+            MinecraftForge.EVENT_BUS.register(new MaidGunEquipEvent());
+            INSTALLED = true;
+        }
+        return INSTALLED;
+    }
+
+    public static boolean isInstalled() {
+        return INSTALLED;
+    }
+
+    public static boolean isGun(ItemStack stack) {
+        if (INSTALLED) {
+            return TacInnerCompat.isGun(stack);
+        }
+        return false;
+    }
+
+    public static boolean isGrenade(ItemStack itemStack) {
+        // TODO 手雷还没有
+        return false;
+    }
+
+    @Nullable
+    public static ResourceLocation getGunId(ItemStack stack) {
+        if (INSTALLED) {
+            return TacInnerCompat.getGunId(stack);
+        }
+        return null;
+    }
+
+    public static boolean canSee(EntityMaid maid, LivingEntity target) {
+        if (INSTALLED) {
+            return TacInnerCompat.canSee(maid, target);
+        }
+        return false;
+    }
+
+    public static int performGunAttack(EntityMaid shooter, LivingEntity target, ItemStack gunItem) throws Exception {
+        if (INSTALLED) {
+            return TacInnerCompat.performGunAttack(shooter, target, gunItem);
+        }
+        return 100;
+    }
+
+    public static void stopAim(EntityMaid maid) {
+        if (INSTALLED) {
+            TacInnerCompat.stopAim(maid);
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static boolean onHoldGun(IMaid maid, @Nullable ModelRendererWrapper armLeft, @Nullable ModelRendererWrapper armRight) {
+        if (INSTALLED) {
+            return GunBaseAnimation.onHoldGun(maid, armLeft, armRight);
+        }
+        return false;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void addItemTranslate(PoseStack matrixStack, ItemStack itemStack, boolean isLeft) {
+        if (INSTALLED) {
+            GunMaidRender.addItemTranslate(matrixStack, itemStack, isLeft);
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void renderBackGun(PoseStack matrixStack, MultiBufferSource bufferIn, int packedLightIn, ItemStack stack, IMaid maid) {
+        if (INSTALLED) {
+            GunMaidRender.renderBackGun(matrixStack, bufferIn, packedLightIn, stack, maid);
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void renderBackGun(ItemStack offhandItem, ILocationModel geoModel, IMaid maid, PoseStack poseStack, MultiBufferSource bufferIn, int packedLight) {
+        if (INSTALLED && isGun(offhandItem)) {
+            poseStack.pushPose();
+            GunMaidRender.renderBackGun(offhandItem, geoModel, maid, poseStack, bufferIn, packedLight);
+            poseStack.popPose();
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @Nullable
+    public static PlayState playGunMainAnimation(IMaid maid, AnimationEvent<GeckoMaidEntity<?>> event, String animationName, ILoopType loopType) {
+        if (INSTALLED && isGun(maid.asEntity().getMainHandItem())) {
+            return GunGeckoAnimation.playGunMainAnimation(event, animationName, loopType);
+        }
+        return null;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @Nullable
+    public static PlayState playGunHoldAnimation(ItemStack mainHandItem, AnimationEvent<GeckoMaidEntity<?>> event) {
+        if (INSTALLED && isGun(mainHandItem)) {
+            return GunGeckoAnimation.playGunHoldAnimation(event, mainHandItem);
+        }
+        return null;
+    }
+}

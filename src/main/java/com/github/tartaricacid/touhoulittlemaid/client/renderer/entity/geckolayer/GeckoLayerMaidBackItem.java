@@ -2,9 +2,10 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.geckolay
 
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.compat.carryon.RenderFixer;
+import com.github.tartaricacid.touhoulittlemaid.compat.gun.swarfare.SWarfareCompat;
+import com.github.tartaricacid.touhoulittlemaid.compat.gun.tacz.TacCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeRender;
-import com.github.tartaricacid.touhoulittlemaid.compat.tacz.TacCompat;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.GeoLayerRenderer;
@@ -73,5 +74,7 @@ public class GeckoLayerMaidBackItem<T extends Mob, R extends IGeoEntityRenderer<
 
         // TACZ 背部枪械渲染
         TacCompat.renderBackGun(stack, model, maid, matrixStack, buffer, packedLight);
+        // 卓越前线背部枪械渲染
+        SWarfareCompat.renderBackGun(stack, model, maid, matrixStack, buffer, packedLight);
     }
 }

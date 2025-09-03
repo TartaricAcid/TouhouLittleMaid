@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task;
 
 import com.github.tartaricacid.touhoulittlemaid.api.mixin.IPlayerMixin;
+import com.github.tartaricacid.touhoulittlemaid.compat.gun.swarfare.SWarfareCompat;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.mixin.accessor.EntityAccessor;
 import com.google.common.collect.ImmutableMap;
@@ -43,6 +44,10 @@ public class MaidFollowOwnerVehicleTask extends Behavior<EntityMaid> {
         }
 
         Entity ownerControlledVehicle = owner.getControlledVehicle();
+        // 额外检查一次卓越前线的载具
+        if (ownerControlledVehicle == null && SWarfareCompat.isVehicle(owner.getVehicle())) {
+            ownerControlledVehicle = owner.getVehicle();
+        }
         Entity maidVehicle = maid.getVehicle();
 
         // 如果主人下船（载具）了，女仆也下船。反之上船了，女仆也跟着上船
@@ -51,6 +56,10 @@ public class MaidFollowOwnerVehicleTask extends Behavior<EntityMaid> {
             // 玩家下船有大约 60 tick 冷却时间，在此时间内，一定范围内的女仆才能主动下船，避免误伤
             boolean isCooldown = ((IPlayerMixin) player).tlmInRemoveVehicleCooldown();
             boolean maidInDismountRange = maid.distanceTo(owner) < RANGE;
+            // 额外检查一次卓越前线的载具
+            if (SWarfareCompat.isVehicle(maidVehicle)) {
+                maidInDismountRange = maid.distanceTo(owner) < RANGE * 3;
+            }
             if (maid.isPassenger() && isCooldown && maidInDismountRange) {
                 this.type = Type.STOP;
                 return true;
