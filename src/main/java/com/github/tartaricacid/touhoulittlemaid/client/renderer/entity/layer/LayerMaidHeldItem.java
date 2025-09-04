@@ -3,8 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.layer;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRenderer;
 import com.github.tartaricacid.touhoulittlemaid.compat.carryon.RenderFixer;
-import com.github.tartaricacid.touhoulittlemaid.compat.gun.swarfare.SWarfareCompat;
-import com.github.tartaricacid.touhoulittlemaid.compat.gun.tacz.TacCompat;
+import com.github.tartaricacid.touhoulittlemaid.compat.gun.common.GunClientUtil;
 import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeRender;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -61,8 +60,7 @@ public class LayerMaidHeldItem extends RenderLayer<Mob, BedrockModel<Mob>> {
                 poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
                 poseStack.translate((isLeft ? -1 : 1) / 16.0, 0.125, -0.525);
             }
-            TacCompat.addItemTranslate(poseStack, itemStack, isLeft);
-            SWarfareCompat.addItemTranslate(poseStack, itemStack, isLeft);
+            GunClientUtil.addItemTranslate(poseStack, itemStack, isLeft);
             this.itemInHandRenderer.renderItem(maid, itemStack, transformTypeIn, isLeft, poseStack, typeBuffer, combinedLightIn);
             poseStack.popPose();
         }

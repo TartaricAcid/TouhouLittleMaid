@@ -3,8 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.animation.gecko;
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.condition.*;
 import com.github.tartaricacid.touhoulittlemaid.client.entity.GeckoMaidEntity;
-import com.github.tartaricacid.touhoulittlemaid.compat.gun.swarfare.SWarfareCompat;
-import com.github.tartaricacid.touhoulittlemaid.compat.gun.tacz.TacCompat;
+import com.github.tartaricacid.touhoulittlemaid.compat.gun.common.GunClientUtil;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntitySit;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -96,12 +95,7 @@ public final class AnimationManager {
                 if (state.getPredicate().test(maid, event)) {
                     String animationName = state.getAnimationName();
                     ILoopType loopType = state.getLoopType();
-                    PlayState gunMainAnimation = TacCompat.playGunMainAnimation(maid, event, animationName, loopType);
-                    if (gunMainAnimation != null) {
-                        return gunMainAnimation;
-                    } else {
-                        gunMainAnimation = SWarfareCompat.playGunMainAnimation(maid, event, animationName, loopType);
-                    }
+                    PlayState gunMainAnimation = GunClientUtil.playGunMainAnimation(maid, event, animationName, loopType);
                     return Objects.requireNonNullElseGet(gunMainAnimation, () -> playAnimation(event, animationName, loopType));
                 }
             }
@@ -147,11 +141,7 @@ public final class AnimationManager {
         }
         if (!maid.asEntity().swinging && !maid.asEntity().isUsingItem()) {
             ItemStack mainHandItem = maid.asEntity().getItemInHand(InteractionHand.MAIN_HAND);
-            PlayState gunHoldAnimation = TacCompat.playGunHoldAnimation(mainHandItem, event);
-            if (gunHoldAnimation != null) {
-                return gunHoldAnimation;
-            }
-            gunHoldAnimation = SWarfareCompat.playGunHoldAnimation(mainHandItem, event);
+            PlayState gunHoldAnimation = GunClientUtil.playGunHoldAnimation(mainHandItem, event);
             if (gunHoldAnimation != null) {
                 return gunHoldAnimation;
             }

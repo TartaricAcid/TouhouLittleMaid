@@ -221,6 +221,9 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     private static final EntityDataAccessor<ItemStack> BACKPACK_ITEM_SHOW = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.ITEM_STACK);
     private static final EntityDataAccessor<String> BACKPACK_FLUID = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.STRING);
 
+    // 给卓越前线之类的枪械模组使用的，标记女仆是否处于 aim 状态
+    private static final EntityDataAccessor<Boolean> DATA_IS_AIMING = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.BOOLEAN);
+
     // 游戏数据记录，包括赢棋次数和赢棋状态
     static final EntityDataAccessor<CompoundTag> GAME_SKILL = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.COMPOUND_TAG);
     static final EntityDataAccessor<Byte> GAME_STATUE = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.BYTE);
@@ -294,6 +297,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
      */
     public int animationId = 0;
     public long animationRecordTime = -1L;
+    public boolean shouldReset = false;
 
     private List<SendEffectMessage.EffectData> effects = Lists.newArrayList();
     private IMaidTask task = TaskManager.getIdleTask();
@@ -397,6 +401,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         this.entityData.define(BACKPACK_ITEM_SHOW, ItemStack.EMPTY);
         this.entityData.define(BACKPACK_FLUID, StringUtils.EMPTY);
         this.entityData.define(TASK_DATA_SYNC, new CompoundTag());
+
+        this.entityData.define(DATA_IS_AIMING, false);
 
         // 父类构造方法调用此类，就会出现这种初始化混乱的问题
         if (this.configManager == null) {
@@ -2649,5 +2655,13 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     public ChatBubbleManager getChatBubbleManager() {
         return chatBubbleManager;
+    }
+
+    public boolean isAiming() {
+        return this.entityData.get(DATA_IS_AIMING);
+    }
+
+    public void setAiming(boolean aiming) {
+        this.entityData.set(DATA_IS_AIMING, aiming);
     }
 }

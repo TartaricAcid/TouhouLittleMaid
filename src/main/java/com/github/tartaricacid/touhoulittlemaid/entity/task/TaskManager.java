@@ -3,9 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.task;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
-import com.github.tartaricacid.touhoulittlemaid.compat.gun.common.task.TaskGunAttack;
-import com.github.tartaricacid.touhoulittlemaid.compat.gun.swarfare.SWarfareCompat;
-import com.github.tartaricacid.touhoulittlemaid.compat.gun.tacz.TacCompat;
+import com.github.tartaricacid.touhoulittlemaid.compat.gun.common.GunCommonUtil;
 import com.github.tartaricacid.touhoulittlemaid.compat.kubejs.ModKubeJSCompat;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -40,11 +38,7 @@ public final class TaskManager {
         manager.add(new TaskTridentAttack());
 
         // 枪械类模组兼容，因为 task 注册比较早，需要在此处处理
-        boolean tacz = TacCompat.init();
-        boolean swf = SWarfareCompat.init();
-        if (tacz || swf) {
-            manager.add(new TaskGunAttack());
-        }
+        GunCommonUtil.initAndAddTask(manager);
 
         manager.add(new TaskNormalFarm());
         manager.add(new TaskSugarCane());

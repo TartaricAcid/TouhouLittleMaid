@@ -8,12 +8,16 @@ import com.atsuishio.superbwarfare.item.HandGrenade;
 import com.atsuishio.superbwarfare.item.gun.GunItem;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
+import com.github.tartaricacid.touhoulittlemaid.network.message.MaidAnimationMessage;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
 import net.minecraft.world.item.ItemStack;
 
 import static com.github.tartaricacid.touhoulittlemaid.api.task.IRangedAttackTask.targetConditionsTest;
+import static com.github.tartaricacid.touhoulittlemaid.network.message.MaidAnimationMessage.SWF_FIRE;
+import static com.github.tartaricacid.touhoulittlemaid.network.message.MaidAnimationMessage.SWF_RELOAD;
 
 public class SWarfareCompatInner {
     static boolean isGun(ItemStack stack) {
@@ -66,18 +70,42 @@ public class SWarfareCompatInner {
         }
         if (gunData.shouldStartReloading(shooter)) {
             gunData.startReload();
-            return 10;
+            MaidAnimationMessage msg = new MaidAnimationMessage(shooter.getId(), SWF_RELOAD);
+            NetworkHandler.sendToTrackingEntity(msg, shooter);
+            return 5;
         }
         if (gunData.shouldStartBolt()) {
             gunData.startBolt();
-            return 10;
+            MaidAnimationMessage msg = new MaidAnimationMessage(shooter.getId(), SWF_RELOAD);
+            NetworkHandler.sendToTrackingEntity(msg, shooter);
+            return 5;
         }
         if (gunData.canShoot(shooter)) {
+            // 如果是狙击枪，应用瞄准
+            boolean isSniper = gunItem.is(SWarfareCompat.SNIPER);
+            if (isSniper && !shooter.isAiming()) {
+                shooter.setAiming(true);
+                return 20;
+            }
+            // 如果是非狙击枪，超出 radius 范围，那么也瞄准
+            if (!isSniper) {
+                float distance = shooter.distanceTo(target);
+                float radius = shooter.getRestrictRadius();
+                if (distance <= radius && shooter.isAiming()) {
+                    shooter.setAiming(false);
+                    return 10;
+                }
+                if (distance > radius && !shooter.isAiming()) {
+                    shooter.setAiming(true);
+                    return 20;
+                }
+            }
+
             double rps = gunData.get(GunProp.RPM) / 60.0;
             int cooldown = (int) Math.round(20 / rps);
             FireMode fireMode = gunData.fireMode.get();
             if (fireMode == FireMode.SEMI || fireMode == FireMode.BURST && gunData.burstAmount.get() == 0) {
-                cooldown += 20;
+                cooldown += (5 + shooter.getRandom().nextInt(5));
             }
 
             // 将女仆的 look angle 设置好
@@ -89,7 +117,10 @@ public class SWarfareCompatInner {
             shooter.setXRot(pitch);
             shooter.setYRot(yaw);
 
-            gunData.shoot(shooter, 0.2, true, target.getUUID());
+            gunData.shoot(shooter, 0, shooter.isAiming(), target.getUUID());
+
+            MaidAnimationMessage msg = new MaidAnimationMessage(shooter.getId(), SWF_FIRE);
+            NetworkHandler.sendToTrackingEntity(msg, shooter);
             return cooldown;
         }
 

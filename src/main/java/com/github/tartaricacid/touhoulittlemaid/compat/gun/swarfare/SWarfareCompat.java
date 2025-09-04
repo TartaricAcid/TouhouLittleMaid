@@ -6,6 +6,8 @@ import com.github.tartaricacid.touhoulittlemaid.client.entity.GeckoMaidEntity;
 import com.github.tartaricacid.touhoulittlemaid.compat.gun.swarfare.client.GunBaseAnimation;
 import com.github.tartaricacid.touhoulittlemaid.compat.gun.swarfare.client.GunGeckoAnimation;
 import com.github.tartaricacid.touhoulittlemaid.compat.gun.swarfare.client.GunMaidRender;
+import com.github.tartaricacid.touhoulittlemaid.compat.gun.swarfare.event.GunHurtMaidEvent;
+import com.github.tartaricacid.touhoulittlemaid.compat.gun.swarfare.event.MaidKillMessageEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.PlayState;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.ILoopType;
@@ -23,6 +25,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.loading.LoadingModList;
 import net.minecraftforge.fml.loading.moddiscovery.ModFileInfo;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -47,6 +50,10 @@ public class SWarfareCompat {
         if (modFileById != null) {
             DefaultArtifactVersion modVersion = new DefaultArtifactVersion(modFileById.versionString());
             INSTALLED = modVersion.compareTo(new DefaultArtifactVersion("0.8.7")) >= 0;
+            if (INSTALLED) {
+                MinecraftForge.EVENT_BUS.register(new GunHurtMaidEvent());
+                MinecraftForge.EVENT_BUS.register(new MaidKillMessageEvent());
+            }
         }
         return INSTALLED;
     }
@@ -60,6 +67,14 @@ public class SWarfareCompat {
             return SWarfareCompatInner.isGun(stack);
         }
         return false;
+    }
+
+    @Nullable
+    public static ResourceLocation getGunId(ItemStack stack) {
+        if (INSTALLED) {
+            return ForgeRegistries.ITEMS.getKey(stack.getItem());
+        }
+        return null;
     }
 
     public static boolean shouldHideLivingRender(LivingEntity entity) {
@@ -157,14 +172,6 @@ public class SWarfareCompat {
     public static PlayState playGrenadeAnimation(AnimationEvent<GeckoMaidEntity<?>> event, ItemStack stack, InteractionHand hand) {
         if (INSTALLED && isGrenade(stack)) {
             return GunGeckoAnimation.playGrenadeAnimation(event, hand);
-        }
-        return null;
-    }
-
-    @Nullable
-    public static ResourceLocation getGunId(ItemStack stack) {
-        if (INSTALLED) {
-            return ForgeRegistries.ITEMS.getKey(stack.getItem());
         }
         return null;
     }

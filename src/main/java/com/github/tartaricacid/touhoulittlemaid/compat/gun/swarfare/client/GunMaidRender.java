@@ -30,6 +30,7 @@ import static com.github.tartaricacid.touhoulittlemaid.compat.gun.swarfare.SWarf
 public class GunMaidRender {
     public static void addItemTranslate(PoseStack matrixStack, ItemStack itemStack, boolean isLeft) {
         if (!isLeft && itemStack.getItem() instanceof GunItem gun) {
+            matrixStack.translate(0, -0.0625, 0);
             ResourceLocation id = ForgeRegistries.ITEMS.getKey(gun);
             if (SWarfareCompat.MINIGUN_ID.equals(id)) {
                 matrixStack.mulPose(Axis.ZP.rotationDegrees(20));

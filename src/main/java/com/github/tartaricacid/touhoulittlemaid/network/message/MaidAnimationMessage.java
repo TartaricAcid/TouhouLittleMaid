@@ -17,6 +17,9 @@ import java.util.function.Supplier;
 public class MaidAnimationMessage {
     public static final int NONE = 0;
     public static final int PICK_UP_SNOWBALL = 1;
+    public static final int SWF_AIM = 2;
+    public static final int SWF_RELOAD = 3;
+    public static final int SWF_FIRE = 4;
 
     private final int maidId;
     private final int animationId;
@@ -61,6 +64,7 @@ public class MaidAnimationMessage {
         if (level.getEntity(message.maidId) instanceof EntityMaid maid) {
             maid.animationId = message.animationId;
             maid.animationRecordTime = System.currentTimeMillis();
+            maid.shouldReset = true;
         }
     }
 }

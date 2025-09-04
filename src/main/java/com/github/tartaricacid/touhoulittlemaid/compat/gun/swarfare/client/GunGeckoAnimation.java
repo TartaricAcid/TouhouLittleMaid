@@ -5,12 +5,14 @@ import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.condition.ConditionManager;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.condition.ConditionTAC;
 import com.github.tartaricacid.touhoulittlemaid.client.entity.GeckoMaidEntity;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.PlayState;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.AnimationBuilder;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.ILoopType;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.event.predicate.AnimationEvent;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.file.AnimationFile;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.resource.GeckoLibCache;
+import com.github.tartaricacid.touhoulittlemaid.network.message.MaidAnimationMessage;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Mob;
@@ -77,8 +79,53 @@ public class GunGeckoAnimation {
                 return getGunTypeAnimation(event, heldItem, "tac:climbing:");
             }
         }
+
+        boolean isAim = false;
+
+        if (entity instanceof EntityMaid maidEntity) {
+            isAim = maidEntity.isAiming();
+
+            // 重载
+            if (maidEntity.animationId == MaidAnimationMessage.SWF_RELOAD) {
+                long time = System.currentTimeMillis() - maidEntity.animationRecordTime;
+                if (time < 2500) {
+                    if (maidEntity.shouldReset) {
+                        maidEntity.shouldReset = false;
+                        event.getController().shouldResetTick = true;
+                        event.getController().adjustTick(0);
+                    }
+                    return getGunTypeAnimation(event, heldItem, "tac:reload:");
+                } else {
+                    maidEntity.animationId = MaidAnimationMessage.NONE;
+                    maidEntity.animationRecordTime = -1L;
+                }
+            }
+
+            // 开火
+            if (maidEntity.animationId == MaidAnimationMessage.SWF_FIRE) {
+                long time = System.currentTimeMillis() - maidEntity.animationRecordTime;
+                if (time < 100) {
+                    if (maidEntity.shouldReset) {
+                        maidEntity.shouldReset = false;
+                        event.getController().shouldResetTick = true;
+                        event.getController().adjustTick(0);
+                    }
+                    if (isAim) {
+                        return getGunTypeAnimation(event, heldItem, "tac:aim:fire:");
+                    }
+                    return getGunTypeAnimation(event, heldItem, "tac:hold:fire:");
+                } else {
+                    maidEntity.animationId = MaidAnimationMessage.NONE;
+                    maidEntity.animationRecordTime = -1L;
+                }
+            }
+        }
+
         if (entity.onGround() && entity.isSprinting()) {
             return getGunTypeAnimation(event, heldItem, "tac:run:");
+        }
+        if (isAim) {
+            return getGunTypeAnimation(event, heldItem, "tac:aim:");
         }
         return getGunTypeAnimation(event, heldItem, "tac:hold:");
     }

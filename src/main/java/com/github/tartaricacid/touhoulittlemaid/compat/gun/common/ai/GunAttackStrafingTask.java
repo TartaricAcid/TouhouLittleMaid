@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.gun.common.ai;
 
-import com.github.tartaricacid.touhoulittlemaid.compat.gun.swarfare.SWarfareCompat;
-import com.github.tartaricacid.touhoulittlemaid.compat.gun.tacz.TacCompat;
+import com.github.tartaricacid.touhoulittlemaid.compat.gun.common.GunCommonUtil;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.server.level.ServerLevel;
@@ -29,8 +28,7 @@ public class GunAttackStrafingTask extends Behavior<EntityMaid> {
     @Override
     protected boolean checkExtraStartConditions(ServerLevel worldIn, EntityMaid owner) {
         ItemStack item = owner.getMainHandItem();
-        boolean isGun = TacCompat.isGun(item) || SWarfareCompat.isGun(item);
-        return isGun && owner.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET)
+        return GunCommonUtil.isGun(item) && owner.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET)
                 .filter(Entity::isAlive)
                 .isPresent();
     }
@@ -38,7 +36,7 @@ public class GunAttackStrafingTask extends Behavior<EntityMaid> {
     @Override
     protected void tick(ServerLevel worldIn, EntityMaid owner, long gameTime) {
         ItemStack stack = owner.getMainHandItem();
-        if (!TacCompat.isGun(stack) && !SWarfareCompat.isGun(stack)) {
+        if (!GunCommonUtil.isGun(stack)) {
             return;
         }
         owner.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).ifPresent((target) -> {

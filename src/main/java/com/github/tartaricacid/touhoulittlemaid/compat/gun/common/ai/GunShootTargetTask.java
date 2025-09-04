@@ -1,8 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.gun.common.ai;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.compat.gun.swarfare.SWarfareCompat;
-import com.github.tartaricacid.touhoulittlemaid.compat.gun.tacz.TacCompat;
+import com.github.tartaricacid.touhoulittlemaid.compat.gun.common.GunCommonUtil;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.server.level.ServerLevel;
@@ -22,8 +21,7 @@ public class GunShootTargetTask extends Behavior<EntityMaid> {
     @Override
     protected boolean checkExtraStartConditions(ServerLevel worldIn, EntityMaid owner) {
         ItemStack item = owner.getMainHandItem();
-        boolean isGun = TacCompat.isGun(item) || SWarfareCompat.isGun(item);
-        if (!isGun) {
+        if (!GunCommonUtil.isGun(item)) {
             return false;
         }
         return owner.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).filter(owner::canSee).isPresent();
@@ -57,21 +55,16 @@ public class GunShootTargetTask extends Behavior<EntityMaid> {
             } else {
                 --this.seeTime;
             }
-            ItemStack mainHandItem = owner.getMainHandItem();
 
-            // 卓越前线的枪需要 tick
-            SWarfareCompat.tick(owner, target, mainHandItem);
+            ItemStack mainHandItem = owner.getMainHandItem();
+            GunCommonUtil.tick(owner, target, mainHandItem);
 
             // 如果实体手部处于激活状态
             if (--this.attackCooldown <= 0 && this.seeTime >= -60 && canSee) {
                 try {
                     // 由于部分枪包作者可能在写 lua 脚本时没有规范书写，导致 lua 脚本抛出异常
                     // 所以这里捕获异常，避免因为 lua 脚本错误导致游戏崩溃
-                    if (TacCompat.isGun(mainHandItem)) {
-                        this.attackCooldown = TacCompat.performGunAttack(owner, target, mainHandItem);
-                    } else if (SWarfareCompat.isGun(mainHandItem)) {
-                        this.attackCooldown = SWarfareCompat.performGunAttack(owner, target, mainHandItem);
-                    }
+                    this.attackCooldown = GunCommonUtil.performGunAttack(owner, target, mainHandItem);
                 } catch (Exception e) {
                     TouhouLittleMaid.LOGGER.error("Error while performing gun attack for EntityMaid: {}", owner.getUUID(), e);
                     // 如果发生异常，重置攻击冷却时间
@@ -86,7 +79,8 @@ public class GunShootTargetTask extends Behavior<EntityMaid> {
         this.seeTime = 0;
         this.attackCooldown = -1;
         maid.setSwingingArms(false);
+        maid.setAiming(false);
         // 停止瞄准
-        TacCompat.stopAim(maid);
+        GunCommonUtil.stopAim(maid);
     }
 }

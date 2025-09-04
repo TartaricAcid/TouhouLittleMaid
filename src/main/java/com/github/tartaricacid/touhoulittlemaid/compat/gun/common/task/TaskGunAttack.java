@@ -2,10 +2,9 @@ package com.github.tartaricacid.touhoulittlemaid.compat.gun.common.task;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IRangedAttackTask;
+import com.github.tartaricacid.touhoulittlemaid.compat.gun.common.GunCommonUtil;
 import com.github.tartaricacid.touhoulittlemaid.compat.gun.common.ai.GunAttackStrafingTask;
 import com.github.tartaricacid.touhoulittlemaid.compat.gun.common.ai.GunShootTargetTask;
-import com.github.tartaricacid.touhoulittlemaid.compat.gun.swarfare.SWarfareCompat;
-import com.github.tartaricacid.touhoulittlemaid.compat.gun.tacz.TacCompat;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidRangedWalkToTarget;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidUseShieldTask;
@@ -89,7 +88,7 @@ public class TaskGunAttack implements IRangedAttackTask {
     @Override
     public AABB searchDimension(EntityMaid maid) {
         ItemStack item = maid.getMainHandItem();
-        if (TacCompat.isGun(item) || SWarfareCompat.isGun(item)) {
+        if (GunCommonUtil.isGun(item)) {
             float searchRange = this.searchRadius(maid);
             if (maid.hasRestriction()) {
                 return new AABB(maid.getRestrictCenter()).inflate(searchRange);
@@ -107,14 +106,8 @@ public class TaskGunAttack implements IRangedAttackTask {
 
     @Override
     public boolean canSee(EntityMaid maid, LivingEntity target) {
-        ItemStack handItem = maid.getMainHandItem();
-        if (TacCompat.isGun(handItem)) {
-            return TacCompat.canSee(maid, target);
-        }
-        if (SWarfareCompat.isGun(handItem)) {
-            return SWarfareCompat.canSee(maid, target);
-        }
-        return IRangedAttackTask.super.canSee(maid, target);
+        return GunCommonUtil.canSee(maid, target)
+                .orElseGet(() -> IRangedAttackTask.super.canSee(maid, target));
     }
 
     @Override
@@ -124,7 +117,7 @@ public class TaskGunAttack implements IRangedAttackTask {
 
     @Override
     public boolean isWeapon(EntityMaid maid, ItemStack stack) {
-        return TacCompat.isGun(stack) || SWarfareCompat.isGun(stack);
+        return GunCommonUtil.isGun(stack);
     }
 
     private boolean mainhandHoldGun(EntityMaid maid) {
