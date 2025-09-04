@@ -7,7 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.compat.gun.swarfare.client.GunBa
 import com.github.tartaricacid.touhoulittlemaid.compat.gun.swarfare.client.GunGeckoAnimation;
 import com.github.tartaricacid.touhoulittlemaid.compat.gun.swarfare.client.GunMaidRender;
 import com.github.tartaricacid.touhoulittlemaid.compat.gun.swarfare.event.GunHurtMaidEvent;
-import com.github.tartaricacid.touhoulittlemaid.compat.gun.swarfare.event.MaidKillMessageEvent;
+import com.github.tartaricacid.touhoulittlemaid.compat.gun.swarfare.event.MaidSaddleClickEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.PlayState;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.ILoopType;
@@ -52,7 +52,7 @@ public class SWarfareCompat {
             INSTALLED = modVersion.compareTo(new DefaultArtifactVersion("0.8.7")) >= 0;
             if (INSTALLED) {
                 MinecraftForge.EVENT_BUS.register(new GunHurtMaidEvent());
-                MinecraftForge.EVENT_BUS.register(new MaidKillMessageEvent());
+                MinecraftForge.EVENT_BUS.register(new MaidSaddleClickEvent());
             }
         }
         return INSTALLED;

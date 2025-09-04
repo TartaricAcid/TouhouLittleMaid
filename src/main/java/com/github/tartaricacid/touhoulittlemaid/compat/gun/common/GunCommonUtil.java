@@ -6,7 +6,9 @@ import com.github.tartaricacid.touhoulittlemaid.compat.gun.tacz.TacCompat;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,6 +25,27 @@ public class GunCommonUtil {
 
     public static boolean isGun(ItemStack stack) {
         return SWarfareCompat.isGun(stack) || TacCompat.isGun(stack);
+    }
+
+    public static boolean canStartAttacking(EntityMaid maid) {
+        ItemStack item = maid.getMainHandItem();
+        if (isGun(item)) {
+            return true;
+        }
+        Entity vehicle = maid.getVehicle();
+        if (vehicle != null) {
+            return SWarfareCompat.isVehicle(vehicle);
+        }
+        LivingEntity owner = maid.getOwner();
+        // 如果女仆在非一号位，那么 getVehicle 会返回 null
+        // 故需要通过此方式判断女仆是否在载具上
+        if (owner instanceof Player player) {
+            Entity playerVehicle = player.getVehicle();
+            if (playerVehicle != null && playerVehicle.getPassengers().contains(maid)) {
+                return SWarfareCompat.isVehicle(playerVehicle);
+            }
+        }
+        return false;
     }
 
     @Nullable
@@ -56,10 +79,9 @@ public class GunCommonUtil {
     public static int performGunAttack(EntityMaid shooter, LivingEntity target, ItemStack gunItem) throws Exception {
         if (TacCompat.isGun(gunItem)) {
             return TacCompat.performGunAttack(shooter, target, gunItem);
-        } else if (SWarfareCompat.isGun(gunItem)) {
+        } else {
             return SWarfareCompat.performGunAttack(shooter, target, gunItem);
         }
-        return 100;
     }
 
     public static void stopAim(EntityMaid maid) {
