@@ -15,7 +15,10 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+
+import java.util.Optional;
 
 import static com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.AI_PASSENGER_WEAPON_TARGET_UUID;
 import static com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.AI_TURRET_TARGET_UUID;
@@ -62,6 +65,25 @@ public class SWarfareCompatInner {
         }
         // 其他情况，中等距离
         return targetConditionsTest(maid, target, MaidConfig.MAID_GUN_MEDIUM_DISTANCE);
+    }
+
+    static Optional<Boolean> canVehicleSee(EntityMaid maid, LivingEntity target) {
+        Entity vehicle = maid.getVehicle();
+        if (vehicle != null && SWarfareCompat.isVehicle(vehicle)) {
+            boolean canSee = targetConditionsTest(maid, target, MaidConfig.MAID_GUN_LONG_DISTANCE);
+            return Optional.of(canSee);
+        }
+        LivingEntity owner = maid.getOwner();
+        // 如果女仆在非一号位，那么 getVehicle 会返回 null
+        // 故需要通过此方式判断女仆是否在载具上
+        if (owner instanceof Player player) {
+            Entity playerVehicle = player.getVehicle();
+            if (playerVehicle != null && playerVehicle.getPassengers().contains(maid) && SWarfareCompat.isVehicle(playerVehicle)) {
+                boolean canSee = targetConditionsTest(maid, target, MaidConfig.MAID_GUN_LONG_DISTANCE);
+                return Optional.of(canSee);
+            }
+        }
+        return Optional.empty();
     }
 
     static void tick(EntityMaid shooter, LivingEntity target, ItemStack gunItem) {
@@ -181,10 +203,11 @@ public class SWarfareCompatInner {
         // 0 号位是驾驶位
         if (seatIndex == 0) {
             data.set(AI_TURRET_TARGET_UUID, target.getUUID().toString());
+            vehicle.aiTurretShoot(shooter);
         } else {
             data.set(AI_PASSENGER_WEAPON_TARGET_UUID, target.getUUID().toString());
+            vehicle.aiPassengerWeaponShoot(shooter);
         }
-        entity.vehicleShoot(shooter, seatIndex);
 
         double rps = entity.mainGunRpm(shooter) / 60.0;
         return (int) Math.round(20 / rps);

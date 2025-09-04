@@ -32,6 +32,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
+
 public class SWarfareCompat {
     public static final ResourceLocation MINIGUN_ID = new ResourceLocation("superbwarfare", "minigun");
     public static final ResourceLocation M_2_HB_ID = new ResourceLocation("superbwarfare", "m_2_hb");
@@ -103,6 +105,13 @@ public class SWarfareCompat {
             return SWarfareCompatInner.canSee(maid, target);
         }
         return false;
+    }
+
+    public static Optional<Boolean> canVehicleSee(EntityMaid maid, LivingEntity target) {
+        if (INSTALLED) {
+            return SWarfareCompatInner.canVehicleSee(maid, target);
+        }
+        return Optional.empty();
     }
 
     public static int performGunAttack(EntityMaid shooter, LivingEntity target, ItemStack gunItem) throws Exception {

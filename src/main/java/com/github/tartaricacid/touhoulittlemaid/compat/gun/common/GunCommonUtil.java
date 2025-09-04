@@ -67,7 +67,7 @@ public class GunCommonUtil {
         if (SWarfareCompat.isGun(handItem)) {
             return Optional.of(SWarfareCompat.canSee(maid, target));
         }
-        return Optional.empty();
+        return SWarfareCompat.canVehicleSee(maid, target);
     }
 
     public static void tick(EntityMaid shooter, LivingEntity target, ItemStack gunItem) {
