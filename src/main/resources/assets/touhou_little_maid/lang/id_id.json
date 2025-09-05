@@ -689,7 +689,6 @@
   "task.touhou_little_maid.farm.desc": "Maid akan menanam atau memanen panenan normal di sekitar",
   "task.touhou_little_maid.sugar_cane.desc": "Maid akan menanam atau memanen tebu di sekitar",
   "task.touhou_little_maid.melon.desc": "Maid akan memanen semangka di sekitar",
-  "task.touhou_little_maid.gun_attack.condition.has_tacz_gun": "Tangan utama memegang senjata TacZ",
   "task.touhou_little_maid.fishing.desc": "Maid akan mencari kursi di sekitar dan duduk di situ, lalu memulai untuk memancing",
   "task.touhou_little_maid.fishing.condition.has_fishing_rod": "Tangan utama memegang pancingan",
   "task.touhou_little_maid.advanced.id": "ID tugas: %s",
