@@ -3,25 +3,26 @@ package com.github.tartaricacid.touhoulittlemaid.compat.gun.swarfare;
 import com.atsuishio.superbwarfare.data.gun.FireMode;
 import com.atsuishio.superbwarfare.data.gun.GunData;
 import com.atsuishio.superbwarfare.data.gun.GunProp;
+import com.atsuishio.superbwarfare.entity.projectile.RgoGrenadeEntity;
 import com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity;
-import com.atsuishio.superbwarfare.entity.vehicle.base.WeaponVehicleEntity;
+import com.atsuishio.superbwarfare.init.ModSounds;
 import com.atsuishio.superbwarfare.item.HandGrenade;
+import com.atsuishio.superbwarfare.item.RgoGrenade;
 import com.atsuishio.superbwarfare.item.gun.GunItem;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.MaidAnimationMessage;
-import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Optional;
 
-import static com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.AI_PASSENGER_WEAPON_TARGET_UUID;
-import static com.atsuishio.superbwarfare.entity.vehicle.base.VehicleEntity.AI_TURRET_TARGET_UUID;
 import static com.github.tartaricacid.touhoulittlemaid.api.task.IRangedAttackTask.targetConditionsTest;
 import static com.github.tartaricacid.touhoulittlemaid.network.message.MaidAnimationMessage.SWF_FIRE;
 import static com.github.tartaricacid.touhoulittlemaid.network.message.MaidAnimationMessage.SWF_RELOAD;
@@ -98,11 +99,7 @@ public class SWarfareCompatInner {
     }
 
     static int performGunAttack(EntityMaid shooter, LivingEntity target, ItemStack gunItem) {
-        // 先判断是否骑乘载具
-        if (shooter.getVehicle() instanceof WeaponVehicleEntity entity) {
-            return performVehicleAttack(shooter, target, entity);
-        }
-        // 再判断枪械
+        // 再次判断枪械
         if (!(gunItem.getItem() instanceof GunItem)) {
             return 100;
         }
@@ -117,9 +114,25 @@ public class SWarfareCompatInner {
         }
         // 再尝试开火
         if (!gunData.canShoot(shooter)) {
-            return 100;
+            // 看看副手有没有 fog 手榴弹，丢手榴弹
+            useGrenade(shooter, target);
+            return 50;
         }
         return doGunShoot(shooter, target, gunItem, gunData);
+    }
+
+    private static void useGrenade(EntityMaid shooter, LivingEntity target) {
+        ItemStack offhand = shooter.getOffhandItem();
+        // 手雷投掷范围有限，限定距离
+        if (offhand.getItem() instanceof RgoGrenade && shooter.distanceTo(target) <= 16) {
+            setViewRot(shooter, target);
+            float power = 1.2f + shooter.getRandom().nextFloat() * 0.4f;
+            ThrowableItemProjectile rgoGrenade = new RgoGrenadeEntity(shooter, shooter.level, 40);
+            rgoGrenade.shootFromRotation(shooter, shooter.getXRot(), shooter.getYRot(), 0, power, 0);
+            shooter.level.addFreshEntity(rgoGrenade);
+            shooter.level.playSound(null, shooter.blockPosition(), ModSounds.GRENADE_THROW.get(), SoundSource.NEUTRAL, 1, 1);
+            offhand.shrink(1);
+        }
     }
 
     private static int doGunReload(EntityMaid shooter, GunData gunData) {
@@ -127,7 +140,7 @@ public class SWarfareCompatInner {
             gunData.startReload();
             MaidAnimationMessage msg = new MaidAnimationMessage(shooter.getId(), SWF_RELOAD);
             NetworkHandler.sendToTrackingEntity(msg, shooter);
-            return 6;
+            return 5;
         }
         if (gunData.shouldStartBolt()) {
             gunData.startBolt();
@@ -170,16 +183,7 @@ public class SWarfareCompatInner {
         }
 
         // 将女仆的 look angle 设置好
-        double x = target.getX() - shooter.getX();
-        double y = target.getEyeY() - shooter.getEyeY();
-        double z = target.getZ() - shooter.getZ();
-        float yaw = (float) -Math.toDegrees(Math.atan2(x, z));
-        float pitch = (float) -Math.toDegrees(Math.atan2(y, Math.sqrt(x * x + z * z)));
-
-        // 因为开火方向和实体视线方向一致，故需要强制指定
-        shooter.setXRot(pitch);
-        shooter.setYRot(yaw);
-
+        setViewRot(shooter, target);
         // 开火
         gunData.shoot(shooter, 0, shooter.isAiming(), target.getUUID());
 
@@ -189,27 +193,15 @@ public class SWarfareCompatInner {
         return cooldown;
     }
 
-    private static int performVehicleAttack(EntityMaid shooter, LivingEntity target, WeaponVehicleEntity entity) {
-        if (!entity.canShoot(shooter)) {
-            return 100;
-        }
-        VehicleEntity vehicle = entity.getVehicleEntity();
-        SynchedEntityData data = vehicle.getEntityData();
-        int seatIndex = vehicle.getSeatIndex(shooter);
-        if (!entity.hasWeapon(seatIndex)) {
-            return 100;
-        }
+    private static void setViewRot(EntityMaid shooter, LivingEntity target) {
+        double x = target.getX() - shooter.getX();
+        double y = target.getEyeY() - shooter.getEyeY();
+        double z = target.getZ() - shooter.getZ();
+        float yaw = (float) -Math.toDegrees(Math.atan2(x, z));
+        float pitch = (float) -Math.toDegrees(Math.atan2(y, Math.sqrt(x * x + z * z)));
 
-        // 0 号位是驾驶位
-        if (seatIndex == 0) {
-            data.set(AI_TURRET_TARGET_UUID, target.getUUID().toString());
-            vehicle.aiTurretShoot(shooter);
-        } else {
-            data.set(AI_PASSENGER_WEAPON_TARGET_UUID, target.getUUID().toString());
-            vehicle.aiPassengerWeaponShoot(shooter);
-        }
-
-        double rps = entity.mainGunRpm(shooter) / 60.0;
-        return (int) Math.round(20 / rps);
+        // 因为开火方向和实体视线方向一致，故需要强制指定
+        shooter.setXRot(pitch);
+        shooter.setYRot(yaw);
     }
 }

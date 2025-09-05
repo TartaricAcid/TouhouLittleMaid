@@ -56,9 +56,9 @@ public class TaskGunAttack implements IRangedAttackTask {
     @Override
     public List<Pair<Integer, BehaviorControl<? super EntityMaid>>> createBrainTasks(EntityMaid maid) {
         BehaviorControl<EntityMaid> supplementedTask = StartAttacking.create(
-                GunCommonUtil::canStartAttacking, IRangedAttackTask::findFirstValidAttackTarget);
+                this::mainhandHoldGun, IRangedAttackTask::findFirstValidAttackTarget);
         BehaviorControl<EntityMaid> findTargetTask = StopAttackingIfTargetInvalid.create(target ->
-                !GunCommonUtil.canStartAttacking(maid) || farAway(target, maid));
+                !this.mainhandHoldGun(maid) || farAway(target, maid));
         BehaviorControl<EntityMaid> gunWalkTargetTask = MaidRangedWalkToTarget.create(0.6f);
         BehaviorControl<EntityMaid> gunAttackStrafingTask = new GunAttackStrafingTask();
         BehaviorControl<EntityMaid> gunShootTargetTask = new GunShootTargetTask();
@@ -76,6 +76,7 @@ public class TaskGunAttack implements IRangedAttackTask {
 
     @Override
     public List<Pair<Integer, BehaviorControl<? super EntityMaid>>> createRideBrainTasks(EntityMaid maid) {
+        // 因为骑乘载具时，也会有射击，故此处设定敌对目标使用 canStartAttacking 方法
         BehaviorControl<EntityMaid> supplementedTask = StartAttacking.create(
                 GunCommonUtil::canStartAttacking, IRangedAttackTask::findFirstValidAttackTarget);
         BehaviorControl<EntityMaid> findTargetTask = StopAttackingIfTargetInvalid.create(target ->
@@ -115,12 +116,17 @@ public class TaskGunAttack implements IRangedAttackTask {
 
     @Override
     public List<Pair<String, Predicate<EntityMaid>>> getConditionDescription(EntityMaid maid) {
-        return Collections.singletonList(Pair.of("has_tacz_gun", m -> isWeapon(m, m.getMainHandItem())));
+        return Collections.singletonList(Pair.of("has_gun", m -> isWeapon(m, m.getMainHandItem())));
     }
 
     @Override
     public boolean isWeapon(EntityMaid maid, ItemStack stack) {
         return GunCommonUtil.isGun(stack);
+    }
+
+    private boolean mainhandHoldGun(EntityMaid maid) {
+        ItemStack item = maid.getMainHandItem();
+        return isWeapon(maid, item);
     }
 
     private boolean farAway(LivingEntity target, EntityMaid maid) {

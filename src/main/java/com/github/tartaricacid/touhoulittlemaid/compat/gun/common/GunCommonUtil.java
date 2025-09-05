@@ -27,6 +27,10 @@ public class GunCommonUtil {
         return SWarfareCompat.isGun(stack) || TacCompat.isGun(stack);
     }
 
+    /**
+     * 不单单判断枪械，还判断女仆是否在载具上 <br>
+     * 女仆在载具上时也可以开火
+     */
     public static boolean canStartAttacking(EntityMaid maid) {
         ItemStack item = maid.getMainHandItem();
         if (isGun(item)) {
@@ -79,9 +83,11 @@ public class GunCommonUtil {
     public static int performGunAttack(EntityMaid shooter, LivingEntity target, ItemStack gunItem) throws Exception {
         if (TacCompat.isGun(gunItem)) {
             return TacCompat.performGunAttack(shooter, target, gunItem);
-        } else {
+        }
+        if (SWarfareCompat.isGun(gunItem)) {
             return SWarfareCompat.performGunAttack(shooter, target, gunItem);
         }
+        return 100;
     }
 
     public static void stopAim(EntityMaid maid) {

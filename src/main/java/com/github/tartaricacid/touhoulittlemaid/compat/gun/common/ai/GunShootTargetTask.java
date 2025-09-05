@@ -20,7 +20,7 @@ public class GunShootTargetTask extends Behavior<EntityMaid> {
 
     @Override
     protected boolean checkExtraStartConditions(ServerLevel worldIn, EntityMaid owner) {
-        if (!GunCommonUtil.canStartAttacking(owner)) {
+        if (!GunCommonUtil.isGun(owner.getMainHandItem())) {
             return false;
         }
         return owner.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).filter(owner::canSee).isPresent();
@@ -76,7 +76,7 @@ public class GunShootTargetTask extends Behavior<EntityMaid> {
     @Override
     protected void stop(ServerLevel worldIn, EntityMaid maid, long gameTimeIn) {
         this.seeTime = 0;
-        this.attackCooldown = -1;
+        this.attackCooldown = 50;
         maid.setSwingingArms(false);
         maid.setAiming(false);
         // 停止
