@@ -683,8 +683,6 @@
   "task.touhou_little_maid.extinguishing.desc": "메이드는 주변의 화재를 진압 할 것 입니다",
   "task.touhou_little_maid.extinguishing.condition.has_extinguisher": "오른손은 소화기를 들고 있어야 합니다",
   "task.touhou_little_maid.board_games.desc": "메이드가 주변 게임 보드를 찾는 중",
-  "task.touhou_little_maid.gun_attack.desc": "메이드는 TacZ 총을 사용할 수 있습니다",
-  "task.touhou_little_maid.gun_attack.condition.has_tacz_gun": "오른손은 TacZ 총기를 들고 있어야 합니다.",
   "task.touhou_little_maid.fishing.desc": "메이드는 주변의 의자를 찾아 앉은 다음 낚시를 시작 할 것 입니다",
   "task.touhou_little_maid.fishing.condition.has_fishing_rod": "오른손은 낚시대를 들고 있어야 합니다",
   "task.touhou_little_maid.advanced.id": "작업 ID: %s",
