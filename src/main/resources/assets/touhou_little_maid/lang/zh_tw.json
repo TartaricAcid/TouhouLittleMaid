@@ -779,8 +779,6 @@
   "task.touhou_little_maid.extinguishing.desc": "女僕會主動撲滅周圍的火",
   "task.touhou_little_maid.extinguishing.condition.has_extinguisher": "主手持有滅火器",
   "task.touhou_little_maid.board_games.desc": "女僕會尋找周圍的棋盤",
-  "task.touhou_little_maid.gun_attack.desc": "女僕會使用永恆槍械工坊：零的槍械",
-  "task.touhou_little_maid.gun_attack.condition.has_tacz_gun": "主手持有永恆槍械工坊：零的槍械",
   "task.touhou_little_maid.fishing.desc": "女僕會尋找椅子並坐在上面，然後開始釣魚",
   "task.touhou_little_maid.fishing.condition.has_fishing_rod": "主手持有釣魚竿",
   "task.touhou_little_maid.advanced.id": "工作模式 ID：%s",
