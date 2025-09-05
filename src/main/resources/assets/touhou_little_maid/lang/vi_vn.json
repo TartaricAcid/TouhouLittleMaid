@@ -788,8 +788,6 @@
   "task.touhou_little_maid.extinguishing.desc": "Maid sẽ chủ động dập lửa ở xung quanh",
   "task.touhou_little_maid.extinguishing.condition.has_extinguisher": "Tay chính cầm bình chữa cháy",
   "task.touhou_little_maid.board_games.desc": "Maid sẽ tìm bàn chơi cờ ở xung quanh",
-  "task.touhou_little_maid.gun_attack.desc": "Maid sẽ dùng súng TacZ",
-  "task.touhou_little_maid.gun_attack.condition.has_tacz_gun": "Tay chính cầm súng TacZ",
   "task.touhou_little_maid.fishing.desc": "Maid sẽ tìm ghế để ngồi ở xung quanh, sau đó bắt đầu câu cá",
   "task.touhou_little_maid.fishing.condition.has_fishing_rod": "Tay chính cầm Cần Câu Cá",
   "task.touhou_little_maid.advanced.id": "ID Chế Độ Làm Việc: %s",
