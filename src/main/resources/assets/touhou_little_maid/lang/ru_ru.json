@@ -689,8 +689,6 @@
   "task.touhou_little_maid.extinguishing.desc": "Горничная будет тушить окружающий огонь",
   "task.touhou_little_maid.extinguishing.condition.has_extinguisher": "Ведущая рука держит огнетушитель",
   "task.touhou_little_maid.board_games.desc": "Горничная будет искать игральную доску",
-  "task.touhou_little_maid.gun_attack.desc": "Горничная будет иметь возможность использовать TacZ",
-  "task.touhou_little_maid.gun_attack.condition.has_tacz_gun": "Ведущая рука держит TacZ",
   "task.touhou_little_maid.fishing.desc": "Горничная будет искать стулья рядом и сядет на них, после начнет рыбалку",
   "task.touhou_little_maid.fishing.condition.has_fishing_rod": "Ведущая рука держит удочку",
   "task.touhou_little_maid.advanced.id": "ID задачи: %s",
