@@ -1036,7 +1036,6 @@
   "patchouli.touhou_little_maid.book.entries.overview.vanilla_change.pages.1.text": "我们还修改了经验球、附魔之瓶和不死图腾的纹理。$(br2)这些都可以在配置文件中关闭。",
   "patchouli.touhou_little_maid.book.entries.overview.favorability.name": "好感度",
   "patchouli.touhou_little_maid.book.entries.overview.favorability.pages.0.text": "好感度能够增加女仆的生命值和攻击力。$(br2)提升女仆好感度：$(li)女仆在空闲日程，玩耍电子琴、电脑、书架和五子棋。$(li)女仆睡觉。$(br2)减少女仆好感度：$(li)女仆死亡。",
-  "task.touhou_little_maid.gun_attack.condition.has_gun": "Mainhand holds a TacZ or SBW gun, or is riding an SBW vehicle",
   "pack.touhou_little_maid.maid.name": "Touhou Project Model",
   "pack.touhou_little_maid.maid.desc": "Default Model",
   "pack.touhou_little_maid.chair.name": "Default Chair Model",

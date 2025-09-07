@@ -73,13 +73,17 @@ public class GunShootTargetTask extends Behavior<EntityMaid> {
         });
     }
 
+    public void setAttackCooldown(int attackCooldown) {
+        this.attackCooldown = attackCooldown;
+    }
+
     @Override
     protected void stop(ServerLevel worldIn, EntityMaid maid, long gameTimeIn) {
         this.seeTime = 0;
-        this.attackCooldown = 50;
+        this.attackCooldown = -1;
         maid.setSwingingArms(false);
         maid.setAiming(false);
         // 停止
-        GunCommonUtil.stopAim(maid);
+        GunCommonUtil.onStop(maid, this);
     }
 }

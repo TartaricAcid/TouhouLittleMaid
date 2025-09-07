@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.gun.common;
 
+import com.github.tartaricacid.touhoulittlemaid.compat.gun.common.ai.GunShootTargetTask;
 import com.github.tartaricacid.touhoulittlemaid.compat.gun.common.task.TaskGunAttack;
 import com.github.tartaricacid.touhoulittlemaid.compat.gun.swarfare.SWarfareCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.gun.tacz.TacCompat;
@@ -17,10 +18,14 @@ import java.util.Optional;
 public class GunCommonUtil {
     public static void initAndAddTask(TaskManager manager) {
         boolean tacz = TacCompat.init();
-        boolean swf = SWarfareCompat.init();
-        if (tacz || swf) {
+        boolean sbw = SWarfareCompat.init();
+        if (tacz || sbw) {
             manager.add(new TaskGunAttack());
         }
+    }
+
+    public static boolean isInstalled() {
+        return TacCompat.isInstalled() || SWarfareCompat.isInstalled();
     }
 
     public static boolean isGun(ItemStack stack) {
@@ -90,7 +95,8 @@ public class GunCommonUtil {
         return 100;
     }
 
-    public static void stopAim(EntityMaid maid) {
+    public static void onStop(EntityMaid maid, GunShootTargetTask task) {
         TacCompat.stopAim(maid);
+        SWarfareCompat.onStop(maid, task);
     }
 }

@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.compat.gun.swarfare;
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.script.ModelRendererWrapper;
 import com.github.tartaricacid.touhoulittlemaid.client.entity.GeckoMaidEntity;
+import com.github.tartaricacid.touhoulittlemaid.compat.gun.common.ai.GunShootTargetTask;
 import com.github.tartaricacid.touhoulittlemaid.compat.gun.swarfare.client.GunBaseAnimation;
 import com.github.tartaricacid.touhoulittlemaid.compat.gun.swarfare.client.GunGeckoAnimation;
 import com.github.tartaricacid.touhoulittlemaid.compat.gun.swarfare.client.GunMaidRender;
@@ -124,6 +125,12 @@ public class SWarfareCompat {
     public static void tick(EntityMaid shooter, LivingEntity target, ItemStack gunItem) {
         if (INSTALLED) {
             SWarfareCompatInner.tick(shooter, target, gunItem);
+        }
+    }
+
+    public static void onStop(EntityMaid maid, GunShootTargetTask task) {
+        if (INSTALLED) {
+            SWarfareCompatInner.onStop(maid, task);
         }
     }
 
