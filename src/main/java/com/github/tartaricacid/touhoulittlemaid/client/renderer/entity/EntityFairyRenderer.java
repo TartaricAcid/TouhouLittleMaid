@@ -61,6 +61,9 @@ public class EntityFairyRenderer extends MobRenderer<EntityFairy, SimpleBedrockM
 
     @Override
     public ResourceLocation getTextureLocation(EntityFairy entity) {
+        if (MiscConfig.USE_NEW_MAID_FAIRY_MODEL.get()) {
+            return newEntityFairyRenderer.getTextureLocation(entity);
+        }
         return switch (entity.getFairyTypeOrdinal()) {
             case 1 -> TEXTURE_1;
             case 2 -> TEXTURE_2;

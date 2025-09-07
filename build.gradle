@@ -233,6 +233,9 @@ dependencies {
     implementation fg.deobf("libs:superbwarfare-1.20.1:0.8.7.1")
     runtimeOnly fg.deobf("maven.modrinth:geckolib:4.4.9-forge,1.20.1")
 
+    runtimeOnly fg.deobf("maven.modrinth:xaeros-minimap:25.2.10_Forge_1.20")
+    runtimeOnly fg.deobf("maven.modrinth:xaeros-world-map:1.39.12_Forge_1.20")
+
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     // runtimeOnly fg.deobf("curse.maven:carry-on-274259:4882500")
