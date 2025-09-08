@@ -22,6 +22,7 @@ import com.github.tartaricacid.touhoulittlemaid.compat.domesticationinnovation.P
 import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.ysm.YsmCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.ysm.event.YsmMaidClientTickEvent;
+import com.github.tartaricacid.touhoulittlemaid.config.ServerConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MiscConfig;
 import com.github.tartaricacid.touhoulittlemaid.datagen.tag.EntityTypeGenerator;
@@ -62,6 +63,7 @@ import com.github.tartaricacid.touhoulittlemaid.network.message.SyncYsmMaidDataM
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.github.tartaricacid.touhoulittlemaid.util.TeleportHelper;
+import com.github.tartaricacid.touhoulittlemaid.world.backups.MaidBackupsManager;
 import com.github.tartaricacid.touhoulittlemaid.world.data.MaidWorldData;
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Dynamic;
@@ -512,6 +514,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
                 return false;
             });
         }
+
         if (YsmCompat.isInstalled() && this.isYsmModel()) {
             if (level.isClientSide) {
                 // 触发 ysm 模型的客户端事件
@@ -522,6 +525,16 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
                 this.rouletteAnimDirty = false;
                 SyncYsmMaidDataMessage message = new SyncYsmMaidDataMessage(this.getId(), this.rouletteAnim, this.rouletteAnimPlaying, this.roamingVars);
                 NetworkHandler.sendToTrackingEntity(message, this);
+            }
+        }
+
+        // 女仆备份机制
+        if (ServerConfig.MAID_BACKUP_ENABLE.get()) {
+            int saveIntervalTick = ServerConfig.MAID_BACKUP_INTERVAL_SECONDS.get() * 20;
+            // 通过哈希计算出一个随机值，这样做可以避免所有实体都在同一 tick 进行保存
+            int checkTick = Math.abs(this.getUUID().hashCode()) % saveIntervalTick;
+            if (this.level.getGameTime() % saveIntervalTick == checkTick && this.level instanceof ServerLevel serverLevel) {
+                MaidBackupsManager.save(serverLevel.getServer(), this);
             }
         }
     }
