@@ -7,7 +7,6 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraftforge.common.ForgeConfigSpec;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface IRangedAttackTask extends IAttackTask {
@@ -23,9 +22,21 @@ public interface IRangedAttackTask extends IAttackTask {
      * @return 第一个可视对象
      */
     static Optional<? extends LivingEntity> findFirstValidAttackTarget(EntityMaid maid) {
-        if (maid.getBrain().getMemory(MemoryModuleType.NEAREST_LIVING_ENTITIES).isPresent()) {
-            List<LivingEntity> list = maid.getBrain().getMemory(MemoryModuleType.NEAREST_LIVING_ENTITIES).get();
-            return list.stream().filter(e -> maid.canAttack(e) && maid.canSee(e)).findAny();
+        // 先检查攻击女仆的对象
+        LivingEntity lastAttacker = maid.getLastHurtByMob();
+        if (lastAttacker != null && maid.canAttack(lastAttacker) && maid.canSee(lastAttacker)) {
+            return Optional.of(lastAttacker);
+        }
+        // 再检查记忆中的可见对象
+        var memory = maid.getBrain().getMemory(MemoryModuleType.NEAREST_LIVING_ENTITIES);
+        if (memory.isEmpty()) {
+            return Optional.empty();
+        }
+        // 改回 for 循环，避免 stream 带来的额外开销
+        for (LivingEntity e : memory.get()) {
+            if (maid.canAttack(e) && maid.canSee(e)) {
+                return Optional.of(e);
+            }
         }
         return Optional.empty();
     }
