@@ -86,7 +86,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.stats.Stats;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
@@ -938,37 +937,6 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         return super.hurt(source, amount);
     }
 
-    /**
-     * 重新复写父类方法，添加上自己的 Event
-     */
-    @Override
-    protected void actuallyHurt(DamageSource damageSrc, float damageAmount) {
-        if (!this.isInvulnerableTo(damageSrc)) {
-            MaidHurtEvent maidHurtEvent = new MaidHurtEvent(this, damageSrc, damageAmount);
-            damageAmount = MinecraftForge.EVENT_BUS.post(maidHurtEvent) ? 0 : maidHurtEvent.getAmount();
-            damageAmount = ForgeHooks.onLivingHurt(this, damageSrc, damageAmount);
-            if (damageAmount > 0) {
-                damageAmount = this.getDamageAfterArmorAbsorb(damageSrc, damageAmount);
-                damageAmount = this.getDamageAfterMagicAbsorb(damageSrc, damageAmount);
-                float damageAfterAbsorption = Math.max(damageAmount - this.getAbsorptionAmount(), 0);
-                this.setAbsorptionAmount(this.getAbsorptionAmount() - (damageAmount - damageAfterAbsorption));
-                float damageDealtAbsorbed = damageAmount - damageAfterAbsorption;
-                if (0 < damageDealtAbsorbed && damageDealtAbsorbed < (Float.MAX_VALUE / 10) && damageSrc.getEntity() instanceof ServerPlayer) {
-                    ((ServerPlayer) damageSrc.getEntity()).awardStat(Stats.DAMAGE_DEALT_ABSORBED, Math.round(damageDealtAbsorbed * 10));
-                }
-                MaidDamageEvent maidDamageEvent = new MaidDamageEvent(this, damageSrc, damageAfterAbsorption);
-                damageAfterAbsorption = MinecraftForge.EVENT_BUS.post(maidDamageEvent) ? 0 : maidDamageEvent.getAmount();
-                damageAfterAbsorption = ForgeHooks.onLivingDamage(this, damageSrc, damageAfterAbsorption);
-                if (damageAfterAbsorption != 0) {
-                    float health = this.getHealth();
-                    this.getCombatTracker().recordDamage(damageSrc, damageAfterAbsorption);
-                    this.setHealth(health - damageAfterAbsorption);
-                    this.setAbsorptionAmount(this.getAbsorptionAmount() - damageAfterAbsorption);
-                }
-            }
-        }
-    }
-
     @Nullable
     @Override
     public Entity changeDimension(ServerLevel serverLevel, ITeleporter teleporter) {
@@ -1016,6 +984,26 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             this.removeAllEffects();
             // 最后父类方法
             super.die(cause);
+            // 额外发送女仆所处坐标
+            this.sendMaidPos();
+        }
+    }
+
+    private void sendMaidPos() {
+        if (this.dead && !this.level.isClientSide
+            && this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES)
+            && this.getOwner() instanceof ServerPlayer serverPlayer) {
+            // 支持旅行地图格式
+            // [name:"name", x:-136, y:36, z:48, dim:minecraft:the_nether]
+            BlockPos blockPos = this.blockPosition();
+            String name = new ResourceLocation(this.getModelId()).getPath();
+            Component msg = Component.literal("""
+                    [name:"%s", x:%d, y:%d, z:%d, dim:%s]""".formatted(
+                    name,
+                    blockPos.getX(), blockPos.getY(), blockPos.getZ(),
+                    this.level.dimension().location().toString()
+            ));
+            serverPlayer.sendSystemMessage(msg);
         }
     }
 

@@ -233,8 +233,10 @@ dependencies {
     implementation fg.deobf("libs:superbwarfare-1.20.1:0.8.7.1")
     runtimeOnly fg.deobf("maven.modrinth:geckolib:4.4.9-forge,1.20.1")
 
+    // 地图相关模组兼容
     runtimeOnly fg.deobf("maven.modrinth:xaeros-minimap:25.2.10_Forge_1.20")
     runtimeOnly fg.deobf("maven.modrinth:xaeros-world-map:1.39.12_Forge_1.20")
+    runtimeOnly fg.deobf("maven.modrinth:journeymap:1.20.1-5.10.3-forge")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
