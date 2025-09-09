@@ -51,7 +51,7 @@ public class BackupCommand {
 
     private static String getFormattedTime(long timestamp) {
         LocalDateTime dateTime = LocalDateTime.ofEpochSecond(timestamp / 1000, 0, ZoneOffset.UTC);
-        return dateTime.format(DateTimeFormatter.ofPattern("MM/dd HH:mm"));
+        return dateTime.format(DateTimeFormatter.ofPattern("(MM/dd HH:mm)"));
     }
 
     private static int handlePlayerMaidIndex(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
@@ -128,10 +128,10 @@ public class BackupCommand {
 
         var backupFiles = MaidBackupsManager.getMaidBackupFiles(player, uuid);
         for (String backupFile : backupFiles) {
-            MutableComponent msg = Component.literal(backupFile).withStyle(ChatFormatting.GOLD);
+            MutableComponent msg = Component.literal(backupFile).withStyle(ChatFormatting.DARK_PURPLE);
 
             String command = "/tlm backup get @s %s \"%s\"".formatted(uuid, backupFile);
-            ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, command);
+            ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.RUN_COMMAND, command);
             msg.withStyle(style -> style.withClickEvent(clickEvent));
 
             player.sendSystemMessage(msg);
