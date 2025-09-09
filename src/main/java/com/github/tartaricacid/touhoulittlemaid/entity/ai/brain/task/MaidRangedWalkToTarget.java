@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.datafixers.kinds.IdF;
 import com.mojang.datafixers.kinds.OptionalBox;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.behavior.BehaviorControl;
 import net.minecraft.world.entity.ai.behavior.EntityTracker;
@@ -13,6 +14,7 @@ import net.minecraft.world.entity.ai.behavior.declarative.Trigger;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.NearestVisibleLivingEntities;
 import net.minecraft.world.entity.ai.memory.WalkTarget;
+import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
@@ -46,7 +48,7 @@ public class MaidRangedWalkToTarget {
                                                  MemoryAccessor<OptionalBox.Mu, NearestVisibleLivingEntities> livingEntitiesMemory) {
         return (level, maid, gameTime) -> {
             LivingEntity target = maidInstance.get(entityMemory);
-            if (maid.canSee(target) && isWithinRestriction(maid, target)) {
+            if (maid.canSee(target) && shouldEraseWalkTarget(maid, target)) {
                 walkTargetMemory.erase();
             } else {
                 positionMemory.set(new EntityTracker(target, true));
@@ -56,8 +58,16 @@ public class MaidRangedWalkToTarget {
         };
     }
 
-    private static boolean isWithinRestriction(EntityMaid maid, LivingEntity target) {
-        float restrictRadius = maid.getRestrictRadius() * 0.65f;
-        return target.distanceTo(maid) < restrictRadius;
+    private static boolean shouldEraseWalkTarget(EntityMaid maid, LivingEntity target) {
+        float restrictRadius = maid.getRestrictRadius() - 2;
+        double checkRadius = 8;
+        if (maid.hasRestriction()) {
+            BlockPos center = maid.getRestrictCenter();
+            checkRadius = Math.sqrt(target.distanceToSqr(center.getX(), center.getY(), center.getZ()));
+        } else if (maid.getOwner() instanceof Player player) {
+            checkRadius = target.distanceTo(player);
+        }
+        // 如果目标在 4 格外，在 最大限制范围-2 内，可以直接走过去，否则清除目标
+        return checkRadius <= 4 || checkRadius >= restrictRadius;
     }
 }

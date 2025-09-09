@@ -8,7 +8,7 @@ import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.param
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.StringParameter;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IAttackTask;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
-import com.github.tartaricacid.touhoulittlemaid.compat.gun.tacz.TacCompat;
+import com.github.tartaricacid.touhoulittlemaid.compat.gun.common.GunCommonUtil;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
@@ -53,8 +53,7 @@ public class SwitchAttackTaskFunction implements IFunctionCall<SwitchAttackTaskF
                 .setDescription(TASK_ID_PARAMETER_DESC)
                 .addEnumValues("idle", "attack", "ranged_attack",
                         "crossbow_attack", "danmaku_attack", "trident_attack");
-        // 兼容 TACZ
-        if (TacCompat.isInstalled()) {
+        if (GunCommonUtil.isInstalled()) {
             taskId.setDescription(TASK_ID_PARAMETER_DESC + "\n" + GUN_TASK_ID_PARAMETER_DESC);
             taskId.addEnumValues("gun_attack");
         }

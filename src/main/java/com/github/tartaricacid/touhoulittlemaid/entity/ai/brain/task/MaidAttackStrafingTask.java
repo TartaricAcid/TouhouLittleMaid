@@ -9,6 +9,7 @@ import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ProjectileWeaponItem;
 
@@ -70,8 +71,12 @@ public class MaidAttackStrafingTask extends Behavior<EntityMaid> {
                     this.strafingBackwards = true;
                 }
 
-                // 应用走位
-                owner.getMoveControl().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
+                // 应用走位，但需要考虑玩家位置
+                if (!owner.hasRestriction() && owner.getOwner() instanceof Player player && owner.distanceTo(player) >= owner.getRestrictRadius()) {
+                    this.stopInPlace(owner);
+                } else {
+                    owner.getMoveControl().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
+                }
                 owner.setYRot(Mth.rotateIfNecessary(owner.getYRot(), owner.yHeadRot, 0.0F));
                 BehaviorUtils.lookAtEntity(owner, target);
             } else {
@@ -95,5 +100,12 @@ public class MaidAttackStrafingTask extends Behavior<EntityMaid> {
     @Override
     protected boolean canStillUse(ServerLevel worldIn, EntityMaid entityIn, long gameTimeIn) {
         return this.checkExtraStartConditions(worldIn, entityIn);
+    }
+
+    private void stopInPlace(EntityMaid maid) {
+        maid.getNavigation().stop();
+        maid.setXxa(0.0F);
+        maid.setYya(0.0F);
+        maid.setSpeed(0.0F);
     }
 }

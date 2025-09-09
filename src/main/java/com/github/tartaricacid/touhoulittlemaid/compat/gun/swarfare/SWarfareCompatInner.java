@@ -9,6 +9,7 @@ import com.atsuishio.superbwarfare.init.ModSounds;
 import com.atsuishio.superbwarfare.item.HandGrenade;
 import com.atsuishio.superbwarfare.item.RgoGrenade;
 import com.atsuishio.superbwarfare.item.gun.GunItem;
+import com.github.tartaricacid.touhoulittlemaid.compat.gun.common.ai.GunShootTargetTask;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
@@ -96,6 +97,14 @@ public class SWarfareCompatInner {
             return;
         }
         gunData.tick(shooter, true);
+    }
+
+    static void onStop(EntityMaid maid, GunShootTargetTask task) {
+        // 如果女仆副手是手雷，那么 cooldown 设置为 50 tick
+        ItemStack offhand = maid.getOffhandItem();
+        if (offhand.getItem() instanceof RgoGrenade) {
+            task.setAttackCooldown(50);
+        }
     }
 
     static int performGunAttack(EntityMaid shooter, LivingEntity target, ItemStack gunItem) {
