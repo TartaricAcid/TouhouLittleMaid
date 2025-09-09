@@ -156,7 +156,20 @@
 		},
 		{
 			"model_id": "touhou_little_maid:yumemi_strawberry_milk",
-			"animation": []
+			"animation": [],
+			"tameable_can_ride": false
+		},
+		{
+			"model_id": "touhou_little_maid:legendary_pig_man",
+			"animation": [],
+			"tameable_can_ride": false,
+			"render_item_scale": 0.8
+		},
+		{
+			"model_id": "touhou_little_maid:head_of_academycraft",
+			"animation": [],
+			"tameable_can_ride": false,
+			"render_item_scale": 0.8
 		}
 	]
 }

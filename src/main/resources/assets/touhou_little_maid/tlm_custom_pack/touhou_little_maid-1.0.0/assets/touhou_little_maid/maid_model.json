@@ -131,6 +131,28 @@
 			]
 		},
 		{
+			"model_id": "touhou_little_maid:cirno_slim",
+			"name": "{model.touhou_little_maid.cirno.name}",
+			"description": ["{model.touhou_little_maid.cirno.desc}"],
+			"extra_textures": [
+				"touhou_little_maid:textures/entity/cirno_slim_tan.png",
+				"touhou_little_maid:textures/entity/cirno_slim_maid.png"
+			],
+			"animation": [
+				"touhou_little_maid:animation/maid/default/head/default.js",
+				"touhou_little_maid:animation/maid/default/head/beg.js",
+				"touhou_little_maid:animation/maid/default/head/music_shake.js",
+				"touhou_little_maid:animation/maid/default/head/blink.js",
+				"touhou_little_maid:animation/maid/default/head/hurt.js",
+				"touhou_little_maid:animation/maid/default/arm/default.js",
+				"touhou_little_maid:animation/maid/default/arm/swing.js",
+				"touhou_little_maid:animation/maid/default/leg/default.js",
+				"touhou_little_maid:animation/maid/default/sit/skirt_rotation.js",
+				"touhou_little_maid:animation/maid/default/sit/default.js",
+				"touhou_little_maid:animation/maid/default/wing/default.js"
+			]
+		},
+		{
 			"model_id": "touhou_little_maid:hong_meiling",
 			"description": ["{model.touhou_little_maid.hong_meiling.desc}"]
 		},

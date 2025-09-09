@@ -52,7 +52,7 @@ public class SWarfareCompat {
         ModFileInfo modFileById = LoadingModList.get().getModFileById(MOD_ID);
         if (modFileById != null) {
             DefaultArtifactVersion modVersion = new DefaultArtifactVersion(modFileById.versionString());
-            INSTALLED = modVersion.compareTo(new DefaultArtifactVersion("0.8.7")) >= 0;
+            INSTALLED = modVersion.compareTo(new DefaultArtifactVersion("0.8.7.1")) >= 0;
             if (INSTALLED) {
                 MinecraftForge.EVENT_BUS.register(new GunHurtMaidEvent());
                 MinecraftForge.EVENT_BUS.register(new MaidSaddleClickEvent());
