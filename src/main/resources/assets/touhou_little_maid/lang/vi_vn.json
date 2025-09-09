@@ -476,7 +476,7 @@
   "gui.touhou_little_maid.fox_scroll.track": "Theo dõi",
   "gui.touhou_little_maid.fox_scroll.empty": "Không có toạ độ của maid nào",
   "gui.touhou_little_maid.optifine_warning.title": "Cảnh Báo Optifine Touhou Little Maid",
-  "gui.touhou_little_maid.optifine_warning.text": "Trước khi bạn nhấn nút tiếp tục, xin lưu ý: Optifine hiện đang dễ xảy ra crash, lỗi kết xuất thực thể, và nhiều vấn đề khác.\n\nTrước khi báo cáo lỗi, hãy xóa Optifine trước và kiểm tra lại để xem có còn lỗi hay không.\n\nCác vấn đề liên quan đến Optifine có thể không bao giờ được sửa ở phía mod Touhou Little Maid! \n\nKhuyến nghị bạn sử dụng mod Oculus và Embeddium thay thế cho Optifine.",
+  "gui.touhou_little_maid.optifine_warning.text": "Trước khi bạn nhấn nút tiếp tục, xin lưu ý: Optifine hiện đang dễ xảy ra crash, lỗi kết xuất thực thể, và nhiều vấn đề khác.\n\nTrước khi báo cáo lỗi, hãy xóa Optifine trước và kiểm tra lại để xem có còn lỗi hay không.\n\nCác vấn đề liên quan đến Optifine có thể không bao giờ được sửa ở phía mod Touhou Little Maid! \n\nKhuyến nghị bạn sử dụng mod Embeddium và Oculus và thay thế cho Optifine.",
   "gui.touhou_little_maid.optifine_warning.embeddium": "Tải Embeddium",
   "gui.touhou_little_maid.optifine_warning.oculus": "Tải Oculus",
   "gui.touhou_little_maid.cloth_config_warning.tips": "Bạn cần cài mod Cloth Config API để sử dụng chức năng cấu hình trong game",
