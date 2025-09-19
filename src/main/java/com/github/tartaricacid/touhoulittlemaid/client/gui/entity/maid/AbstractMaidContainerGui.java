@@ -291,17 +291,10 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
 
     private void addTaskControlButton() {
         pageDown = new ImageButton(leftPos - 72, topPos + 9, 16, 13, 93, 0, 14, TASK, (b) -> {
-            List<IMaidTask> tasks = TaskManager.getTaskIndex();
-            if (TASK_PAGE * TASK_COUNT_PER_PAGE + TASK_COUNT_PER_PAGE < tasks.size()) {
-                TASK_PAGE++;
-                init();
-            }
+            taskPageDown();
         });
         pageUp = new ImageButton(leftPos - 89, topPos + 9, 16, 13, 110, 0, 14, TASK, (b) -> {
-            if (TASK_PAGE > 0) {
-                TASK_PAGE--;
-                init();
-            }
+            taskPageUp();
         });
         pageClose = new ImageButton(leftPos - 19, topPos + 9, 13, 13, 127, 0, 14, TASK, (b) -> {
             TASK_LIST_OPEN = false;
@@ -313,6 +306,21 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         pageUp.visible = TASK_LIST_OPEN;
         pageDown.visible = TASK_LIST_OPEN;
         pageClose.visible = TASK_LIST_OPEN;
+    }
+
+    private void taskPageUp() {
+        if (TASK_PAGE > 0) {
+            TASK_PAGE--;
+            init();
+        }
+    }
+
+    private void taskPageDown() {
+        List<IMaidTask> tasks = TaskManager.getTaskIndex();
+        if (TASK_PAGE * TASK_COUNT_PER_PAGE + TASK_COUNT_PER_PAGE < tasks.size()) {
+            TASK_PAGE++;
+            init();
+        }
     }
 
     private void addTaskListButton() {
@@ -553,7 +561,8 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
 
     private void drawTaskListBg(GuiGraphics graphics) {
         if (TASK_LIST_OPEN) {
-            graphics.blit(TASK, leftPos - 93, topPos + 5, 0, 0, 92, 251);
+            Rect2i taskListArea = getTaskListArea();
+            graphics.blit(TASK, taskListArea.getX(), taskListArea.getY(), 0, 0, taskListArea.getWidth(), taskListArea.getHeight());
         }
     }
 
@@ -618,6 +627,10 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         return TASK_LIST_OPEN;
     }
 
+    private Rect2i getTaskListArea() {
+        return new Rect2i(leftPos - 93, topPos + 5, 92, 251);
+    }
+
     // 获取女仆界面JERI屏蔽区域
     public List<Rect2i> getExclusionArea() {
         List<Rect2i> zones = new ArrayList<>();
@@ -625,9 +638,25 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         zones.add(new Rect2i(leftPos + 251, topPos + 28 + 9, 21, 99));
         // 任务列表
         if (isTaskListOpen()) {
-            zones.add(new Rect2i(leftPos - 93, topPos + 5, 92, 251));
+            zones.add(getTaskListArea());
         }
         return zones;
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollY) {
+        if (TASK_LIST_OPEN && getTaskListArea().contains((int) mouseX, (int) mouseY)) {
+            if (scrollY > 0) {
+                // 向上滚，相当于点击 "Page Up"
+                taskPageUp();
+            } else {
+                // 向下滚，相当于点击 "Page Down"
+                taskPageDown();
+            }
+            return true;
+        }
+
+        return super.mouseScrolled(mouseX, mouseY, scrollY);
     }
 
     public EntityMaid getMaid() {
