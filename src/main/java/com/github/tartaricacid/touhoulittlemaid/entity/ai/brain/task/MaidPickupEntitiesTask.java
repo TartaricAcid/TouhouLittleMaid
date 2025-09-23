@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.google.common.base.Predicates;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -20,6 +21,9 @@ import java.util.function.Predicate;
 public class MaidPickupEntitiesTask extends Behavior<EntityMaid> {
     private final Predicate<EntityMaid> predicate;
     private final float speedModifier;
+    private static long globalNextScheduleAt = 0;
+    private long nextScheduledAt = 0;
+
 
     public MaidPickupEntitiesTask(float speedModifier) {
         this(Predicates.alwaysTrue(), speedModifier);
@@ -34,13 +38,21 @@ public class MaidPickupEntitiesTask extends Behavior<EntityMaid> {
 
     @Override
     protected boolean checkExtraStartConditions(ServerLevel worldIn, EntityMaid owner) {
-        return owner.isTame() && owner.canBrainMoving() && predicate.test(owner);
+        return owner.isTame() && nextScheduledAt <= Util.getMillis() && owner.canBrainMoving() && predicate.test(owner);
     }
 
     @Override
     protected void start(ServerLevel worldIn, EntityMaid maid, long gameTimeIn) {
         List<Entity> items = this.getItems(maid);
         var pathFinding = new MaidPathFindingBFS(maid.getNavigation().getNodeEvaluator(), worldIn, maid);
+        long millis = Util.getMillis();
+        //在不同的女仆的拾取任务之间对齐时间间隔，来尽可能发挥相邻点缓存的作用
+        nextScheduledAt = globalNextScheduleAt;
+        if (millis >= nextScheduledAt) {
+            //如果没有其他女仆的拾取计划，那么安排在三秒后
+            globalNextScheduleAt = millis + 3000;
+            nextScheduledAt = globalNextScheduleAt;
+        }
         for (Entity entity : items) {
             BlockPos blockPos = entity.blockPosition();
             if (maid.isWithinRestriction(blockPos)
@@ -48,6 +60,8 @@ public class MaidPickupEntitiesTask extends Behavior<EntityMaid> {
                     && !entity.isInWater()
                     && pathFinding.canPathReach(blockPos)) {
                 BehaviorUtils.setWalkAndLookTargetMemories(maid, entity, this.speedModifier, 0);
+                //如果成功，那么下一次计划立刻进行，方便进行连续拾取
+                nextScheduledAt = 0;
                 break;
             }
         }
