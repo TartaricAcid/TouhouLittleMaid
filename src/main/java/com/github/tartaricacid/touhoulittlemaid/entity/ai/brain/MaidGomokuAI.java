@@ -45,8 +45,8 @@ public final class MaidGomokuAI {
      * 获取棋局状态
      */
     public static Statue getStatue(byte[][] chessData, Point point) {
-        int numRows = chessData.length;
-        int numCols = chessData[0].length;
+        int rows = chessData[0].length;
+        int cols = chessData.length;
         int x = point.x;
         int y = point.y;
         int type = point.type;
@@ -67,7 +67,7 @@ public final class MaidGomokuAI {
         }
         for (int i = 1; i < 5; i++) {
             int nextX = x + i;
-            if (nextX > numRows - 1) {
+            if (nextX > rows - 1) {
                 break;
             }
             if (chessData[nextX][y] != type) {
@@ -94,7 +94,7 @@ public final class MaidGomokuAI {
         }
         for (int i = 1; i < 5; i++) {
             int nextY = y + i;
-            if (nextY > numCols - 1) {
+            if (nextY > cols - 1) {
                 break;
             }
             if (chessData[x][nextY] != type) {
@@ -123,7 +123,7 @@ public final class MaidGomokuAI {
         for (int i = 1; i < 5; i++) {
             int nextX = x + i;
             int nextY = y + i;
-            if (nextX > numRows - 1 || nextY > numCols - 1) {
+            if (nextX > rows - 1 || nextY > cols - 1) {
                 break;
             }
             if (chessData[nextX][nextY] != type) {
@@ -139,7 +139,7 @@ public final class MaidGomokuAI {
         for (int i = 1; i < 5; i++) {
             int nextX = x + i;
             int preY = y - i;
-            if (nextX > numRows - 1 || preY < 0) {
+            if (nextX > rows - 1 || preY < 0) {
                 break;
             }
             if (chessData[nextX][preY] != type) {
@@ -152,7 +152,7 @@ public final class MaidGomokuAI {
         for (int i = 1; i < 5; i++) {
             int preX = x - i;
             int nextY = y + i;
-            if (preX < 0 || nextY > numCols - 1) {
+            if (preX < 0 || nextY > cols - 1) {
                 break;
             }
             if (chessData[preX][nextY] != type) {
@@ -165,10 +165,11 @@ public final class MaidGomokuAI {
 
         // 检查和局：棋盘已满且无胜局
         boolean full = true;
-        for (int i = 0; full && i < numRows; i++) {
-            for (int j = 0; full && j < numCols; j++) {
+        for (int i = 0; full && i < cols; i++) {
+            for (int j = 0; full && j < rows; j++) {
                 if (chessData[i][j] == 0) {
                     full = false;
+                    break;
                 }
             }
         }

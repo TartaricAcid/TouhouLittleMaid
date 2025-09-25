@@ -508,6 +508,7 @@
   "message.touhou_little_maid.chisel.offhand_not_photo": "請將女僕照片拿在副手",
   "message.touhou_little_maid.gomoku.win": "玩家獲勝",
   "message.touhou_little_maid.gomoku.lose": "玩家失敗",
+  "message.touhou_little_maid.gomoku.draw": "平局",
   "message.touhou_little_maid.gomoku.reset": "右鍵棋盒進行重置",
   "message.touhou_little_maid.gomoku.round": "回合：%d",
   "message.touhou_little_maid.gomoku.no_maid": "沒有女僕來參與遊戲",

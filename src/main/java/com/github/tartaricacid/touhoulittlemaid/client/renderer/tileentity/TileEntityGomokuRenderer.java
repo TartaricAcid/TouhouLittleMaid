@@ -115,7 +115,11 @@ public class TileEntityGomokuRenderer implements BlockEntityRenderer<TileEntityG
             MutableComponent preRoundIcon = Component.literal("⏹ ").withStyle(ChatFormatting.GREEN);
             MutableComponent postRoundIcon = Component.literal(" ⏹").withStyle(ChatFormatting.GREEN);
             MutableComponent roundTips = preRoundIcon.append(roundText).append(postRoundIcon);
-            if (gomoku.isPlayerTurn()) {
+            // 依据最终局面显示：平局 > 胜利/失败
+            var statue = com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidGomokuAI.getStatue(gomoku.getChessData(), gomoku.getLatestChessPoint());
+            if (statue == com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Statue.DRAW) {
+                loseTips = Component.translatable("message.touhou_little_maid.gomoku.draw").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.GOLD);
+            } else if (gomoku.isPlayerTurn()) {
                 loseTips = Component.translatable("message.touhou_little_maid.gomoku.win").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.DARK_PURPLE);
             } else {
                 loseTips = Component.translatable("message.touhou_little_maid.gomoku.lose").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.DARK_PURPLE);

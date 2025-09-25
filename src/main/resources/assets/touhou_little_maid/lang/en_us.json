@@ -512,6 +512,7 @@
   "message.touhou_little_maid.chisel.offhand_not_photo": "Please have a photo of a maid in your offhand",
   "message.touhou_little_maid.gomoku.win": "Player Won",
   "message.touhou_little_maid.gomoku.lose": "Player Lost",
+  "message.touhou_little_maid.gomoku.draw": "Draw",
   "message.touhou_little_maid.gomoku.reset": "Right click the chess box to reset",
   "message.touhou_little_maid.gomoku.round": "Round: %d",
   "message.touhou_little_maid.gomoku.no_maid": "There is no maid participating in the game",
