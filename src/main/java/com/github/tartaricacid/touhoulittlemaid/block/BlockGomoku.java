@@ -287,12 +287,17 @@ public class BlockGomoku extends BlockJoy implements IBoardGameBlock {
                         InitTrigger.MAID_EVENT.get().trigger(serverPlayer, TriggerType.WIN_GOMOKU);
                     }
                 }
+                // 更新进行状态
                 gomoku.setInProgress(statue == Statue.IN_PROGRESS);
                 level.playSound(null, pos, InitSounds.GOMOKU.get(), SoundSource.BLOCKS, 1.0f, 0.8F + level.random.nextFloat() * 0.4F);
-                if (gomoku.isInProgress() && player instanceof ServerPlayer serverPlayer) {
-                    gomoku.setPlayerTurn(false);
-                    PacketDistributor.sendToPlayer(serverPlayer, new GomokuClientPackage(centerPos, chessData, playerPoint, maid.getGameRecordManager().getGomokuWinCount()));
+                // 仅当对局未结束时，才让 AI 思考
+                if (statue == Statue.IN_PROGRESS) {
+                    if (player instanceof ServerPlayer serverPlayer) {
+                        gomoku.setPlayerTurn(false);
+                        PacketDistributor.sendToPlayer(serverPlayer, new GomokuClientPackage(centerPos, chessData, playerPoint, maid.getGameRecordManager().getGomokuWinCount()));
+                    }
                 }
+                // 和棋或胜负已分都直接刷新，不再轮转
                 gomoku.refresh();
                 return ItemInteractionResult.SUCCESS;
             }

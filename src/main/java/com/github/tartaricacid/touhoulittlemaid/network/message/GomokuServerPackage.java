@@ -45,11 +45,14 @@ public record GomokuServerPackage(BlockPos pos, Point point) implements CustomPa
                     }
                     Point aiPoint = message.point;
                     gomoku.setChessData(aiPoint.x, aiPoint.y, aiPoint.type);
-                    gomoku.setInProgress(MaidGomokuAI.getStatue(gomoku.getChessData(), aiPoint) == Statue.IN_PROGRESS);
+                    Statue statue = MaidGomokuAI.getStatue(gomoku.getChessData(), aiPoint);
+                    gomoku.setInProgress(statue == Statue.IN_PROGRESS);
                     if (level instanceof ServerLevel serverLevel && serverLevel.getEntity(gomoku.getSitId()) instanceof EntitySit sit && sit.getFirstPassenger() instanceof EntityMaid maid) {
                         maid.swing(InteractionHand.MAIN_HAND);
                         if (!gomoku.isInProgress()) {
-                            maid.getGameRecordManager().markStatue(true);
+                            if (statue == Statue.WIN) {
+                                maid.getGameRecordManager().markStatue(true);
+                            }
                         }
                     }
                     level.playSound(null, message.pos, InitSounds.GOMOKU.get(), SoundSource.BLOCKS, 1.0f, 0.8F + level.random.nextFloat() * 0.4F);

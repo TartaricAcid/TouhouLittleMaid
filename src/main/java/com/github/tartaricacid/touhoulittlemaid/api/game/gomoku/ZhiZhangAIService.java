@@ -8,6 +8,7 @@
 package com.github.tartaricacid.touhoulittlemaid.api.game.gomoku;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -394,6 +395,7 @@ public class ZhiZhangAIService implements AIService {
         this.aiConfig = aiConfig;
     }
 
+    @Nullable
     @Override
     public Point getPoint(byte[][] chessData, Point point) {
         initChessData(chessData);
