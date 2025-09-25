@@ -1,3 +1,13 @@
 {
-    "chair_pack.next_update_model.desc": "Alcuni modelli attualmente programmati, ma non ancora implementati"
+    "chair_pack.next_update_model.desc": "Alcuni modelli attualmente programmati, ma non ancora implementati",
+    "chair_pack.next_update_model.name": "Modelli in aggiornamenti successivi",
+    "model.next_update_model.stage.name": "Palco",
+    "model.next_update_model.japanese_lottery_machine.name": "Macchina Della Lotteria Giapponese",
+    "model.next_update_model.fishpond.name": "Laghetto",
+    "model.next_update_model.mine.name": "Miniera",
+    "model.next_update_model.logging_hut.name": "Capanno del taglialegna",
+    "model.next_update_model.kitchen.name": "Cucina",
+    "model.next_update_model.dining_table_default.name": "Tavolo da pranzo",
+    "model.next_update_model.cumin_lamb_chop.name": "Costoletta d'agnello Cumin",
+    "model.next_update_model.hot_spring.name": "Sorgenti Termali"
 }
