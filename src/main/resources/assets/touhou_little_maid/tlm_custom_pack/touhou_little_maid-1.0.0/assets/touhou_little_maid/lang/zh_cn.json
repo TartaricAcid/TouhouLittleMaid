@@ -308,5 +308,7 @@
     "model.touhou_little_maid.chimi_houjuu.name": "封兽魑魅",
     "model.touhou_little_maid.chimi_houjuu.desc": "§7原形不明的反骨妖兽",
     "model.touhou_little_maid.ubame_chirizuka.name": "尘塚姥芽",
-    "model.touhou_little_maid.ubame_chirizuka.desc": "§7栖息于圣域的山姥之长"
+    "model.touhou_little_maid.ubame_chirizuka.desc": "§7栖息于圣域的山姥之长",
+    "model.touhou_little_maid.legendary_pig_man.name": "传奇 PigMan 像",
+    "model.touhou_little_maid.head_of_academycraft.name": "AcademyCraft 作者像"
 }
