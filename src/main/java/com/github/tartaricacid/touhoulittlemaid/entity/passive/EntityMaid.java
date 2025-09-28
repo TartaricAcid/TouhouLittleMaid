@@ -31,6 +31,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidBrain;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.control.MaidMoveControl;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.navigation.MaidPathNavigation;
+import com.github.tartaricacid.touhoulittlemaid.entity.ai.navigation.NodeNeighborCache;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleDataCollection;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManager;
@@ -292,6 +293,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     public boolean rouletteAnimDirty = false;
     public int roamingVarsUpdateFlag = 0;
     public Object2FloatOpenHashMap<String> roamingVars = new Object2FloatOpenHashMap<>();
+
+    public NodeNeighborCache nodeNeighborCache = null;
 
     /**
      * 用于方便特殊动画播放的变量，目前仅支持捡雪球

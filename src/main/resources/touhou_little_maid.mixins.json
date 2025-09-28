@@ -6,15 +6,29 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "touhou_little_maid.refmap.json",
   "mixins": [
-    "ArrowMixin", "ConduitBlockEntityMixin", "EntityMixin", "FishingHookPredicateMixin", "NavigationMixin",
-    "PersistentEntitySectionManagerMixin", "PlayerMixin", "StructureTemplateMixin", "ThrownTridentMixin",
-    "accessor.ArrowAccessor", "accessor.CropBlockAccessor", "accessor.EntityAccessor",
+    "ArrowMixin",
+    "BlockBurningCache",
+    "ConduitBlockEntityMixin",
+    "EntityMixin",
+    "FishingHookPredicateMixin",
+    "NavigationMixin",
+    "NodeEvaluatorBurningCacher",
+    "PersistentEntitySectionManagerMixin",
+    "PlayerMixin",
+    "StructureTemplateMixin",
+    "ThrownTridentMixin",
+    "accessor.ArrowAccessor",
+    "accessor.CropBlockAccessor",
+    "accessor.EntityAccessor",
     "accessor.FenceGateBlockAccessor",
     "accessor.LivingEntityAccessor"
   ],
   "client": [
-    "client.ClientPacketListenerMixin", "client.HumanoidModelMixin", "client.ItemPropertiesMixin",
-    "client.LanguageMixin", "client.LivingEntityRendererMixin"
+    "client.ClientPacketListenerMixin",
+    "client.HumanoidModelMixin",
+    "client.ItemPropertiesMixin",
+    "client.LanguageMixin",
+    "client.LivingEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
