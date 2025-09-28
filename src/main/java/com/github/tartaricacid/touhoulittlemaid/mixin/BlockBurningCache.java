@@ -9,8 +9,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(Block.class)
+@SuppressWarnings("all")
 public abstract class BlockBurningCache extends BlockBehaviour implements ItemLike, IBlockExtension, IBlockBurningCacheMixin {
-
     @Unique
     public Boolean touhou_little_maid$isBurning = null;
     @Unique

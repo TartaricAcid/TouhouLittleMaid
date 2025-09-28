@@ -7,27 +7,33 @@ import net.minecraft.world.level.pathfinder.PathType;
 import java.util.Arrays;
 
 public class NodeNeighborCache {
-    final int centerX;
-    final int centerY;
-    final int centerZ;
-    //
-    final int dx;
-    final int dy;
-    final int dz;
-    final int rx;
-    final int ry;
-    final int rz;
-    //链表next，使用offset描述，默认情况下从0->n-1依次相连，所以使用id+offset+1来获取nextId，可以省略初始化步骤
-    final int[] nextOffset;
-    //data用于存储节点描述信息，用这些信息重新创建node
-    final long[] data;
-    final long[] data2;
-    final float[] data3;
-    //某个方块位置的链表起始节点。0代表不存在，后续ID顺次减一
-    final int[] start;
-    //下一个空闲节点的id，从这个节点开始的data节点都是空的，可以覆盖
-    public int nextFree = 1;
-    final public int tickCount;
+    public final int tickCount;
+
+    private final int centerX;
+    private final int centerY;
+    private final int centerZ;
+
+    private final int dx;
+    private final int dy;
+    private final int dz;
+
+    private final int rx;
+    private final int ry;
+    private final int rz;
+
+    // 链表next，使用offset描述，默认情况下从0->n-1依次相连，所以使用id+offset+1来获取nextId，可以省略初始化步骤
+    private final int[] nextOffset;
+
+    // data用于存储节点描述信息，用这些信息重新创建node
+    private final long[] data;
+    private final long[] data2;
+    private final float[] data3;
+
+    // 某个方块位置的链表起始节点。0代表不存在，后续ID顺次减一
+    private final int[] start;
+
+    // 下一个空闲节点的id，从这个节点开始的data节点都是空的，可以覆盖
+    private int nextFree = 1;
 
     public NodeNeighborCache(int x, int y, int z, int rx, int ry, int rz, int tickCount) {
         this.centerX = x;
@@ -66,13 +72,16 @@ public class NodeNeighborCache {
         this.nextFree = cache.nextFree;
         this.tickCount = cache.tickCount;
     }
+
     public void record(Node pos, Node[] nodes, int nodeId) {
-        if (!isInRange(pos.x, pos.y, pos.z))
+        if (!isInRange(pos.x, pos.y, pos.z)) {
             return;
+        }
         int nid = id(pos.x, pos.y, pos.z);
-        //确保可以存下所有节点
-        if (!grantNode(nodeId))
+        // 确保可以存下所有节点
+        if (!grantNode(nodeId)) {
             return;
+        }
         int lastNode = 0;
         for (int i = 0; i < nodeId; i++) {
             int nextFreeNode = getNextFreeNode();
@@ -84,8 +93,9 @@ public class NodeNeighborCache {
             storeNode(nextFreeNode, nodes[i]);
             lastNode = nextFreeNode;
         }
-        if (lastNode != 0)
+        if (lastNode != 0) {
             next(lastNode, 0);
+        }
     }
 
     private void storeNode(int i, Node node) {
@@ -102,11 +112,13 @@ public class NodeNeighborCache {
     }
 
     public int get(Node node, Node[] nodes, INodeCacheEvaluator nodeCreator) {
-        if (!isInRange(node.x, node.y, node.z))
+        if (!isInRange(node.x, node.y, node.z)) {
             return -1;
+        }
         int nid = id(node.x, node.y, node.z);
-        if (start[nid] == 0)
+        if (start[nid] == 0) {
             return -1;
+        }
         int i = start[nid];
         int count = 0;
         while (i != 0) {
@@ -119,7 +131,9 @@ public class NodeNeighborCache {
     public boolean grantNode(int count) {
         int t = this.nextFree;
         for (int i = 0; i < count; i++) {
-            if (t == 0) return false;
+            if (t == 0) {
+                return false;
+            }
             t = next(t);
         }
         return true;
@@ -132,8 +146,9 @@ public class NodeNeighborCache {
     }
 
     public void clearForId(int nid) {
-        if (start[nid] == 0)
+        if (start[nid] == 0) {
             return;
+        }
         next(finalFrom(start[nid]), nextFree);
         nextFree = start[nid];
         start[nid] = 0;
@@ -144,10 +159,9 @@ public class NodeNeighborCache {
     }
 
     public int id(int x, int y, int z) {
-        return
-                ((x - this.centerX + this.rx) * this.dy * this.dz) +
-                        ((y - this.centerY + this.ry) * this.dz) +
-                        (z - this.centerZ + this.rz);
+        return ((x - this.centerX + this.rx) * this.dy * this.dz) +
+               ((y - this.centerY + this.ry) * this.dz) +
+               (z - this.centerZ + this.rz);
     }
 
     public int next(int id) {
@@ -161,16 +175,17 @@ public class NodeNeighborCache {
     public int finalFrom(int id) {
         int i = id;
         while (true) {
-            if (next(i) == 0)
+            if (next(i) == 0) {
                 return i;
+            }
             i = next(i);
         }
     }
 
     public boolean isInRange(int ix, int iy, int iz) {
         return ix >= this.centerX - this.rx && ix <= this.centerX + this.rx &&
-                iy >= this.centerY - this.ry && iy <= this.centerY + this.ry &&
-                iz >= this.centerZ - this.rz && iz <= this.centerZ + this.rz;
+               iy >= this.centerY - this.ry && iy <= this.centerY + this.ry &&
+               iz >= this.centerZ - this.rz && iz <= this.centerZ + this.rz;
     }
 
     public static NodeNeighborCache copyToAnotherCenter(NodeNeighborCache cache, int x, int y, int z) {

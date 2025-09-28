@@ -31,31 +31,26 @@ public class MaidNodeEvaluator extends WalkNodeEvaluator implements INodeCacheEv
     @Override
     public void prepare(PathNavigationRegion level, Mob mob) {
         super.prepare(level, mob);
-        //这里尝试从其他女仆获取相邻点缓存
+        // 这里尝试从其他女仆获取相邻点缓存
         if (mob instanceof EntityMaid maid && maid.level() instanceof ServerLevel sl) {
             BlockPos pos = maid.hasRestriction() ? maid.getRestrictCenter() : maid.blockPosition();
             int restrictRadius = maid.hasRestriction() ? (int) maid.getRestrictRadius() : 5;
             int tickCount = sl.getServer().getTickCount();
-            //如果女仆存在这一刻的缓存，那么直接可以使用
-            if (maid.nodeNeighborCache != null && maid.nodeNeighborCache.tickCount == tickCount)
+            // 如果女仆存在这一刻的缓存，那么直接可以使用
+            if (maid.nodeNeighborCache != null && maid.nodeNeighborCache.tickCount == tickCount) {
                 return;
-            //否则，寻找离自己最近的女仆
+            }
+            // 否则，寻找离自己最近的女仆
             Optional<EntityMaid> min = mob.level().getEntities(EntityTypeTest.forClass(EntityMaid.class),
                     new AABB(pos).inflate(restrictRadius),
                     m -> m.nodeNeighborCache != null && m.nodeNeighborCache.tickCount == tickCount
             ).stream().min((t, t2) -> (int) (t.distanceTo(maid) - t2.distanceTo(maid)));
-            if (min.isPresent()) {
-                //将其缓存复制到自己
-                maid.nodeNeighborCache = NodeNeighborCache.copyToAnotherCenter(
-                        min.get().nodeNeighborCache,
-                        pos.getX(),
-                        pos.getY(),
-                        pos.getZ()
-                );
-            } else {
-                //否则创建新的缓存
-                maid.nodeNeighborCache = new NodeNeighborCache(pos.getX(), pos.getY(), pos.getZ(), restrictRadius, 10, restrictRadius, tickCount);
-            }
+            // 将其缓存复制到自己
+            // 否则创建新的缓存
+            maid.nodeNeighborCache = min.map(entityMaid -> NodeNeighborCache.copyToAnotherCenter(
+                            entityMaid.nodeNeighborCache, pos.getX(), pos.getY(), pos.getZ()))
+                    .orElseGet(() -> new NodeNeighborCache(pos.getX(), pos.getY(), pos.getZ(),
+                            restrictRadius, 10, restrictRadius, tickCount));
         }
     }
 

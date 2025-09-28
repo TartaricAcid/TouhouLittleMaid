@@ -19,11 +19,11 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class MaidPickupEntitiesTask extends Behavior<EntityMaid> {
+    private static long GLOBAL_NEXT_SCHEDULE_AT = 0;
+
     private final Predicate<EntityMaid> predicate;
     private final float speedModifier;
-    private static long globalNextScheduleAt = 0;
     private long nextScheduledAt = 0;
-
 
     public MaidPickupEntitiesTask(float speedModifier) {
         this(Predicates.alwaysTrue(), speedModifier);
@@ -46,21 +46,21 @@ public class MaidPickupEntitiesTask extends Behavior<EntityMaid> {
         List<Entity> items = this.getItems(maid);
         var pathFinding = new MaidPathFindingBFS(maid.getNavigation().getNodeEvaluator(), worldIn, maid);
         long millis = Util.getMillis();
-        //在不同的女仆的拾取任务之间对齐时间间隔，来尽可能发挥相邻点缓存的作用
-        nextScheduledAt = globalNextScheduleAt;
+        // 在不同的女仆的拾取任务之间对齐时间间隔，来尽可能发挥相邻点缓存的作用
+        nextScheduledAt = GLOBAL_NEXT_SCHEDULE_AT;
         if (millis >= nextScheduledAt) {
-            //如果没有其他女仆的拾取计划，那么安排在三秒后
-            globalNextScheduleAt = millis + 3000;
-            nextScheduledAt = globalNextScheduleAt;
+            // 如果没有其他女仆的拾取计划，那么安排在三秒后
+            GLOBAL_NEXT_SCHEDULE_AT = millis + 3000;
+            nextScheduledAt = GLOBAL_NEXT_SCHEDULE_AT;
         }
         for (Entity entity : items) {
             BlockPos blockPos = entity.blockPosition();
             if (maid.isWithinRestriction(blockPos)
-                    && entity.isAlive()
-                    && !entity.isInWater()
-                    && pathFinding.canPathReach(blockPos)) {
+                && entity.isAlive()
+                && !entity.isInWater()
+                && pathFinding.canPathReach(blockPos)) {
                 BehaviorUtils.setWalkAndLookTargetMemories(maid, entity, this.speedModifier, 0);
-                //如果成功，那么下一次计划立刻进行，方便进行连续拾取
+                // 如果成功，那么下一次计划立刻进行，方便进行连续拾取
                 nextScheduledAt = 0;
                 break;
             }
