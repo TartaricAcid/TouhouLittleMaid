@@ -512,6 +512,7 @@
   "message.touhou_little_maid.chisel.offhand_not_photo": "Vui lòng cầm một bức ảnh của maid trên tay phụ",
   "message.touhou_little_maid.gomoku.win": "Người Chơi Thắng",
   "message.touhou_little_maid.gomoku.lose": "Người Chơi Thua",
+  "message.touhou_little_maid.gomoku.draw": "Hoà",
   "message.touhou_little_maid.gomoku.reset": "Nhấn chuột phải vào hộp cờ để đặt lại",
   "message.touhou_little_maid.gomoku.round": "Số nước đi: %d",
   "message.touhou_little_maid.gomoku.no_maid": "Không có maid nào tham gia trò chơi",
