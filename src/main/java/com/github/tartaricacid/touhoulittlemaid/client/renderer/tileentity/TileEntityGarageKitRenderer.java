@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.client.render.MaidRenderState;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.SimpleBedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader;
+import com.github.tartaricacid.touhoulittlemaid.compat.ysm.YsmCompat;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGarageKit;
@@ -79,7 +80,13 @@ public class TileEntityGarageKitRenderer implements BlockEntityRenderer<TileEnti
         if (entity instanceof EntityMaid maid) {
             clearMaidDataResidue(maid, true);
             maid.renderState = MaidRenderState.GARAGE_KIT;
+            if (YsmCompat.isInstalled() && maid.isYsmModel()) {
+                maid.tickCount = (int) world.getGameTime();
+            } else {
+                maid.tickCount = 0;
+            }
         }
+
 
         poseStack.pushPose();
         poseStack.scale(0.5f, 0.5f, 0.5f);
