@@ -13,7 +13,6 @@ public class ServerConfig {
     public static ForgeConfigSpec.BooleanValue MAID_AI_TIME_DEBUG;
 
     // 女仆备份机制
-    public static ForgeConfigSpec.BooleanValue MAID_BACKUP_ENABLE;
     public static ForgeConfigSpec.IntValue MAID_BACKUP_INTERVAL_SECONDS;
     public static ForgeConfigSpec.IntValue MAID_BACKUP_MAX_COUNT;
 
@@ -26,9 +25,6 @@ public class ServerConfig {
 
         builder.comment("When turned on, when the maid AI executes more than 50ms, the entity information of the problem will be logged");
         MAID_AI_TIME_DEBUG = builder.define("MaidAITimeDebug", false);
-
-        builder.comment("Whether to enable the maid backup mechanism, which will back up the maid data of all players on the server at regular intervals");
-        MAID_BACKUP_ENABLE = builder.define("MaidBackupEnable", false);
 
         builder.comment("The interval time (in seconds) for the maid backup mechanism to back up maid data");
         MAID_BACKUP_INTERVAL_SECONDS = builder.defineInRange("MaidBackupIntervalSeconds", 60 * 3, 5, Integer.MAX_VALUE);

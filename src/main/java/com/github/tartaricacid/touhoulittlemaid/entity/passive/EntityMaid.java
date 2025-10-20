@@ -531,14 +531,12 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             }
         }
 
-        // 女仆备份机制
-        if (ServerConfig.MAID_BACKUP_ENABLE.get()) {
-            int saveIntervalTick = ServerConfig.MAID_BACKUP_INTERVAL_SECONDS.get() * 20;
-            // 通过哈希计算出一个随机值，这样做可以避免所有实体都在同一 tick 进行保存
-            int checkTick = Math.abs(this.getUUID().hashCode()) % saveIntervalTick;
-            if (this.level.getGameTime() % saveIntervalTick == checkTick && this.level instanceof ServerLevel serverLevel) {
-                MaidBackupsManager.save(serverLevel.getServer(), this);
-            }
+        // 自 1.4.2 版本起强制开启女仆备份机制
+        int saveIntervalTick = ServerConfig.MAID_BACKUP_INTERVAL_SECONDS.get() * 20;
+        // 通过哈希计算出一个随机值，这样做可以避免所有实体都在同一 tick 进行保存
+        int checkTick = Math.abs(this.getUUID().hashCode()) % saveIntervalTick;
+        if (this.level.getGameTime() % saveIntervalTick == checkTick && this.level instanceof ServerLevel serverLevel) {
+            MaidBackupsManager.save(serverLevel.getServer(), this);
         }
     }
 
