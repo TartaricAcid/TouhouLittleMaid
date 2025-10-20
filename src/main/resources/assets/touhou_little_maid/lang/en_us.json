@@ -528,6 +528,7 @@
   "message.touhou_little_maid.kappa_compass.maid_write": "Successfully saved positions to the maid",
   "message.touhou_little_maid.kappa_compass.maid_clear": "Successfully cleared the maid's positions",
   "message.touhou_little_maid.kappa_compass.maid_dimension_check": "The position's dimension does not match the maid's current dimension",
+  "message.touhou_little_maid.kappa_compass.diff_dimension": "The recorded dimension does not match your current dimension",
   "message.touhou_little_maid.kappa_compass.no_data": "This compass has not recorded any positions",
   "message.touhou_little_maid.kappa_compass.work": "§a▍ §7Work Pos: [%d, %d, %d§7]",
   "message.touhou_little_maid.kappa_compass.idle": "§a▍ §7Idle Pos: [%d, %d, %d§7]",
