@@ -116,13 +116,7 @@ public final class ItemsUtil {
      */
     public static int getBaubleSlotInMaid(EntityMaid maid, IMaidBauble bauble) {
         BaubleItemHandler handler = maid.getMaidBauble();
-        for (int i = 0; i < handler.getSlots(); i++) {
-            IMaidBauble baubleIn = handler.getBaubleInSlot(i);
-            if (baubleIn == bauble) {
-                return i;
-            }
-        }
-        return -1;
+        return handler.getBaubleSlot(bauble);
     }
 
     /**

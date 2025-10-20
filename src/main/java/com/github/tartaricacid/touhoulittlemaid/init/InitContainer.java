@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.backpack.*;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.config.MaidAIChatConfigContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.config.MaidConfigContainer;
+import com.github.tartaricacid.touhoulittlemaid.inventory.container.backpack.BaubleContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.other.PicnicBasketContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.other.WirelessIOContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.task.AttackTaskConfigContainer;
@@ -24,6 +25,7 @@ public final class InitContainer {
     public static final RegistryObject<MenuType<EnderChestBackpackContainer>> MAID_ENDER_CHEST_CONTAINER = CONTAINER_TYPE.register("maid_ender_chest_container", () -> EnderChestBackpackContainer.TYPE);
     public static final RegistryObject<MenuType<FurnaceBackpackContainer>> MAID_FURNACE_CONTAINER = CONTAINER_TYPE.register("maid_furnace_container", () -> FurnaceBackpackContainer.TYPE);
     public static final RegistryObject<MenuType<TankBackpackContainer>> MAID_TANK_CONTAINER = CONTAINER_TYPE.register("maid_tank_container", () -> TankBackpackContainer.TYPE);
+    public static final RegistryObject<MenuType<BaubleContainer>> MAID_BAUBLE_CONTAINER = CONTAINER_TYPE.register("maid_bauble_container", () -> BaubleContainer.TYPE);
 
     public static final RegistryObject<MenuType<MaidConfigContainer>> MAID_CONFIG_CONTAINER = CONTAINER_TYPE.register("maid_config_container", () -> MaidConfigContainer.TYPE);
     public static final RegistryObject<MenuType<MaidAIChatConfigContainer>> MAID_AI_CHAT_CONFIG_CONTAINER = CONTAINER_TYPE.register("maid_ai_chat_config_container", () -> MaidAIChatConfigContainer.TYPE);

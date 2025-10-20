@@ -2,21 +2,22 @@ package com.github.tartaricacid.touhoulittlemaid.inventory.handler;
 
 import com.github.tartaricacid.touhoulittlemaid.api.bauble.IMaidBauble;
 import com.github.tartaricacid.touhoulittlemaid.item.bauble.BaubleManager;
+import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectSortedMap;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.function.BiPredicate;
 import java.util.stream.IntStream;
 
 public class BaubleItemHandler extends ItemStackHandler {
     /**
-     * 存储 IMaidBauble 对象的数组，该数组和饰品栏同等大小
+     * 存储 IMaidBauble 对象的数组，该数组和饰品栏不同等大小
      */
-    private IMaidBauble[] baubles;
+    private final Int2ObjectSortedMap<IMaidBauble> baubles = new Int2ObjectRBTreeMap<>();
 
     /**
      * 构建默认大小（1 格）的饰品栏
@@ -32,7 +33,6 @@ public class BaubleItemHandler extends ItemStackHandler {
      */
     public BaubleItemHandler(int size) {
         super(size);
-        baubles = new IMaidBauble[size];
     }
 
     /**
@@ -42,23 +42,7 @@ public class BaubleItemHandler extends ItemStackHandler {
      */
     public BaubleItemHandler(NonNullList<ItemStack> stacks) {
         super(stacks);
-        baubles = new IMaidBauble[stacks.size()];
         IntStream.range(0, getSlots()).forEach(this::onContentsChanged);
-    }
-
-    /**
-     * 重新更改饰品栏大小
-     *
-     * @param size 改变的大小
-     */
-    @Override
-    public void setSize(int size) {
-        if (size == stacks.size()) {
-            Arrays.fill(baubles, null);
-        } else {
-            baubles = new IMaidBauble[stacks.size()];
-        }
-        super.setSize(size);
     }
 
     /**
@@ -69,7 +53,11 @@ public class BaubleItemHandler extends ItemStackHandler {
      */
     private void setBaubleInSlot(int slot, @Nullable IMaidBauble bauble) {
         validateSlotIndex(slot);
-        baubles[slot] = bauble;
+        if (bauble == null) {
+            baubles.remove(slot);
+        } else {
+            baubles.put(slot, bauble);
+        }
     }
 
     /**
@@ -84,7 +72,7 @@ public class BaubleItemHandler extends ItemStackHandler {
         if (stack.isEmpty()) {
             return null;
         } else {
-            return baubles[slot];
+            return baubles.get(slot);
         }
     }
 
@@ -137,13 +125,33 @@ public class BaubleItemHandler extends ItemStackHandler {
     }
 
     public boolean fireEvent(BiPredicate<IMaidBauble, ItemStack> function) {
-        for (int i = 0; i < getSlots(); i++) {
-            ItemStack stack = getStackInSlot(i);
-            IMaidBauble bauble = getBaubleInSlot(i);
-            if (!stack.isEmpty() && bauble != null && function.test(bauble, stack)) {
+        var iterator = baubles.int2ObjectEntrySet().iterator();
+        while (iterator.hasNext()) {
+            var entry = iterator.next();
+            int slot = entry.getIntKey();
+
+            IMaidBauble bauble = entry.getValue();
+            ItemStack stack = getStackInSlot(slot);
+
+            if (stack.isEmpty()) {
+                // 删除不存在物品的映射
+                iterator.remove();
+                continue;
+            }
+
+            if (function.test(bauble, stack)) {
                 return true;
             }
         }
         return false;
+    }
+
+    public int getBaubleSlot(IMaidBauble bauble) {
+        for (var entry : baubles.int2ObjectEntrySet()) {
+            if (entry.getValue() == bauble) {
+                return entry.getIntKey();
+            }
+        }
+        return -1;
     }
 }

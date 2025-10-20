@@ -10,6 +10,7 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -34,6 +35,12 @@ public class TankBackpackContainerScreen extends AbstractMaidContainerGui<TankBa
         this.imageHeight = 256;
         this.imageWidth = 256;
         this.maid = menu.getMaid();
+    }
+
+    @Override
+    protected void initAdditionWidgets() {
+        ImageButton button = this.getBaubleButton(maid, leftPos, topPos);
+        this.addRenderableWidget(button);
     }
 
     @Override

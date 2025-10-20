@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.inventory.container;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.inventory.handler.BaubleItemHandler;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -27,23 +26,22 @@ import static net.minecraft.world.inventory.InventoryMenu.*;
 
 public abstract class MaidMainContainer extends AbstractMaidContainer {
     protected static final int PLAYER_INVENTORY_SIZE = 36;
-    private static final ResourceLocation EMPTY_MAINHAND_SLOT = new ResourceLocation("item/empty_slot_sword");
-    private static final ResourceLocation EMPTY_BACK_SHOW_SLOT = new ResourceLocation(TouhouLittleMaid.MOD_ID, "slot/empty_back_show_slot");
-    private static final ResourceLocation[] TEXTURE_EMPTY_SLOTS = new ResourceLocation[]{EMPTY_ARMOR_SLOT_BOOTS, EMPTY_ARMOR_SLOT_LEGGINGS, EMPTY_ARMOR_SLOT_CHESTPLATE, EMPTY_ARMOR_SLOT_HELMET};
-    private static final EquipmentSlot[] SLOT_IDS = new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
+    protected static final ResourceLocation EMPTY_MAINHAND_SLOT = new ResourceLocation("item/empty_slot_sword");
+    protected static final ResourceLocation EMPTY_BACK_SHOW_SLOT = new ResourceLocation(TouhouLittleMaid.MOD_ID, "slot/empty_back_show_slot");
+    protected static final ResourceLocation[] TEXTURE_EMPTY_SLOTS = new ResourceLocation[]{EMPTY_ARMOR_SLOT_BOOTS, EMPTY_ARMOR_SLOT_LEGGINGS, EMPTY_ARMOR_SLOT_CHESTPLATE, EMPTY_ARMOR_SLOT_HELMET};
+    protected static final EquipmentSlot[] SLOT_IDS = new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
 
     public MaidMainContainer(MenuType<?> type, int id, Inventory inventory, int entityId) {
         super(type, id, inventory, entityId);
         if (maid != null) {
             this.addMaidArmorInv();
-            this.addMaidBauble();
             this.addMaidHandInv();
             this.addMainDefaultInv();
             this.addBackpackInv(inventory);
         }
     }
 
-    private void addMaidHandInv() {
+    protected void addMaidHandInv() {
         LazyOptional<IItemHandler> hand = maid.getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.DOWN);
         hand.ifPresent((handler) -> addSlot(new SlotItemHandler(handler, 0, 87, 77) {
             @Override
@@ -61,7 +59,7 @@ public abstract class MaidMainContainer extends AbstractMaidContainer {
         }));
     }
 
-    private void addMaidArmorInv() {
+    protected void addMaidArmorInv() {
         LazyOptional<IItemHandler> armor = maid.getCapability(ForgeCapabilities.ITEM_HANDLER, Direction.EAST);
         armor.ifPresent((handler -> {
             for (int i = 0; i < 2; ++i) {
@@ -96,7 +94,7 @@ public abstract class MaidMainContainer extends AbstractMaidContainer {
         }));
     }
 
-    private void addMainDefaultInv() {
+    protected void addMainDefaultInv() {
         ItemStackHandler inv = maid.getMaidInv();
         // 默认背包
         for (int i = 0; i < 6; i++) {
@@ -115,22 +113,14 @@ public abstract class MaidMainContainer extends AbstractMaidContainer {
 
     protected abstract void addBackpackInv(Inventory inventory);
 
-    private void addMaidBauble() {
-        BaubleItemHandler maidBauble = maid.getMaidBauble();
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                addSlot(new SlotItemHandler(maidBauble, i * 3 + j, 86 + 18 * j, 99 + 18 * i));
-            }
-        }
-    }
-
     @Override
-    public ItemStack quickMoveStack(Player playerIn, int index) {
+    public ItemStack quickMoveStack(Player player, int index) {
         ItemStack stack1 = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
-        if (slot != null && slot.hasItem()) {
+        if (slot.hasItem()) {
             ItemStack stack2 = slot.getItem();
             stack1 = stack2.copy();
+
             if (index < PLAYER_INVENTORY_SIZE) {
                 if (!this.moveItemStackTo(stack2, PLAYER_INVENTORY_SIZE, this.slots.size(), false)) {
                     return ItemStack.EMPTY;
@@ -138,11 +128,18 @@ public abstract class MaidMainContainer extends AbstractMaidContainer {
             } else if (!this.moveItemStackTo(stack2, 0, PLAYER_INVENTORY_SIZE, true)) {
                 return ItemStack.EMPTY;
             }
+
             if (stack2.isEmpty()) {
-                slot.set(ItemStack.EMPTY);
+                slot.setByPlayer(ItemStack.EMPTY);
             } else {
                 slot.setChanged();
             }
+
+            if (stack2.getCount() == stack1.getCount()) {
+                return ItemStack.EMPTY;
+            }
+
+            slot.onTake(player, stack2);
         }
         return stack1;
     }

@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.task.meal;
 
 import com.github.tartaricacid.touhoulittlemaid.api.task.meal.IMaidMeal;
+import com.github.tartaricacid.touhoulittlemaid.api.task.meal.MaidMealType;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Type;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -17,13 +18,19 @@ public class DefaultMaidWorkMeal implements IMaidMeal {
     @Override
     public boolean canMaidEat(EntityMaid maid, ItemStack stack, InteractionHand hand) {
         return stack.isEdible() && !IMaidMeal.isBlockList(stack, MaidConfig.MAID_WORK_MEALS_BLOCK_LIST.get())
-                && !IMaidMeal.isBlockList(stack, MaidMealRegConfigEvent.WORK_MEAL_REGEX);
+               && !IMaidMeal.isBlockList(stack, MaidMealRegConfigEvent.WORK_MEAL_REGEX);
     }
 
     @Override
     public void onMaidEat(EntityMaid maid, ItemStack stack, InteractionHand hand) {
         FoodProperties foodProperties = stack.getFoodProperties(maid);
         if (foodProperties != null) {
+            // 调用饰品
+            maid.getMaidBauble().fireEvent((b, s) -> {
+                b.onMaidEat(maid, s, stack, MaidMealType.WORK_MEAL);
+                return false;
+            });
+
             maid.startUsingItem(hand);
             int nutrition = foodProperties.getNutrition();
             float saturationModifier = foodProperties.getSaturationModifier();

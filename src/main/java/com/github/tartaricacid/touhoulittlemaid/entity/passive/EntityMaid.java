@@ -49,6 +49,7 @@ import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
+import com.github.tartaricacid.touhoulittlemaid.inventory.container.backpack.BaubleContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.config.MaidAIChatConfigContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.config.MaidConfigContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.BaubleItemHandler;
@@ -196,6 +197,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     private static final long WARNING_TIME_NANOS = Duration.ofMillis(50L).toNanos();
     // 女仆传送到主人处的最大尝试次数
     private static final int MAX_TELEPORT_ATTEMPTS_TIMES = 10;
+    // 饰品栏容量
+    public static final int BAUBLE_INV_SIZE = 24;
 
     // YSM 女仆兼容同步数据
     private static final EntityDataAccessor<Boolean> DATA_IS_YSM_MODEL = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.BOOLEAN);
@@ -267,7 +270,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     private final EntityArmorInvWrapper armorInvWrapper = new EntityArmorInvWrapper(this);
     private final EntityHandsInvWrapper handsInvWrapper = new MaidHandsInvWrapper(this);
     private final ItemStackHandler maidInv = new MaidBackpackHandler(36, this);
-    private final BaubleItemHandler maidBauble = new BaubleItemHandler(9);
+    private final BaubleItemHandler maidBauble = new BaubleItemHandler(BAUBLE_INV_SIZE);
     // 用于暂存副手物品的物品栏
     private final ItemStackHandler hideInv = new ItemStackHandler(1);
     // 用于工作任务可能需要的物品栏
@@ -899,6 +902,12 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             return true;
         }
 
+        // 调用饰品的攻击
+        maidBauble.fireEvent((b, s) -> {
+            b.onMeleeAttack(this, s, target);
+            return false;
+        });
+
         boolean result = super.doHurtTarget(target);
         if (result) {
             // 尝试使用横扫之刃
@@ -1004,7 +1013,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     @Override
     public void die(DamageSource cause) {
-        if (!MinecraftForge.EVENT_BUS.post(new MaidDeathEvent(this, cause))) {
+        boolean baubleCancel = this.maidBauble.fireEvent((b, s) -> b.onDeath(this, s, cause));
+        if (!baubleCancel && !MinecraftForge.EVENT_BUS.post(new MaidDeathEvent(this, cause))) {
             // 清除死亡时需要清除的内容
             this.clearFire();
             this.setTicksFrozen(0);
@@ -1177,8 +1187,13 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     @Override
     public void performRangedAttack(LivingEntity target, float distanceFactor) {
         IMaidTask maidTask = this.getTask();
-        if (maidTask instanceof IRangedAttackTask) {
-            ((IRangedAttackTask) maidTask).performRangedAttack(this, target, distanceFactor);
+        if (maidTask instanceof IRangedAttackTask rangedAttackTask) {
+            // 调用饰品的攻击
+            maidBauble.fireEvent((b, s) -> {
+                b.onRangedAttack(this, s, rangedAttackTask);
+                return false;
+            });
+            rangedAttackTask.performRangedAttack(this, target, distanceFactor);
         }
     }
 
@@ -1400,7 +1415,15 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             maidInv.deserializeNBT(compound.getCompound(MAID_INVENTORY_TAG));
         }
         if (compound.contains(MAID_BAUBLE_INVENTORY_TAG, Tag.TAG_COMPOUND)) {
-            maidBauble.deserializeNBT(compound.getCompound(MAID_BAUBLE_INVENTORY_TAG));
+            CompoundTag baubleTag = compound.getCompound(MAID_BAUBLE_INVENTORY_TAG);
+            if (baubleTag.contains("Size", Tag.TAG_INT)) {
+                // 1.4.2 版本起，饰品栏拓展了数量，需要在这里进行修正
+                int oldSize = baubleTag.getInt("Size");
+                if (oldSize < BAUBLE_INV_SIZE) {
+                    baubleTag.putInt("Size", BAUBLE_INV_SIZE);
+                }
+            }
+            maidBauble.deserializeNBT(baubleTag);
         }
         if (compound.contains(MAID_HIDE_INVENTORY_TAG, Tag.TAG_COMPOUND)) {
             hideInv.deserializeNBT(compound.getCompound(MAID_HIDE_INVENTORY_TAG));
@@ -1477,6 +1500,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             case TabIndex.TASK_CONFIG -> task.getTaskConfigGuiProvider(this);
             case TabIndex.MAID_CONFIG -> MaidConfigContainer.create(getId());
             case TabIndex.MAID_AI_CHAT_CONFIG -> MaidAIChatConfigContainer.create(this);
+            case TabIndex.BAUBLE -> BaubleContainer.create(this);
             default -> this.getMaidBackpackType().getGuiProvider(getId());
         };
     }
