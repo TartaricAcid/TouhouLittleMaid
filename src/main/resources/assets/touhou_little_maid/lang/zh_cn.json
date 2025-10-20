@@ -528,6 +528,7 @@
   "message.touhou_little_maid.kappa_compass.clear": "所有的坐标已经清除",
   "message.touhou_little_maid.kappa_compass.full": "坐标已满，请Shift右击进行清除",
   "message.touhou_little_maid.kappa_compass.far_away": "距离前一个坐标过远，最大只能为64",
+  "message.touhou_little_maid.kappa_compass.diff_dimension": "罗盘记录的维度与当前所在维度不一致",
   "message.touhou_little_maid.kappa_compass.maid_write": "成功为女仆写入坐标",
   "message.touhou_little_maid.kappa_compass.maid_clear": "成功清除女仆的坐标",
   "message.touhou_little_maid.kappa_compass.maid_dimension_check": "记录的维度与当前女仆所处的维度不相同",
