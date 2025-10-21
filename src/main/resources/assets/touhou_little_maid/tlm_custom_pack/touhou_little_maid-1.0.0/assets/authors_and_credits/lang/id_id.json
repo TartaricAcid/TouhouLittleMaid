@@ -1,1 +1,24 @@
-{}
+{
+    "maid_pack.authors_and_credits.name": "Pembuat & Kredit",
+    "maid_pack.authors_and_credits.desc": "Model karakter asli untuk pembuat & kontributor",
+    "model.authors_and_credits.wine_fox_maid.name": "Wine Fox Maid",
+    "model.authors_and_credits.wine_fox_maid.desc": "§7Seorang rubah pembantu yang menyukai bir",
+    "model.authors_and_credits.wine_fox_maid.author.desc": "§7Pembuat: TartaricAcid",
+    "model.authors_and_credits.sazuki.name": "Sazuki",
+    "model.authors_and_credits.sazuki.desc": "§7Telinga sangat sensitif, mohon jangan sentuh",
+    "model.authors_and_credits.sazuki.author.desc": "§7Pembuat: Sazuki",
+    "model.authors_and_credits.pajinyi.name": "Pajinyi",
+    "model.authors_and_credits.pajinyi.desc": "§7Pembuat: Pajinyi",
+    "model.authors_and_credits.fledge.name": "Fledge",
+    "model.authors_and_credits.fledge.desc": "§7Pembuat: Succinum",
+    "model.authors_and_credits.clocklalier.name": "Clocklalier Dandeliowers",
+    "model.authors_and_credits.clocklalier.desc": "§7Lampu Racun Iblis",
+    "model.authors_and_credits.clocklalier.author.desc": "§7Pembuat: Hoishi",
+    "model.authors_and_credits.cyra.name": "Cyra",
+    "model.authors_and_credits.cyra.desc": "§7Pahlawan pelindung kota dengan kekuatan kegelapan",
+    "model.authors_and_credits.cyra.author.desc": "§7Pembuat: CrystalizedSun",
+    "model.authors_and_credits.mory_chan.name": "Mory Chan",
+    "model.authors_and_credits.mory_chan.desc": "§7Pembuat: FumoLover, Seorang artis dari Korea.",
+    "model.authors_and_credits.flower_candy.name": "Flower Candy",
+    "model.authors_and_credits.flower_candy.desc": "§7Pembuat: Hoishi"
+}
