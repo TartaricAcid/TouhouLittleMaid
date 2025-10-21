@@ -48,6 +48,10 @@ public class ImageChatBubbleData implements IChatBubbleData {
         return new ImageChatBubbleData(DEFAULT_EXIST_TICK, TYPE_2, image, width, height, uOffset, vOffset, 256, 256, DEFAULT_PRIORITY);
     }
 
+    public static ImageChatBubbleData singleImage(ResourceLocation image, int width, int height) {
+        return new ImageChatBubbleData(DEFAULT_EXIST_TICK, TYPE_2, image, width, height, 0, 0, width, height, DEFAULT_PRIORITY);
+    }
+
     public static ImageChatBubbleData create(int existTick, ResourceLocation bg, ResourceLocation image, int width, int height,
                                              int uOffset, int vOffset, int textureWidth, int textureHeight, int priority) {
         return new ImageChatBubbleData(existTick, bg, image, width, height, uOffset, vOffset, textureWidth, textureHeight, priority);
