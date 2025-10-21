@@ -43,17 +43,22 @@ public class BaubleContainer extends MaidMainContainer {
 
     @Override
     protected void addBackpackInv(Inventory inventory) {
-        for (int i = 0; i < 6; i++) {
-            addSlot(new BaubleSlot(maid, i, 143 + 18 * i, 37));
-        }
-        for (int i = 0; i < 6; i++) {
-            addSlot(new BaubleSlot(maid, 6 + i, 143 + 18 * i, 59));
-        }
-        for (int i = 0; i < 6; i++) {
-            addSlot(new BaubleSlot(maid, 12 + i, 143 + 18 * i, 82));
-        }
-        for (int i = 0; i < 6; i++) {
-            addSlot(new BaubleSlot(maid, 18 + i, 143 + 18 * i, 100));
+        // 0 级和 1 级：只有前两层
+        // 2 级，前四层
+        // 3 级及以上，全部开放
+        int level = this.maid.getFavorabilityManager().getLevel();
+
+        for (int y = 0; y < 6; y++) {
+            if (level <= 1 && y >= 2) {
+                break;
+            }
+            if (level == 2 && y >= 4) {
+                break;
+            }
+            for (int x = 0; x < 5; x++) {
+                int index = x + y * 5;
+                addSlot(new BaubleSlot(maid, index, 152 + 18 * x, 45 + 18 * y));
+            }
         }
     }
 

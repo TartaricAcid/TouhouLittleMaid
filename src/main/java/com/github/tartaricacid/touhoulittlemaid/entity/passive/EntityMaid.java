@@ -198,7 +198,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     // 女仆传送到主人处的最大尝试次数
     private static final int MAX_TELEPORT_ATTEMPTS_TIMES = 10;
     // 饰品栏容量
-    public static final int BAUBLE_INV_SIZE = 24;
+    public static final int BAUBLE_INV_SIZE = 30;
 
     // YSM 女仆兼容同步数据
     private static final EntityDataAccessor<Boolean> DATA_IS_YSM_MODEL = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.BOOLEAN);
