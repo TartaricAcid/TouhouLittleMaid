@@ -9,7 +9,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.input.STTChatKey;
 import com.github.tartaricacid.touhoulittlemaid.client.overlay.BroomTipsOverlay;
 import com.github.tartaricacid.touhoulittlemaid.client.overlay.MaidTipsOverlay;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.LegacyPackRepositorySource;
-import com.github.tartaricacid.touhoulittlemaid.compat.gun.swarfare.SWarfareCompat;
+import com.github.tartaricacid.touhoulittlemaid.client.resource.listener.EmojiReloadListener;
 import com.github.tartaricacid.touhoulittlemaid.compat.immersivemelodies.ImmersiveMelodiesCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.oculus.OculusCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.patpat.PatPatCompat;
@@ -18,6 +18,7 @@ import com.github.tartaricacid.touhoulittlemaid.compat.simplehats.SimpleHatsComp
 import com.github.tartaricacid.touhoulittlemaid.compat.sodium.SodiumCompat;
 import net.minecraft.server.packs.PackType;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.event.AddPackFindersEvent;
@@ -62,5 +63,10 @@ public class ClientSetupEvent {
         if (event.getPackType() == PackType.CLIENT_RESOURCES) {
             event.addRepositorySource(new LegacyPackRepositorySource());
         }
+    }
+
+    @SubscribeEvent
+    public static void onRegisterClientReloadListeners(RegisterClientReloadListenersEvent event) {
+        event.registerReloadListener(new EmojiReloadListener());
     }
 }
