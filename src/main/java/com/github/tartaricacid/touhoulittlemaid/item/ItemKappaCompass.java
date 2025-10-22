@@ -153,7 +153,7 @@ public class ItemKappaCompass extends Item {
                     return super.useOn(context);
                 }
                 if (dimension != null && !player.level.dimension().location().equals(dimension)) {
-                    sendMessage(player, Component.translatable("message.touhou_little_maid.kappa_compass.diff_dimension"));
+                    player.sendSystemMessage(Component.translatable("message.touhou_little_maid.kappa_compass.diff_dimension"));
                     return super.useOn(context);
                 }
                 addPoint(Activity.REST, clickedPos, compass);
@@ -165,7 +165,7 @@ public class ItemKappaCompass extends Item {
                     return super.useOn(context);
                 }
                 if (dimension != null && !player.level.dimension().location().equals(dimension)) {
-                    sendMessage(player, Component.translatable("message.touhou_little_maid.kappa_compass.diff_dimension"));
+                    player.sendSystemMessage(Component.translatable("message.touhou_little_maid.kappa_compass.diff_dimension"));
                     return super.useOn(context);
                 }
                 addPoint(Activity.IDLE, clickedPos, compass);
