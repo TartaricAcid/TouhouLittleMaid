@@ -531,6 +531,7 @@
   "message.touhou_little_maid.kappa_compass.maid_write": "Đã viết thành công toạ độ cho maid",
   "message.touhou_little_maid.kappa_compass.maid_clear": "Đã xoá thành công toạ độ của maid",
   "message.touhou_little_maid.kappa_compass.maid_dimension_check": "Chiều không gian đã ghi khác với chiều không gian của maid hiện tại",
+  "message.touhou_little_maid.kappa_compass.diff_dimension": "Chiều không gian đã ghi không khớp với chiều không gian hiện tại của bạn",
   "message.touhou_little_maid.kappa_compass.no_data": "La bàn này chưa ghi lại bất cứ toạ độ nào",
   "message.touhou_little_maid.kappa_compass.work": "§a▍ §7Khu Vực Làm Việc: [%d, %d, %d§7]",
   "message.touhou_little_maid.kappa_compass.idle": "§a▍ §7Khu Vực Nghỉ Ngơi: [%d, %d, %d§7]",
