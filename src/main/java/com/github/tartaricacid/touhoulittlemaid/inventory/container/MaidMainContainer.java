@@ -64,7 +64,7 @@ public abstract class MaidMainContainer extends AbstractMaidContainer {
         armor.ifPresent((handler -> {
             for (int i = 0; i < 2; ++i) {
                 for (int j = 0; j < 2; j++) {
-                    final EquipmentSlot EquipmentSlot = SLOT_IDS[2 * i + j];
+                    final EquipmentSlot equipmentSlot = SLOT_IDS[2 * i + j];
                     addSlot(new SlotItemHandler(handler, 3 - 2 * i - j, 94 + 20 * j, 37 + 20 * i) {
                         @Override
                         public int getMaxStackSize() {
@@ -73,7 +73,7 @@ public abstract class MaidMainContainer extends AbstractMaidContainer {
 
                         @Override
                         public boolean mayPlace(@Nonnull ItemStack stack) {
-                            return stack.canEquip(EquipmentSlot, maid) && stack.getItem().canFitInsideContainerItems();
+                            return stack.canEquip(equipmentSlot, maid) && stack.getItem().canFitInsideContainerItems();
                         }
 
                         @Override
@@ -86,7 +86,7 @@ public abstract class MaidMainContainer extends AbstractMaidContainer {
                         @Override
                         @OnlyIn(Dist.CLIENT)
                         public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
-                            return Pair.of(BLOCK_ATLAS, TEXTURE_EMPTY_SLOTS[EquipmentSlot.getIndex()]);
+                            return Pair.of(BLOCK_ATLAS, TEXTURE_EMPTY_SLOTS[equipmentSlot.getIndex()]);
                         }
                     });
                 }
@@ -140,6 +140,18 @@ public abstract class MaidMainContainer extends AbstractMaidContainer {
             }
 
             slot.onTake(player, stack2);
+
+            // 用来修正护甲值不变化的问题
+            if (PLAYER_INVENTORY_SIZE <= index && index < PLAYER_INVENTORY_SIZE + 4) {
+                EquipmentSlot equipmentSlot = SLOT_IDS[index - PLAYER_INVENTORY_SIZE];
+                maid.setLastArmorItem(equipmentSlot, stack1);
+            }
+            // 还有主副手
+            if (PLAYER_INVENTORY_SIZE + 4 <= index && index < PLAYER_INVENTORY_SIZE + 6) {
+                int slotIndex = index - PLAYER_INVENTORY_SIZE - 4;
+                EquipmentSlot equipmentSlot = slotIndex == 0 ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
+                maid.setLastHandItem(equipmentSlot, stack1);
+            }
         }
         return stack1;
     }
