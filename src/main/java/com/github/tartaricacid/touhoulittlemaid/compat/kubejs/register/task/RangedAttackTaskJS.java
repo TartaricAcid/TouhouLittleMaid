@@ -106,6 +106,14 @@ public class RangedAttackTaskJS implements IRangedAttackTask {
     }
 
     @Override
+    public boolean isHidden(EntityMaid maid) {
+        if (this.builder.isHidden == null) {
+            return false;
+        }
+        return this.builder.isHidden.test(maid);
+    }
+
+    @Override
     public boolean enableLookAndRandomWalk(EntityMaid maid) {
         if (this.builder.enableLookAndRandomWalk == null) {
             return true;

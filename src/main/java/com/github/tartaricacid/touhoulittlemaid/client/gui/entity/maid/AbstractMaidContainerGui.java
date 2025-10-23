@@ -72,6 +72,10 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
 
     protected final EntityMaid maid;
     protected final IMaidTask task;
+    /**
+     * 非隐藏的任务列表，用于任务切换按钮显示
+     */
+    protected final List<IMaidTask> notHiddenTasks;
 
     /**
      * 事件系统添加的额外按钮
@@ -100,6 +104,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         this.imageWidth = 256;
         this.maid = menu.getMaid();
         this.task = menu.getMaid().getTask();
+        this.notHiddenTasks = TaskManager.getNotHiddenTaskList(this.maid);
     }
 
     @Override
@@ -322,22 +327,20 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     }
 
     private void taskPageDown() {
-        List<IMaidTask> tasks = TaskManager.getTaskIndex();
-        if (TASK_PAGE * TASK_COUNT_PER_PAGE + TASK_COUNT_PER_PAGE < tasks.size()) {
+        if (TASK_PAGE * TASK_COUNT_PER_PAGE + TASK_COUNT_PER_PAGE < notHiddenTasks.size()) {
             TASK_PAGE++;
             init();
         }
     }
 
     private void addTaskListButton() {
-        List<IMaidTask> tasks = TaskManager.getTaskIndex();
-        if (TASK_PAGE * TASK_COUNT_PER_PAGE >= tasks.size()) {
+        if (TASK_PAGE * TASK_COUNT_PER_PAGE >= notHiddenTasks.size()) {
             TASK_PAGE = 0;
         }
         for (int count = 0; count < TASK_COUNT_PER_PAGE; count++) {
             int index = TASK_PAGE * TASK_COUNT_PER_PAGE + count;
-            if (index < tasks.size()) {
-                drawPerTaskButton(tasks, count, index);
+            if (index < notHiddenTasks.size()) {
+                drawPerTaskButton(notHiddenTasks, count, index);
             }
         }
     }
@@ -483,7 +486,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
 
     private void drawTaskPageCount(GuiGraphics graphics) {
         if (TASK_LIST_OPEN) {
-            String text = String.format("%d/%d", TASK_PAGE + 1, (TaskManager.getTaskIndex().size() - 1) / TASK_COUNT_PER_PAGE + 1);
+            String text = String.format("%d/%d", TASK_PAGE + 1, (notHiddenTasks.size() - 1) / TASK_COUNT_PER_PAGE + 1);
             graphics.drawString(font, text, -48, 12, 0x333333, false);
         }
     }
