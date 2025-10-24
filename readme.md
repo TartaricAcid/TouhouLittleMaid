@@ -55,6 +55,7 @@ Here is a sample repository to demonstrate how to add additional functions to th
 - Gomoku AI: <https://github.com/anlingyi/xechat-idea>
 - Chinese Chess AI: <https://github.com/xqbase/xqwlight>
 - Chess AI: <https://github.com/xqbase/chess>
+- GIF Decoder: <https://github.com/rtyley/animated-gif-lib-for-java>
 - Other players who have helped me in any ways, and you
 
 ## License
