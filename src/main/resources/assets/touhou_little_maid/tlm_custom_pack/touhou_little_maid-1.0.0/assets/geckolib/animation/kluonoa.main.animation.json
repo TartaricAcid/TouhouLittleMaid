@@ -29,6 +29,10 @@
 				"lianhong": {
 					"position": [0, 0, -1],
 					"scale": 1
+				},
+				"wei_xiao": {
+					"position": [0, 0, 0],
+					"scale": 0
 				}
 			}
 		},
@@ -4376,6 +4380,12 @@
 				}
 			}
 		},
+		"parallel2": {
+			"loop": true
+		},
+		"parallel3": {
+			"loop": true
+		},
 		"parallel4": {
 			"loop": true,
 			"bones": {
@@ -4389,6 +4399,18 @@
 					"rotation": [0, "math.clamp(-1*ysm.head_yaw,-25,25)", 0]
 				}
 			}
+		},
+		"parallel5": {
+			"loop": true
+		},
+		"parallel6": {
+			"loop": true
+		},
+		"parallel7": {
+			"loop": true
+		},
+		"pre_parallel0": {
+			"loop": true
 		},
 		"pre_parallel1": {
 			"loop": true,
