@@ -72,6 +72,9 @@ public final class InitItems {
     public static RegistryObject<Item> SERVANT_BELL = ITEMS.register("servant_bell", ItemServantBell::new);
     public static RegistryObject<Item> ENTITY_ID_COPY = ITEMS.register("entity_id_copy", ItemEntityIdCopy::new);
     public static RegistryObject<Item> OWNER_CONVERSION_TOOL = ITEMS.register("owner_conversion_tool", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
+    public static RegistryObject<Item> GOMOKU_BOARD_STATE = ITEMS.register("gomoku_board_state", ItemBoardState::new);
+    public static RegistryObject<Item> CCHESS_BOARD_STATE = ITEMS.register("cchess_board_state", ItemBoardState::new);
+    public static RegistryObject<Item> WCHESS_BOARD_STATE = ITEMS.register("wchess_board_state", ItemBoardState::new);
     @SuppressWarnings("deprecation")
     public static RegistryObject<Item> MONSTER_LIST = ITEMS.register("monster_list", ItemMonsterList::new);
 

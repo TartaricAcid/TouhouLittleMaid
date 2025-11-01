@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.datagen;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
+import com.github.tartaricacid.touhoulittlemaid.loot.RandomBoardStateFunction;
 import com.google.common.collect.Sets;
 import net.minecraft.data.loot.EntityLootSubProvider;
 import net.minecraft.data.loot.LootTableSubProvider;
@@ -53,6 +54,8 @@ public class LootTableGenerator {
 
     public static final ResourceLocation STRUCTURE_SPAWN_MAID_GIFT = new ResourceLocation(TouhouLittleMaid.MOD_ID, "chest/structure_spawn_maid_gift");
     public static final ResourceLocation MAID_BURIED_TREASURE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "chest/maid_buried_treasure");
+
+    public static final ResourceLocation RANDOM_BOARD_STATE = new ResourceLocation(TouhouLittleMaid.MOD_ID, "chest/random_board_state");
 
     public static class AdvancementLootTables implements LootTableSubProvider {
         @Override
@@ -181,6 +184,14 @@ public class LootTableGenerator {
                             .setRolls(ConstantValue.exactly(1))
                             .add(LootItem.lootTableItem(InitItems.SHRINE.get()))
                             .add(EmptyLootItem.emptyItem())));
+
+            var library = RandomBoardStateFunction.create().addTag("library");
+            consumer.accept(RANDOM_BOARD_STATE, LootTable.lootTable()
+                    .withPool(LootPool.lootPool()
+                            .setRolls(ConstantValue.exactly(1))
+                            .add(LootItem.lootTableItem(InitItems.GOMOKU_BOARD_STATE.get()).apply(library))
+                            .add(LootItem.lootTableItem(InitItems.CCHESS_BOARD_STATE.get()).apply(library))
+                            .add(LootItem.lootTableItem(InitItems.WCHESS_BOARD_STATE.get()).apply(library))));
         }
 
         @NotNull

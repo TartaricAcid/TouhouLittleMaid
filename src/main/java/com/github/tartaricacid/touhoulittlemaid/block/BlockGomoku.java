@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.block;
 
 import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.api.block.IBoardGameBlock;
+import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.GomokuCodec;
 import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Point;
 import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Statue;
 import com.github.tartaricacid.touhoulittlemaid.block.properties.GomokuPart;
@@ -23,6 +24,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentUtils;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -31,7 +34,9 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Explosion;
@@ -237,12 +242,44 @@ public class BlockGomoku extends BlockJoy implements IBoardGameBlock {
                 return InteractionResult.FAIL;
             }
 
-            // 如果是创造模式拿着御币点击，那么铺满棋盘，只剩三个位置
-            if (player.getAbilities().instabuild && player.getMainHandItem().getItem() instanceof ItemHakureiGohei) {
-                gomoku.clickWithDebug();
-                gomoku.refresh();
-                level.playSound(null, centerPos, InitSounds.GOMOKU_RESET.get(), SoundSource.BLOCKS, 1.0f, 1.0f);
-                return InteractionResult.SUCCESS;
+            Vec3 location = hit.getLocation().subtract(pos.getX(), pos.getY(), pos.getZ());
+            Direction facing = state.getValue(FACING);
+
+            // 如果是创造模式，有特殊用法
+            if (player.getAbilities().instabuild) {
+                Item item = player.getMainHandItem().getItem();
+
+                // 拿着御币点击，那么铺满棋盘，只剩三个位置，用来调试满棋盘
+                if (item instanceof ItemHakureiGohei) {
+                    gomoku.clickWithDebug();
+                    gomoku.refresh();
+                    level.playSound(null, centerPos, InitSounds.GOMOKU_RESET.get(), SoundSource.BLOCKS, 1.0f, 1.0f);
+                    return InteractionResult.SUCCESS;
+                }
+
+                // 如果是木棍，那么就是预设棋局模式
+                if (item == Items.STICK) {
+                    // 如果玩家点击的是棋盒，导出
+                    if (isClickChessBox(location.x, location.z, part, facing)) {
+                        String result = GomokuCodec.encode(gomoku.getStateData());
+                        MutableComponent component = ComponentUtils.copyOnClickText(result);
+                        player.sendSystemMessage(component);
+                        return InteractionResult.SUCCESS;
+                    }
+
+                    // 否则就是预设棋局
+                    int[] clickPos = getChessPos(location.x, location.z, part);
+                    if (clickPos == null) {
+                        return InteractionResult.FAIL;
+                    }
+                    int type = gomoku.isPlayerTurn() ? Point.BLACK : Point.WHITE;
+                    Point playerPoint = new Point(clickPos[0], clickPos[1], type);
+                    gomoku.setChessData(playerPoint.x, playerPoint.y, playerPoint.type);
+                    level.playSound(null, pos, InitSounds.GOMOKU.get(), SoundSource.BLOCKS, 1.0f, 0.8F + level.random.nextFloat() * 0.4F);
+                    gomoku.setPlayerTurn(!gomoku.isPlayerTurn());
+                    gomoku.refresh();
+                    return InteractionResult.SUCCESS;
+                }
             }
 
             // 然后是下棋，必须空手
@@ -250,8 +287,6 @@ public class BlockGomoku extends BlockJoy implements IBoardGameBlock {
                 return InteractionResult.PASS;
             }
 
-            Vec3 location = hit.getLocation().subtract(pos.getX(), pos.getY(), pos.getZ());
-            Direction facing = state.getValue(FACING);
             if (isClickChessBox(location.x, location.z, part, facing)) {
                 level.playSound(null, centerPos, InitSounds.GOMOKU_RESET.get(), SoundSource.BLOCKS, 1.0f, 1.0f);
                 gomoku.reset();

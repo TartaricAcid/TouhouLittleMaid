@@ -29,6 +29,9 @@ public class ItemModelGenerator extends ItemModelProvider {
         addInHandModel(InitItems.MAID_BEACON.get());
 
         basicItem(InitItems.OWNER_CONVERSION_TOOL.get());
+        basicItem(InitItems.GOMOKU_BOARD_STATE.get());
+        basicItem(InitItems.CCHESS_BOARD_STATE.get());
+        basicItem(InitItems.WCHESS_BOARD_STATE.get());
     }
 
     private void addInHandModel(Item item) {

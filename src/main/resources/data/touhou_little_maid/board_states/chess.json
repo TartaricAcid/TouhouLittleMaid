@@ -1,0 +1,47 @@
+[
+  {
+    "tags": ["library"],
+    "display": {
+      "description": "board_state.touhou_little_maid.chess.default",
+      "author": "Stockfish"
+    },
+    "data": "8/8/2k5/8/8/5NB1/4K3/8 w - - 0 1",
+    "weight": 1
+  },
+  {
+    "tags": ["library"],
+    "display": {
+      "description": "board_state.touhou_little_maid.chess.default",
+      "author": "Stockfish"
+    },
+    "data": "8/6p1/8/5P2/5P2/5K2/8/6k1 w - - 0 1",
+    "weight": 1
+  },
+  {
+    "tags": ["library"],
+    "display": {
+      "description": "board_state.touhou_little_maid.chess.default",
+      "author": "Stockfish"
+    },
+    "data": "8/7k/4K2p/6p1/6P1/7P/8/8 w - - 0 1",
+    "weight": 1
+  },
+  {
+    "tags": ["library"],
+    "display": {
+      "description": "board_state.touhou_little_maid.chess.default",
+      "author": "Stockfish"
+    },
+    "data": "8/2pp2pp/8/2PP1P2/1p5k/8/PP4p1/6K1 w - - 0 1",
+    "weight": 1
+  },
+  {
+    "tags": ["library"],
+    "display": {
+      "description": "board_state.touhou_little_maid.chess.default",
+      "author": "Stockfish"
+    },
+    "data": "8/3PK3/3Q4/8/6k1/8/8/5q2 w - - 0 1",
+    "weight": 1
+  }
+]
