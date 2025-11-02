@@ -52,6 +52,8 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
     private EditBox searchBox;
     private String searchText = "";
     private List<E> filteredModelList = null;
+    private boolean isSearchMode = false;  // 是否处于搜索模式
+    private List<E> allModelsList = null;  // 所有pack中的模型列表
 
     public AbstractModelGui(T entity, List<CustomModelPack<E>> listPack) {
         super(Component.literal("Custom Model GUI"));
@@ -61,6 +63,12 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
         setPageIndex(Mth.clamp(getPageIndex(), 0, guiNumber.getPageSize() - 1));
         setPackIndex(Mth.clamp(getPackIndex(), 0, guiNumber.getPackSize() - 1));
         setRowIndex(Mth.clamp(getRowIndex(), 0, guiNumber.getRowSize(getPackIndex())));
+
+        // 初始化所有模型列表（仅初始化一次）
+        this.allModelsList = new ArrayList<>();
+        for (CustomModelPack<E> pack : modelPackList) {
+            allModelsList.addAll(pack.getModelList());
+        }
     }
 
     /**
@@ -149,11 +157,10 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
                 .build();
         this.addRenderableWidget(cacheCheckBox);
 
-        // 添加搜索框
+        // 创建搜索框（始终创建，根据模式控制可见性）
         int searchBoxWidth = 200;
         int searchBoxX = startX - searchBoxWidth / 2;
         int searchBoxY = startY + 100;
-
 
         this.searchBox = new EditBox(
                 this.font,
@@ -170,7 +177,13 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
         this.searchBox.setHint(Component.translatable("gui.touhou_little_maid.skin.search.hint").withStyle(ChatFormatting.DARK_GRAY));
         this.searchBox.setResponder(this::onSearchTextChanged);
 
+        // 根据搜索模式设置可见性
+        this.searchBox.setVisible(isSearchMode);
+
         this.addRenderableWidget(this.searchBox);
+
+        // 添加搜索标签（独立的标签，位于左下角）
+        addSearchTabButton(startX, startY);
 
         // 初始化时更新过滤列表
         this.updateFilteredModelList();
@@ -184,10 +197,16 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
         int offsetX = -100;
         int offsetY = -35;
 
-        // 切割列表，让其一页最多显示 44 个模型，但是又不至于溢出
+        // 切割列表，让其一页最多显示 55 个模型（11列 x 5行），但是又不至于溢出
+        // 实际上原本也是55个！
         int fromIndex = guiNumber.modelFromIndex(getRowIndex());
+        // 确保 fromIndex 不超出列表范围
+        if (fromIndex >= displayList.size()) {
+            return;
+        }
+
         int toIndex = Math.min(
-                guiNumber.modelToIndex(getPackIndex(), getRowIndex()),
+                fromIndex + 55,  // 每页最多显示 55 个模型（11列 x 5行）
                 displayList.size()  // 确保不超出过滤列表的大小
         );
 
@@ -261,20 +280,50 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
     }
 
     private void addTabButton(int startX, int startY, int index) {
-        if (index == guiNumber.getTabIndex(getPackIndex())) {
+        // 只处理普通模型包标签
+        if (index == guiNumber.getTabIndex(getPackIndex()) && !isSearchMode) {
+            // 当前选中的标签（选中状态）
             this.addRenderableWidget(new TouhouImageButton(startX - 98 + 28 * index, startY - 108, 28, 31, 116, 224, 0, BG, NO_PRESS));
         } else if (index < guiNumber.getTabSize(getPackIndex())) {
+            // 未选中的标签
             this.addRenderableWidget(new ImageButtonWithId(index, startX - 98 + 28 * index, startY - 105, 28, 25, 116, 194, 0, BG,
                     (b) -> {
                         setRowIndex(0);
                         setPackIndex(guiNumber.tabToPackIndex(((ImageButtonWithId) b).getIndex(), getPageIndex()));
-                        updateFilteredModelList();
-                        this.init();
+                        isSearchMode = false;  // 退出搜索模式
+                        searchText = "";  // 清空搜索文本
+                        updateFilteredModelList();  // 更新过滤列表
+                        this.init();  // 自动设置 searchBox 的可见性
                     }));
         } else {
+            // 空白标签（不可见）
             TouhouImageButton buttonImage = new TouhouImageButton(startX - 98 + 28 * index, startY - 105, 28, 25, 116, 194, 0, BG, NO_PRESS);
             buttonImage.visible = false;
             this.addRenderableWidget(buttonImage);
+        }
+    }
+
+    /**
+     * 添加搜索标签按钮（独立的标签，位于左下角）
+     */
+    private void addSearchTabButton(int startX, int startY) {
+        // 搜索标签位置：右侧UI的左下角
+        int searchTabX = startX - 256 / 2;  // 右侧UI左边缘
+        int searchTabY = startY + 95;  // 底部位置
+
+        if (isSearchMode) {
+            // 选中状态
+            this.addRenderableWidget(new TouhouImageButton(searchTabX, searchTabY, 28, 31, 116, 224, 0, BG, NO_PRESS));
+        } else {
+            // 未选中状态
+            this.addRenderableWidget(new TouhouImageButton(searchTabX, searchTabY + 3, 28, 25, 116, 194, 0, BG,
+                    (b) -> {
+                        // 切换到搜索模式
+                        setRowIndex(0);
+                        isSearchMode = true;
+                        updateFilteredModelList();  // 更新过滤列表
+                        this.init();  // 自动设置 searchBox 的可见性
+                    }));
         }
     }
 
@@ -321,13 +370,13 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
     }
 
     private void drawScrollSide(GuiGraphics graphics, int middleX, int middleY) {
-        if (guiNumber.canScroll(getPackIndex(), getRowIndex())) {
+        if (canScrollCurrentList()) {
             graphics.blit(SIDE, middleX - 256 / 2 + 254,
-                    middleY - 61 + (int) (127 * guiNumber.getCurrentScroll(getPackIndex(), getRowIndex())),
+                    middleY - 61 + (int) (127 * getCurrentScrollPosition()),
                     24, 0, 12, 15);
         } else {
             graphics.blit(SIDE, middleX - 256 / 2 + 254,
-                    middleY - 61 + (int) (127 * guiNumber.getCurrentScroll(getPackIndex(), getRowIndex())),
+                    middleY - 61 + (int) (127 * getCurrentScrollPosition()),
                     36, 0, 12, 15);
         }
     }
@@ -360,6 +409,25 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
                 }
             }
         }
+
+        // 绘制搜索标签的图标（独立绘制，位于左下角）
+        drawSearchTabIcon(graphics, middleX, middleY);
+    }
+
+    /**
+     * 绘制搜索标签的图标
+     */
+    private void drawSearchTabIcon(GuiGraphics graphics, int middleX, int middleY) {
+        int searchTabX = middleX - 256 / 2;  // 右侧UI左边缘
+        int searchTabY = middleY + 95;  // 底部位置
+
+        // 使用文字 "搜" 作为图标
+        int iconX = searchTabX + 8;  // 标签中心
+        int iconY = searchTabY + 8;  // 标签中心（根据选中状态调整）
+        if (!isSearchMode) {
+            iconY += 3;  // 未选中状态下Y坐标偏移
+        }
+        graphics.drawCenteredString(font, Component.literal("\u641c"), iconX, iconY, 0xFFFFFF);
     }
 
     private int getTickTime() {
@@ -386,11 +454,15 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
      * 绘制所有的模型实体图案
      */
     private void drawEntity(GuiGraphics graphics, int middleX, int middleY) {
-        // 获取当前包索引得到的模型列表
-        CustomModelPack<E> pack = modelPackList.get(getPackIndex());
-
-        // 绘制包信息
-        drawPackInfoText(graphics, pack, middleX, middleY);
+        // 绘制包信息或搜索模式提示
+        if (isSearchMode) {
+            drawSearchModeInfo(graphics, middleX, middleY);
+        } else {
+            // 获取当前包索引得到的模型列表
+            CustomModelPack<E> pack = modelPackList.get(getPackIndex());
+            // 绘制包信息
+            drawPackInfoText(graphics, pack, middleX, middleY);
+        }
 
         // 使用过滤后的列表
         List<E> displayList = getDisplayModelList();
@@ -399,10 +471,15 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
         int offsetX = -100;
         int offsetY = -38;
 
-        // 切割列表，让其一页最多显示 PAGE_MAX_NUM 个模型，但是又不至于溢出
+        // 切割列表，让其一页最多显示 55 个模型（11列 x 5行），但是又不至于溢出
         int fromIndex = guiNumber.modelFromIndex(getRowIndex());
+        // 确保 fromIndex 不超出列表范围
+        if (fromIndex >= displayList.size()) {
+            return;
+        }
+
         int toIndex = Math.min(
-                guiNumber.modelToIndex(getPackIndex(), getRowIndex()),
+                fromIndex + 55,  // 每页最多显示 55 个模型（11列 x 5行）
                 displayList.size()
         );
 
@@ -416,6 +493,29 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
                 offsetX = -100;
                 offsetY = offsetY + 30;
             }
+        }
+    }
+
+    /**
+     * 绘制搜索模式的文本信息
+     */
+    private void drawSearchModeInfo(GuiGraphics graphics, int middleX, int middleY) {
+        int offsetY = -80;
+        int sideMiddleX = (middleX - 256 / 2) / 2;
+
+        // 绘制"搜索模式"标题
+        offsetY += 10;
+        graphics.drawCenteredString(font, Component.translatable("gui.touhou_little_maid.skin.search.mode"),
+                sideMiddleX, middleY + offsetY, 0xFFFF00);
+
+        // 绘制模型总数提示
+        List<E> displayList = getDisplayModelList();
+        if (displayList != null) {
+            offsetY += 15;
+            graphics.drawCenteredString(font,
+                    Component.translatable("gui.touhou_little_maid.skin.search.total", displayList.size())
+                            .withStyle(ChatFormatting.GRAY),
+                    sideMiddleX, middleY + offsetY, 0xFFFFFF);
         }
     }
 
@@ -478,9 +578,6 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
      * 应该不会存在性能问题<br>
      */
     private void drawTooltips(GuiGraphics graphics, int mouseX, int mouseY, int middleX, int middleY) {
-        // 获取当前包索引得到的模型列表（用于获取packName）
-        CustomModelPack<E> pack = modelPackList.get(getPackIndex());
-
         // 使用过滤后的列表
         List<E> displayList = getDisplayModelList();
 
@@ -488,58 +585,71 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
         int offsetX = -100;
         int offsetY = -35;
 
-        // 切割列表，让其一页最多显示 44 个模型，但是又不至于溢出
+        // 切割列表，让其一页最多显示 55 个模型（11列 x 5行），但是又不至于溢出
         int fromIndex = guiNumber.modelFromIndex(getRowIndex());
-        int toIndex = Math.min(
-                guiNumber.modelToIndex(getPackIndex(), getRowIndex()),
-                displayList.size()
-        );
+        // 确保 fromIndex 不超出列表范围
+        if (fromIndex >= displayList.size()) {
+            // 继续绘制其他 tooltip（标签页、关闭按钮等）
+        } else {
+            int toIndex = Math.min(
+                    fromIndex + 55,  // 每页最多显示 55 个模型（11列 x 5行）
+                    displayList.size()
+            );
 
-        // 开始绘制实体图案，并往上添加对应模型和材质
-        for (E modelItem : displayList.subList(fromIndex, toIndex)) {
-            // 判定鼠标所在的位置
-            boolean isxInRange = middleX + offsetX - 8 < mouseX && mouseX < middleX + offsetX + 7;
-            boolean isyInRange = middleY + offsetY - 23 < mouseY && mouseY < middleY + offsetY + 1;
+            // 开始绘制实体图案，并往上添加对应模型和材质
+            for (E modelItem : displayList.subList(fromIndex, toIndex)) {
+                // 判定鼠标所在的位置
+                boolean isxInRange = middleX + offsetX - 8 < mouseX && mouseX < middleX + offsetX + 7;
+                boolean isyInRange = middleY + offsetY - 23 < mouseY && mouseY < middleY + offsetY + 1;
 
-            // 在位置内，就绘制文本提示
-            if (isxInRange && isyInRange) {
-                // 绘制的文本
-                List<String> str = new ArrayList<>();
-                // 塞入模型名称
-                str.add(modelItem.getName());
-                // 塞入描述
-                str.addAll(modelItem.getDescription());
-                // 转换为 ITextComponent
-                List<Component> tooltips = ParseI18n.parse(str);
-                // 添加额外的提示
-                addModelCustomTips(modelItem, tooltips);
-                // 塞入提示语
-                if (!modelItem.getName().equals(ENCRYPT_EGG_NAME) && !modelItem.getName().equals(NORMAL_EGG_NAME)) {
-                    tooltips.add(Component.translatable("gui.touhou_little_maid.skin.tooltips.show_details")
-                            .withStyle(ChatFormatting.DARK_PURPLE));
+                // 在位置内，就绘制文本提示
+                if (isxInRange && isyInRange) {
+                    // 绘制的文本
+                    List<String> str = new ArrayList<>();
+                    // 塞入模型名称
+                    str.add(modelItem.getName());
+                    // 塞入描述
+                    str.addAll(modelItem.getDescription());
+                    // 转换为 ITextComponent
+                    List<Component> tooltips = ParseI18n.parse(str);
+                    // 添加额外的提示
+                    addModelCustomTips(modelItem, tooltips);
+                    // 塞入提示语
+                    if (!modelItem.getName().equals(ENCRYPT_EGG_NAME) && !modelItem.getName().equals(NORMAL_EGG_NAME)) {
+                        tooltips.add(Component.translatable("gui.touhou_little_maid.skin.tooltips.show_details")
+                                .withStyle(ChatFormatting.DARK_PURPLE));
+                    }
+                    // 当开启显示更多物品信息功能时，显示模型 ID
+                    if (getMinecraft().options.advancedItemTooltips) {
+                        tooltips.add(Component.literal(modelItem.getModelId().toString()).withStyle(ChatFormatting.DARK_GRAY));
+                    }
+                    // 添加包名（搜索模式下需要查找模型所属的pack）
+                    if (isSearchMode) {
+                        CustomModelPack<E> modelPack = findPackForModel(modelItem);
+                        if (modelPack != null) {
+                            tooltips.add(ParseI18n.parse(modelPack.getPackName()).withStyle(ChatFormatting.BLUE));
+                        }
+                    } else {
+                        CustomModelPack<E> pack = modelPackList.get(getPackIndex());
+                        tooltips.add(ParseI18n.parse(pack.getPackName()).withStyle(ChatFormatting.BLUE));
+                    }
+                    // 绘制解析过的文本提示
+                    graphics.renderComponentTooltip(font, tooltips, mouseX, mouseY);
                 }
-                // 当开启显示更多物品信息功能时，显示模型 ID
-                if (getMinecraft().options.advancedItemTooltips) {
-                    tooltips.add(Component.literal(modelItem.getModelId().toString()).withStyle(ChatFormatting.DARK_GRAY));
+
+                // 往右绘制
+                offsetX = offsetX + 20;
+
+                // 如果超出一定限制，换行
+                if (offsetX > 105) {
+                    offsetX = -100;
+                    offsetY = offsetY + 30;
                 }
-                // 添加包名（过滤后需要从pack获取）
-                tooltips.add(ParseI18n.parse(pack.getPackName()).withStyle(ChatFormatting.BLUE));
-                // 绘制解析过的文本提示
-                graphics.renderComponentTooltip(font, tooltips, mouseX, mouseY);
-            }
-
-            // 往右绘制
-            offsetX = offsetX + 20;
-
-            // 如果超出一定限制，换行
-            if (offsetX > 105) {
-                offsetX = -100;
-                offsetY = offsetY + 30;
             }
         }
 
         // 绘制标签页的文本提示
-        int size = guiNumber.getTabSize(getPackIndex());
+        int size = isSearchMode ? 0 : guiNumber.getTabSize(getPackIndex());
         for (int index = 0; index < size; index++) {
             boolean isxInRange = middleX - 98 + 28 * index < mouseX && mouseX < middleX - 98 + 28 * index + 28;
             boolean isyInRange = middleY - 108 < mouseY && mouseY < middleY - 108 + 31;
@@ -547,6 +657,15 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
                 CustomModelPack<E> hoverPack = modelPackList.get(guiNumber.tabToPackIndex(index, getPageIndex()));
                 graphics.renderTooltip(font, ParseI18n.parse(hoverPack.getPackName()), mouseX, mouseY);
             }
+        }
+
+        // 绘制搜索标签的文本提示（独立的标签，位于左下角）
+        int searchTabX = middleX - 256 / 2;
+        int searchTabY = middleY + 95;
+        boolean searchTabXInRange = searchTabX < mouseX && mouseX < searchTabX + 28;
+        boolean searchTabYInRange = searchTabY < mouseY && mouseY < searchTabY + 31;
+        if (searchTabXInRange && searchTabYInRange) {
+            graphics.renderTooltip(font, Component.translatable("gui.touhou_little_maid.skin.search.tab"), mouseX, mouseY);
         }
 
         // 绘制关闭按钮的文本提示
@@ -633,15 +752,29 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
      * 根据搜索文本更新过滤后的模型列表
      */
     private void updateFilteredModelList() {
-        if (searchText == null || searchText.trim().isEmpty()) {
-            // 无搜索文本时，清空过滤列表（使用原始列表）
-            filteredModelList = null;
+        if (isSearchMode) {
+            // 搜索模式下，从所有模型列表中过滤
+            if (searchText == null || searchText.trim().isEmpty()) {
+                // 无搜索文本时，显示所有模型
+                filteredModelList = allModelsList;
+            } else {
+                // 有搜索文本时，从所有模型中过滤
+                filteredModelList = allModelsList.stream()
+                        .filter(model -> searchModelInf(model, searchText))
+                        .collect(Collectors.toList());
+            }
         } else {
-            // 有搜索文本时，过滤当前模型包的模型列表
-            CustomModelPack<E> pack = modelPackList.get(getPackIndex());
-            filteredModelList = pack.getModelList().stream()
-                    .filter(model -> searchModelInf(model,searchText))
-                    .collect(Collectors.toList());
+            // 非搜索模式下，使用当前模型包的列表
+            if (searchText == null || searchText.trim().isEmpty()) {
+                // 无搜索文本时，清空过滤列表（使用原始列表）
+                filteredModelList = null;
+            } else {
+                // 有搜索文本时，过滤当前模型包的模型列表
+                CustomModelPack<E> pack = modelPackList.get(getPackIndex());
+                filteredModelList = pack.getModelList().stream()
+                        .filter(model -> searchModelInf(model, searchText))
+                        .collect(Collectors.toList());
+            }
         }
     }
 
@@ -686,10 +819,19 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
      * @return 显示的模型列表
      */
     private List<E> getDisplayModelList() {
-        if (filteredModelList != null) {
-            return filteredModelList;
+        if (isSearchMode) {
+            // 搜索模式下，使用所有模型列表或过滤后的列表
+            if (filteredModelList != null) {
+                return filteredModelList;
+            }
+            return allModelsList != null ? allModelsList : new ArrayList<>();
+        } else {
+            // 正常模式下，使用当前包的模型列表或过滤后的列表
+            if (filteredModelList != null) {
+                return filteredModelList;
+            }
+            return modelPackList.get(getPackIndex()).getModelList();
         }
-        return modelPackList.get(getPackIndex()).getModelList();
     }
 
     /**
@@ -697,8 +839,58 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
      */
     private int getDisplayRowSize() {
         List<E> displayList = getDisplayModelList();
+        if (displayList == null || displayList.isEmpty()) {
+            return 0;
+        }
         int row = (displayList.size() - 1) / 11 + 1;  // 11 是每行模型数
-        return Math.max(row - 5, 0);  // 5 是总行数
+        return Math.max(row - 5, 0);  // 5 是可见行数，超过5行才能滚动
+    }
+
+    /**
+     * 在所有pack中查找包含指定模型的pack
+     * @param model 要查找的模型
+     * @return 包含该模型的pack，如果未找到则返回null
+     */
+    private CustomModelPack<E> findPackForModel(E model) {
+        for (CustomModelPack<E> pack : modelPackList) {
+            if (pack.getModelList().contains(model)) {
+                return pack;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 判断当前列表是否可以滚动
+     */
+    private boolean canScrollCurrentList() {
+        if (isSearchMode) {
+            List<E> displayList = getDisplayModelList();
+            int modelSize = displayList.size() - 11 * getRowIndex();
+            return modelSize > 5 * 11;  // 超过55个（5行x11列）才能滚动
+        } else {
+            return guiNumber.canScroll(getPackIndex(), getRowIndex());
+        }
+    }
+
+    /**
+     * 获取当前滚动条位置（0.0-1.0）
+     */
+    private float getCurrentScrollPosition() {
+        if (isSearchMode) {
+            List<E> displayList = getDisplayModelList();
+            if (displayList.isEmpty()) {
+                return 0;
+            }
+            int totalRows = (displayList.size() - 1) / 11;
+            int maxScroll = Math.max(totalRows - 4, 0);
+            if (maxScroll == 0) {
+                return 0;
+            }
+            return Mth.clamp((float) (getRowIndex() * (1.0 / maxScroll)), 0, 1);
+        } else {
+            return guiNumber.getCurrentScroll(getPackIndex(), getRowIndex());
+        }
     }
 
     protected void onClickCloseButton() {
