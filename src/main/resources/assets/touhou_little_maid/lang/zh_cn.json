@@ -312,6 +312,7 @@
   "tooltips.touhou_little_maid.entity_id_copy.desc": "用于复制实体ID，方便填写女仆攻击列表",
   "tooltips.touhou_little_maid.board_state.empty": "这上面没有残局数据",
   "tooltips.touhou_little_maid.board_state.author": "作者：%s",
+  "board_state.touhou_little_maid.show_picture": "< 按下 Shift 显示细节 >",
   "board_state.touhou_little_maid.gomoku.default": "五子棋残局",
   "board_state.touhou_little_maid.gomoku.moon": "月亮阵",
   "board_state.touhou_little_maid.gomoku.stealth_cow": "隐身牛阵",
