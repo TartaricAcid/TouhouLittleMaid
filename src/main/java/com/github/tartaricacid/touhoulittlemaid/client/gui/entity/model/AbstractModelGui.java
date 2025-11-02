@@ -311,11 +311,11 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
         int searchTabY = startY + 95;  // 底部位置
 
         if (isSearchMode) {
-            // 选中状态
-            this.addRenderableWidget(new TouhouImageButton(searchTabX, searchTabY, 28, 31, 116, 224, 0, BG, NO_PRESS));
+            // 选中状态：向下突出（Y坐标增加）
+            this.addRenderableWidget(new TouhouImageButton(searchTabX, searchTabY + 3, 28, 31, 116, 224, 0, BG, NO_PRESS));
         } else {
-            // 未选中状态
-            this.addRenderableWidget(new TouhouImageButton(searchTabX, searchTabY + 3, 28, 25, 116, 194, 0, BG,
+            // 未选中状态：正常位置
+            this.addRenderableWidget(new TouhouImageButton(searchTabX, searchTabY, 28, 25, 116, 194, 0, BG,
                     (b) -> {
                         // 切换到搜索模式
                         setRowIndex(0);
@@ -422,9 +422,9 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
 
         // 使用文字 "搜" 作为图标
         int iconX = searchTabX + 8;  // 标签中心
-        int iconY = searchTabY + 8;  // 标签中心（根据选中状态调整）
-        if (!isSearchMode) {
-            iconY += 3;  // 未选中状态下Y坐标偏移
+        int iconY = searchTabY + 8;  // 标签中心
+        if (isSearchMode) {
+            iconY += 3;  // 选中状态下向下偏移
         }
         graphics.drawCenteredString(font, Component.literal("\u641c"), iconX, iconY, 0xFFFFFF);
     }
@@ -634,8 +634,11 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
         // 绘制搜索标签的文本提示（独立的标签，位于左下角）
         int searchTabX = middleX - 256 / 2;
         int searchTabY = middleY + 95;
+        // 根据选中状态调整tooltip检测区域
+        int searchTabHeight = isSearchMode ? 31 : 25;  // 选中状态高度31，未选中25
+        int searchTabYOffset = isSearchMode ? 3 : 0;  // 选中状态向下偏移3
         boolean searchTabXInRange = searchTabX < mouseX && mouseX < searchTabX + 28;
-        boolean searchTabYInRange = searchTabY < mouseY && mouseY < searchTabY + 31;
+        boolean searchTabYInRange = (searchTabY + searchTabYOffset) < mouseY && mouseY < (searchTabY + searchTabYOffset + searchTabHeight);
         if (searchTabXInRange && searchTabYInRange) {
             graphics.renderTooltip(font, Component.translatable("gui.touhou_little_maid.skin.search.tab"), mouseX,
                     mouseY); // 标签按钮的悬浮文本提示
