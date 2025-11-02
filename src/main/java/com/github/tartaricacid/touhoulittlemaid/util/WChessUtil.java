@@ -32,6 +32,10 @@ public final class WChessUtil {
         return -1;
     }
 
+    public static byte piecesIndex(int x, int y, byte[] data) {
+        return data[Position.COORD_XY(x, y)];
+    }
+
     public static boolean isWhite(byte piecesIndex) {
         return (piecesIndex & 8) == 8;
     }

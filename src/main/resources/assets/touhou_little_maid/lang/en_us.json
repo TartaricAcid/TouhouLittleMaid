@@ -312,6 +312,7 @@
   "tooltips.touhou_little_maid.entity_id_copy.desc": "Used to copy the entity ID, making it easier to fill in the attack list.",
   "tooltips.touhou_little_maid.board_state.empty": "There is no board game data on it",
   "tooltips.touhou_little_maid.board_state.author": "Author: %s",
+  "board_state.touhou_little_maid.show_picture": "<Press Shift To Show Details>",
   "board_state.touhou_little_maid.gomoku.default": "Gomoku Endgame",
   "board_state.touhou_little_maid.gomoku.moon": "Moon Endgame",
   "board_state.touhou_little_maid.gomoku.stealth_cow": "Stealth Cow Endgame",
