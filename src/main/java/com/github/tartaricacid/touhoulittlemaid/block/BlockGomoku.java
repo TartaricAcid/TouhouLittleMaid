@@ -14,6 +14,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
+import com.github.tartaricacid.touhoulittlemaid.item.ItemBoardState;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemHakureiGohei;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.GomokuToClientMessage;
@@ -58,6 +59,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
 
@@ -247,39 +249,26 @@ public class BlockGomoku extends BlockJoy implements IBoardGameBlock {
 
             // 如果是创造模式，有特殊用法
             if (player.getAbilities().instabuild) {
-                Item item = player.getMainHandItem().getItem();
-
-                // 拿着御币点击，那么铺满棋盘，只剩三个位置，用来调试满棋盘
-                if (item instanceof ItemHakureiGohei) {
-                    gomoku.clickWithDebug();
-                    gomoku.refresh();
-                    level.playSound(null, centerPos, InitSounds.GOMOKU_RESET.get(), SoundSource.BLOCKS, 1.0f, 1.0f);
-                    return InteractionResult.SUCCESS;
+                InteractionResult success = this.onCreativePlayerClick(level, pos, player, gomoku, centerPos, location, part, facing);
+                if (success != null) {
+                    return success;
                 }
+            }
 
-                // 如果是木棍，那么就是预设棋局模式
-                if (item == Items.STICK) {
-                    // 如果玩家点击的是棋盒，导出
-                    if (isClickChessBox(location.x, location.z, part, facing)) {
-                        String result = GomokuCodec.encode(gomoku.getStateData());
-                        MutableComponent component = ComponentUtils.copyOnClickText(result);
-                        player.sendSystemMessage(component);
-                        return InteractionResult.SUCCESS;
-                    }
-
-                    // 否则就是预设棋局
-                    int[] clickPos = getChessPos(location.x, location.z, part);
-                    if (clickPos == null) {
-                        return InteractionResult.FAIL;
-                    }
-                    int type = gomoku.isPlayerTurn() ? Point.BLACK : Point.WHITE;
-                    Point playerPoint = new Point(clickPos[0], clickPos[1], type);
-                    gomoku.setChessData(playerPoint.x, playerPoint.y, playerPoint.type);
-                    level.playSound(null, pos, InitSounds.GOMOKU.get(), SoundSource.BLOCKS, 1.0f, 0.8F + level.random.nextFloat() * 0.4F);
-                    gomoku.setPlayerTurn(!gomoku.isPlayerTurn());
-                    gomoku.refresh();
-                    return InteractionResult.SUCCESS;
+            // 如果是残局道具，那么直接设置残局
+            ItemStack heldItem = player.getMainHandItem();
+            if (heldItem.is(InitItems.GOMOKU_BOARD_STATE.get())) {
+                String[] boardState = ItemBoardState.getState(heldItem);
+                if (boardState == null) {
+                    return InteractionResult.PASS;
                 }
+                String data = boardState[0];
+                if (StringUtils.isEmpty(data)) {
+                    return InteractionResult.PASS;
+                }
+                gomoku.setStateData(GomokuCodec.decode(data));
+                level.playSound(null, pos, InitSounds.GOMOKU_RESET.get(), SoundSource.BLOCKS, 1.0f, 1.0f);
+                return InteractionResult.SUCCESS;
             }
 
             // 然后是下棋，必须空手
@@ -348,6 +337,46 @@ public class BlockGomoku extends BlockJoy implements IBoardGameBlock {
             }
         }
         return InteractionResult.PASS;
+    }
+
+    @Nullable
+    private InteractionResult onCreativePlayerClick(Level level, BlockPos pos, Player player, TileEntityGomoku gomoku,
+                                                    BlockPos centerPos, Vec3 location, GomokuPart part, Direction facing) {
+        Item item = player.getMainHandItem().getItem();
+
+        // 拿着御币点击，那么铺满棋盘，只剩三个位置，用来调试满棋盘
+        if (item instanceof ItemHakureiGohei) {
+            gomoku.clickWithDebug();
+            gomoku.refresh();
+            level.playSound(null, centerPos, InitSounds.GOMOKU_RESET.get(), SoundSource.BLOCKS, 1.0f, 1.0f);
+            return InteractionResult.SUCCESS;
+        }
+
+        // 如果是木棍，那么就是预设棋局模式
+        if (item == Items.STICK) {
+            // 如果玩家点击的是棋盒，导出
+            if (isClickChessBox(location.x, location.z, part, facing)) {
+                String result = GomokuCodec.encode(gomoku.getStateData());
+                MutableComponent component = ComponentUtils.copyOnClickText(result);
+                player.sendSystemMessage(component);
+                return InteractionResult.SUCCESS;
+            }
+
+            // 否则就是预设棋局
+            int[] clickPos = getChessPos(location.x, location.z, part);
+            if (clickPos == null) {
+                return InteractionResult.FAIL;
+            }
+            int type = gomoku.isPlayerTurn() ? Point.BLACK : Point.WHITE;
+            Point playerPoint = new Point(clickPos[0], clickPos[1], type);
+            gomoku.setChessData(playerPoint.x, playerPoint.y, playerPoint.type);
+            level.playSound(null, pos, InitSounds.GOMOKU.get(), SoundSource.BLOCKS, 1.0f, 0.8F + level.random.nextFloat() * 0.4F);
+            gomoku.setPlayerTurn(!gomoku.isPlayerTurn());
+            gomoku.refresh();
+            return InteractionResult.SUCCESS;
+        }
+
+        return null;
     }
 
     @Override

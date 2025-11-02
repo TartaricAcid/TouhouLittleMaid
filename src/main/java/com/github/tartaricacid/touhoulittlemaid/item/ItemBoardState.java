@@ -1,23 +1,12 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
-import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.GomokuCodec;
-import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
-import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
-import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityCChess;
-import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGomoku;
-import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityWChess;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
@@ -54,45 +43,6 @@ public class ItemBoardState extends Item {
                 tag.getString(DESC_TAG),
                 tag.getString(AUTHOR_TAG)
         };
-    }
-
-    @Override
-    public InteractionResult useOn(UseOnContext context) {
-        BlockPos clickedPos = context.getClickedPos();
-        Level level = context.getLevel();
-        if (level.isClientSide()) {
-            return InteractionResult.PASS;
-        }
-        ItemStack stack = context.getItemInHand();
-        String[] state = getState(stack);
-        if (state == null) {
-            return InteractionResult.PASS;
-        }
-        String data = state[0];
-        if (StringUtils.isEmpty(data)) {
-            return InteractionResult.PASS;
-        }
-        BlockEntity be = level.getBlockEntity(clickedPos);
-
-        if (stack.is(InitItems.GOMOKU_BOARD_STATE.get()) && be instanceof TileEntityGomoku gomoku) {
-            gomoku.setStateData(GomokuCodec.decode(data));
-            level.playSound(null, clickedPos, InitSounds.GOMOKU_RESET.get(), SoundSource.BLOCKS, 1.0f, 1.0f);
-            return InteractionResult.SUCCESS;
-        }
-
-        if (stack.is(InitItems.CCHESS_BOARD_STATE.get()) && be instanceof TileEntityCChess chess) {
-            chess.setEndgame(data);
-            level.playSound(null, clickedPos, InitSounds.GOMOKU_RESET.get(), SoundSource.BLOCKS, 1.0f, 1.0f);
-            return InteractionResult.SUCCESS;
-        }
-
-        if (stack.is(InitItems.WCHESS_BOARD_STATE.get()) && be instanceof TileEntityWChess chess) {
-            chess.setEndgame(data);
-            level.playSound(null, clickedPos, InitSounds.GOMOKU_RESET.get(), SoundSource.BLOCKS, 1.0f, 1.0f);
-            return InteractionResult.SUCCESS;
-        }
-
-        return super.useOn(context);
     }
 
     @Override
