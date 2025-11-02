@@ -7,7 +7,6 @@ import com.github.tartaricacid.touhoulittlemaid.client.renderer.texture.SizeText
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.CustomModelPack;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.IModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MiscConfig;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.util.Color;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -455,9 +454,7 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
      */
     private void drawEntity(GuiGraphics graphics, int middleX, int middleY) {
         // 绘制包信息或搜索模式提示
-        if (isSearchMode) {
-            drawSearchModeInfo(graphics, middleX, middleY);
-        } else {
+        if (!isSearchMode) {
             // 获取当前包索引得到的模型列表
             CustomModelPack<E> pack = modelPackList.get(getPackIndex());
             // 绘制包信息
@@ -493,29 +490,6 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
                 offsetX = -100;
                 offsetY = offsetY + 30;
             }
-        }
-    }
-
-    /**
-     * 绘制搜索模式的文本信息
-     */
-    private void drawSearchModeInfo(GuiGraphics graphics, int middleX, int middleY) {
-        int offsetY = -80;
-        int sideMiddleX = (middleX - 256 / 2) / 2;
-
-        // 绘制"搜索模式"标题
-        offsetY += 10;
-        graphics.drawCenteredString(font, Component.translatable("gui.touhou_little_maid.skin.search.mode"),
-                sideMiddleX, middleY + offsetY, 0xFFFF00);
-
-        // 绘制模型总数提示
-        List<E> displayList = getDisplayModelList();
-        if (displayList != null) {
-            offsetY += 15;
-            graphics.drawCenteredString(font,
-                    Component.translatable("gui.touhou_little_maid.skin.search.total", displayList.size())
-                            .withStyle(ChatFormatting.GRAY),
-                    sideMiddleX, middleY + offsetY, 0xFFFFFF);
         }
     }
 
@@ -588,9 +562,7 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
         // 切割列表，让其一页最多显示 55 个模型（11列 x 5行），但是又不至于溢出
         int fromIndex = guiNumber.modelFromIndex(getRowIndex());
         // 确保 fromIndex 不超出列表范围
-        if (fromIndex >= displayList.size()) {
-            // 继续绘制其他 tooltip（标签页、关闭按钮等）
-        } else {
+        if (fromIndex < displayList.size()) {
             int toIndex = Math.min(
                     fromIndex + 55,  // 每页最多显示 55 个模型（11列 x 5行）
                     displayList.size()
@@ -665,7 +637,8 @@ public abstract class AbstractModelGui<T extends LivingEntity, E extends IModelI
         boolean searchTabXInRange = searchTabX < mouseX && mouseX < searchTabX + 28;
         boolean searchTabYInRange = searchTabY < mouseY && mouseY < searchTabY + 31;
         if (searchTabXInRange && searchTabYInRange) {
-            graphics.renderTooltip(font, Component.translatable("gui.touhou_little_maid.skin.search.tab"), mouseX, mouseY);
+            graphics.renderTooltip(font, Component.translatable("gui.touhou_little_maid.skin.search.tab"), mouseX,
+                    mouseY); // 标签按钮的悬浮文本提示
         }
 
         // 绘制关闭按钮的文本提示
