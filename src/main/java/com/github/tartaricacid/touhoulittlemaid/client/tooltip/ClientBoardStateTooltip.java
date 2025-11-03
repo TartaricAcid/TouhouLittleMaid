@@ -103,7 +103,7 @@ public class ClientBoardStateTooltip implements ClientTooltipComponent {
 
     private void renderGomoku(int pX, int pY, GuiGraphics graphics, int[][] data) {
         graphics.pose().pushPose();
-        graphics.pose().scale(0.5f, 0.5f, 0.5f);
+        graphics.pose().scale(0.5f, 0.5f, 1);
         graphics.pose().translate(pX, pY, 0);
         graphics.blit(GOMOKU_BG, pX, pY, 0, 0, 151, 151);
 
@@ -160,7 +160,7 @@ public class ClientBoardStateTooltip implements ClientTooltipComponent {
 
     private void renderChess(int pX, int pY, GuiGraphics graphics, byte[] data) {
         graphics.pose().pushPose();
-        graphics.pose().scale(0.5f, 0.5f, 0.5f);
+        graphics.pose().scale(0.5f, 0.5f, 1);
         graphics.pose().translate(pX, pY, 0);
         graphics.blit(CHESS_BG, pX, pY, 0, 0, 204, 204);
 
