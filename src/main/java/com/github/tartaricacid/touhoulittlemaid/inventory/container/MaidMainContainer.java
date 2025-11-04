@@ -1,6 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.inventory.container;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.backpack.ITriggerSlotChange;
+import com.github.tartaricacid.touhoulittlemaid.api.event.MaidBackpackChangeEvent;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -13,11 +16,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
 
@@ -95,13 +99,12 @@ public abstract class MaidMainContainer extends AbstractMaidContainer {
     }
 
     protected void addMainDefaultInv() {
-        ItemStackHandler inv = maid.getMaidInv();
         // 默认背包
         for (int i = 0; i < 6; i++) {
-            addSlot(new SlotItemHandler(inv, i, 143 + 18 * i, 37));
+            addSlot(new BackpackSlot(maid, i, 143 + 18 * i, 37));
             // 最后一格给予特殊图标
             if (i == 5) {
-                addSlot(new SlotItemHandler(inv, i, 143 + 18 * i, 37) {
+                addSlot(new BackpackSlot(maid, i, 143 + 18 * i, 37) {
                     @Override
                     public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
                         return Pair.of(BLOCK_ATLAS, EMPTY_BACK_SHOW_SLOT);
@@ -140,6 +143,10 @@ public abstract class MaidMainContainer extends AbstractMaidContainer {
             }
 
             slot.onTake(player, stack2);
+            // 触发 Shift 点击取出事件
+            if (slot instanceof ITriggerSlotChange slotChange) {
+                slotChange.onShiftTakeoff(player, stack1);
+            }
 
             // 用来修正护甲值不变化的问题
             if (PLAYER_INVENTORY_SIZE <= index && index < PLAYER_INVENTORY_SIZE + 4) {
@@ -154,5 +161,35 @@ public abstract class MaidMainContainer extends AbstractMaidContainer {
             }
         }
         return stack1;
+    }
+
+    public static class BackpackSlot extends SlotItemHandler implements ITriggerSlotChange {
+        private final EntityMaid maid;
+
+        public BackpackSlot(EntityMaid maid, int index, int xPosition, int yPosition) {
+            super(maid.getMaidInv(), index, xPosition, yPosition);
+            this.maid = maid;
+        }
+
+        @Override
+        public void onShiftTakeoff(@Nullable Player player, ItemStack stack) {
+            if (!maid.level.isClientSide && !stack.isEmpty()) {
+                MinecraftForge.EVENT_BUS.post(new MaidBackpackChangeEvent.TakeOff(maid, stack));
+            }
+        }
+
+        @Override
+        public void onTake(Player player, ItemStack stack) {
+            super.onTake(player, stack);
+            this.onShiftTakeoff(player, stack);
+        }
+
+        @Override
+        public void setByPlayer(ItemStack stack) {
+            super.setByPlayer(stack);
+            if (!maid.level.isClientSide && !stack.isEmpty()) {
+                MinecraftForge.EVENT_BUS.post(new MaidBackpackChangeEvent.PutOn(maid, stack));
+            }
+        }
     }
 }

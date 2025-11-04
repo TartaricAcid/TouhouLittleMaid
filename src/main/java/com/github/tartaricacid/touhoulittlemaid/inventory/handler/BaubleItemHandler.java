@@ -2,14 +2,18 @@ package com.github.tartaricacid.touhoulittlemaid.inventory.handler;
 
 import com.github.tartaricacid.touhoulittlemaid.api.bauble.IMaidBauble;
 import com.github.tartaricacid.touhoulittlemaid.item.bauble.BaubleManager;
+import com.google.common.collect.Sets;
 import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectSortedMap;
 import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
+import org.jetbrains.annotations.ApiStatus;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.stream.IntStream;
 
@@ -18,6 +22,10 @@ public class BaubleItemHandler extends ItemStackHandler {
      * 存储 IMaidBauble 对象的数组，该数组和饰品栏不同等大小
      */
     private final Int2ObjectSortedMap<IMaidBauble> baubles = new Int2ObjectRBTreeMap<>();
+    /**
+     * 存储所有物品的缓存集合，用于提高查询效率
+     */
+    private final Set<Item> baubleItemsCache = Sets.newHashSet();
 
     /**
      * 构建默认大小（1 格）的饰品栏
@@ -83,11 +91,33 @@ public class BaubleItemHandler extends ItemStackHandler {
      */
     @Override
     protected void onContentsChanged(int slot) {
+        // 更新饰品信息
+        this.updateBaubles(slot);
+        // 更新物品缓存
+        this.updateBaublesCache();
+    }
+
+    /**
+     * 更新指定格子的饰品信息
+     *
+     * @param slot 指定的格子
+     */
+    protected void updateBaubles(int slot) {
         ItemStack stack = getStackInSlot(slot);
         if (stack.isEmpty()) {
             setBaubleInSlot(slot, null);
         } else {
             setBaubleInSlot(slot, BaubleManager.getBauble(stack));
+        }
+    }
+
+    protected void updateBaublesCache() {
+        baubleItemsCache.clear();
+        for (int baubleSlot : baubles.keySet()) {
+            ItemStack stack = getStackInSlot(baubleSlot);
+            if (!stack.isEmpty()) {
+                baubleItemsCache.add(stack.getItem());
+            }
         }
     }
 
@@ -121,7 +151,8 @@ public class BaubleItemHandler extends ItemStackHandler {
      */
     @Override
     protected void onLoad() {
-        IntStream.range(0, getSlots()).forEach(this::onContentsChanged);
+        IntStream.range(0, getSlots()).forEach(this::updateBaubles);
+        this.updateBaublesCache();
     }
 
     public boolean fireEvent(BiPredicate<IMaidBauble, ItemStack> function) {
@@ -153,5 +184,10 @@ public class BaubleItemHandler extends ItemStackHandler {
             }
         }
         return -1;
+    }
+
+    @ApiStatus.AvailableSince("1.4.3")
+    public boolean containsItem(Item item) {
+        return baubleItemsCache.contains(item);
     }
 }

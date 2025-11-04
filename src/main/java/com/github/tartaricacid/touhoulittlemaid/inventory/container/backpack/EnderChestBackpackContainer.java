@@ -22,7 +22,8 @@ public class EnderChestBackpackContainer extends MaidMainContainer {
         }
         for (int j = 0; j < 3; j++) {
             for (int i = 0; i < 5; i++) {
-                addSlot(new Slot(enderChestContainer, 6 + 5 * j + i, 161 + 18 * i, 79 + j * 18));            }
+                addSlot(new Slot(enderChestContainer, 6 + 5 * j + i, 161 + 18 * i, 79 + j * 18));
+            }
         }
         for (int i = 0; i < 6; i++) {
             addSlot(new Slot(enderChestContainer, 21 + i, 143 + 18 * i, 133));

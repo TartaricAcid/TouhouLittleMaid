@@ -16,7 +16,7 @@ public class SmallBackpackContainer extends MaidMainContainer {
     @Override
     protected void addBackpackInv(Inventory inventory) {
         for (int i = 0; i < 6; i++) {
-            addSlot(new SlotItemHandler(maid.getMaidInv(), 6 + i, 143 + 18 * i, 59));
+            addSlot(new BackpackSlot(maid, 6 + i, 143 + 18 * i, 59));
         }
     }
 }

@@ -14,8 +14,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.extensions.IForgeMenuType;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
 
 public class FurnaceBackpackContainer extends MaidMainContainer {
     public static final MenuType<FurnaceBackpackContainer> TYPE = IForgeMenuType.create((windowId, inv, data) -> new FurnaceBackpackContainer(windowId, inv, data.readInt()));
@@ -43,12 +41,11 @@ public class FurnaceBackpackContainer extends MaidMainContainer {
 
     @Override
     protected void addBackpackInv(Inventory inventory) {
-        IItemHandler itemHandler = maid.getMaidInv();
         for (int i = 0; i < 6; i++) {
-            addSlot(new SlotItemHandler(itemHandler, 6 + i, 143 + 18 * i, 57));
+            addSlot(new BackpackSlot(maid, 6 + i, 143 + 18 * i, 57));
         }
         for (int i = 0; i < 6; i++) {
-            addSlot(new SlotItemHandler(itemHandler, 12 + i, 143 + 18 * i, 75));
+            addSlot(new BackpackSlot(maid, 12 + i, 143 + 18 * i, 75));
         }
     }
 
@@ -82,10 +79,12 @@ public class FurnaceBackpackContainer extends MaidMainContainer {
             this.furnaceBackpackContainer = furnaceBackpackContainer;
         }
 
+        @Override
         public boolean mayPlace(ItemStack stack) {
             return this.furnaceBackpackContainer.isFuel(stack) || isBucket(stack);
         }
 
+        @Override
         public int getMaxStackSize(ItemStack stack) {
             return isBucket(stack) ? 1 : super.getMaxStackSize(stack);
         }

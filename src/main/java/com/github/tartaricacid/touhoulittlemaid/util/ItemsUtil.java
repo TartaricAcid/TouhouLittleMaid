@@ -16,6 +16,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.wrapper.PlayerMainInvWrapper;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -111,12 +112,35 @@ public final class ItemsUtil {
 
     /**
      * 获取女仆饰品栏的饰品数据
+     * <p>
+     * 此方法为遍历查找，性能为 O(n)，不适合频繁调用
      *
      * @return 如果没找到，返回 -1
      */
     public static int getBaubleSlotInMaid(EntityMaid maid, IMaidBauble bauble) {
         BaubleItemHandler handler = maid.getMaidBauble();
         return handler.getBaubleSlot(bauble);
+    }
+
+    /**
+     * 女仆是否拥有该饰品物品
+     * <p>
+     * 此方法采用了缓存机制，性能为 O(1)，适合频繁调用
+     */
+    @ApiStatus.AvailableSince("1.4.3")
+    public static boolean hasBaubleItemInMaid(EntityMaid maid, Item bauble) {
+        BaubleItemHandler handler = maid.getMaidBauble();
+        return handler.containsItem(bauble);
+    }
+
+    /**
+     * 女仆是否拥有该饰品物品
+     * <p>
+     * 此方法采用了缓存机制，性能为 O(1)，适合频繁调用
+     */
+    @ApiStatus.AvailableSince("1.4.3")
+    public static boolean hasBaubleStackInMaid(EntityMaid maid, ItemStack bauble) {
+        return hasBaubleItemInMaid(maid, bauble.getItem());
     }
 
     /**
