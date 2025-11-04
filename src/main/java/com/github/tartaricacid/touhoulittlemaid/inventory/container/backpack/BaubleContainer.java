@@ -51,6 +51,8 @@ public class BaubleContainer extends MaidMainContainer {
         // 2 级，前四层
         // 3 级及以上，全部开放
         int level = this.maid.getFavorabilityManager().getLevel();
+        // 以防万一，检测是否越界
+        int maxSize = maid.getMaidBauble().getSlots();
 
         for (int y = 0; y < 6; y++) {
             if (level <= 1 && y >= 2) {
@@ -61,6 +63,9 @@ public class BaubleContainer extends MaidMainContainer {
             }
             for (int x = 0; x < 5; x++) {
                 int index = x + y * 5;
+                if (index >= maxSize) {
+                    return;
+                }
                 addSlot(new BaubleSlot(maid, index, 152 + 18 * x, 45 + 18 * y));
             }
         }
