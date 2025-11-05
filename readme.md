@@ -5,9 +5,13 @@
 <p align="center">A Minecraft NeoForge/Forge mod about the maid</p>
 <p align="center">
     <a href="https://www.curseforge.com/minecraft/mc-mods/touhou-little-maid">
-        <img src="http://cf.way2muchnoise.eu/full_touhou-little-maid_downloads.svg" alt="CurseForge Download">
+        <img src="https://img.shields.io/curseforge/dt/355044?logo=curseforge&label=CurseForge" alt="CurseForge Download">
     </a>
-    <img src="https://img.shields.io/badge/license-MIT%2FCC%20BY--NC--SA%204.0-green" alt="License">
+    <a href="https://modrinth.com/mod/touhou-little-maid">
+        <img src="https://img.shields.io/modrinth/dt/R0bDWFAW?logo=modrinth&label=Modrinth" alt="Modrinth Download">
+    </a>
+    <img src="https://img.shields.io/badge/license-MIT%20|%20CC%20BY--NC--SA%204.0-green" alt="License">    
+    <br>
     <a href="https://discord.gg/re4xQtb">
         <img src="https://img.shields.io/discord/316493876103872512?logo=discord" alt="chat on Discord">
     </a>
