@@ -23,11 +23,6 @@
     <a href="https://github.com/TartaricAcid/TouhouLittleMaid/issues">Report Bug</a>    ·
     <a href="https://github.com/TartaricAcid/TouhouLittleMaid/releases">View Release</a>
 </p>
-<p align="center">
-    <a href="#">English</a> | 
-    <a href="#">简体中文</a> | 
-    <a href="#">日本語</a>
-</p>
 
 This is a Minecraft 1.12.2/1.16.5/1.18.2/1.19.2/1.20.1/1.21.1 Forge/NeoForge mod, which was inspired by the [Little Maid Mob](https://github.com/MMM666/littleMaidMob) mod and [Touhou Project](https://en.wikipedia.org/wiki/Touhou_Project).       
 Added cute maids to Minecraft, who can help with battles, farming and other tasks.      
@@ -61,3 +56,6 @@ Here is a sample repository to demonstrate how to add additional functions to th
 ## License
 - Code: [MIT](https://www.mit.edu/~amini/LICENSE.md)
 - Assets: [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+
+## GitHub Analytics
+![Analytics](https://repobeats.axiom.co/api/embed/e7a9807334b41ddbfc937d8c604e4331c5832a1f.svg)
