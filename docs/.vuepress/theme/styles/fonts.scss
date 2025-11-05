@@ -1,0 +1,63 @@
+:root:where(:lang(zh-CN)) {
+  --vp-font-family-base: "Noto Sans SC",
+  "Punctuation SC",
+  "Inter",
+  ui-sans-serif,
+  system-ui,
+  sans-serif,
+  "Apple Color Emoji",
+  "Segoe UI Emoji",
+  "Segoe UI Symbol",
+  "Noto Color Emoji";
+
+  --vp-font-family-mono: "JetBrains Mono",
+  "Noto Sans SC",
+  ui-monospace,
+  "Menlo",
+  "Monaco",
+  "Consolas",
+  "Liberation Mono",
+  "Courier New",
+  monospace;
+}
+
+.vp-doc-title:where(:lang(zh-CN)) {
+  font-family: 'Noto Serif SC',
+  STZhongsong,
+  "Source Han Sans CN",
+  'PingFang SC',
+  'Myriad Pro',
+  'Hiragino Sans GB',
+  serif,
+  SimHei,
+  ui-monospace;
+}
+
+.vp-doc h2:where(:lang(zh-CN)) {
+  font-family: 'Noto Serif SC',
+  STZhongsong,
+  "Source Han Sans CN",
+  'PingFang SC',
+  'Myriad Pro',
+  'Hiragino Sans GB',
+  serif,
+  SimHei,
+  ui-monospace;
+}
+
+.field-meta > .name {
+  font-family: "JetBrains Mono",
+  "Noto Sans SC",
+  ui-monospace,
+  "Menlo",
+  "Monaco",
+  "Consolas",
+  "Liberation Mono",
+  "Courier New",
+  monospace;
+  padding: 3px 6px;
+  background-color: var(--vp-code-bg);
+  border-radius: 4px;
+  transition: color var(--vp-t-color), background-color var(--vp-t-color);
+  color: var(--vp-code-color);
+}
