@@ -77,7 +77,12 @@ const zhDoc = defineCollection({
             icon: "si:json-fill",
             prefix: "datapack",
             items: [
-                "如何开始"
+                "如何开始",
+                "修改合成表",
+                "修改标签",
+                "添加颜文字",
+                "添加表情包",
+                "添加残局"
             ],
         },
         {
