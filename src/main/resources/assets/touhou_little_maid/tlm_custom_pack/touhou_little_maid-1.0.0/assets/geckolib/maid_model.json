@@ -109,6 +109,17 @@
       "description": ["{model.geckolib.winefox_salesperson.desc}"]
     },
     {
+      "model_id": "geckolib:winefox_little",
+      "is_gecko": true,
+      "description": ["{model.geckolib.winefox_little.desc}"],
+      "render_entity_scale": 0.7,
+      "animation": [
+        "geckolib:animation/winefox_little.main.animation.json",
+        "geckolib:animation/winefox_little.condition.animation.json",
+        "geckolib:animation/winefox_little.tac.animation.json"
+      ]
+    },
+    {
       "model_id": "geckolib:sta",
       "is_gecko": true,
       "description": ["{model.geckolib.sta.desc}", "{model.geckolib.sta.author}"],
