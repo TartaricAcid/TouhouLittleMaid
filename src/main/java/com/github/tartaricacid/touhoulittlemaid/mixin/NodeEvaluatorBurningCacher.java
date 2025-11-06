@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.mixin;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.mixin.IBlockBurningCacheMixin;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
@@ -39,24 +40,40 @@ public class NodeEvaluatorBurningCacher {
                     block.touhou_little_maid$setCannotCache(true);
                     return;
                 } catch (NoSuchMethodException ignored) {
+                } catch (Error error) {
+                    block.touhou_little_maid$setCannotCache(true);
+                    TouhouLittleMaid.LOGGER.error("Error when checking is(Block) method for caching burning state for block: " + b, error);
+                    return;
                 }
                 try {
                     c.getDeclaredMethod("is", TagKey.class);
                     block.touhou_little_maid$setCannotCache(true);
                     return;
                 } catch (NoSuchMethodException ignored) {
+                } catch (Error error) {
+                    block.touhou_little_maid$setCannotCache(true);
+                    TouhouLittleMaid.LOGGER.error("Error when checking is(TagKey) method for caching burning state for block: " + b, error);
+                    return;
                 }
                 try {
                     c.getDeclaredMethod("is", Holder.class);
                     block.touhou_little_maid$setCannotCache(true);
                     return;
                 } catch (NoSuchMethodException ignored) {
+                } catch (Error error) {
+                    block.touhou_little_maid$setCannotCache(true);
+                    TouhouLittleMaid.LOGGER.error("Error when checking is(Holder) method for caching burning state for block: " + b, error);
+                    return;
                 }
                 try {
                     c.getDeclaredMethod("is", HolderSet.class);
                     block.touhou_little_maid$setCannotCache(true);
                     return;
                 } catch (NoSuchMethodException ignored) {
+                } catch (Error error) {
+                    block.touhou_little_maid$setCannotCache(true);
+                    TouhouLittleMaid.LOGGER.error("Error when checking is(HolderSet) method for caching burning state for block: " + b, error);
+                    return;
                 }
             }
             block.touhou_little_maid$setBurning(cir.getReturnValue());
