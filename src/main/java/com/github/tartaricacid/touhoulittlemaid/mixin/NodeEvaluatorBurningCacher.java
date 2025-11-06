@@ -36,41 +36,45 @@ public class NodeEvaluatorBurningCacher {
             Class<? extends Block> c = b.getClass();
             if (c != Block.class) {
                 try {
-                    c.getDeclaredMethod("is", Block.class);
-                    block.touhou_little_maid$setCannotCache(true);
+                    if (c.getDeclaredMethod("is", Block.class).getDeclaringClass() != Block.class) {
+                        block.touhou_little_maid$setCannotCache(true);
+                    }
                     return;
                 } catch (NoSuchMethodException ignored) {
-                } catch (Error error) {
+                } catch (Throwable error) {
                     block.touhou_little_maid$setCannotCache(true);
                     TouhouLittleMaid.LOGGER.error("Error when checking is(Block) method for caching burning state for block: " + b, error);
                     return;
                 }
                 try {
-                    c.getDeclaredMethod("is", TagKey.class);
-                    block.touhou_little_maid$setCannotCache(true);
+                    if (c.getDeclaredMethod("is", TagKey.class).getDeclaringClass() != Block.class) {
+                        block.touhou_little_maid$setCannotCache(true);
+                    }
                     return;
                 } catch (NoSuchMethodException ignored) {
-                } catch (Error error) {
+                } catch (Throwable error) {
                     block.touhou_little_maid$setCannotCache(true);
                     TouhouLittleMaid.LOGGER.error("Error when checking is(TagKey) method for caching burning state for block: " + b, error);
                     return;
                 }
                 try {
-                    c.getDeclaredMethod("is", Holder.class);
-                    block.touhou_little_maid$setCannotCache(true);
+                    if (c.getDeclaredMethod("is", Holder.class).getDeclaringClass() != Block.class) {
+                        block.touhou_little_maid$setCannotCache(true);
+                    }
                     return;
                 } catch (NoSuchMethodException ignored) {
-                } catch (Error error) {
+                } catch (Throwable error) {
                     block.touhou_little_maid$setCannotCache(true);
                     TouhouLittleMaid.LOGGER.error("Error when checking is(Holder) method for caching burning state for block: " + b, error);
                     return;
                 }
                 try {
-                    c.getDeclaredMethod("is", HolderSet.class);
-                    block.touhou_little_maid$setCannotCache(true);
+                    if (c.getDeclaredMethod("is", HolderSet.class).getDeclaringClass() != Block.class) {
+                        block.touhou_little_maid$setCannotCache(true);
+                    }
                     return;
                 } catch (NoSuchMethodException ignored) {
-                } catch (Error error) {
+                } catch (Throwable error) {
                     block.touhou_little_maid$setCannotCache(true);
                     TouhouLittleMaid.LOGGER.error("Error when checking is(HolderSet) method for caching burning state for block: " + b, error);
                     return;
