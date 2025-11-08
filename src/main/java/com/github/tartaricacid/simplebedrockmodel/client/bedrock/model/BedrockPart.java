@@ -96,6 +96,18 @@ public class BedrockPart {
         }
     }
 
+    public Vector3f getTranslateAndRotateVector3f() {
+        Quaternionf quaternionf = new Quaternionf();
+        if (this.xRot != 0.0F || this.yRot != 0.0F || this.zRot != 0.0F) {
+            quaternionf.rotateZYX(this.zRot, this.yRot, this.xRot);
+        }
+        float finalX = (this.x / 16.0F) + this.offsetX;
+        float finalY = (this.y / 16.0F) + this.offsetY;
+        float finalZ = (this.z / 16.0F) + this.offsetZ;
+        Vector3f translation = new Vector3f(finalX, finalY, finalZ);
+        return quaternionf.transform(translation);
+    }
+
     public void translateAndRotateAndScale(PoseStack poseStack) {
         translateAndRotate(poseStack);
         poseStack.mulPose(additionalQuaternion);

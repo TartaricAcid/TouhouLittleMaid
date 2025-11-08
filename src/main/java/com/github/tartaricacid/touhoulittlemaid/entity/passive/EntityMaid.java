@@ -159,6 +159,7 @@ import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.tags.ITagManager;
 import org.apache.commons.lang3.StringUtils;
+import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
 import java.time.Duration;
@@ -1877,17 +1878,51 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     @Override
     @OnlyIn(Dist.CLIENT)
     public Vec3 getLeashOffset() {
-        Optional<BedrockModel<Mob>> modelOptional = CustomPackLoader.MAID_MODELS.getModel(this.getModelId());
-        Optional<MaidModelInfo> infoOptional = CustomPackLoader.MAID_MODELS.getInfo(this.getModelId());
+        String modelId = this.getModelId();
+        Vec3 pose = getLegacyLeashOffset(modelId);
+        if (pose != null) {
+            return pose;
+        }
+        return super.getLeashOffset();
+    }
+
+    @Nullable
+    @OnlyIn(Dist.CLIENT)
+    private Vec3 getLegacyLeashOffset(String modelId) {
+        Optional<BedrockModel<Mob>> modelOptional = CustomPackLoader.MAID_MODELS.getModel(modelId);
+        Optional<MaidModelInfo> infoOptional = CustomPackLoader.MAID_MODELS.getInfo(modelId);
         if (modelOptional.isPresent() && infoOptional.isPresent()) {
             BedrockModel<Mob> model = modelOptional.get();
             float renderEntityScale = infoOptional.get().getRenderEntityScale();
+
+            BedrockPart arm = null;
+            HumanoidArm armSide = HumanoidArm.RIGHT;
+            if (model.hasRightArm()) {
+                arm = model.getRightArm();
+            } else if (model.hasLeftArm()) {
+                arm = model.getLeftArm();
+                armSide = HumanoidArm.LEFT;
+            }
+
+            if (arm != null) {
+                BedrockPart positioningModel = model.getArmPositioningModel(armSide);
+                Vector3f positionVec;
+                if (positioningModel != null) {
+                    positionVec = positioningModel.getTranslateAndRotateVector3f();
+                } else {
+                    positionVec = new Vector3f(0, 0.5f, 0);
+                }
+                Vector3f armVec = arm.getTranslateAndRotateVector3f();
+                Vector3f pose = armVec.add(positionVec);
+                return new Vec3(pose.x() * renderEntityScale, (1.5 - pose.y) * renderEntityScale, pose.z() * renderEntityScale);
+            }
+
             if (model.hasHead()) {
                 BedrockPart head = model.getHead();
                 return new Vec3(head.x * renderEntityScale, (1.5 - head.y / 16) * renderEntityScale, head.z * renderEntityScale);
             }
         }
-        return super.getLeashOffset();
+        return null;
     }
 
     @Override

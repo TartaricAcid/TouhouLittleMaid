@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.model.bedrock;
 
 import com.github.tartaricacid.simplebedrockmodel.client.bedrock.AbstractBedrockEntityModel;
-import com.github.tartaricacid.simplebedrockmodel.client.bedrock.AbstractBedrockModel;
 import com.github.tartaricacid.simplebedrockmodel.client.bedrock.model.BedrockPart;
 import com.github.tartaricacid.simplebedrockmodel.client.bedrock.pojo.BedrockModelPOJO;
 import com.github.tartaricacid.simplebedrockmodel.client.bedrock.pojo.BedrockVersion;
@@ -17,7 +16,6 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -137,13 +135,26 @@ public class BedrockModel<T extends LivingEntity> extends AbstractBedrockEntityM
         return modelMap.containsKey("armLeft");
     }
 
+    public BedrockPart getLeftArm() {
+        return modelMap.get("armLeft");
+    }
+
     public boolean hasRightArm() {
         return modelMap.containsKey("armRight");
+    }
+
+    public BedrockPart getRightArm() {
+        return modelMap.get("armRight");
     }
 
     public boolean hasArmPositioningModel(HumanoidArm side) {
         BedrockPart arm = (side == HumanoidArm.LEFT ? modelMap.get("armLeftPositioningBone") : modelMap.get("armRightPositioningBone"));
         return arm != null;
+    }
+
+    @Nullable
+    public BedrockPart getArmPositioningModel(HumanoidArm side) {
+        return (side == HumanoidArm.LEFT ? modelMap.get("armLeftPositioningBone") : modelMap.get("armRightPositioningBone"));
     }
 
     public void translateToPositioningHand(HumanoidArm sideIn, PoseStack poseStack) {
