@@ -3,57 +3,21 @@ package com.github.tartaricacid.touhoulittlemaid.entity.ai.navigation;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.PathNavigationRegion;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.level.pathfinder.PathfindingContext;
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Optional;
 
 /**
  * 该方法仅修改了栅栏门和梯子的寻路判断
  */
-public class MaidNodeEvaluator extends WalkNodeEvaluator implements INodeCacheEvaluator {
-    boolean noValidation = false;
-
-    @Override
-    public void prepare(PathNavigationRegion level, Mob mob) {
-        super.prepare(level, mob);
-        // 这里尝试从其他女仆获取相邻点缓存
-        if (mob instanceof EntityMaid maid && maid.level() instanceof ServerLevel sl) {
-            BlockPos pos = maid.hasRestriction() ? maid.getRestrictCenter() : maid.blockPosition();
-            int restrictRadius = maid.hasRestriction() ? (int) maid.getRestrictRadius() : 5;
-            int tickCount = sl.getServer().getTickCount();
-            // 如果女仆存在这一刻的缓存，那么直接可以使用
-            if (maid.nodeNeighborCache != null && maid.nodeNeighborCache.tickCount == tickCount) {
-                return;
-            }
-            // 否则，寻找离自己最近的女仆
-            Optional<EntityMaid> min = mob.level().getEntities(EntityTypeTest.forClass(EntityMaid.class),
-                    new AABB(pos).inflate(restrictRadius),
-                    m -> m.nodeNeighborCache != null && m.nodeNeighborCache.tickCount == tickCount
-            ).stream().min((t, t2) -> (int) (t.distanceTo(maid) - t2.distanceTo(maid)));
-            // 将其缓存复制到自己
-            // 否则创建新的缓存
-            maid.nodeNeighborCache = min.map(entityMaid -> NodeNeighborCache.copyToAnotherCenter(
-                            entityMaid.nodeNeighborCache, pos.getX(), pos.getY(), pos.getZ()))
-                    .orElseGet(() -> new NodeNeighborCache(pos.getX(), pos.getY(), pos.getZ(),
-                            restrictRadius, 10, restrictRadius, tickCount));
-        }
-    }
-
+public class MaidNodeEvaluator extends WalkNodeEvaluator {
     @Override
     public PathType getPathType(PathfindingContext pContext, int pX, int pY, int pZ) {
         return getMaidBlockPathTypeStatic(pContext, new BlockPos.MutableBlockPos(pX, pY, pZ));
@@ -61,44 +25,8 @@ public class MaidNodeEvaluator extends WalkNodeEvaluator implements INodeCacheEv
 
     @Override
     public int getNeighbors(Node[] outputArray, Node node) {
-        //优先尝试从缓存中获取相邻点
-        int nodeId = -1;
-        if (mob instanceof EntityMaid maid) {
-            nodeId = maid.nodeNeighborCache.get(node, outputArray, this);
-        }
-        //没有获取到，那么重新进行计算
-        if (nodeId == -1) {
-            //首先，不判断节点合法性（因为其与上下文相关）
-            noValidation = true;
-            //获取相邻点
-            nodeId = super.getNeighbors(outputArray, node);
-            noValidation = false;
-            if (mob instanceof EntityMaid maid) {
-                //缓存相邻点
-                maid.nodeNeighborCache.record(node, outputArray, nodeId);
-            }
-        }
-        //然后，删除不合法点
-        int offset = 0;
-        for (int i = 0; i < nodeId; i++) {
-            if (!isNeighborValid(outputArray[i], node)) {
-                offset++;
-            } else if (offset != 0) {
-                outputArray[i - offset] = outputArray[i];
-            }
-        }
-        if (offset != 0) {
-            nodeId -= offset;
-        }
+        int nodeId = super.getNeighbors(outputArray, node);
         return this.createClimbNode(nodeId, outputArray, node);
-    }
-
-    @Override
-    protected boolean isNeighborValid(@Nullable Node neighbor, Node node) {
-        if (neighbor != null && noValidation) {
-            return true;
-        }
-        return super.isNeighborValid(neighbor, node);
     }
 
     // 将可爬行物加入寻路节点里头
@@ -214,10 +142,5 @@ public class MaidNodeEvaluator extends WalkNodeEvaluator implements INodeCacheEv
 
     public static boolean isMaidCanClimbBlock(BlockState blockState, BlockPos blockPos, EntityMaid maid) {
         return blockState.isLadder(maid.level, blockPos, maid);
-    }
-
-    @Override
-    public Node createNode(int x, int y, int z) {
-        return getNode(x, y, z);
     }
 }
