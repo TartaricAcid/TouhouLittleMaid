@@ -2,7 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.loot;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.data.TankBackpackData;
 import com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent;
-import com.github.tartaricacid.touhoulittlemaid.init.InitLootCondition;
+import com.github.tartaricacid.touhoulittlemaid.init.InitLootModifier;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -43,7 +43,7 @@ public class SetTankCountFunction extends LootItemConditionalFunction {
 
     @Override
     public LootItemFunctionType<? extends LootItemConditionalFunction> getType() {
-        return InitLootCondition.SET_TANK_COUNT_FUNCTION.get();
+        return InitLootModifier.SET_TANK_COUNT_FUNCTION.get();
     }
 
     @Override

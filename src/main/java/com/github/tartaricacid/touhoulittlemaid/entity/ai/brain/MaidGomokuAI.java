@@ -163,6 +163,16 @@ public final class MaidGomokuAI {
             }
         }
 
-        return Statue.IN_PROGRESS;
+        // 判断棋盘是否已满
+        for (byte[] chessDatum : chessData) {
+            for (int j = 0; j < rows; j++) {
+                if (chessDatum[j] == 0) {
+                    // 还有空位，游戏继续
+                    return Statue.IN_PROGRESS;
+                }
+            }
+        }
+
+        return Statue.DRAW;
     }
 }

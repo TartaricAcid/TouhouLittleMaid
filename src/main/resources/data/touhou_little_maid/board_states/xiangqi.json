@@ -1,0 +1,47 @@
+[
+  {
+    "tags": ["library"],
+    "display": {
+      "description": "board_state.touhou_little_maid.xiangqi.default",
+      "author": "象棋巫师"
+    },
+    "data": "2b1k4/4aP3/4b4/5P3/9/9/9/9/4K4/9 w - - 0 1",
+    "weight": 1
+  },
+  {
+    "tags": ["library"],
+    "display": {
+      "description": "board_state.touhou_little_maid.xiangqi.default",
+      "author": "象棋巫师"
+    },
+    "data": "4k4/4a4/4P4/9/9/9/9/9/9/5K3 w - - 0 1",
+    "weight": 1
+  },
+  {
+    "tags": ["library"],
+    "display": {
+      "description": "board_state.touhou_little_maid.xiangqi.default",
+      "author": "象棋巫师"
+    },
+    "data": "49/1P1k5/4b4/3P5/6b2/9/9/9/9/4K4 w - - 0 1",
+    "weight": 1
+  },
+  {
+    "tags": ["library"],
+    "display": {
+      "description": "board_state.touhou_little_maid.xiangqi.default",
+      "author": "象棋巫师"
+    },
+    "data": "4k4/3PaP1cP/4Pa1P1/9/9/9/9/1p7/4pp3/3K5 w - - 0 1",
+    "weight": 1
+  },
+  {
+    "tags": ["library"],
+    "display": {
+      "description": "board_state.touhou_little_maid.xiangqi.default",
+      "author": "象棋巫师"
+    },
+    "data": "2c2k3/3PP4/3PPr3/9/9/8C/9/4p3C/3p1p3/4K1R1R w - - 0 1",
+    "weight": 1
+  }
+]

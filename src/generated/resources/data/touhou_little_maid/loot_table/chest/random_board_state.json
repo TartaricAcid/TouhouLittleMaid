@@ -1,0 +1,48 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "touhou_little_maid:board_state_randomly",
+              "tags": [
+                "library"
+              ]
+            }
+          ],
+          "name": "touhou_little_maid:gomoku_board_state"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "touhou_little_maid:board_state_randomly",
+              "tags": [
+                "library"
+              ]
+            }
+          ],
+          "name": "touhou_little_maid:cchess_board_state"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "touhou_little_maid:board_state_randomly",
+              "tags": [
+                "library"
+              ]
+            }
+          ],
+          "name": "touhou_little_maid:wchess_board_state"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "touhou_little_maid:chest/random_board_state"
+}

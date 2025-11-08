@@ -6,6 +6,9 @@ import net.neoforged.bus.api.ICancellableEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEvent;
 import org.jetbrains.annotations.ApiStatus;
 
+/**
+ * 女仆近战伤害其他实体时触发此事件
+ */
 @ApiStatus.AvailableSince("1.4.0")
 public abstract class MaidHurtTarget extends LivingEvent {
     private final EntityMaid maid;

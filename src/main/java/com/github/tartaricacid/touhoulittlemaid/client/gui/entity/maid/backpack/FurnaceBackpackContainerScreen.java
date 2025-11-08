@@ -2,9 +2,11 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.backpack
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.AbstractMaidContainerGui;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.BaubleButton;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.backpack.FurnaceBackpackContainer;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -26,6 +28,12 @@ public class FurnaceBackpackContainerScreen extends AbstractMaidContainerGui<Fur
         super(container, inv, titleIn);
         this.imageHeight = 256;
         this.imageWidth = 256;
+    }
+
+    @Override
+    protected void initAdditionWidgets() {
+        BaubleButton button = this.getBaubleButton(maid, leftPos, topPos);
+        this.addRenderableWidget(button);
     }
 
     @Override

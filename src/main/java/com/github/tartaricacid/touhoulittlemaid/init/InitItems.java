@@ -72,6 +72,9 @@ public final class InitItems {
     public static DeferredItem<Item> SERVANT_BELL = ITEMS.register("servant_bell", ItemServantBell::new);
     public static DeferredItem<Item> ENTITY_ID_COPY = ITEMS.register("entity_id_copy", ItemEntityIdCopy::new);
     public static DeferredItem<Item> OWNER_CONVERSION_TOOL = ITEMS.register("owner_conversion_tool", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
+    public static DeferredItem<Item> GOMOKU_BOARD_STATE = ITEMS.register("gomoku_board_state", ItemBoardState::new);
+    public static DeferredItem<Item> CCHESS_BOARD_STATE = ITEMS.register("cchess_board_state", ItemBoardState::new);
+    public static DeferredItem<Item> WCHESS_BOARD_STATE = ITEMS.register("wchess_board_state", ItemBoardState::new);
     @SuppressWarnings("deprecation")
     public static DeferredItem<Item> MONSTER_LIST = ITEMS.register("monster_list", ItemMonsterList::new);
 

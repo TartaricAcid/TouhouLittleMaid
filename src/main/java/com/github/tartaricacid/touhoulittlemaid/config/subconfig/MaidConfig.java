@@ -35,6 +35,12 @@ public final class MaidConfig {
     public static ModConfigSpec.IntValue OWNER_MAX_MAID_NUM;
     public static ModConfigSpec.DoubleValue REPLACE_ALLAY_PERCENT;
 
+    // 女仆随机发表情包（颜文字）功能开关
+    public static ModConfigSpec.BooleanValue ENABLE_EMOJI;
+    public static ModConfigSpec.IntValue EMOJI_CHECK_RATE;
+    public static ModConfigSpec.IntValue IMAGE_EMOJI_WEIGHT;
+    public static ModConfigSpec.IntValue KAOMOJI_EMOJI_WEIGHT;
+
     public static ModConfigSpec.ConfigValue<List<String>> MAID_BACKPACK_BLACKLIST;
     public static ModConfigSpec.ConfigValue<List<String>> MAID_ATTACK_IGNORE;
     public static ModConfigSpec.ConfigValue<List<String>> MAID_RANGED_ATTACK_IGNORE;
@@ -135,6 +141,18 @@ public final class MaidConfig {
         builder.comment("Percentage chance of replace Allays spawn in pillager outposts with Maids")
                 .translation(translateKey("replace_allay_percent"));
         REPLACE_ALLAY_PERCENT = builder.defineInRange("ReplaceAllayPercent", 0.2, 0, 1);
+
+        builder.comment("Enable maid random emoji/kaomoji feature");
+        ENABLE_EMOJI = builder.define("EnableEmoji", true);
+
+        builder.comment("The check rate (in ticks) for maid to display random emoji/kaomoji");
+        EMOJI_CHECK_RATE = builder.defineInRange("EmojiCheckRate", 60 * 20, 20, 24000);
+
+        builder.comment("The weight for image emoji to be selected");
+        IMAGE_EMOJI_WEIGHT = builder.defineInRange("ImageEmojiWeight", 10, 0, 100);
+
+        builder.comment("The weight for kaomoji emoji to be selected");
+        KAOMOJI_EMOJI_WEIGHT = builder.defineInRange("KaomojiEmojiWeight", 10, 0, 100);
 
         builder.comment("These items cannot be used as a maid's work meals")
                 .translation(translateKey("maid_work_meals_block_list"));

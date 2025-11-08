@@ -20905,6 +20905,7 @@
 				},
 				"AllBody": {
 					"rotation": [0, 0, 0],
+					"position": [0, -14, 0],
 					"scale": 1
 				},
 				"Head": {

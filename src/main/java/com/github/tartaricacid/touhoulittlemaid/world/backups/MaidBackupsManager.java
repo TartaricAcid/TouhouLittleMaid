@@ -78,7 +78,6 @@ public final class MaidBackupsManager {
     public static void save(@NotNull MinecraftServer server, @NotNull EntityMaid maid) {
         UUID ownerId = maid.getOwnerUUID();
         if (ownerId == null) {
-            LOGGER.debug("Skipping backup for maid {} - no owner", maid.getStringUUID());
             return;
         }
 
@@ -310,8 +309,6 @@ public final class MaidBackupsManager {
             NbtUtils.addCurrentDataVersion(backupData.entityData);
             NbtIo.writeCompressed(backupData.entityData, backupFile.toPath());
 
-            LOGGER.debug("Saved entity data to: {}", backupFile);
-
             // 删除旧备份
             removeOldBackups(backupData.saveFolder, ServerConfig.MAID_BACKUP_MAX_COUNT.get());
 
@@ -332,9 +329,7 @@ public final class MaidBackupsManager {
 
             // 删除多余的备份文件
             for (int i = 0; i < backupFiles.length - maxBackups; i++) {
-                if (backupFiles[i].delete()) {
-                    LOGGER.debug("Deleted old backup file: {}", backupFiles[i].getAbsolutePath());
-                } else {
+                if (!backupFiles[i].delete()) {
                     LOGGER.warn("Failed to delete old backup file: {}", backupFiles[i].getAbsolutePath());
                 }
             }

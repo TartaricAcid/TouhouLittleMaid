@@ -135,6 +135,7 @@ public class ItemKappaCompass extends Item {
             compass.remove(KAPPA_COMPASS_DIMENSION);
             sendMessage(player, Component.translatable("message.touhou_little_maid.kappa_compass.clear"));
         } else {
+            ResourceLocation dimension = getDimension(compass);
             int recordCount = getRecordCount(compass);
             if (recordCount >= 3) {
                 sendMessage(player, Component.translatable("message.touhou_little_maid.kappa_compass.full"));
@@ -144,12 +145,20 @@ public class ItemKappaCompass extends Item {
                     sendMessage(player, Component.translatable("message.touhou_little_maid.kappa_compass.far_away"));
                     return super.useOn(context);
                 }
+                if (dimension != null && !player.level.dimension().location().equals(dimension)) {
+                    sendMessage(player, Component.translatable("message.touhou_little_maid.kappa_compass.diff_dimension"));
+                    return super.useOn(context);
+                }
                 addPoint(Activity.REST, clickedPos, compass);
                 sendMessage(player, Component.translatable("message.touhou_little_maid.kappa_compass.sleep", clickedPos.getX(), clickedPos.getY(), clickedPos.getZ()));
             } else if (recordCount == 1) {
                 BlockPos workPos = getPoint(Activity.WORK, compass);
                 if (workPos != null && workPos.distSqr(clickedPos) > 64 * 64) {
                     sendMessage(player, Component.translatable("message.touhou_little_maid.kappa_compass.far_away"));
+                    return super.useOn(context);
+                }
+                if (dimension != null && !player.level.dimension().location().equals(dimension)) {
+                    sendMessage(player, Component.translatable("message.touhou_little_maid.kappa_compass.diff_dimension"));
                     return super.useOn(context);
                 }
                 addPoint(Activity.IDLE, clickedPos, compass);

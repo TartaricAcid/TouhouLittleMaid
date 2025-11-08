@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.inventory.container.backpack;
 
+import com.github.tartaricacid.touhoulittlemaid.api.backpack.ITriggerSlotChange;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.MaidMainContainer;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.server.level.ServerPlayer;
@@ -89,6 +90,10 @@ public class CraftingTableBackpackContainer extends MaidMainContainer {
                 return ItemStack.EMPTY;
             }
             slot.onTake(player, stack2);
+            // 触发 Shift 点击取出事件
+            if (slot instanceof ITriggerSlotChange slotChange) {
+                slotChange.onShiftTakeoff(player, stack1);
+            }
             if (index == resultSlot.index) {
                 player.drop(stack2, false);
             }
@@ -98,12 +103,11 @@ public class CraftingTableBackpackContainer extends MaidMainContainer {
 
     @Override
     protected void addBackpackInv(Inventory inventory) {
-        IItemHandler itemHandler = maid.getMaidInv();
         for (int i = 0; i < 6; i++) {
-            addSlot(new SlotItemHandler(itemHandler, 6 + i, 143 + 18 * i, 57));
+            addSlot(new BackpackSlot(maid, 6 + i, 143 + 18 * i, 57));
         }
         for (int i = 0; i < 6; i++) {
-            addSlot(new SlotItemHandler(itemHandler, 12 + i, 143 + 18 * i, 75));
+            addSlot(new BackpackSlot(maid, 12 + i, 143 + 18 * i, 75));
         }
     }
 

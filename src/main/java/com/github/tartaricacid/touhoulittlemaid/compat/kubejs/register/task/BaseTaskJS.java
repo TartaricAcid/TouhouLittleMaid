@@ -64,6 +64,14 @@ public class BaseTaskJS implements IMaidTask {
     }
 
     @Override
+    public boolean isHidden(EntityMaid maid) {
+        if (this.builder.isHidden == null) {
+            return IMaidTask.super.isHidden(maid);
+        }
+        return this.builder.isHidden.test(maid);
+    }
+
+    @Override
     public boolean enableLookAndRandomWalk(EntityMaid maid) {
         if (this.builder.enableLookAndRandomWalk == null) {
             return IMaidTask.super.enableLookAndRandomWalk(maid);

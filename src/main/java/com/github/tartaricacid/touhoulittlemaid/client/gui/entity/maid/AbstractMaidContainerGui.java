@@ -60,16 +60,25 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     private static final ResourceLocation SIDE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_side.png");
     private static final ResourceLocation BUTTON = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_button.png");
     private static final ResourceLocation TASK = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_task.png");
+
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("00");
+
     private static final int TASK_COUNT_PER_PAGE = 12;
     private static int TASK_PAGE = 0;
     private static boolean TASK_LIST_OPEN = false;
+
     protected final EntityMaid maid;
     protected final IMaidTask task;
+    /**
+     * 非隐藏的任务列表，用于任务切换按钮显示
+     */
+    protected final List<IMaidTask> notHiddenTasks;
+
     /**
      * 事件系统添加的额外按钮
      */
     private final Map<String, AbstractWidget> eventAddButtons = Maps.newHashMap();
+
     private TouhouStateSwitchButton home;
     private TouhouStateSwitchButton pick;
     private TouhouStateSwitchButton ride;
@@ -83,6 +92,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     private TouhouImageButton taskSwitch;
     private MaidDownloadButton modelDownload;
     private ScheduleButton<T> scheduleButton;
+
     private int counterTime = 0;
 
     public AbstractMaidContainerGui(T screenContainer, Inventory inv, Component titleIn) {
@@ -91,6 +101,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         this.imageWidth = 256;
         this.maid = menu.getMaid();
         this.task = menu.getMaid().getTask();
+        this.notHiddenTasks = TaskManager.getNotHiddenTaskList(this.maid);
     }
 
     @Override
@@ -231,6 +242,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
 
     @Override
     protected void renderTooltip(GuiGraphics graphics, int x, int y) {
+        graphics.pose().pushPose();
         super.renderTooltip(graphics, x, y);
         renderTransTooltip(home, graphics, x, y, "gui.touhou_little_maid.button.home");
         renderTransTooltip(pick, graphics, x, y, "gui.touhou_little_maid.button.pickup");
@@ -250,6 +262,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         renderScheduleInfo(graphics, x, y);
         renderTaskButtonInfo(graphics, x, y);
         modelDownload.renderExtraTips(graphics);
+        graphics.pose().popPose();
     }
 
     // 渲染额外的 Tooltip
@@ -311,23 +324,21 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         }
     }
 
-    private  void taskPageDown() {
-        List<IMaidTask> tasks = TaskManager.getTaskIndex();
-        if (TASK_PAGE * TASK_COUNT_PER_PAGE + TASK_COUNT_PER_PAGE < tasks.size()) {
+    private void taskPageDown() {
+        if (TASK_PAGE * TASK_COUNT_PER_PAGE + TASK_COUNT_PER_PAGE < notHiddenTasks.size()) {
             TASK_PAGE++;
             init();
         }
     }
 
     private void addTaskListButton() {
-        List<IMaidTask> tasks = TaskManager.getTaskIndex();
-        if (TASK_PAGE * TASK_COUNT_PER_PAGE >= tasks.size()) {
+        if (TASK_PAGE * TASK_COUNT_PER_PAGE >= notHiddenTasks.size()) {
             TASK_PAGE = 0;
         }
         for (int count = 0; count < TASK_COUNT_PER_PAGE; count++) {
             int index = TASK_PAGE * TASK_COUNT_PER_PAGE + count;
-            if (index < tasks.size()) {
-                drawPerTaskButton(tasks, count, index);
+            if (index < notHiddenTasks.size()) {
+                drawPerTaskButton(notHiddenTasks, count, index);
             }
         }
     }
@@ -473,7 +484,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
 
     private void drawTaskPageCount(GuiGraphics graphics) {
         if (TASK_LIST_OPEN) {
-            String text = String.format("%d/%d", TASK_PAGE + 1, (TaskManager.getTaskIndex().size() - 1) / TASK_COUNT_PER_PAGE + 1);
+            String text = String.format("%d/%d", TASK_PAGE + 1, (notHiddenTasks.size() - 1) / TASK_COUNT_PER_PAGE + 1);
             graphics.drawString(font, text, -48, 12, 0x333333, false);
         }
     }

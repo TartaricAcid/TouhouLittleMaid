@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.loot;
 
-import com.github.tartaricacid.touhoulittlemaid.init.InitLootCondition;
+import com.github.tartaricacid.touhoulittlemaid.init.InitLootModifier;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.Registries;
@@ -48,6 +48,6 @@ public record LootTableTypeCondition(ResourceLocation lootTableType,
 
     @Override
     public LootItemConditionType getType() {
-        return InitLootCondition.LOOT_TABLE_TYPE.get();
+        return InitLootModifier.LOOT_TABLE_TYPE.get();
     }
 }

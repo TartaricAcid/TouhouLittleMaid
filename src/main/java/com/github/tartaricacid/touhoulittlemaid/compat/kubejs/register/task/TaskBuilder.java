@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.ai.behavior.BehaviorControl;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -32,6 +33,8 @@ public abstract class TaskBuilder<T extends TaskBuilder<T, E>, E> {
     public final List<Pair<String, Predicate<EntityMaid>>> conditionDesc = Lists.newArrayList();
     @HideFromJS
     public @Nullable Predicate<EntityMaid> enable = null;
+    @HideFromJS
+    public @Nullable Predicate<EntityMaid> isHidden = null;
     @HideFromJS
     public @Nullable Predicate<EntityMaid> enableLookAndRandomWalk = null;
     @HideFromJS
@@ -122,6 +125,16 @@ public abstract class TaskBuilder<T extends TaskBuilder<T, E>, E> {
             """)
     public T enable(Predicate<EntityMaid> enable) {
         this.enable = enable;
+        return (T) this;
+    }
+
+    @Info(value = """
+            Sets the hidden condition for the task. Default is not hidden. <br>
+            设置该任务是否在切换界面中隐藏，默认不隐藏。
+            """)
+    @ApiStatus.AvailableSince("1.4.2")
+    public T isHidden(Predicate<EntityMaid> isHidden) {
+        this.isHidden = isHidden;
         return (T) this;
     }
 

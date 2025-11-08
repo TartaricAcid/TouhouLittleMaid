@@ -42,12 +42,11 @@ public class TankBackpackContainer extends MaidMainContainer {
 
     @Override
     protected void addBackpackInv(Inventory inventory) {
-        IItemHandler itemHandler = maid.getMaidInv();
         for (int i = 0; i < 6; i++) {
-            addSlot(new SlotItemHandler(itemHandler, 6 + i, 143 + 18 * i, 57));
+            addSlot(new BackpackSlot(maid, 6 + i, 143 + 18 * i, 57));
         }
         for (int i = 0; i < 6; i++) {
-            addSlot(new SlotItemHandler(itemHandler, 12 + i, 143 + 18 * i, 75));
+            addSlot(new BackpackSlot(maid, 12 + i, 143 + 18 * i, 75));
         }
     }
 

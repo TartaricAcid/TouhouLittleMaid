@@ -28,6 +28,7 @@ public class GlobalLootModifier extends GlobalLootModifierProvider {
 
         addChestLootModifier("spawn_bonus_chest", BuiltInLootTables.SPAWN_BONUS_CHEST, LootTableGenerator.SPAWN_BONUS);
         addChestLootModifier("village_temple", BuiltInLootTables.VILLAGE_TEMPLE, LootTableGenerator.NORMAL_BAUBLE);
+        addChestLootModifier("village_cartographer", BuiltInLootTables.VILLAGE_CARTOGRAPHER, LootTableGenerator.RANDOM_BOARD_STATE);
         addChestLootModifier("desert_pyramid", BuiltInLootTables.DESERT_PYRAMID, LootTableGenerator.RARE_BAUBLE);
         addChestLootModifier("jungle_temple", BuiltInLootTables.JUNGLE_TEMPLE, LootTableGenerator.RARE_BAUBLE);
         addChestLootModifier("woodland_mansion_bauble", BuiltInLootTables.WOODLAND_MANSION, LootTableGenerator.VERY_RARE_BAUBLE);
@@ -36,6 +37,7 @@ public class GlobalLootModifier extends GlobalLootModifierProvider {
         addChestLootModifier("nether_bridge", BuiltInLootTables.NETHER_BRIDGE, LootTableGenerator.TANK_BACKPACK);
         addChestLootModifier("stronghold_corridor", BuiltInLootTables.STRONGHOLD_CORRIDOR, LootTableGenerator.ENDER_CHEST_BACKPACK);
         addChestLootModifier("stronghold_library", BuiltInLootTables.STRONGHOLD_LIBRARY, LootTableGenerator.SHRINE_LESS);
+        addChestLootModifier("stronghold_library_board_state", BuiltInLootTables.STRONGHOLD_LIBRARY, LootTableGenerator.RANDOM_BOARD_STATE);
         addChestLootModifier("ancient_city", BuiltInLootTables.ANCIENT_CITY, LootTableGenerator.SHRINE_LESS);
         addChestLootModifier("bastion_treasure", BuiltInLootTables.BASTION_TREASURE, LootTableGenerator.SHRINE_LESS);
         addChestLootModifier("end_city_treasure", BuiltInLootTables.END_CITY_TREASURE, LootTableGenerator.SHRINE_MORE);

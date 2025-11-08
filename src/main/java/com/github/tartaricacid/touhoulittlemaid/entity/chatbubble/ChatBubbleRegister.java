@@ -2,10 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.chatbubble;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.implement.ImageChatBubbleData;
-import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.implement.ProgressChatBubbleData;
-import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.implement.TextChatBubbleData;
-import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.implement.WaitingChatBubbleData;
+import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.implement.*;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import it.unimi.dsi.fastutil.longs.Long2ObjectAVLTreeMap;
@@ -67,12 +64,11 @@ public class ChatBubbleRegister {
         register.register(ImageChatBubbleData.ID, new ImageChatBubbleData.ImageChatSerializer());
         register.register(WaitingChatBubbleData.ID, new WaitingChatBubbleData.WaitingChatSerializer());
         register.register(ProgressChatBubbleData.ID, new ProgressChatBubbleData.ProgressChatSerializer());
+        register.register(EmojiChatBubbleData.ID, new EmojiChatBubbleData.EmojiChatSerializer());
         for (ILittleMaid littleMaid : TouhouLittleMaid.EXTENSIONS) {
             littleMaid.registerChatBubble(register);
         }
         CODEC_MAP = ImmutableMap.copyOf(CODEC_MAP);
-        // 同时读取随机表情
-        RandomEmoji.init();
     }
 
     public void register(ResourceLocation id, IChatBubbleData.ChatSerializer serializer) {

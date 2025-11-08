@@ -42,6 +42,11 @@ public class TileEntityCChess extends TileEntityJoy implements IBoardGameEntityB
         this.chessData.fromFen(CChessUtil.INIT);
     }
 
+    public void setEndgame(String endgame) {
+        this.chessData.fromFen(endgame);
+        this.refresh();
+    }
+
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
         CompoundTag data = getPersistentData();

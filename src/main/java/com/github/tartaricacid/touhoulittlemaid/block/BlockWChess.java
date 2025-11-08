@@ -11,6 +11,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
+import com.github.tartaricacid.touhoulittlemaid.item.ItemBoardState;
 import com.github.tartaricacid.touhoulittlemaid.network.message.WChessToClientPackage;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityJoy;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityWChess;
@@ -50,6 +51,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.network.PacketDistributor;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
@@ -200,7 +202,7 @@ public class BlockWChess extends BlockJoy implements IBoardGameBlock {
 
     @Override
     public ItemInteractionResult useItemOn(ItemStack itemStack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (level instanceof ServerLevel serverLevel && hand == InteractionHand.MAIN_HAND && player.getMainHandItem().isEmpty()) {
+        if (level instanceof ServerLevel serverLevel && hand == InteractionHand.MAIN_HAND) {
             GomokuPart part = state.getValue(PART);
             BlockPos centerPos = pos.subtract(new Vec3i(part.getPosX(), 0, part.getPosY()));
             BlockEntity te = level.getBlockEntity(centerPos);
@@ -208,19 +210,30 @@ public class BlockWChess extends BlockJoy implements IBoardGameBlock {
             if (!(te instanceof TileEntityWChess chess)) {
                 return ItemInteractionResult.FAIL;
             }
+
+            // 女仆思考时间，不允许玩家操作
             if (!chess.isPlayerTurn() && !chess.isCheckmate()) {
                 return ItemInteractionResult.FAIL;
             }
 
-            // 检查女仆
-            Entity sitEntity = serverLevel.getEntity(chess.getSitId());
-            if (sitEntity == null || !sitEntity.isAlive() || !(sitEntity.getFirstPassenger() instanceof EntityMaid maid)) {
-                player.sendSystemMessage(Component.translatable("message.touhou_little_maid.gomoku.no_maid"));
-                return ItemInteractionResult.FAIL;
+            // 如果是残局道具，那么直接设置残局
+            ItemStack heldItem = player.getMainHandItem();
+            if (heldItem.is(InitItems.WCHESS_BOARD_STATE.get())) {
+                String[] boardState = ItemBoardState.getState(heldItem);
+                if (boardState == null) {
+                    return ItemInteractionResult.FAIL;
+                }
+                String data = boardState[0];
+                if (StringUtils.isEmpty(data)) {
+                    return ItemInteractionResult.FAIL;
+                }
+                chess.setEndgame(data);
+                level.playSound(null, pos, InitSounds.GOMOKU_RESET.get(), SoundSource.BLOCKS, 1.0f, 1.0f);
+                return ItemInteractionResult.SUCCESS;
             }
-            // 检查是不是自己的女仆
-            if (MaidConfig.MAID_GOMOKU_OWNER_LIMIT.get() && !maid.isOwnedBy(player)) {
-                player.sendSystemMessage(Component.translatable("message.touhou_little_maid.gomoku.not_owner"));
+
+            // 只能空手操作
+            if (!heldItem.isEmpty()) {
                 return ItemInteractionResult.FAIL;
             }
 
@@ -234,10 +247,29 @@ public class BlockWChess extends BlockJoy implements IBoardGameBlock {
             // 重置棋盘
             boolean clickResetArea = WChessUtil.isClickResetArea(clickPos);
             if (clickResetArea) {
+                level.playSound(null, centerPos, InitSounds.GOMOKU_RESET.get(), SoundSource.BLOCKS, 1.0f, 1.0f);
                 chess.reset();
                 chess.refresh();
-                level.playSound(null, centerPos, InitSounds.GOMOKU_RESET.get(), SoundSource.BLOCKS, 1.0f, 1.0f);
-                maid.getGameRecordManager().resetStatue();
+
+                // 重置女仆棋类动画
+                Entity sitEntity = serverLevel.getEntity(chess.getSitId());
+                if (sitEntity != null && sitEntity.isAlive() && sitEntity.getFirstPassenger() instanceof EntityMaid maid) {
+                    maid.getGameRecordManager().resetStatue();
+                }
+
+                return ItemInteractionResult.SUCCESS;
+            }
+
+            // 检查女仆
+            Entity sitEntity = serverLevel.getEntity(chess.getSitId());
+            if (sitEntity == null || !sitEntity.isAlive() || !(sitEntity.getFirstPassenger() instanceof EntityMaid maid)) {
+                player.sendSystemMessage(Component.translatable("message.touhou_little_maid.gomoku.no_maid"));
+                return ItemInteractionResult.FAIL;
+            }
+            // 检查是不是自己的女仆
+            if (MaidConfig.MAID_GOMOKU_OWNER_LIMIT.get() && !maid.isOwnedBy(player)) {
+                player.sendSystemMessage(Component.translatable("message.touhou_little_maid.gomoku.not_owner"));
+                return ItemInteractionResult.FAIL;
             }
 
             // 没有点击到棋盘上，返回

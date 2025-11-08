@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Point;
+import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Statue;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockGomoku;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.SimpleBedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader;
@@ -107,7 +108,8 @@ public class TileEntityGomokuRenderer implements BlockEntityRenderer<TileEntityG
     }
 
     private void renderTipsText(TileEntityGomoku gomoku, PoseStack poseStack, MultiBufferSource bufferIn, int combinedLightIn) {
-        if (!gomoku.isInProgress() && inRenderDistance(gomoku, TIPS_RENDER_DISTANCE)) {
+        Statue statue = gomoku.getStatue();
+        if (statue != Statue.IN_PROGRESS && inRenderDistance(gomoku, TIPS_RENDER_DISTANCE)) {
             Camera camera = this.dispatcher.camera;
             MutableComponent loseTips;
             MutableComponent resetTips = Component.translatable("message.touhou_little_maid.gomoku.reset").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.AQUA);
@@ -115,10 +117,14 @@ public class TileEntityGomokuRenderer implements BlockEntityRenderer<TileEntityG
             MutableComponent preRoundIcon = Component.literal("⏹ ").withStyle(ChatFormatting.GREEN);
             MutableComponent postRoundIcon = Component.literal(" ⏹").withStyle(ChatFormatting.GREEN);
             MutableComponent roundTips = preRoundIcon.append(roundText).append(postRoundIcon);
-            if (gomoku.isPlayerTurn()) {
-                loseTips = Component.translatable("message.touhou_little_maid.gomoku.win").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.DARK_PURPLE);
+            if (statue == Statue.WIN) {
+                if (gomoku.isPlayerTurn()) {
+                    loseTips = Component.translatable("message.touhou_little_maid.gomoku.win").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.DARK_PURPLE);
+                } else {
+                    loseTips = Component.translatable("message.touhou_little_maid.gomoku.lose").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.DARK_PURPLE);
+                }
             } else {
-                loseTips = Component.translatable("message.touhou_little_maid.gomoku.lose").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.DARK_PURPLE);
+                loseTips = Component.translatable("message.touhou_little_maid.gomoku.draw").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.DARK_PURPLE);
             }
             float loseTipsWidth = (float) (-this.font.width(loseTips) / 2);
             float resetTipsWidth = (float) (-this.font.width(resetTips) / 2);

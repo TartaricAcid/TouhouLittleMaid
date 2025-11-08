@@ -68,6 +68,9 @@ public class InitCreativeTabs {
                 output.accept(GOMOKU.get());
                 output.accept(CCHESS.get());
                 output.accept(WCHESS.get());
+                output.accept(GOMOKU_BOARD_STATE.get());
+                output.accept(CCHESS_BOARD_STATE.get());
+                output.accept(WCHESS_BOARD_STATE.get());
                 output.accept(KEYBOARD.get());
                 output.accept(BOOKSHELF.get());
                 output.accept(COMPUTER.get());

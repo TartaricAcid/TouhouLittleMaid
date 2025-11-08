@@ -161,6 +161,37 @@ public class MenuIntegration {
                     MaidConfig.REPLACE_ALLAY_PERCENT.save();
                 }).build());
 
+        maid.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.maid.enable_emoji"), MaidConfig.ENABLE_EMOJI.get())
+                .setDefaultValue(true).setTooltip(Component.translatable("config.touhou_little_maid.maid.enable_emoji.tooltip"))
+                .setSaveConsumer(b -> {
+                    MaidConfig.ENABLE_EMOJI.set(b);
+                    MaidConfig.ENABLE_EMOJI.save();
+                }).build());
+
+        maid.addEntry(entryBuilder.startIntField(Component.translatable("config.touhou_little_maid.maid.emoji_check_rate"), MaidConfig.EMOJI_CHECK_RATE.get())
+                .setDefaultValue(MaidConfig.EMOJI_CHECK_RATE.getDefault()).setMin(20).setMax(24000)
+                .setTooltip(Component.translatable("config.touhou_little_maid.maid.emoji_check_rate.tooltip"))
+                .setSaveConsumer(i -> {
+                    MaidConfig.EMOJI_CHECK_RATE.set(i);
+                    MaidConfig.EMOJI_CHECK_RATE.save();
+                }).build());
+
+        maid.addEntry(entryBuilder.startIntField(Component.translatable("config.touhou_little_maid.maid.image_emoji_weight"), MaidConfig.IMAGE_EMOJI_WEIGHT.get())
+                .setDefaultValue(MaidConfig.IMAGE_EMOJI_WEIGHT.getDefault()).setMin(0).setMax(100)
+                .setTooltip(Component.translatable("config.touhou_little_maid.maid.image_emoji_weight.tooltip"))
+                .setSaveConsumer(i -> {
+                    MaidConfig.IMAGE_EMOJI_WEIGHT.set(i);
+                    MaidConfig.IMAGE_EMOJI_WEIGHT.save();
+                }).build());
+
+        maid.addEntry(entryBuilder.startIntField(Component.translatable("config.touhou_little_maid.maid.kaomoji_emoji_weight"), MaidConfig.KAOMOJI_EMOJI_WEIGHT.get())
+                .setDefaultValue(MaidConfig.KAOMOJI_EMOJI_WEIGHT.getDefault()).setMin(0).setMax(100)
+                .setTooltip(Component.translatable("config.touhou_little_maid.maid.kaomoji_emoji_weight.tooltip"))
+                .setSaveConsumer(i -> {
+                    MaidConfig.KAOMOJI_EMOJI_WEIGHT.set(i);
+                    MaidConfig.KAOMOJI_EMOJI_WEIGHT.save();
+                }).build());
+
         maid.addEntry(entryBuilder.startStrList(Component.translatable("config.touhou_little_maid.maid.maid_backpack_blacklist"), MaidConfig.MAID_BACKPACK_BLACKLIST.get())
                 .setDefaultValue(MaidConfig.MAID_BACKPACK_BLACKLIST.getDefault())
                 .setTooltip(Component.translatable("config.touhou_little_maid.maid.maid_backpack_blacklist.tooltip"))

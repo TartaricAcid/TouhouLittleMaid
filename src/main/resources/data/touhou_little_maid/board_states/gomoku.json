@@ -1,0 +1,56 @@
+[
+  {
+    // 标签，用来区分获取方式或者其他设计辅助用
+    "tags": ["library"],
+    // 用于名称显示
+    "display": {
+      // 月亮阵是五子棋中最快赢棋阵法
+      "description": "board_state.touhou_little_maid.gomoku.moon",
+      "author": "欢乐小游戏"
+    },
+    // 具体棋局数据
+    "data": "eNpjYKAvYMTPZ8SreAgAdP8w0twTAAhFAAk, 8, 8_9",
+    // 随机选中的权重
+    "weight": 1
+  },
+  {
+    "tags": ["library"],
+    "display": {
+      // 隐身牛阵是五子棋中最强阵法
+      "description": "board_state.touhou_little_maid.gomoku.stealth_cow",
+      "author": "欢乐小游戏"
+    },
+    "data": "eNpjYKApYGTEJ0mEyFADjBTySQcACGkACQ, 8, 10_9",
+    "weight": 1
+  },
+  {
+    "tags": ["library"],
+    "display": {
+      // 面条阵
+      "description": "board_state.touhou_little_maid.gomoku.noodles",
+      "author": "欢乐小游戏"
+    },
+    "data": "eNpjYKAnYGRE4-ORZWQYhgDVh8geZiTXywAK0AAN, 12, 9_7",
+    "weight": 1
+  },
+  {
+    "tags": ["library"],
+    "display": {
+      // 口字阵
+      "description": "board_state.touhou_little_maid.gomoku.square",
+      "author": "欢乐小游戏"
+    },
+    "data": "eNpjYKAzYEThMDLg4Q4RgOJqDC_Q3EsACkQACw, 10, 6_8",
+    "weight": 1
+  },
+  {
+    "tags": ["library"],
+    "display": {
+      // 床阵
+      "description": "board_state.touhou_little_maid.gomoku.bed",
+      "author": "欢乐小游戏"
+    },
+    "data": "eNpjYBhIwMjIiCbAMMQBIwaPkcaeAwAISgAJ, 8, 9_4",
+    "weight": 1
+  }
+]

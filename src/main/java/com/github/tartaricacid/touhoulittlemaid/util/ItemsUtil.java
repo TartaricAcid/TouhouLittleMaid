@@ -13,10 +13,10 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.wrapper.PlayerMainInvWrapper;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -112,18 +112,35 @@ public final class ItemsUtil {
 
     /**
      * 获取女仆饰品栏的饰品数据
+     * <p>
+     * 此方法为遍历查找，性能为 O(n)，不适合频繁调用
      *
      * @return 如果没找到，返回 -1
      */
     public static int getBaubleSlotInMaid(EntityMaid maid, IMaidBauble bauble) {
         BaubleItemHandler handler = maid.getMaidBauble();
-        for (int i = 0; i < handler.getSlots(); i++) {
-            IMaidBauble baubleIn = handler.getBaubleInSlot(i);
-            if (baubleIn == bauble) {
-                return i;
-            }
-        }
-        return -1;
+        return handler.getBaubleSlot(bauble);
+    }
+
+    /**
+     * 女仆是否拥有该饰品物品
+     * <p>
+     * 此方法采用了缓存机制，性能为 O(1)，适合频繁调用
+     */
+    @ApiStatus.AvailableSince("1.4.3")
+    public static boolean hasBaubleItemInMaid(EntityMaid maid, Item bauble) {
+        BaubleItemHandler handler = maid.getMaidBauble();
+        return handler.containsItem(bauble);
+    }
+
+    /**
+     * 女仆是否拥有该饰品物品
+     * <p>
+     * 此方法采用了缓存机制，性能为 O(1)，适合频繁调用
+     */
+    @ApiStatus.AvailableSince("1.4.3")
+    public static boolean hasBaubleStackInMaid(EntityMaid maid, ItemStack bauble) {
+        return hasBaubleItemInMaid(maid, bauble.getItem());
     }
 
     /**
@@ -158,10 +175,9 @@ public final class ItemsUtil {
      * 判断玩家主背包（包括快捷栏）能否插入物品
      *
      * @param player 要检查的玩家
-     *
      * @return 如果背包已满返回true，否则返回false
      */
-    public static boolean canItemInsert(Player player,ItemStack testStack) {
+    public static boolean canItemInsert(Player player, ItemStack testStack) {
         // 获取玩家主背包的物品处理器（与giveItemToPlayer使用相同的包装器）
         IItemHandler inventory = new PlayerMainInvWrapper(player.getInventory());
 

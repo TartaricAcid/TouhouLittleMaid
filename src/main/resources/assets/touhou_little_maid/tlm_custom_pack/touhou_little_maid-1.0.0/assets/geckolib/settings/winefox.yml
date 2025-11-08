@@ -12,7 +12,9 @@ meta:
     - geckolib:winefox_hanfu
     - geckolib:winefox_new_year
     - geckolib:winefox_jk
-    - new_year_model_pack:wine_fox
+    - geckolib:winefox_kongfu
+    - geckolib:winefox_magical
+    - geckolib:winefox_salesperson
 
 # All lines starting with # are comments, ${xxx} will be replaced by the program
 # 所有以 # 开头的行是注释，${xxx} 为程序到时候会替换的字符串
