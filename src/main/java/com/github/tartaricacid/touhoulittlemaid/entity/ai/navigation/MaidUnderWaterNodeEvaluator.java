@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * 水下的寻路节点计算器，修改了起点计算方法
  */
-public class MaidUnderWaterNodeEvaluator extends AmphibiousNodeEvaluator implements ICachedEvaluator, INodeCacheEvaluator {
+public class MaidUnderWaterNodeEvaluator extends AmphibiousNodeEvaluator implements ICachedEvaluator {
     protected CenterOffsetBlockPosSet vis;
 
     public MaidUnderWaterNodeEvaluator() {
@@ -95,10 +95,5 @@ public class MaidUnderWaterNodeEvaluator extends AmphibiousNodeEvaluator impleme
             return null;
         }
         return super.findAcceptedNode(pX, pY, pZ, verticalDeltaLimit, nodeFloorLevel, direction, pathType);
-    }
-
-    @Override
-    public Node createNode(int x, int y, int z) {
-        return getNode(x, y, z);
     }
 }
