@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai.navigation;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -123,10 +124,16 @@ public class MaidNodeEvaluator extends WalkNodeEvaluator {
         } else {
             pathType = WalkNodeEvaluator.getBlockPathTypeRaw(level, pos);
             // 判断目标方块的碰撞高度。有些半透明方块拥有超过 0.5（台阶）的高度，此时女仆是不能从其中穿过的，需要将其视为不可通行方块
+            // 修复: 因为部分方块碰撞箱再中心，但小于和等于0.5格，判定女仆可以通过但实际不跳跃无法通过
             if (!heightCheckExclusions(pathType)) {
                 VoxelShape shape = blockState.getCollisionShape(level, pos);
-                if (pathType != BlockPathTypes.BLOCKED && shape.max(Direction.Axis.Y) - shape.min(Direction.Axis.Y) > 0.5) {
-                    pathType = BlockPathTypes.BLOCKED;
+                double height = shape.max(Direction.Axis.Y) - shape.min(Direction.Axis.Y);
+                if (pathType != BlockPathTypes.BLOCKED) {
+                    if (height > 0.5) {
+                        pathType = BlockPathTypes.BLOCKED;
+                    } else if (height <= 0.5 && (shape.min(Direction.Axis.Y) > 0 || shape.max(Direction.Axis.Y) < 1)) {
+                        pathType = BlockPathTypes.BLOCKED;
+                    }
                 }
             }
         }
