@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.kubejs.event;
 
 import com.github.tartaricacid.touhoulittlemaid.compat.kubejs.event.common.*;
-import dev.latvian.mods.kubejs.bindings.event.ItemEvents;
+import dev.latvian.mods.kubejs.plugin.builtin.event.ItemEvents;
 import dev.latvian.mods.kubejs.event.EventGroup;
 import dev.latvian.mods.kubejs.event.EventHandler;
 import dev.latvian.mods.kubejs.event.EventTargetType;
