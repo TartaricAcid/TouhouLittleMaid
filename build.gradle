@@ -238,7 +238,7 @@ dependencies {
 
     // KubeJS
     compileOnly "dev.latvian.mods:rhino:2101.2.7-build.72"
-    compileOnly "dev.latvian.mods:kubejs-neoforge:2101.7.1-build.181"
+    compileOnly "dev.latvian.mods:kubejs-neoforge:2101.7.2-build.309"
     // runtimeOnly "com.github.rtyley:animated-gif-lib-for-java:animated-gif-lib-1.7"
 
     compileOnly "maven.modrinth:sodium:mc1.21.1-0.6.13-neoforge"
