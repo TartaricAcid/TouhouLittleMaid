@@ -306,6 +306,8 @@
   "gui.touhou_little_maid.button.maid_ai_chat_config.edit_custom_setting.export.success": "Il file è stato esportato con successo con il seguente percorso: %s",
   "gui.touhou_little_maid.button.task_info.desc": " -§a Usato per visualizzare le semplici informazioni dell'attività",
   "gui.touhou_little_maid.button.global_config": "Configurazioni Globali",
+  "gui.touhou_little_maid.button.global_config.desc": "-§a Clicca per navigare alla schermata di configurazione della mod",
+  "gui.touhou_little_maid.name_tag.edit_box": "Casella di Modifica Name Tag Box",
   "message.touhou_little_maid.change_model.disabled": "Il cambio del modello è disabilitato.",
   "message.touhou_little_maid.extinguisher.player_cannot_use": "La tua mancanza di conoscenza non sa come utilizzare questo oggetto",
   "message.touhou_little_maid.altar.not_enough_power": "Non hai abbastanza energia.",
