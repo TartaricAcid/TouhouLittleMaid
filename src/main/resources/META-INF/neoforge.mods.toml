@@ -23,16 +23,23 @@ issueTrackerURL = "https://github.com/TartaricAcid/TouhouLittleMaid/issues"
 [modproperties.touhou_little_maid]
     catalogueItemIcon = "touhou_little_maid:hakurei_gohei"
 
-[[dependencies.${mod_id}]]
+[[dependencies."${mod_id}"]]
     modId = "neoforge"
     type = "required"
     versionRange = "${neo_version_range}"
     ordering = "NONE"
     side = "BOTH"
 
-[[dependencies.${mod_id}]]
+[[dependencies."${mod_id}"]]
     modId = "minecraft"
     type = "required"
     versionRange = "${minecraft_version_range}"
+    ordering = "NONE"
+    side = "BOTH"
+
+[[dependencies."${mod_id}"]]
+    modId = "kubejs"
+    type="optional"
+    versionRange = "[2101.7.2-build.309,)"
     ordering = "NONE"
     side = "BOTH"
