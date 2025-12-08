@@ -71,9 +71,9 @@ public class MaidREIClientPlugin implements REIClientPlugin {
 
     @Override
     public void registerTransferHandlers(TransferHandlerRegistry registry) {
-        registry.register(new BackpackTransferHandler(CraftingTableBackpackContainer.class, BuiltinPlugin.CRAFTING, 71, 9, 0, 70));
-        registry.register(new BackpackTransferHandler(FurnaceBackpackContainer.class, BuiltinPlugin.SMELTING, 70, 1, 0, 70));
-        registry.register(new BackpackTransferHandler(FurnaceBackpackContainer.class, BuiltinPlugin.FUEL, 71, 1, 0, 70));
+        registry.register(new BackpackTransferHandler(CraftingTableBackpackContainer.class, BuiltinPlugin.CRAFTING, 62, 9, 0, 61));
+        registry.register(new BackpackTransferHandler(FurnaceBackpackContainer.class, BuiltinPlugin.SMELTING, 61, 1, 0, 61));
+        registry.register(new BackpackTransferHandler(FurnaceBackpackContainer.class, BuiltinPlugin.FUEL, 62, 1, 0, 61));
     }
 
     @Override

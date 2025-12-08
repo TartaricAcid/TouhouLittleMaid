@@ -49,9 +49,9 @@ public class MaidPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
-        registration.addRecipeTransferHandler(CraftingTableBackpackContainer.class, CraftingTableBackpackContainer.TYPE, RecipeTypes.CRAFTING, 71, 9, 0, 70);
-        registration.addRecipeTransferHandler(FurnaceBackpackContainer.class, FurnaceBackpackContainer.TYPE, RecipeTypes.SMELTING, 70, 1, 0, 70);
-        registration.addRecipeTransferHandler(FurnaceBackpackContainer.class, FurnaceBackpackContainer.TYPE, RecipeTypes.FUELING, 71, 1, 0, 70);
+        registration.addRecipeTransferHandler(CraftingTableBackpackContainer.class, CraftingTableBackpackContainer.TYPE, RecipeTypes.CRAFTING, 62, 9, 0, 61);
+        registration.addRecipeTransferHandler(FurnaceBackpackContainer.class, FurnaceBackpackContainer.TYPE, RecipeTypes.SMELTING, 61, 1, 0, 61);
+        registration.addRecipeTransferHandler(FurnaceBackpackContainer.class, FurnaceBackpackContainer.TYPE, RecipeTypes.FUELING, 62, 1, 0, 61);
     }
 
     @Override

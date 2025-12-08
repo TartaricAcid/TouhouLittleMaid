@@ -149,6 +149,13 @@ repositories {
             includeGroup "dev.engine-room.flywheel"
         }
     }
+    maven {
+        name = "TerraformersMC"
+        url = "https://maven.terraformersmc.com/"
+        content {
+            includeGroup "dev.emi"
+        }
+    }
 }
 
 dependencies {
@@ -183,9 +190,8 @@ dependencies {
     compileOnly fg.deobf("libs:RoughlyEnoughItems-forge:12.1.725")
 
     // emi
-    // Forge (see below block as well if you use Forge Gradle)
-    compileOnly fg.deobf("libs:emi-forge:1.1.6+1.20.1:api")
-    compileOnly fg.deobf("libs:emi-forge:1.1.6+1.20.1")
+    compileOnly fg.deobf("dev.emi:emi-forge:1.1.22+1.20.1:api")
+    compileOnly fg.deobf("dev.emi:emi-forge:1.1.22+1.20.1")
 
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.20.1-84-FORGE")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.20.1-84-FORGE")

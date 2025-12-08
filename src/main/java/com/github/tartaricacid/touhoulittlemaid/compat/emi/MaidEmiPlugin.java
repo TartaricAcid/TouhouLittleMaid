@@ -61,9 +61,9 @@ public class MaidEmiPlugin implements EmiPlugin {
     }
 
     private void registerRecipeHandlers(EmiRegistry registry) {
-        registry.addRecipeHandler(CraftingTableBackpackContainer.TYPE, new BackpackRecipeHandler<>(VanillaEmiRecipeCategories.CRAFTING, 71, 9, 0, 70));
-        registry.addRecipeHandler(FurnaceBackpackContainer.TYPE, new BackpackRecipeHandler<>(VanillaEmiRecipeCategories.SMELTING, 70, 1, 0, 70));
-        registry.addRecipeHandler(FurnaceBackpackContainer.TYPE, new BackpackRecipeHandler<>(VanillaEmiRecipeCategories.FUEL, 71, 1, 0, 70));
+        registry.addRecipeHandler(CraftingTableBackpackContainer.TYPE, new BackpackRecipeHandler<>(VanillaEmiRecipeCategories.CRAFTING, 62, 9, 0, 61));
+        registry.addRecipeHandler(FurnaceBackpackContainer.TYPE, new BackpackRecipeHandler<>(VanillaEmiRecipeCategories.SMELTING, 61, 1, 0, 61));
+        registry.addRecipeHandler(FurnaceBackpackContainer.TYPE, new BackpackRecipeHandler<>(VanillaEmiRecipeCategories.FUEL, 62, 1, 0, 61));
     }
 
     private void registerExclusionArea(EmiRegistry registry) {
