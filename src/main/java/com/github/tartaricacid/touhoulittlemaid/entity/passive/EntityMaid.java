@@ -1017,7 +1017,6 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             this.clearFire();
             this.setTicksFrozen(0);
             this.setSharedFlagOnFire(false);
-            this.getCombatTracker().recheckStatus();
             this.removeAllEffects();
             // 最后父类方法
             super.die(cause);
