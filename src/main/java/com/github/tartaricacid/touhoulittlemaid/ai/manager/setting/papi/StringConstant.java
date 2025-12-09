@@ -44,7 +44,9 @@ public class StringConstant {
             - My current health: ${owner_healthy}
             
             ## Function Call Instructions
-            - If I haven't provided enough information to call a function, please continue to ask questions to ensure enough information is collected.
+            - If I express that I want you to perform an action, do something or change something, first try to find and call the most relevant function from the available tools to fulfill the request.
+            - If no suitable function exists to accomplish the request, ask concise follow-up questions to confirm my intent or gather what is missing, rather than replying with text alone.
+            - If I haven't provided enough information to call a function, continue to ask targeted questions until enough information is collected.
             - Decide which function to call based on the conversation and system information.
             - When continuing to ask questions or providing summary content, please also follow the output format requirements below.
             
