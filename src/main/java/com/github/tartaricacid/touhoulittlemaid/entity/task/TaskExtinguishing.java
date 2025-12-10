@@ -15,6 +15,8 @@ import net.minecraft.world.entity.ai.behavior.BehaviorControl;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
+import com.github.tartaricacid.touhoulittlemaid.api.task.FunctionCallSwitchResult;
+import com.github.tartaricacid.touhoulittlemaid.util.TaskEquipUtil;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
@@ -55,5 +57,16 @@ public class TaskExtinguishing implements IMaidTask {
 
     private boolean hasExtinguisher(EntityMaid maid) {
         return maid.getMainHandItem().getItem() == InitItems.EXTINGUISHER.get();
+    }
+
+    @Override
+    public FunctionCallSwitchResult onFunctionCallSwitch(EntityMaid maid) {
+        if (hasExtinguisher(maid)) {
+            return FunctionCallSwitchResult.NO_CHANGE;
+        }
+        if (TaskEquipUtil.tryEquipFromBackpack(maid, item -> item.getItem() == InitItems.EXTINGUISHER.get())) {
+            return FunctionCallSwitchResult.OK;
+        }
+        return FunctionCallSwitchResult.MISSING_REQUIRED_ITEM;
     }
 }

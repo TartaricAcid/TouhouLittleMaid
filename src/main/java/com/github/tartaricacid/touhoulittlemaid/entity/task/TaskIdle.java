@@ -21,6 +21,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 
 import javax.annotation.Nullable;
+import com.github.tartaricacid.touhoulittlemaid.api.task.FunctionCallSwitchResult;
+import com.github.tartaricacid.touhoulittlemaid.util.TaskEquipUtil;
 import java.util.List;
 import java.util.Optional;
 
@@ -71,5 +73,11 @@ public class TaskIdle implements IMaidTask {
             return maid.getOwner().equals(maidOther.getOwner());
         }
         return false;
+    }
+
+    @Override
+    public FunctionCallSwitchResult onFunctionCallSwitch(EntityMaid maid) {
+        boolean moved = TaskEquipUtil.putMainHandBack(maid);
+        return moved ? FunctionCallSwitchResult.OK : FunctionCallSwitchResult.NO_CHANGE;
     }
 }

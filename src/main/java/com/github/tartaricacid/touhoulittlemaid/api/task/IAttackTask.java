@@ -9,6 +9,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitTaskData;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.AbstractMaidContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.task.AttackTaskConfigContainer;
+import com.github.tartaricacid.touhoulittlemaid.util.TaskEquipUtil;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -111,6 +112,20 @@ public interface IAttackTask extends IMaidTask {
      */
     default boolean isWeapon(EntityMaid maid, ItemStack stack) {
         return false;
+    }
+
+    /**
+     * 攻击类任务在 Function Call 触发的默认切换逻辑：确保主手持有合适的武器。
+     */
+    @Override
+    default FunctionCallSwitchResult onFunctionCallSwitch(EntityMaid maid) {
+        if (isWeapon(maid, maid.getMainHandItem())) {
+            return FunctionCallSwitchResult.NO_CHANGE;
+        }
+        if (TaskEquipUtil.tryEquipFromBackpack(maid, item -> isWeapon(maid, item))) {
+            return FunctionCallSwitchResult.OK;
+        }
+        return FunctionCallSwitchResult.MISSING_REQUIRED_ITEM;
     }
 
     @Override

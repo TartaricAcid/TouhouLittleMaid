@@ -6,25 +6,14 @@ import com.github.tartaricacid.touhoulittlemaid.ai.service.function.response.Too
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.ObjectParameter;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.Parameter;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.StringParameter;
-import com.github.tartaricacid.touhoulittlemaid.api.task.IAttackTask;
+import com.github.tartaricacid.touhoulittlemaid.api.task.FunctionCallSwitchResult;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskExtinguishing;
-import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskFishing;
-import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskHoney;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
-import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskShears;
-import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
-import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.neoforged.neoforge.common.ItemAbilities;
-import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
-import net.neoforged.neoforge.items.wrapper.RangedWrapper;
+ 
 import java.util.Map;
 import java.util.Optional;
 
@@ -42,11 +31,8 @@ public class SwitchAttackTaskFunction implements IFunctionCall<SwitchAttackTaskF
     private static final String SUCCESS = "Successfully switched to %s task";
     private static final String FAIL = "Switch failed and there is no task named %s";
     private static final String NO_CHANGE = "You're currently in %s task and don't need to switch";
-    private static final String MISSING_WEAPON = "Successfully switched to %s task, but the corresponding weapon is missing";
-    private static final String MISSING_ROD = "Successfully switched to %s task, but the corresponding rod is missing";
-    private static final String MISSING_SHEARS = "Successfully switched to %s task, but the corresponding shears is missing";
-    private static final String MISSING_SHEARS_AND_BOTTLE = "Successfully switched to %s task, but both shears and bottles are missing";
-    private static final String MISSING_EXTINGUISHER = "Successfully switched to %s task, but the extinguisher is missing";
+    private static final String MISSING_REQUIRED = "Successfully switched to %s task, but required item is missing";
+    private static final String PARTIAL = "Successfully switched to %s task, but some requirements are missing";
 
     @Override
     public String getId() {
@@ -88,105 +74,24 @@ public class SwitchAttackTaskFunction implements IFunctionCall<SwitchAttackTaskF
 
         IMaidTask task = optional.get();
         IMaidTask currentTask = maid.getTask();
-        RangedWrapper backpack = maid.getAvailableBackpackInv();
 
-        // 空闲模式：收起主手物品
-        if (task == TaskManager.getIdleTask()) {
-            putItemBack(maid, backpack);
-            maid.setTask(task);
-            return new ToolResponse(SUCCESS.formatted(id));
+        if (task == currentTask) {
+            FunctionCallSwitchResult switchResult = task.onFunctionCallSwitch(maid);
+            return switch (switchResult) {
+                case NO_CHANGE -> new ToolResponse(NO_CHANGE.formatted(id));
+                case MISSING_REQUIRED_ITEM -> new ToolResponse(MISSING_REQUIRED.formatted(id));
+                case PARTIAL_OK -> new ToolResponse(PARTIAL.formatted(id));
+                case OK -> new ToolResponse(SUCCESS.formatted(id));
+            };
         }
 
-        // 战斗类任务：尝试拿到合适武器
-        if (task instanceof IAttackTask attackTask) {
-            if (attackTask == currentTask && attackTask.isWeapon(maid, maid.getMainHandItem())) {
-                return new ToolResponse(NO_CHANGE.formatted(id));
-            }
-            maid.setTask(task);
-            if (tryEquipFromBackpack(maid, backpack, item -> attackTask.isWeapon(maid, item))) {
-                return new ToolResponse(SUCCESS.formatted(id));
-            }
-            return new ToolResponse(MISSING_WEAPON.formatted(id));
-        }
-
-        // 钓鱼任务：尝试拿出钓鱼竿
-        if (task instanceof TaskFishing) {
-            maid.setTask(task);
-            if (tryEquipFromBackpack(maid, backpack, item -> item.canPerformAction(ItemAbilities.FISHING_ROD_CAST))) {
-                return new ToolResponse(SUCCESS.formatted(id));
-            }
-            return new ToolResponse(MISSING_ROD.formatted(id));
-        }
-
-        // 剪羊毛：尝试把剪刀放到主手
-        if (task instanceof TaskShears) {
-            maid.setTask(task);
-            if (tryEquipFromBackpack(maid, backpack, item -> item.canPerformAction(ItemAbilities.SHEARS_HARVEST))) {
-                return new ToolResponse(SUCCESS.formatted(id));
-            }
-            return new ToolResponse(MISSING_SHEARS.formatted(id));
-        }
-
-        // 蜂巢采集：优先尝试把剪刀放到主手；没有剪刀则检查是否有玻璃瓶
-        if (task instanceof TaskHoney) {
-            maid.setTask(task);
-            // 先尝试剪刀（采蜜脾）
-            if (tryEquipFromBackpack(maid, backpack, item -> item.canPerformAction(ItemAbilities.SHEARS_HARVEST))) {
-                return new ToolResponse(SUCCESS.formatted(id));
-            }
-            // 无剪刀则检查是否有玻璃瓶（采蜂蜜瓶无需主手）
-            CombinedInvWrapper available = maid.getAvailableInv(false);
-            if (ItemsUtil.isStackIn(available, stack -> stack.is(Items.GLASS_BOTTLE))) {
-                return new ToolResponse(SUCCESS.formatted(id) + " (no shears, will use bottles)");
-            }
-            return new ToolResponse(MISSING_SHEARS_AND_BOTTLE.formatted(id));
-        }
-
-        // 灭火：尝试把灭火器放到主手
-        if (task instanceof TaskExtinguishing) {
-            maid.setTask(task);
-            if (tryEquipFromBackpack(maid, backpack, item -> item.getItem() == InitItems.EXTINGUISHER.get())) {
-                return new ToolResponse(SUCCESS.formatted(id));
-            }
-            return new ToolResponse(MISSING_EXTINGUISHER.formatted(id));
-        }
-
-        // 其他生活类任务：仅切换，不处理物品（各任务会自检）
         maid.setTask(task);
-        return new ToolResponse(SUCCESS.formatted(id));
-    }
-
-    private void putItemBack(EntityMaid maid, RangedWrapper backpack) {
-        if (maid.getMainHandItem().isEmpty()) {
-            return;
-        }
-        ItemStack mainHandItem = maid.getMainHandItem();
-        for (int i = 0; i < backpack.getSlots(); i++) {
-            ItemStack stackInSlot = backpack.getStackInSlot(i);
-            if (stackInSlot.isEmpty()) {
-                backpack.setStackInSlot(i, mainHandItem);
-                maid.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
-                return;
-            }
-        }
-    }
-
-    private boolean tryEquipFromBackpack(EntityMaid maid, RangedWrapper backpack, java.util.function.Predicate<ItemStack> predicate) {
-        if (predicate.test(maid.getMainHandItem())) {
-            return true;
-        }
-        int slot = ItemsUtil.findStackSlot(backpack, predicate::test);
-        if (slot >= 0) {
-            int count = backpack.getStackInSlot(slot).getCount();
-            ItemStack output = backpack.extractItem(slot, count, false);
-            if (!maid.getMainHandItem().isEmpty()) {
-                ItemStack mainhand = maid.getMainHandItem();
-                backpack.setStackInSlot(slot, mainhand);
-            }
-            maid.setItemInHand(InteractionHand.MAIN_HAND, output);
-            return true;
-        }
-        return false;
+        FunctionCallSwitchResult switchResult = task.onFunctionCallSwitch(maid);
+        return switch (switchResult) {
+            case NO_CHANGE, OK -> new ToolResponse(SUCCESS.formatted(id));
+            case MISSING_REQUIRED_ITEM -> new ToolResponse(MISSING_REQUIRED.formatted(id));
+            case PARTIAL_OK -> new ToolResponse(PARTIAL.formatted(id));
+        };
     }
 
     public record Result(String id) {

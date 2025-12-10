@@ -15,6 +15,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 import javax.annotation.Nullable;
+import com.github.tartaricacid.touhoulittlemaid.api.task.FunctionCallSwitchResult;
+import com.github.tartaricacid.touhoulittlemaid.util.TaskEquipUtil;
+import net.neoforged.neoforge.common.ItemAbilities;
 import java.util.List;
 
 public class TaskShears implements IMaidTask {
@@ -39,5 +42,16 @@ public class TaskShears implements IMaidTask {
     @Override
     public List<Pair<Integer, BehaviorControl<? super EntityMaid>>> createBrainTasks(EntityMaid maid) {
         return Lists.newArrayList(Pair.of(5, new MaidShearTask(0.6f)));
+    }
+
+    @Override
+    public FunctionCallSwitchResult onFunctionCallSwitch(EntityMaid maid) {
+        if (maid.getMainHandItem().canPerformAction(ItemAbilities.SHEARS_HARVEST)) {
+            return FunctionCallSwitchResult.NO_CHANGE;
+        }
+        if (TaskEquipUtil.tryEquipFromBackpack(maid, item -> item.canPerformAction(ItemAbilities.SHEARS_HARVEST))) {
+            return FunctionCallSwitchResult.OK;
+        }
+        return FunctionCallSwitchResult.MISSING_REQUIRED_ITEM;
     }
 }

@@ -14,6 +14,8 @@ import net.minecraft.world.entity.ai.behavior.BehaviorControl;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.common.ItemAbilities;
+import com.github.tartaricacid.touhoulittlemaid.api.task.FunctionCallSwitchResult;
+import com.github.tartaricacid.touhoulittlemaid.util.TaskEquipUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
@@ -57,5 +59,16 @@ public class TaskFishing implements IMaidTask {
     @Override
     public boolean workPointTask(EntityMaid maid) {
         return true;
+    }
+
+    @Override
+    public FunctionCallSwitchResult onFunctionCallSwitch(EntityMaid maid) {
+        if (maid.getMainHandItem().canPerformAction(ItemAbilities.FISHING_ROD_CAST)) {
+            return FunctionCallSwitchResult.NO_CHANGE;
+        }
+        if (TaskEquipUtil.tryEquipFromBackpack(maid, item -> item.canPerformAction(ItemAbilities.FISHING_ROD_CAST))) {
+            return FunctionCallSwitchResult.OK;
+        }
+        return FunctionCallSwitchResult.MISSING_REQUIRED_ITEM;
     }
 }
