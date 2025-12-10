@@ -1,1 +1,13 @@
-{}
+{
+    "maid_pack.minecraft_15th.name": "Modelos de Minecraft",
+    "maid_pack.minecraft_15th.desc": "Varios modelos relacionados con Minecraft",
+    "model.minecraft_15th.alex.name": "Alex",
+    "model.minecraft_15th.alex.desc": "§7El modelo de Alex de Minecraft, pero en forma de una maid",
+    "model.minecraft_15th.rana.name": "Rana",
+    "model.minecraft_15th.rana.desc": "§7Rana era un mob pasivo que existía para la mayoría de Java Edition Indev 0.31",
+    "model.minecraft_15th.minecraft_movie.desc": "§7Debutado en Una Película de Minecraft",
+    "model.minecraft_15th.natalie.name": "Natalie",
+    "model.minecraft_15th.natalie.desc": "§7Retratada por Emma Myers",
+    "model.minecraft_15th.dawn.name": "Dawn",
+    "model.minecraft_15th.dawn.desc": "§7Retratada por Danielle Brooks"
+}
