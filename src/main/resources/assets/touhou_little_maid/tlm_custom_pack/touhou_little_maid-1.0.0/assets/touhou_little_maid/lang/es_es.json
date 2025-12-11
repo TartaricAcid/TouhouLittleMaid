@@ -307,5 +307,8 @@
     "model.touhou_little_maid.nareko_michigami.desc": "§7Dousojin confinado de terreno sagrado",
     "model.touhou_little_maid.chimi_houjuu.name": "Chimi Houjuu",
     "model.touhou_little_maid.chimi_houjuu.desc": "§7Bestia rebelde no identificada",
-    "model.touhou_little_maid.ubame_chirizuka.name": "Ubame Chirizuka"
+    "model.touhou_little_maid.ubame_chirizuka.name": "Ubame Chirizuka",
+    "model.touhou_little_maid.ubame_chirizuka.desc": "§7Jefa Yamanba de la vivienda del santuario",
+    "model.touhou_little_maid.legendary_pig_man.name": "Hombre Cerdo Legendario",
+    "model.touhou_little_maid.head_of_academycraft.name": "Líder de AcademyCraft"
 }
