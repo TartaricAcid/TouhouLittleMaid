@@ -1,5 +1,5 @@
 {
-  "ai.touhou_little_maid.chat.llm.empty": "Không có trang web model ngôn ngữ lớn (LLM) nào khả dụng, vui lòng kiểm tra xem trang web liên quan đã được cấu hình hay chưa",
+  "ai.touhou_little_maid.chat.llm.empty": "Không có trang web mô hình ngôn ngữ lớn (LLM) nào khả dụng, vui lòng kiểm tra xem trang web liên quan đã được cấu hình hay chưa",
   "ai.touhou_little_maid.chat.tts.empty": "Không có trang web chuyển văn bản thành giọng nói (TTS) nào khả dụng, vui lòng kiểm tra xem trang web liên quan đã được cấu hình hay chưa",
   "ai.touhou_little_maid.chat.stt.empty": "Không có trang web chuyển giọng nói thành văn bản (STT) nào khả dụng, vui lòng kiểm tra xem trang web liên quan đã được cấu hình hay chưa",
   "ai.touhou_little_maid.chat.llm.request_sending_error": "Lỗi Gửi Yêu Cầu LLM: %s",
