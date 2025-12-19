@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.papi;
 
 /**
- * 这些是角色无关的设定，统一用中文硬编码
+ * 这些是角色无关的设定，统一用英文硬编码
  */
 public class StringConstant {
     public static final String OVERWORLD = "Overworld";
@@ -44,7 +44,9 @@ public class StringConstant {
             - My current health: ${owner_healthy}
             
             ## Function Call Instructions
-            - If I haven't provided enough information to call a function, please continue to ask questions to ensure enough information is collected.
+            - If I express that I want you to perform an action, do something or change something, first try to find and call the most relevant function from the available tools to fulfill the request.
+            - If no suitable function exists to accomplish the request, ask concise follow-up questions to confirm my intent or gather what is missing, rather than replying with text alone.
+            - If I haven't provided enough information to call a function, continue to ask targeted questions until enough information is collected.
             - Decide which function to call based on the conversation and system information.
             - When continuing to ask questions or providing summary content, please also follow the output format requirements below.
             

@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.task;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.task.FunctionCallSwitchResult;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidMilkTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -51,5 +52,13 @@ public class TaskMilk implements IMaidTask {
 
     private boolean hasBucket(EntityMaid maid) {
         return ItemsUtil.isStackIn(maid.getAvailableInv(true), stack -> stack.getItem() == Items.BUCKET);
+    }
+
+    @Override
+    public FunctionCallSwitchResult onFunctionCallSwitch(EntityMaid maid) {
+        if (hasBucket(maid)) {
+            return FunctionCallSwitchResult.NO_CHANGE;
+        }
+        return FunctionCallSwitchResult.MISSING_REQUIRED_ITEM;
     }
 }

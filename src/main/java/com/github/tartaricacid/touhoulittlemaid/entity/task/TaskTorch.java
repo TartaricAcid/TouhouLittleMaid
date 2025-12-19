@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.task;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.task.FunctionCallSwitchResult;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidTorchMoveTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidTorchPlaceTask;
@@ -54,5 +55,13 @@ public class TaskTorch implements IMaidTask {
 
     private boolean hasTorch(EntityMaid maid) {
         return ItemsUtil.isStackIn(maid.getAvailableInv(false), stack -> stack.getItem() == Items.TORCH);
+    }
+
+    @Override
+    public FunctionCallSwitchResult onFunctionCallSwitch(EntityMaid maid) {
+        if (hasTorch(maid)) {
+            return FunctionCallSwitchResult.NO_CHANGE;
+        }
+        return FunctionCallSwitchResult.MISSING_REQUIRED_ITEM;
     }
 }

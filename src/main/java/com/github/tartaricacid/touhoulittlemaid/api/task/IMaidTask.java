@@ -245,4 +245,17 @@ public interface IMaidTask {
         // 默认依据女仆的工作范围划定搜索范围
         return maid.getRestrictRadius();
     }
+
+    /**
+     * 在通过 Function Call 切换到该任务时触发的钩子。
+     * 任务可在此准备主手物品或执行其他快速调整。
+     * 默认不做任何处理并返回 OK。
+     *
+     * @param maid 女仆实体
+     * @return 函数调用场景下的切换结果
+     */
+    @ApiStatus.AvailableSince("1.4.7")
+    default FunctionCallSwitchResult onFunctionCallSwitch(EntityMaid maid) {
+        return FunctionCallSwitchResult.OK;
+    }
 }

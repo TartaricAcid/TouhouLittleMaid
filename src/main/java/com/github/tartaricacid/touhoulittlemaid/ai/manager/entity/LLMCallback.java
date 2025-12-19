@@ -18,6 +18,8 @@ import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai.response.T
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSSite;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.AIConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.mojang.serialization.JsonOps;
@@ -32,6 +34,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.net.http.HttpRequest;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public class LLMCallback implements ResponseCallback<ResponseChat> {
     private static final int MAX_CALL_COUNT = 3;
@@ -110,11 +113,26 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
             // 说明是 Function Call 触发的调用，此时不需要重复缓存用户输入部分
             chatManager.addUserHistory(message);
         }
+
         // 缓存 Function Call 的调用记录
         chatManager.addAssistantHistory(StringUtils.EMPTY, choice.getToolCalls());
         messages.add(LLMMessage.assistantChat(maid, choice.getContent(), choice.getToolCalls()));
-        // 开始 Function Call
-        choice.getToolCalls().forEach(toolCall -> {
+
+        // 开始 Function Call：对重复的 tool_call 进行去重后再执行
+        List<ToolCall> toolCalls = choice.getToolCalls() == null ? List.of() : choice.getToolCalls();
+        Set<String> seen = Sets.newHashSet();
+        List<ToolCall> deduped = Lists.newArrayList();
+        for (ToolCall tc : toolCalls) {
+            FunctionToolCall f = tc.getFunction();
+            String name = f != null ? f.getName() : "unknown";
+            String arguments = f != null ? f.getArguments() : "";
+            String key = name + "|" + arguments;
+            if (seen.add(key)) {
+                deduped.add(tc);
+            }
+        }
+
+        deduped.forEach(toolCall -> {
             try {
                 this.onSingleCall(messages, config, client, toolCall);
             } catch (JsonSyntaxException exception) {

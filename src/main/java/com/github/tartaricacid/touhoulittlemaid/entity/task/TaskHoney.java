@@ -1,12 +1,14 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.task;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.task.FunctionCallSwitchResult;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidCollectHoneyTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.SoundUtil;
+import com.github.tartaricacid.touhoulittlemaid.util.TaskEquipUtil;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.resources.ResourceLocation;
@@ -56,5 +58,21 @@ public class TaskHoney implements IMaidTask {
 
     private boolean hasShears(EntityMaid maid) {
         return maid.getMainHandItem().canPerformAction(ToolActions.SHEARS_HARVEST);
+    }
+
+    @Override
+    public FunctionCallSwitchResult onFunctionCallSwitch(EntityMaid maid) {
+        // 优先将剪刀放入主手
+        if (hasShears(maid)) {
+            return FunctionCallSwitchResult.NO_CHANGE;
+        }
+        if (TaskEquipUtil.tryEquipFromBackpack(maid, item -> item.canPerformAction(ToolActions.SHEARS_HARVEST))) {
+            return FunctionCallSwitchResult.OK;
+        }
+        // 若无剪刀，但有玻璃瓶则允许仅用瓶子进行部分功能（部分成功）
+        if (hasBottle(maid)) {
+            return FunctionCallSwitchResult.PARTIAL_OK;
+        }
+        return FunctionCallSwitchResult.MISSING_REQUIRED_ITEM;
     }
 }
