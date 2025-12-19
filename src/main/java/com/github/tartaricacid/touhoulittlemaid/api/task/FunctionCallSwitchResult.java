@@ -1,8 +1,11 @@
 package com.github.tartaricacid.touhoulittlemaid.api.task;
 
+import org.jetbrains.annotations.ApiStatus;
+
 /**
  * 通过 Function Call 进行任务切换的结果枚举。
  */
+@ApiStatus.AvailableSince("1.4.7")
 public enum FunctionCallSwitchResult {
     /**
      * 切换成功且准备就绪。

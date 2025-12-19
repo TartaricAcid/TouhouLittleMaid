@@ -58,7 +58,6 @@ public class SwitchFollowStateFunction implements IFunctionCall<SwitchFollowStat
             if (!isHome) {
                 return new ToolResponse(NO_CHANGE_FOLLOW_ON);
             }
-            // Disable home mode → follow owner
             maid.restrictTo(BlockPos.ZERO, MaidConfig.MAID_NON_HOME_RANGE.get());
             maid.setHomeModeEnable(false);
             return new ToolResponse(SUCCESS_FOLLOW_ON);
@@ -66,12 +65,12 @@ public class SwitchFollowStateFunction implements IFunctionCall<SwitchFollowStat
             if (isHome) {
                 return new ToolResponse(NO_CHANGE_FOLLOW_OFF);
             }
-            // Enable home mode at current position
             maid.getSchedulePos().setHomeModeEnable(maid, maid.blockPosition());
             maid.setHomeModeEnable(true);
             return new ToolResponse(SUCCESS_FOLLOW_OFF);
         }
     }
 
-    public record Result(boolean follow) {}
+    public record Result(boolean follow) {
+    }
 }

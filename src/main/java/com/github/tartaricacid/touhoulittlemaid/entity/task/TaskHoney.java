@@ -63,14 +63,14 @@ public class TaskHoney implements IMaidTask {
     @Override
     public FunctionCallSwitchResult onFunctionCallSwitch(EntityMaid maid) {
         // 优先将剪刀放入主手
-        if (maid.getMainHandItem().canPerformAction(ItemAbilities.SHEARS_HARVEST)) {
+        if (hasShears(maid)) {
             return FunctionCallSwitchResult.NO_CHANGE;
         }
         if (TaskEquipUtil.tryEquipFromBackpack(maid, item -> item.canPerformAction(ItemAbilities.SHEARS_HARVEST))) {
             return FunctionCallSwitchResult.OK;
         }
         // 若无剪刀，但有玻璃瓶则允许仅用瓶子进行部分功能（部分成功）
-        if (ItemsUtil.isStackIn(maid.getAvailableInv(false), stack -> stack.is(Items.GLASS_BOTTLE))) {
+        if (hasBottle(maid)) {
             return FunctionCallSwitchResult.PARTIAL_OK;
         }
         return FunctionCallSwitchResult.MISSING_REQUIRED_ITEM;

@@ -1,8 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.service.function;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.function.implement.SwitchAttackTaskFunction;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.implement.SwitchFollowStateFunction;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.function.implement.SwitchWorkTaskFunction;
 import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
@@ -15,7 +15,7 @@ public class FunctionCallRegister {
 
     public static void init() {
         FunctionCallRegister register = new FunctionCallRegister();
-        register.register(new SwitchAttackTaskFunction());
+        register.register(new SwitchWorkTaskFunction());
         register.register(new SwitchFollowStateFunction());
 
         for (ILittleMaid littleMaid : TouhouLittleMaid.EXTENSIONS) {

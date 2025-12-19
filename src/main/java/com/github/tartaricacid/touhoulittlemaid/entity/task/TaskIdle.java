@@ -1,12 +1,14 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.task;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.task.FunctionCallSwitchResult;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidSnowballTargetTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidStartSnowballAttacking;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.util.SoundUtil;
+import com.github.tartaricacid.touhoulittlemaid.util.TaskEquipUtil;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
@@ -19,10 +21,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import org.jetbrains.annotations.ApiStatus;
 
 import javax.annotation.Nullable;
-import com.github.tartaricacid.touhoulittlemaid.api.task.FunctionCallSwitchResult;
-import com.github.tartaricacid.touhoulittlemaid.util.TaskEquipUtil;
 import java.util.List;
 import java.util.Optional;
 

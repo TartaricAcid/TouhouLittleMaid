@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.papi;
 
 /**
- * 这些是角色无关的设定，统一用中文硬编码
+ * 这些是角色无关的设定，统一用英文硬编码
  */
 public class StringConstant {
     public static final String OVERWORLD = "Overworld";

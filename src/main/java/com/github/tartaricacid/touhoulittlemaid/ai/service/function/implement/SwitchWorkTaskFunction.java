@@ -13,12 +13,12 @@ import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
- 
+
 import java.util.Map;
 import java.util.Optional;
 
-public class SwitchAttackTaskFunction implements IFunctionCall<SwitchAttackTaskFunction.Result> {
-    private static final String FUNCTION_ID = "switch_maid_attack_task";
+public class SwitchWorkTaskFunction implements IFunctionCall<SwitchWorkTaskFunction.Result> {
+    private static final String FUNCTION_ID = "switch_maid_work_task";
     private static final String FUNCTION_DESC = """
             Use this function to switch the maid to any available task, including non-combat tasks such as fishing, farming, torch placing, etc.
             This is the unified entry for all task changes, including combat tasks (attack, ranged_attack, crossbow_attack, danmaku_attack, trident_attack).""";

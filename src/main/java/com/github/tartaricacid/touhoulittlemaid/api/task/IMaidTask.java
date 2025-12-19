@@ -259,6 +259,7 @@ public interface IMaidTask {
      * @param maid 女仆实体
      * @return 函数调用场景下的切换结果
      */
+    @ApiStatus.AvailableSince("1.4.7")
     default FunctionCallSwitchResult onFunctionCallSwitch(EntityMaid maid) {
         return FunctionCallSwitchResult.OK;
     }

@@ -36,6 +36,7 @@ public final class TaskEquipUtil {
 
     /**
      * 将主手物品放回背包的第一个空槽位。
+     *
      * @return 若成功移动物品进背包返回 true
      */
     public static boolean putMainHandBack(EntityMaid maid) {
