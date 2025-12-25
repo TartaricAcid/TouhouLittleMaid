@@ -997,7 +997,7 @@
   "patchouli.touhou_little_maid.book.entries.maid.servant_bell.pages.0.text": "Chuông người hầu có thể triệu hồi từng maid đã ràng buộc. Nếu maid đang ở chunk không được tải, nó cũng có thể nhắc bạn biết maid đang ở đâu.$(br2)Cầm vật phẩm này và nhấn chuột phải vào maid để ràng buộc!",
   "patchouli.touhou_little_maid.book.entries.other.chisel_and_statues.name": "Dao Điêu Khắc và Tượng",
   "patchouli.touhou_little_maid.book.entries.other.chisel_and_statues.pages.0.text": "Nhấn chuột phải vào khối đất sét bằng dao điêu khắc để tạo các bức tượng kích thước khác nhau. Hiện tại hỗ trợ kích thước 1x1x1, 1x1x2, 2x2x4 và 3x3x6.",
-  "patchouli.touhou_little_maid.book.entries.other.chisel_and_statues.pages.1.text": "Người chơi tay phụ cầm ảnh maid, tay chính cầm dao điêu khắc, nhấn chuột phải vào góc dưới bên trái của cấu trúc nhiều khối, vậy là điêu khắc xong hình maid trong ảnh.",
+  "patchouli.touhou_little_maid.book.entries.other.chisel_and_statues.pages.1.text": "Tay phụ người chơi cầm ảnh maid, tay chính cầm dao điêu khắc, nhấn chuột phải vào góc dưới bên trái của cấu trúc nhiều khối, vậy là điêu khắc xong hình maid trong ảnh.",
   "patchouli.touhou_little_maid.book.entries.other.garage_kit.name": "Mô Hình",
   "patchouli.touhou_little_maid.book.entries.other.garage_kit.pages.0.text": "Tượng 1x1 được nung cháy có thể được chuyển hoá thành nó.",
   "patchouli.touhou_little_maid.book.entries.other.maid_beacon.name": "Đèn Điện Thờ",
