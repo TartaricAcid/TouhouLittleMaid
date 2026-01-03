@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.ai.service.SerializerRegister;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.FunctionCallRegister;
 import com.github.tartaricacid.touhoulittlemaid.block.multiblock.MultiBlockManager;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.HardcodedAnimationManger;
+import com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.magic.MagicCastingAnimationManager;
 import com.github.tartaricacid.touhoulittlemaid.client.overlay.MaidTipsOverlay;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRenderer;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.GeckoEntityMaidRenderer;
@@ -164,7 +165,7 @@ public interface ILittleMaid {
      * @param manager 注册管理器
      */
     @OnlyIn(Dist.CLIENT)
-    default void registerMagicCastingAnimation(com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.magic.MagicCastingAnimationManager manager) {
+    default void registerMagicCastingAnimation(MagicCastingAnimationManager manager) {
     }
 
     @VisibleForDebug

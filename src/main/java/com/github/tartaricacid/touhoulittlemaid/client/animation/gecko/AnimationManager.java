@@ -363,6 +363,9 @@ public final class AnimationManager {
         if (maid == null) {
             return PlayState.STOP;
         }
+        if (event.getController().getAnimationState() != com.github.tartaricacid.touhoulittlemaid.geckolib3.core.AnimationState.STOPPED) {
+            return PlayState.CONTINUE;
+        }
 
         // 遍历所有注册的提供器，按优先级顺序
         for (IMagicCastingAnimationProvider provider : MagicCastingAnimationManager.getProviders()) {
@@ -381,6 +384,7 @@ public final class AnimationManager {
             // 尝试获取自定义动画
             AnimationBuilder builder = provider.getAnimationBuilder(maid, state);
             if (builder != null) {
+                event.getController().markNeedsReload();
                 event.getController().setAnimation(builder);
                 return PlayState.CONTINUE;
             }

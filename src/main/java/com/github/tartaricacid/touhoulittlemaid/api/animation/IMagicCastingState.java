@@ -40,14 +40,22 @@ public interface IMagicCastingState {
          * 不在咏唱中
          */
         NONE,
+
+        /**
+         * 瞬间施法
+         */
+        INSTANT,
+
         /**
          * 开始咏唱
          */
         START,
+
         /**
          * 持续咏唱
          */
         CASTING,
+
         /**
          * 咏唱结束
          */
