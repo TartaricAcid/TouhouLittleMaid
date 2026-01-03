@@ -158,6 +158,15 @@ public interface ILittleMaid {
     default void addHardcodeAnimation(HardcodedAnimationManger manger) {
     }
 
+    /**
+     * 注册魔法咏唱动画提供器
+     *
+     * @param manager 注册管理器
+     */
+    @OnlyIn(Dist.CLIENT)
+    default void registerMagicCastingAnimation(com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.magic.MagicCastingAnimationManager manager) {
+    }
+
     @VisibleForDebug
     default Collection<? extends Function<EntityMaid, List<DebugTarget>>> getMaidDebugTargets() {
         return List.of();
