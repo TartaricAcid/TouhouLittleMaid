@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.ai.service.SerializerRegister;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.FunctionCallRegister;
 import com.github.tartaricacid.touhoulittlemaid.block.multiblock.MultiBlockManager;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.HardcodedAnimationManger;
+import com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.magic.MagicCastingAnimationManager;
 import com.github.tartaricacid.touhoulittlemaid.client.overlay.MaidTipsOverlay;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMaidRenderer;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.GeckoEntityMaidRenderer;
@@ -24,6 +25,7 @@ import net.minecraft.util.VisibleForDebug;
 import net.minecraft.world.entity.Mob;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Collection;
 import java.util.List;
@@ -156,6 +158,16 @@ public interface ILittleMaid {
      */
     @OnlyIn(Dist.CLIENT)
     default void addHardcodeAnimation(HardcodedAnimationManger manger) {
+    }
+
+    /**
+     * 注册魔法咏唱动画提供器
+     *
+     * @param manager 注册管理器
+     */
+    @OnlyIn(Dist.CLIENT)
+    @ApiStatus.AvailableSince("1.4.7")
+    default void registerMagicCastingAnimation(MagicCastingAnimationManager manager) {
     }
 
     @VisibleForDebug

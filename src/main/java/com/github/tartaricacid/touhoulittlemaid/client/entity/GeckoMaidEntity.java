@@ -57,6 +57,7 @@ public class GeckoMaidEntity<T extends Mob> extends AnimatableEntity<T> implemen
         addAnimationController(new AnimationController<>(this, "hold_mainhand", 0, manager::predicateMainhandHold));
         addAnimationController(new AnimationController<>(this, "swing", 2, manager::predicateSwing));
         addAnimationController(new AnimationController<>(this, "use", 2, manager::predicateUse));
+        addAnimationController(new AnimationController<>(this, "magic_casting", 2, manager::predicateMagicCastingAnimation));
         addAnimationController(new AnimationController<>(this, "misc", 2, manager::predicateMisc));
         addAnimationController(new AnimationController<>(this, "passenger", 2, manager::predicatePassengerAnimation));
         for (int i = 0; i < 8; i++) {

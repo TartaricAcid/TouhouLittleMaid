@@ -1,7 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.client.animation.gecko;
 
+import com.github.tartaricacid.touhoulittlemaid.api.animation.IMagicCastingAnimationProvider;
+import com.github.tartaricacid.touhoulittlemaid.api.animation.IMagicCastingState;
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.condition.*;
+import com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.magic.MagicCastingAnimationManager;
 import com.github.tartaricacid.touhoulittlemaid.client.entity.GeckoMaidEntity;
 import com.github.tartaricacid.touhoulittlemaid.compat.gun.common.GunClientUtil;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
@@ -352,6 +355,42 @@ public final class AnimationManager {
                 return playAnimation(event, name, ILoopType.EDefaultLoopTypes.LOOP);
             }
         }
+        return PlayState.STOP;
+    }
+
+    public PlayState predicateMagicCastingAnimation(AnimationEvent<GeckoMaidEntity<?>> event) {
+        IMaid maid = event.getAnimatableEntity().getMaid();
+        if (maid == null) {
+            return PlayState.STOP;
+        }
+        if (event.getController().getAnimationState() != com.github.tartaricacid.touhoulittlemaid.geckolib3.core.AnimationState.STOPPED) {
+            return PlayState.CONTINUE;
+        }
+
+        // 遍历所有注册的提供器，按优先级顺序
+        for (IMagicCastingAnimationProvider provider : MagicCastingAnimationManager.getProviders()) {
+            IMagicCastingState state = provider.getMagicCastingState(maid);
+
+            // 检查状态是否有效
+            if (state == null || state.getCurrentPhase() == IMagicCastingState.CastingPhase.NONE) {
+                continue;
+            }
+
+            // 如果咏唱被取消，跳过当前提供器，检查下一个附属
+            if (state.isCancelled()) {
+                continue;
+            }
+
+            // 尝试获取自定义动画
+            AnimationBuilder builder = provider.getAnimationBuilder(maid, state);
+            if (builder != null) {
+                event.getController().markNeedsReload();
+                event.getController().setAnimation(builder);
+                return PlayState.CONTINUE;
+            }
+        }
+
+        // 没有任何附属提供有效的动画
         return PlayState.STOP;
     }
 
