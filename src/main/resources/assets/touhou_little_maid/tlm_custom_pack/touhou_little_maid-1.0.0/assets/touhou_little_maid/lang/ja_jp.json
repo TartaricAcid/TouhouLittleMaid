@@ -308,5 +308,7 @@
     "model.touhou_little_maid.chimi_houjuu.name": "封獣 チミ",
     "model.touhou_little_maid.chimi_houjuu.desc": "§7正体不明の順わぬ妖獣",
     "model.touhou_little_maid.ubame_chirizuka.name": "塵塚 ウバメ",
-    "model.touhou_little_maid.ubame_chirizuka.desc": "§7聖域に棲む山姥の長"
+    "model.touhou_little_maid.ubame_chirizuka.desc": "§7聖域に棲む山姥の長",
+    "model.touhou_little_maid.legendary_pig_man.name": "伝説の豚男",
+    "model.touhou_little_maid.head_of_academycraft.name": "アカデミークラフト責任者"
 }

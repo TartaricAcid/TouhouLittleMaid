@@ -1,1 +1,24 @@
-{}
+{
+    "maid_pack.authors_and_credits.name": "Autores y créditos",
+    "maid_pack.authors_and_credits.desc": "Modelos de personaje originales para autores y colaboradores",
+    "model.authors_and_credits.wine_fox_maid.name": "Wine Fox Maid",
+    "model.authors_and_credits.wine_fox_maid.desc": "§7Una maid zorro a la que le gusta el vino",
+    "model.authors_and_credits.wine_fox_maid.author.desc": "§7Autor: TartaricAcid",
+    "model.authors_and_credits.sazuki.name": "Sazuki",
+    "model.authors_and_credits.sazuki.desc": "§7Las orejas son muy sensibles, por favor no tocar",
+    "model.authors_and_credits.sazuki.author.desc": "§7Autor: Sazuki",
+    "model.authors_and_credits.pajinyi.name": "Pajinyi",
+    "model.authors_and_credits.pajinyi.desc": "§7Autor: Pajinyi",
+    "model.authors_and_credits.fledge.name": "Fledge",
+    "model.authors_and_credits.fledge.desc": "§7Autor: Succinum",
+    "model.authors_and_credits.clocklalier.name": "Clocklalier Dandeliowers",
+    "model.authors_and_credits.clocklalier.desc": "§7Lámpara venenosa del Diablo",
+    "model.authors_and_credits.clocklalier.author.desc": "§7Autor: Hoishi",
+    "model.authors_and_credits.cyra.name": "Cyra",
+    "model.authors_and_credits.cyra.desc": "§7Guardián Heroico de la Ciudad con el Poder de la Oscuridad",
+    "model.authors_and_credits.cyra.author.desc": "§7Author: CrystalizedSun",
+    "model.authors_and_credits.mory_chan.name": "Mory Chan",
+    "model.authors_and_credits.mory_chan.desc": "§7Autor: FumoLover, Un artista de Corea.",
+    "model.authors_and_credits.flower_candy.name": "Flower Candy",
+    "model.authors_and_credits.flower_candy.desc": "§7Autor: Hoishi"
+}

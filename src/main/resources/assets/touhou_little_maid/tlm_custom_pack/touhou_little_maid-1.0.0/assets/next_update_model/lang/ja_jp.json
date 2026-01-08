@@ -1,4 +1,5 @@
 {
+    "chair_pack.next_update_model.desc": "現在計画中であるが、まだ実装されていないモデル",
     "chair_pack.next_update_model.name": "Next Update モデル",
     "model.next_update_model.stage.name": "ステージ",
     "model.next_update_model.japanese_lottery_machine.name": "ガラガラ抽選器",
@@ -17,6 +18,7 @@
     "model.next_update_model.fox_demon_statue.name": "狐像",
     "model.next_update_model.bathroom.name": "ぼっとん便所",
     "model.next_update_model.backpack.name": "バックパックを背負ったスティーブ",
+    "model.next_update_model.cabinet.name": "内閣",
     "model.next_update_model.single_bed.name": "シングルベッド",
     "model.next_update_model.double_bed.name": "ダブルベッド",
     "model.next_update_model.3d_printer.name": "3Dプリンター",

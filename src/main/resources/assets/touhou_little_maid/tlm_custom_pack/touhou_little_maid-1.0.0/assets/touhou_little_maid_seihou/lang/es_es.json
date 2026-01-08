@@ -1,1 +1,11 @@
-{}
+{
+  "maid_pack.touhou_little_maid_seihou.name": "Modelo de Seihou Project",
+  "maid_pack.touhou_little_maid_seihou.desc": "Personaje de Seihou",
+  "model.touhou_little_maid_seihou.vivit.name": "VIVIT",
+  "model.touhou_little_maid_seihou.vivit.desc": "§7Androide multiusos",
+  "model.touhou_little_maid_seihou.milia.name": "Millia",
+  "model.touhou_little_maid_seihou.milia.desc": "§7Mercenaria hiper-veloz",
+  "model.touhou_little_maid_seihou.mei.name": "Mei",
+  "model.touhou_little_maid_seihou.mei.desc": "§7Gemelas de la Muerte",
+  "model.touhou_little_maid_seihou.mai.name": "Mai"
+}
