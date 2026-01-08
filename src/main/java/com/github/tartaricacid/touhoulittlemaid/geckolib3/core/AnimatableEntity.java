@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.geckolib3.core;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.molang.PhysicsManager;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.Animation;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.controller.AnimationController;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.event.predicate.AnimationEvent;
@@ -22,9 +23,11 @@ public abstract class AnimatableEntity<E extends Entity> {
     private final AnimationData manager = new AnimationData();
     private final AnimationProcessor animationProcessor;
     private final RateLimiter rateLimiter;
-    protected final E entity;
-    private AnimatedGeoModel currentModel;
 
+    protected final E entity;
+    protected final PhysicsManager physicsManager;
+
+    private AnimatedGeoModel currentModel;
     private double seekTime;
     private double lastGameTickTime;
 
@@ -32,6 +35,7 @@ public abstract class AnimatableEntity<E extends Entity> {
         this.entity = entity;
         this.rateLimiter = new RateLimiter(fps);
         this.animationProcessor = new AnimationProcessor(this);
+        this.physicsManager = new PhysicsManager();
     }
 
     /**
@@ -78,6 +82,7 @@ public abstract class AnimatableEntity<E extends Entity> {
             return false;
         }
 
+        getPhysicsManager().update((float) this.seekTime);
         this.animationProcessor.tickAnimation(this.seekTime, animationEvent, ctx);
         return true;
     }
@@ -109,6 +114,7 @@ public abstract class AnimatableEntity<E extends Entity> {
         if (this.currentModel == null || model != this.currentModel.geoModel()) {
             this.currentModel = new AnimatedGeoModel(model);
             this.animationProcessor.registerModelRenderer(this.currentModel.bones());
+            physicsManager.reset();
         }
         return true;
     }
@@ -142,5 +148,9 @@ public abstract class AnimatableEntity<E extends Entity> {
 
     public double getSeekTime() {
         return seekTime;
+    }
+
+    public PhysicsManager getPhysicsManager() {
+        return physicsManager;
     }
 }

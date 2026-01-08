@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.HardcodedAnimationManger;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.AnimationManager;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
+import com.github.tartaricacid.touhoulittlemaid.compat.immersivemelodies.ImmersiveMelodiesCompat;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.AnimatableEntity;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.controller.AnimationController;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.event.predicate.AnimationEvent;
@@ -37,6 +38,11 @@ public class GeckoMaidEntity<T extends Mob> extends AnimatableEntity<T> implemen
     private MaidModelInfo maidInfo;
     private float currentTick = -1;
     private boolean modelDirty = false;
+
+    /**
+     * 沉浸式奏乐兼容数据缓存
+     */
+    private ImmersiveMelodiesCompat.ImmersiveMelodiesData imData = new ImmersiveMelodiesCompat.ImmersiveMelodiesData();
 
     public GeckoMaidEntity(T mob, IMaid maid) {
         super(mob, FPS);
@@ -85,6 +91,9 @@ public class GeckoMaidEntity<T extends Mob> extends AnimatableEntity<T> implemen
                 this.updateHead(data, currentModel, update);
                 HardcodedAnimationManger.playGeckoMaidAnimation(maid, currentModel, event.getLimbSwing(), event.getLimbSwingAmount(),
                         maid.asEntity().tickCount + event.getPartialTick(), data.netHeadYaw, data.headPitch);
+
+                // 更新沉浸式奏乐数据
+                ImmersiveMelodiesCompat.updateMelodyProgress(maid.asEntity(), imData);
             }
             return update;
         } else {
@@ -171,6 +180,10 @@ public class GeckoMaidEntity<T extends Mob> extends AnimatableEntity<T> implemen
 
     @Override
     public void updateRoamingVars(Object2FloatOpenHashMap<String> roamingVars) {
+    }
+
+    public ImmersiveMelodiesCompat.ImmersiveMelodiesData getImmersiveMelodiesData() {
+        return imData;
     }
 
     private static class MaidState<T extends Mob> {

@@ -5,9 +5,11 @@ import com.github.tartaricacid.touhoulittlemaid.geckolib3.file.AnimationFile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.Event;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.EnumMap;
 
 import static com.github.tartaricacid.touhoulittlemaid.client.resource.GeckoModelLoader.mergeAnimationFile;
 
@@ -15,26 +17,30 @@ import static com.github.tartaricacid.touhoulittlemaid.client.resource.GeckoMode
  * 在客户端加载额外的默认 Gecko 动画文件。
  */
 public class DefaultGeckoAnimationEvent extends Event {
-    private final AnimationFile maidAnimationFile;
-    private final AnimationFile tacAnimationFile;
-    private final AnimationFile chairAnimationFile;
+    private final EnumMap<AnimationType, AnimationFile> animationFiles;
 
-    public DefaultGeckoAnimationEvent(AnimationFile maidAnimationFile, AnimationFile tacAnimationFile, AnimationFile chairAnimationFile) {
-        this.maidAnimationFile = maidAnimationFile;
-        this.tacAnimationFile = tacAnimationFile;
-        this.chairAnimationFile = chairAnimationFile;
+    public DefaultGeckoAnimationEvent(EnumMap<AnimationType, AnimationFile> animationFiles) {
+        this.animationFiles = animationFiles;
     }
 
+    @Deprecated(since = "1.4.7")
     public AnimationFile getMaidAnimationFile() {
-        return maidAnimationFile;
+        return animationFiles.get(AnimationType.MAID);
     }
 
+    @Deprecated(since = "1.4.7")
     public AnimationFile getTacAnimationFile() {
-        return tacAnimationFile;
+        return animationFiles.get(AnimationType.TAC);
     }
 
+    @Deprecated(since = "1.4.7")
     public AnimationFile getChairAnimationFile() {
-        return chairAnimationFile;
+        return animationFiles.get(AnimationType.CHAIR);
+    }
+
+    @ApiStatus.AvailableSince("1.4.7")
+    public AnimationFile getAnimationFile(AnimationType type) {
+        return animationFiles.get(type);
     }
 
     public void addAnimation(AnimationFile animationFile, ResourceLocation file) {
@@ -43,5 +49,36 @@ public class DefaultGeckoAnimationEvent extends Event {
         } catch (IOException e) {
             TouhouLittleMaid.LOGGER.error("Failed to load animation file", e);
         }
+    }
+
+    @ApiStatus.AvailableSince("1.4.7")
+    public void addAnimation(AnimationType type, ResourceLocation file) {
+        AnimationFile animationFile = animationFiles.get(type);
+        if (animationFile != null) {
+            addAnimation(animationFile, file);
+        }
+    }
+
+    public enum AnimationType {
+        /**
+         * 女仆主动画
+         */
+        MAID,
+        /**
+         * 枪械动画
+         */
+        TAC,
+        /**
+         * 坐垫动画
+         */
+        CHAIR,
+        /**
+         * 铁魔法
+         */
+        ISS,
+        /**
+         * 沉浸式奏乐
+         */
+        IM
     }
 }
