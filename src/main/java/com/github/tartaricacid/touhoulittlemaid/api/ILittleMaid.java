@@ -25,6 +25,7 @@ import net.minecraft.util.VisibleForDebug;
 import net.minecraft.world.entity.Mob;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Collection;
 import java.util.List;
@@ -165,6 +166,7 @@ public interface ILittleMaid {
      * @param manager 注册管理器
      */
     @OnlyIn(Dist.CLIENT)
+    @ApiStatus.AvailableSince("1.4.7")
     default void registerMagicCastingAnimation(MagicCastingAnimationManager manager) {
     }
 

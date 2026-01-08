@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.api.animation;
 
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.AnimationBuilder;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -19,6 +20,7 @@ import org.jetbrains.annotations.Nullable;
  * @author Gardel &lt;gardel741@outlook.com&gt;
  * @since 2026-01-03
  */
+@ApiStatus.AvailableSince("1.4.7")
 public interface IMagicCastingAnimationProvider {
     /**
      * 判断女仆是否应该播放魔法咏唱动画
@@ -46,7 +48,7 @@ public interface IMagicCastingAnimationProvider {
     /**
      * 获取此 provider 的优先级
      * <p>
-     * 数字越小优先级越高。<br>
+     * 数字越大优先级越高。<br>
      * 当多个 provider 同时返回非 null 状态时，只使用优先级最高的那个。<br>
      * 相同优先级按注册顺序。
      *

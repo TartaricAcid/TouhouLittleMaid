@@ -1,5 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.api.animation;
 
+import org.jetbrains.annotations.ApiStatus;
+
 /**
  * 魔法咏唱状态接口
  * <p>
@@ -10,6 +12,7 @@ package com.github.tartaricacid.touhoulittlemaid.api.animation;
  * @author Gardel &lt;gardel741@outlook.com&gt;
  * @since 2026-01-03
  */
+@ApiStatus.AvailableSince("1.4.7")
 public interface IMagicCastingState {
     /**
      * 获取当前帧的魔法咏唱阶段

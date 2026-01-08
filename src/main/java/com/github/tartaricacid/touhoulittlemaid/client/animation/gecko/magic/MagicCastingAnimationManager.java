@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.magic;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.animation.IMagicCastingAnimationProvider;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -22,7 +23,7 @@ import java.util.List;
  */
 @OnlyIn(Dist.CLIENT)
 public class MagicCastingAnimationManager {
-    private static final List<IMagicCastingAnimationProvider> PROVIDERS = Lists.newArrayList();
+    private static List<IMagicCastingAnimationProvider> PROVIDERS = Lists.newArrayList();
 
     /**
      * 初始化魔法咏唱动画管理器
@@ -36,6 +37,8 @@ public class MagicCastingAnimationManager {
         for (ILittleMaid littleMaid : TouhouLittleMaid.EXTENSIONS) {
             littleMaid.registerMagicCastingAnimation(manager);
         }
+
+        PROVIDERS = ImmutableList.copyOf(PROVIDERS);
     }
 
     /**
@@ -45,8 +48,8 @@ public class MagicCastingAnimationManager {
      */
     public void register(IMagicCastingAnimationProvider provider) {
         PROVIDERS.add(provider);
-        // 按优先级排序，数字越小优先级越高
-        PROVIDERS.sort(Comparator.comparingInt(IMagicCastingAnimationProvider::getPriority));
+        // 按优先级排序，数字越大优先级越高
+        PROVIDERS.sort(Comparator.comparingInt(IMagicCastingAnimationProvider::getPriority).reversed());
     }
 
     /**
