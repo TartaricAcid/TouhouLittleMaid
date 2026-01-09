@@ -134,10 +134,7 @@
 			"model_id": "touhou_little_maid:cirno_slim",
 			"name": "{model.touhou_little_maid.cirno.name}",
 			"description": ["{model.touhou_little_maid.cirno.desc}"],
-			"extra_textures": [
-				"touhou_little_maid:textures/entity/cirno_slim_tan.png",
-				"touhou_little_maid:textures/entity/cirno_slim_maid.png"
-			],
+			"extra_textures": ["touhou_little_maid:textures/entity/cirno_slim_tan.png", "touhou_little_maid:textures/entity/cirno_slim_maid.png"],
 			"animation": [
 				"touhou_little_maid:animation/maid/default/head/default.js",
 				"touhou_little_maid:animation/maid/default/head/beg.js",
@@ -852,6 +849,10 @@
 		{
 			"model_id": "touhou_little_maid:nareko_michigami",
 			"description": ["{model.touhou_little_maid.nareko_michigami.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid:ariya_iwanaga",
+			"description": ["{model.touhou_little_maid.ariya_iwanaga.desc}"]
 		},
 		{
 			"model_id": "touhou_little_maid:morichika_rinnosuke",

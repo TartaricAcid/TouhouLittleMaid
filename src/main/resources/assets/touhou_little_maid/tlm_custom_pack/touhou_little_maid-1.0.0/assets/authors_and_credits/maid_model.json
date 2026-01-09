@@ -23,6 +23,22 @@
 			]
 		},
 		{
+			"model_id": "authors_and_credits:wine_fox_taisho",
+			"description": ["{model.authors_and_credits.wine_fox_maid.desc}", "{model.authors_and_credits.wine_fox_taisho.author.desc}"],
+			"animation": [
+				"touhou_little_maid:animation/maid/default/head/default.js",
+				"touhou_little_maid:animation/maid/default/head/beg.js",
+				"touhou_little_maid:animation/maid/default/head/music_shake.js",
+				"touhou_little_maid:animation/maid/default/head/blink.js",
+				"touhou_little_maid:animation/maid/default/arm/default.js",
+				"touhou_little_maid:animation/maid/default/arm/swing.js",
+				"touhou_little_maid:animation/maid/default/leg/default.js",
+				"touhou_little_maid:animation/maid/default/sit/default.js",
+				"touhou_little_maid:animation/maid/default/sit/skirt_rotation.js",
+				"touhou_little_maid:animation/maid/default/tail/default.js"
+			]
+		},
+		{
 			"model_id": "authors_and_credits:sazuki",
 			"description": ["{model.authors_and_credits.sazuki.desc}", "{model.authors_and_credits.sazuki.author.desc}"],
 			"animation": [
@@ -117,6 +133,29 @@
 			],
 			"render_entity_scale": 0.8,
 			"render_item_scale": 1.2
+		},
+		{
+			"model_id": "authors_and_credits:cyra_pow_wow",
+			"name": "{model.authors_and_credits.cyra.name}",
+			"description": ["{model.authors_and_credits.cyra.desc}"],
+			"animation": [
+				"touhou_little_maid:animation/maid/default/head/default.js",
+				"touhou_little_maid:animation/maid/default/head/beg.js",
+				"touhou_little_maid:animation/maid/default/head/music_shake.js",
+				"touhou_little_maid:animation/maid/default/head/blink.js",
+				"touhou_little_maid:animation/maid/default/task/danmaku_attack.js",
+				"touhou_little_maid:animation/maid/default/task/ranged_attack.js",
+				"touhou_little_maid:animation/maid/default/task/attack.js",
+				"touhou_little_maid:animation/maid/default/health/less_show.js",
+				"touhou_little_maid:animation/maid/default/sleep/default.js",
+				"touhou_little_maid:animation/maid/default/armor/default.js",
+				"touhou_little_maid:animation/maid/default/wing/default.js",
+				"touhou_little_maid:animation/maid/default/arm/default.js",
+				"touhou_little_maid:animation/maid/default/arm/swing.js",
+				"touhou_little_maid:animation/maid/default/leg/default.js",
+				"touhou_little_maid:animation/maid/default/sit/default.js",
+				"touhou_little_maid:animation/maid/default/sit/skirt_rotation.js"
+			]
 		},
 		{
 			"model_id": "authors_and_credits:mory_chan",
