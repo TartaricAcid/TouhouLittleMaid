@@ -14,6 +14,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.MaidGameRecordMan
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.PlayState;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.AnimationBuilder;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.ILoopType;
+import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.RawAnimation;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.event.predicate.AnimationEvent;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.resource.GeckoLibCache;
 import com.github.tartaricacid.touhoulittlemaid.network.message.MaidAnimationMessage;
@@ -363,7 +364,9 @@ public final class AnimationManager {
         if (maid == null) {
             return PlayState.STOP;
         }
-        if (event.getController().getAnimationState() != com.github.tartaricacid.touhoulittlemaid.geckolib3.core.AnimationState.STOPPED) {
+        if (event.getController().isJustStarting
+            && event.getController().getCurrentAnimation() != null
+            && event.getController().getCurrentAnimation().loop ==  ILoopType.EDefaultLoopTypes.PLAY_ONCE) {
             return PlayState.CONTINUE;
         }
 
@@ -384,7 +387,12 @@ public final class AnimationManager {
             // 尝试获取自定义动画
             AnimationBuilder builder = provider.getAnimationBuilder(maid, state);
             if (builder != null) {
-                event.getController().markNeedsReload();
+                for (RawAnimation rawAnimation : builder.getRawAnimationList()) {
+                    if (rawAnimation.loopType == ILoopType.EDefaultLoopTypes.PLAY_ONCE) {
+                        event.getController().markNeedsReload();
+                        break;
+                    }
+                }
                 event.getController().setAnimation(builder);
                 return PlayState.CONTINUE;
             }
