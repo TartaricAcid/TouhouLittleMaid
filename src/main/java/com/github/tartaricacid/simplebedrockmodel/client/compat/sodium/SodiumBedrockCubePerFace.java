@@ -31,20 +31,24 @@ public class SodiumBedrockCubePerFace extends BedrockCubePerFace implements ISod
         long ptr = SCRATCH_BUFFER;
 
         for (int i = 0; i < NUM_CUBE_FACES; i++) {
+            if ((emptyFacesMask & (1 << i)) != 0) {
+                continue;
+            }
+
             emitVertex(ptr, VERTICES[VERTEX_ORDER[i][0]].x, VERTICES[VERTEX_ORDER[i][0]].y, VERTICES[VERTEX_ORDER[i][0]].z,
-                    color, uvs[i][1], uvs[i][2], overlay, lightmap, NORMALS[i]);
+                    color, uvs[i][0], uvs[i][1], overlay, lightmap, NORMALS[i]);
             ptr += STRIDE;
 
             emitVertex(ptr, VERTICES[VERTEX_ORDER[i][1]].x, VERTICES[VERTEX_ORDER[i][1]].y, VERTICES[VERTEX_ORDER[i][1]].z,
-                    color, uvs[i][0], uvs[i][2], overlay, lightmap, NORMALS[i]);
+                    color, uvs[i][2], uvs[i][3], overlay, lightmap, NORMALS[i]);
             ptr += STRIDE;
 
             emitVertex(ptr, VERTICES[VERTEX_ORDER[i][2]].x, VERTICES[VERTEX_ORDER[i][2]].y, VERTICES[VERTEX_ORDER[i][2]].z,
-                    color, uvs[i][0], uvs[i][3], overlay, lightmap, NORMALS[i]);
+                    color, uvs[i][4], uvs[i][5], overlay, lightmap, NORMALS[i]);
             ptr += STRIDE;
 
             emitVertex(ptr, VERTICES[VERTEX_ORDER[i][3]].x, VERTICES[VERTEX_ORDER[i][3]].y, VERTICES[VERTEX_ORDER[i][3]].z,
-                    color, uvs[i][1], uvs[i][3], overlay, lightmap, NORMALS[i]);
+                    color, uvs[i][6], uvs[i][7], overlay, lightmap, NORMALS[i]);
             ptr += STRIDE;
             vertexCount += 4;
         }
