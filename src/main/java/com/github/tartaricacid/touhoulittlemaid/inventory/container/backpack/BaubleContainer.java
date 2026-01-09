@@ -6,6 +6,8 @@ import com.github.tartaricacid.touhoulittlemaid.api.event.MaidBaubleChangeEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.MaidMainContainer;
 import com.github.tartaricacid.touhoulittlemaid.item.bauble.BaubleManager;
+import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
+import com.github.tartaricacid.touhoulittlemaid.network.message.SyncBaubleMessage;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -81,12 +83,19 @@ public class BaubleContainer extends MaidMainContainer {
 
         @Override
         public void onShiftTakeoff(@Nullable Player player, ItemStack stack) {
-            if (!maid.level.isClientSide && !stack.isEmpty()) {
-                IMaidBauble bauble = BaubleManager.getBauble(stack);
-                if (bauble != null) {
-                    bauble.onTakeOff(maid, stack);
-                    MinecraftForge.EVENT_BUS.post(new MaidBaubleChangeEvent.TakeOff(maid, stack));
-                }
+            if (maid.level.isClientSide || stack.isEmpty()) {
+                return;
+            }
+            IMaidBauble bauble = BaubleManager.getBauble(stack);
+            if (bauble == null) {
+                return;
+            }
+            bauble.onTakeOff(maid, stack);
+            MinecraftForge.EVENT_BUS.post(new MaidBaubleChangeEvent.TakeOff(maid, stack));
+            // 如果是可同步，同步删除客户端信息
+            if (bauble.syncClient(maid, stack)) {
+                SyncBaubleMessage msg = SyncBaubleMessage.partialDel(maid.getId(), this.getContainerSlot());
+                NetworkHandler.sendToTrackingEntity(msg, maid);
             }
         }
 
@@ -99,12 +108,19 @@ public class BaubleContainer extends MaidMainContainer {
         @Override
         public void setByPlayer(ItemStack stack) {
             super.setByPlayer(stack);
-            if (!maid.level.isClientSide && !stack.isEmpty()) {
-                IMaidBauble bauble = BaubleManager.getBauble(stack);
-                if (bauble != null) {
-                    bauble.onPutOn(maid, stack);
-                    MinecraftForge.EVENT_BUS.post(new MaidBaubleChangeEvent.PutOn(maid, stack));
-                }
+            if (maid.level.isClientSide || stack.isEmpty()) {
+                return;
+            }
+            IMaidBauble bauble = BaubleManager.getBauble(stack);
+            if (bauble == null) {
+                return;
+            }
+            bauble.onPutOn(maid, stack);
+            MinecraftForge.EVENT_BUS.post(new MaidBaubleChangeEvent.PutOn(maid, stack));
+            // 如果是可同步，同步客户端信息
+            if (bauble.syncClient(maid, stack)) {
+                SyncBaubleMessage msg = SyncBaubleMessage.partialSync(maid.getId(), this.getContainerSlot(), stack);
+                NetworkHandler.sendToTrackingEntity(msg, maid);
             }
         }
     }

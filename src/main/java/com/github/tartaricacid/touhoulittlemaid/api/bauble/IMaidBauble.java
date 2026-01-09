@@ -121,6 +121,21 @@ public interface IMaidBauble {
     }
 
     /**
+     * 是否将当前佩戴的饰品同步到客户端。
+     * <p>
+     * 默认情况下不进行同步。若饰品需要在客户端渲染特殊佩戴效果（例如自定义模型），
+     * 应返回 true，服务器会把饰品物品数据发送到客户端以供渲染使用。
+     *
+     * @param maid       女仆实体
+     * @param baubleItem 饰品物品堆
+     * @return 若需同步到客户端返回 true，否则返回 false
+     */
+    @ApiStatus.AvailableSince("1.4.7")
+    default boolean syncClient(EntityMaid maid, ItemStack baubleItem) {
+        return false;
+    }
+
+    /**
      * Get a chat bubble when maid has the bauble
      * <p>
      * 已废弃，不再使用

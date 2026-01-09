@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.inventory.handler;
 
 import com.github.tartaricacid.touhoulittlemaid.api.bauble.IMaidBauble;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.item.bauble.BaubleManager;
 import com.google.common.collect.Sets;
 import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
@@ -189,5 +190,28 @@ public class BaubleItemHandler extends ItemStackHandler {
     @ApiStatus.AvailableSince("1.4.3")
     public boolean containsItem(Item item) {
         return baubleItemsCache.contains(item);
+    }
+
+    @ApiStatus.AvailableSince("1.4.7")
+    public void clearAll() {
+        this.stacks.clear();
+        this.baubles.clear();
+        this.baubleItemsCache.clear();
+    }
+
+    /**
+     * 获取需要同步到客户端饰品
+     */
+    @ApiStatus.AvailableSince("1.4.7")
+    public Int2ObjectSortedMap<ItemStack> getSyncClientBauble(EntityMaid maid) {
+        Int2ObjectSortedMap<ItemStack> sync = new Int2ObjectRBTreeMap<>();
+        for (var entry : baubles.int2ObjectEntrySet()) {
+            int index = entry.getIntKey();
+            ItemStack stack = getStackInSlot(index);
+            if (entry.getValue().syncClient(maid, stack)) {
+                sync.put(index, stack);
+            }
+        }
+        return sync;
     }
 }
