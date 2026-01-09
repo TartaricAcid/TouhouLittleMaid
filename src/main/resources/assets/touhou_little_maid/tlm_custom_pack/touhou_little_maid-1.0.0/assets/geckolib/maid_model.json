@@ -1,185 +1,192 @@
 {
-  "pack_name": "{maid_pack.geckolib.name}",
-  "version": "1.0.0",
-  "author": ["Very Many Authors"],
-  "description": ["{maid_pack.geckolib.desc}"],
-  "date": "2023-10-10",
-  "icon": "geckolib:textures/maid_icon.png",
-  "model_list": [
-    {
-      "model_id": "geckolib:winefox",
-      "is_gecko": true,
-      "animation": ["geckolib:animation/winefox.animation.json", "geckolib:animation/foxmaid.tac.animation.json"],
-      "render_entity_scale": 0.65,
-      "description": ["{model.geckolib.winefox.desc}"]
-    },
-    {
-      "name": "{model.geckolib.winefox.name}",
-      "model": "geckolib:models/entity/winefox.json",
-      "model_id": "geckolib:winefox_blue",
-      "is_gecko": true,
-      "animation": [
-        "geckolib:animation/winefox.animation.json",
-        "geckolib:animation/foxmaid.tac.animation.json",
-        "geckolib:animation/winefox_blue.animation.json"
-      ],
-      "render_entity_scale": 0.65,
-      "description": ["{model.geckolib.winefox.desc}"]
-    },
-    {
-      "model_id": "geckolib:winefox_hanfu",
-      "is_gecko": true,
-      "animation": ["geckolib:animation/winefox_hanfu.animation.json"],
-      "render_entity_scale": 0.65,
-      "description": ["{model.geckolib.winefox_hanfu.desc}"]
-    },
-    {
-      "model_id": "geckolib:winefox_new_year",
-      "is_gecko": true,
-      "animation": ["geckolib:animation/winefox.animation.json", "geckolib:animation/foxmaid.tac.animation.json"],
-      "render_entity_scale": 0.65,
-      "description": ["{model.geckolib.winefox_new_year.desc}"]
-    },
-    {
-      "model_id": "geckolib:winefox_jk",
-      "is_gecko": true,
-      "animation": [
-        "geckolib:animation/winefox_jk.main.animation.json",
-        "geckolib:animation/winefox_jk.condition.animation.json",
-        "geckolib:animation/winefox_jk.tac.animation.json"
-      ],
-      "render_entity_scale": 0.65,
-      "description": ["{model.geckolib.winefox_jk.desc}"]
-    },
-    {
-      "model_id": "geckolib:winefox_astronaut",
-      "is_gecko": true,
-      "animation": [
-        "geckolib:animation/winefox_astronaut.main.animation.json",
-        "geckolib:animation/winefox_astronaut.condition.animation.json",
-        "geckolib:animation/foxmaid.tac.animation.json"
-      ],
-      "render_entity_scale": 0.65,
-      "description": ["{model.geckolib.winefox_astronaut.desc}"]
-    },
-    {
-      "model_id": "geckolib:winefox_kongfu",
-      "is_gecko": true,
-      "extra_textures": [
-        "geckolib:textures/entity/winefox_kongfu_1.png",
-        "geckolib:textures/entity/winefox_kongfu_2.png",
-        "geckolib:textures/entity/winefox_kongfu_3.png",
-        "geckolib:textures/entity/winefox_kongfu_4.png",
-        "geckolib:textures/entity/winefox_kongfu_5.png"
-      ],
-      "animation": [
-        "geckolib:animation/winefox_kongfu.main.animation.json",
-        "geckolib:animation/winefox_kongfu.condition.animation.json"
-      ],
-      "render_entity_scale": 0.65,
-      "description": ["{model.geckolib.winefox_kongfu.desc}"]
-    },
-    {
-      "model_id": "geckolib:winefox_magical",
-      "is_gecko": true,
-      "extra_textures": [
-        "geckolib:textures/entity/winefox_magical_1.png",
-        "geckolib:textures/entity/winefox_magical_2.png",
-        "geckolib:textures/entity/winefox_magical_3.png",
-        "geckolib:textures/entity/winefox_magical_4.png",
-        "geckolib:textures/entity/winefox_magical_5.png"
-      ],
-      "animation": [
-        "geckolib:animation/winefox_magical.main.animation.json",
-        "geckolib:animation/winefox_magical.condition.animation.json",
-        "geckolib:animation/foxmaid.tac.animation.json"
-      ],
-      "render_entity_scale": 0.65,
-      "description": ["{model.geckolib.winefox_magical.desc}"]
-    },
-    {
-      "model_id": "geckolib:winefox_salesperson",
-      "is_gecko": true,
-      "extra_textures": ["geckolib:textures/entity/winefox_salesperson_1.png"],
-      "animation": [
-        "geckolib:animation/winefox_salesperson.main.animation.json",
-        "geckolib:animation/winefox_salesperson.condition.animation.json"
-      ],
-      "render_entity_scale": 0.65,
-      "description": ["{model.geckolib.winefox_salesperson.desc}"]
-    },
-    {
-      "model_id": "geckolib:winefox_little",
-      "is_gecko": true,
-      "description": ["{model.geckolib.winefox_little.desc}"],
-      "render_entity_scale": 0.7,
-      "animation": [
-        "geckolib:animation/winefox_little.main.animation.json",
-        "geckolib:animation/winefox_little.condition.animation.json",
-        "geckolib:animation/winefox_little.tac.animation.json"
-      ]
-    },
-    {
-      "model_id": "geckolib:sta",
-      "is_gecko": true,
-      "description": ["{model.geckolib.sta.desc}", "{model.geckolib.sta.author}"],
-      "animation": [
-        "geckolib:animation/sta.main.animation.json",
-        "geckolib:animation/sta.condition.animation.json",
-        "geckolib:animation/sta.tac.animation.json"
-      ],
-      "render_entity_scale": 0.7,
-      "show_backpack": false
-    },
-    {
-      "model_id": "geckolib:zhiban",
-      "is_gecko": true,
-      "animation": ["geckolib:animation/zhiban.animation.json"],
-      "render_entity_scale": 0.65,
-      "description": ["{model.geckolib.zhiban.desc}"]
-    },
-    {
-      "name": "{model.geckolib.zhiban.name}",
-      "model_id": "geckolib:zhiban_hanfu",
-      "is_gecko": true,
-      "animation": ["geckolib:animation/zhiban_hanfu.animation.json"],
-      "render_entity_scale": 0.65,
-      "description": ["{model.geckolib.zhiban.desc}"]
-    },
-    {
-      "name": "{model.geckolib.zhiban.name}",
-      "model_id": "geckolib:zhiban_new_year",
-      "is_gecko": true,
-      "animation": ["geckolib:animation/zhiban_hanfu.animation.json"],
-      "render_entity_scale": 0.65,
-      "description": ["{model.geckolib.zhiban.desc}"]
-    },
-    {
-      "name": "{model.geckolib.hailuo.name}",
-      "model_id": "geckolib:hailuo_new_year",
-      "is_gecko": true,
-      "animation": [
-        "geckolib:animation/hailuo.main.animation.json", "geckolib:animation/hailuo.condition.animation.json"
-      ],
-      "render_entity_scale": 0.6,
-      "description": ["{model.geckolib.hailuo.desc}"]
-    },
-    {
-      "model_id": "geckolib:kluonoa",
-      "is_gecko": true,
-      "render_entity_scale": 0.7,
-      "animation": [
-        "geckolib:animation/kluonoa.main.animation.json",
-        "geckolib:animation/kluonoa.condition.animation.json",
-        "geckolib:animation/kluonoa.tac.animation.json"
-      ]
-    },
-    {
-      "model_id": "geckolib:foxmaid",
-      "is_gecko": true,
-      "animation": ["geckolib:animation/foxmaid.animation.json"],
-      "render_entity_scale": 0.7,
-      "description": ["{model.geckolib.foxmaid.desc}"]
-    }
-  ]
+	"pack_name": "{maid_pack.geckolib.name}",
+	"version": "1.0.0",
+	"author": ["Very Many Authors"],
+	"description": ["{maid_pack.geckolib.desc}"],
+	"date": "2023-10-10",
+	"icon": "geckolib:textures/maid_icon.png",
+	"model_list": [
+		{
+			"model_id": "geckolib:winefox",
+			"is_gecko": true,
+			"animation": ["geckolib:animation/winefox.animation.json", "geckolib:animation/foxmaid.tac.animation.json"],
+			"render_entity_scale": 0.65,
+			"description": ["{model.geckolib.winefox.desc}"]
+		},
+		{
+			"name": "{model.geckolib.winefox.name}",
+			"model": "geckolib:models/entity/winefox.json",
+			"model_id": "geckolib:winefox_blue",
+			"is_gecko": true,
+			"animation": [
+				"geckolib:animation/winefox.animation.json",
+				"geckolib:animation/foxmaid.tac.animation.json",
+				"geckolib:animation/winefox_blue.animation.json"
+			],
+			"render_entity_scale": 0.65,
+			"description": ["{model.geckolib.winefox.desc}"]
+		},
+		{
+			"model_id": "geckolib:winefox_hanfu",
+			"is_gecko": true,
+			"animation": ["geckolib:animation/winefox_hanfu.animation.json"],
+			"render_entity_scale": 0.65,
+			"description": ["{model.geckolib.winefox_hanfu.desc}"]
+		},
+		{
+			"model_id": "geckolib:winefox_new_year",
+			"is_gecko": true,
+			"animation": ["geckolib:animation/winefox.animation.json", "geckolib:animation/foxmaid.tac.animation.json"],
+			"render_entity_scale": 0.65,
+			"description": ["{model.geckolib.winefox_new_year.desc}"]
+		},
+		{
+			"model_id": "geckolib:winefox_jk",
+			"is_gecko": true,
+			"animation": [
+				"geckolib:animation/winefox_jk.main.animation.json",
+				"geckolib:animation/winefox_jk.condition.animation.json",
+				"geckolib:animation/winefox_jk.tac.animation.json"
+			],
+			"render_entity_scale": 0.65,
+			"description": ["{model.geckolib.winefox_jk.desc}"]
+		},
+		{
+			"model_id": "geckolib:winefox_astronaut",
+			"is_gecko": true,
+			"animation": [
+				"geckolib:animation/winefox_astronaut.main.animation.json",
+				"geckolib:animation/winefox_astronaut.condition.animation.json",
+				"geckolib:animation/foxmaid.tac.animation.json"
+			],
+			"render_entity_scale": 0.65,
+			"description": ["{model.geckolib.winefox_astronaut.desc}"]
+		},
+		{
+			"model_id": "geckolib:winefox_kongfu",
+			"is_gecko": true,
+			"extra_textures": [
+				"geckolib:textures/entity/winefox_kongfu_1.png",
+				"geckolib:textures/entity/winefox_kongfu_2.png",
+				"geckolib:textures/entity/winefox_kongfu_3.png",
+				"geckolib:textures/entity/winefox_kongfu_4.png",
+				"geckolib:textures/entity/winefox_kongfu_5.png"
+			],
+			"animation": ["geckolib:animation/winefox_kongfu.main.animation.json", "geckolib:animation/winefox_kongfu.condition.animation.json"],
+			"render_entity_scale": 0.65,
+			"description": ["{model.geckolib.winefox_kongfu.desc}"]
+		},
+		{
+			"model_id": "geckolib:winefox_magical",
+			"is_gecko": true,
+			"extra_textures": [
+				"geckolib:textures/entity/winefox_magical_1.png",
+				"geckolib:textures/entity/winefox_magical_2.png",
+				"geckolib:textures/entity/winefox_magical_3.png",
+				"geckolib:textures/entity/winefox_magical_4.png",
+				"geckolib:textures/entity/winefox_magical_5.png"
+			],
+			"animation": [
+				"geckolib:animation/winefox_magical.main.animation.json",
+				"geckolib:animation/winefox_magical.condition.animation.json",
+				"geckolib:animation/foxmaid.tac.animation.json"
+			],
+			"render_entity_scale": 0.65,
+			"description": ["{model.geckolib.winefox_magical.desc}"]
+		},
+		{
+			"model_id": "geckolib:winefox_salesperson",
+			"is_gecko": true,
+			"extra_textures": ["geckolib:textures/entity/winefox_salesperson_1.png"],
+			"animation": ["geckolib:animation/winefox_salesperson.main.animation.json", "geckolib:animation/winefox_salesperson.condition.animation.json"],
+			"render_entity_scale": 0.65,
+			"description": ["{model.geckolib.winefox_salesperson.desc}"]
+		},
+		{
+			"model_id": "geckolib:winefox_little",
+			"is_gecko": true,
+			"description": ["{model.geckolib.winefox_little.desc}"],
+			"render_entity_scale": 0.7,
+			"animation": [
+				"geckolib:animation/winefox_little.main.animation.json",
+				"geckolib:animation/winefox_little.condition.animation.json",
+				"geckolib:animation/winefox_little.tac.animation.json"
+			]
+		},
+		{
+			"model_id": "geckolib:winefox_matured",
+			"is_gecko": true,
+			"render_entity_scale": 0.7,
+			"description": ["{model.geckolib.winefox_matured.desc}"],
+			"animation": ["geckolib:animation/winefox_matured.main.animation.json", "geckolib:animation/winefox_matured.condition.animation.json"]
+		},
+		{
+			"model_id": "geckolib:winefox_momo",
+			"is_gecko": true,
+			"description": ["{model.geckolib.winefox_momo.desc}"],
+			"extra_textures": ["geckolib:textures/entity/winefox_momo_1.png"],
+			"animation": ["geckolib:animation/winefox_momo.main.animation.json", "geckolib:animation/winefox_momo.condition.animation.json"],
+			"render_entity_scale": 0.7
+		},
+		{
+			"model_id": "geckolib:sta",
+			"is_gecko": true,
+			"description": ["{model.geckolib.sta.desc}", "{model.geckolib.sta.author}"],
+			"animation": [
+				"geckolib:animation/sta.main.animation.json",
+				"geckolib:animation/sta.condition.animation.json",
+				"geckolib:animation/sta.tac.animation.json"
+			],
+			"render_entity_scale": 0.7,
+			"show_backpack": false
+		},
+		{
+			"model_id": "geckolib:zhiban",
+			"is_gecko": true,
+			"animation": ["geckolib:animation/zhiban.animation.json"],
+			"render_entity_scale": 0.65,
+			"description": ["{model.geckolib.zhiban.desc}"]
+		},
+		{
+			"name": "{model.geckolib.zhiban.name}",
+			"model_id": "geckolib:zhiban_hanfu",
+			"is_gecko": true,
+			"animation": ["geckolib:animation/zhiban_hanfu.animation.json"],
+			"render_entity_scale": 0.65,
+			"description": ["{model.geckolib.zhiban.desc}"]
+		},
+		{
+			"name": "{model.geckolib.zhiban.name}",
+			"model_id": "geckolib:zhiban_new_year",
+			"is_gecko": true,
+			"animation": ["geckolib:animation/zhiban_hanfu.animation.json"],
+			"render_entity_scale": 0.65,
+			"description": ["{model.geckolib.zhiban.desc}"]
+		},
+		{
+			"name": "{model.geckolib.hailuo.name}",
+			"model_id": "geckolib:hailuo_new_year",
+			"is_gecko": true,
+			"animation": ["geckolib:animation/hailuo.main.animation.json", "geckolib:animation/hailuo.condition.animation.json"],
+			"render_entity_scale": 0.6,
+			"description": ["{model.geckolib.hailuo.desc}"]
+		},
+		{
+			"model_id": "geckolib:kluonoa",
+			"is_gecko": true,
+			"render_entity_scale": 0.7,
+			"animation": [
+				"geckolib:animation/kluonoa.main.animation.json",
+				"geckolib:animation/kluonoa.condition.animation.json",
+				"geckolib:animation/kluonoa.tac.animation.json"
+			]
+		},
+		{
+			"model_id": "geckolib:foxmaid",
+			"is_gecko": true,
+			"animation": ["geckolib:animation/foxmaid.animation.json"],
+			"render_entity_scale": 0.7,
+			"description": ["{model.geckolib.foxmaid.desc}"]
+		}
+	]
 }

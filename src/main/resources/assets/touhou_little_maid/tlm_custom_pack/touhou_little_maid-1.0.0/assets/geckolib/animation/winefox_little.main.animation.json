@@ -5081,7 +5081,7 @@
 			"bones": {
 				"Root": {
 					"rotation": [-13.25506, -77.79629, 23.76148],
-					"position": [-4, 0, -3],
+					"position": [-4, 0, -1],
 					"scale": 1
 				},
 				"UpBody": {
