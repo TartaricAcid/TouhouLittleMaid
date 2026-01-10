@@ -364,7 +364,7 @@ public final class AnimationManager {
         if (maid == null) {
             return PlayState.STOP;
         }
-        if (event.getController().isJustStarting
+        if (event.getController().getAnimationState() != com.github.tartaricacid.touhoulittlemaid.geckolib3.core.AnimationState.STOPPED
             && event.getController().getCurrentAnimation() != null
             && event.getController().getCurrentAnimation().loop ==  ILoopType.EDefaultLoopTypes.PLAY_ONCE) {
             return PlayState.CONTINUE;
