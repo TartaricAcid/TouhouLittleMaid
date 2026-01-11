@@ -22,14 +22,14 @@ import net.neoforged.neoforge.items.ItemStackHandler;
 import javax.annotation.Nullable;
 
 public class TileEntityAltar extends BlockEntity {
-    public static final BlockEntityType<TileEntityAltar> TYPE = BlockEntityType.Builder.of(TileEntityAltar::new, InitBlocks.ALTAR.get()).build(null);
-    private static final String STORAGE_ITEM = "StorageItem";
+    private static final String STORAGE_ITEM = "StorageItem";    public static final BlockEntityType<TileEntityAltar> TYPE = BlockEntityType.Builder.of(TileEntityAltar::new, InitBlocks.ALTAR.get()).build(null);
     private static final String IS_RENDER = "IsRender";
     private static final String CAN_PLACE_ITEM = "CanPlaceItem";
     private static final String STORAGE_STATE_ID = "StorageBlockStateId";
     private static final String DIRECTION = "Direction";
     private static final String STORAGE_BLOCK_LIST = "StorageBlockList";
     private static final String CAN_PLACE_ITEM_POS_LIST = "CanPlaceItemPosList";
+    private static final String MAID_BEACON_POS = "MaidBeaconPos";
     public final ItemStackHandler handler = new AltarItemHandler();
     private boolean isRender = false;
     private boolean canPlaceItem = false;
@@ -37,7 +37,7 @@ public class TileEntityAltar extends BlockEntity {
     private PosListData blockPosList = new PosListData();
     private PosListData canPlaceItemPosList = new PosListData();
     private Direction direction = Direction.SOUTH;
-
+    private BlockPos maidBeaconPos = BlockPos.ZERO;
     public TileEntityAltar(BlockPos blockPos, BlockState blockState) {
         super(TYPE, blockPos, blockState);
     }
@@ -62,6 +62,7 @@ public class TileEntityAltar extends BlockEntity {
         getPersistentData().putString(DIRECTION, direction.getSerializedName());
         getPersistentData().put(STORAGE_BLOCK_LIST, blockPosList.serialize());
         getPersistentData().put(CAN_PLACE_ITEM_POS_LIST, canPlaceItemPosList.serialize());
+        getPersistentData().putLong(MAID_BEACON_POS, maidBeaconPos.asLong());
         super.saveAdditional(pTag, pRegistries);
     }
 
@@ -75,6 +76,7 @@ public class TileEntityAltar extends BlockEntity {
         direction = Direction.byName(getPersistentData().getString(DIRECTION));
         blockPosList.deserialize(getPersistentData().getList(STORAGE_BLOCK_LIST, Tag.TAG_INT_ARRAY));
         canPlaceItemPosList.deserialize(getPersistentData().getList(CAN_PLACE_ITEM_POS_LIST, Tag.TAG_INT_ARRAY));
+        maidBeaconPos = BlockPos.of(getPersistentData().getLong(MAID_BEACON_POS));
     }
 
     public BlockPos getWorldPosition() {
@@ -130,4 +132,15 @@ public class TileEntityAltar extends BlockEntity {
     public Direction getDirection() {
         return direction;
     }
+
+    public BlockPos getMaidBeaconPos() {
+        return maidBeaconPos;
+    }
+
+    public void setMaidBeaconPos(BlockPos maidBeaconPos) {
+        this.maidBeaconPos = maidBeaconPos;
+        refresh();
+    }
+
+
 }

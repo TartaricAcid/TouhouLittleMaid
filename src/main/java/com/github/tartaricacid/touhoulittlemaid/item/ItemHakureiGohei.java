@@ -2,11 +2,14 @@ package com.github.tartaricacid.touhoulittlemaid.item;
 
 import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.api.block.IMultiBlock;
+import com.github.tartaricacid.touhoulittlemaid.block.BlockAltar;
+import com.github.tartaricacid.touhoulittlemaid.block.BlockMaidBeacon;
 import com.github.tartaricacid.touhoulittlemaid.block.multiblock.MultiBlockManager;
 import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
 import com.google.common.base.Predicates;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -24,12 +27,16 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Predicate;
+
+import static com.github.tartaricacid.touhoulittlemaid.block.BlockMaidBeacon.POSITION;
+import static com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent.BINDING_POS;
 
 public class ItemHakureiGohei extends ProjectileWeaponItem {
     public ItemHakureiGohei() {
@@ -74,6 +81,46 @@ public class ItemHakureiGohei extends ProjectileWeaponItem {
     @Override
     public InteractionResult useOn(UseOnContext context) {
         if (context.getHand() == InteractionHand.MAIN_HAND) {
+
+            // 神社庭灯绑定
+            if (!context.getLevel().isClientSide()) {
+                BlockPos clickedPos = context.getClickedPos();
+                Level level = context.getLevel();
+                BlockState state = level.getBlockState(clickedPos);
+                Block block = state.getBlock();
+                ItemStack itemInHand = context.getItemInHand();
+                // 判定是否为神社庭灯
+                if (block instanceof BlockMaidBeacon) {
+                    BlockMaidBeacon.Position value = state.getValue(POSITION);
+                    if (value == BlockMaidBeacon.Position.DOWN) {
+                        itemInHand.set(BINDING_POS, clickedPos.above());
+                    } else {
+                        itemInHand.set(BINDING_POS, clickedPos);
+                    }
+                    if (context.getPlayer() instanceof ServerPlayer serverPlayer) {
+                        serverPlayer.sendSystemMessage(Component.translatable("tooltips.touhou_little_maid.hakurei_gohei.bind_beacon"));
+                    }
+                    return InteractionResult.SUCCESS;
+                }
+                // 如果是神社祭坛，则绑定御币的祭坛位置并清空储存坐标
+                BlockPos blockPos = itemInHand.get(BINDING_POS);
+                if (blockPos != null) {
+                    BlockAltar.getAltar(level, clickedPos).ifPresent(altarBlock -> {
+                        altarBlock.getCanPlaceItemPosList().getData().forEach(
+                                pos -> {
+                                    BlockAltar.getAltar(level, pos).ifPresent(altar -> {
+                                        altar.setMaidBeaconPos(blockPos);
+                                    });
+                                }
+                        );
+                        itemInHand.set(BINDING_POS, null);
+                        if (context.getPlayer() instanceof ServerPlayer serverPlayer) {
+                            serverPlayer.sendSystemMessage(Component.translatable("tooltips.touhou_little_maid.hakurei_gohei.bind_altar"));
+                        }
+                    });
+                }
+            }
+
             List<IMultiBlock> multiBlockList = MultiBlockManager.getMultiBlockList();
             BlockState blockState = context.getLevel().getBlockState(context.getClickedPos());
             Level world = context.getLevel();
