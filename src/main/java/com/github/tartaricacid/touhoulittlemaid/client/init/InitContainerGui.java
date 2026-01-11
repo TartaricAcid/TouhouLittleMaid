@@ -3,15 +3,15 @@ package com.github.tartaricacid.touhoulittlemaid.client.init;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.backpack.*;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.config.MaidAIChatConfigContainerGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.config.MaidConfigContainerGui;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.backpack.BaubleContainerScreen;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.task.AttackTaskConfigGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.task.DefaultMaidTaskConfigGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.item.PicnicBasketContainerScreen;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.item.WirelessIOContainerGui;
+import com.github.tartaricacid.touhoulittlemaid.compat.curios.CuriosCompat;
+import com.github.tartaricacid.touhoulittlemaid.init.registry.CompatRegistry;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.backpack.*;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.config.MaidAIChatConfigContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.config.MaidConfigContainer;
-import com.github.tartaricacid.touhoulittlemaid.inventory.container.backpack.BaubleContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.other.PicnicBasketContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.other.WirelessIOContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.task.AttackTaskConfigContainer;
@@ -19,6 +19,7 @@ import com.github.tartaricacid.touhoulittlemaid.inventory.container.task.Default
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
@@ -43,5 +44,10 @@ public final class InitContainerGui {
 
         evt.enqueueWork(() -> MenuScreens.register(DefaultMaidTaskConfigContainer.TYPE, DefaultMaidTaskConfigGui::new));
         evt.enqueueWork(() -> MenuScreens.register(AttackTaskConfigContainer.TYPE, AttackTaskConfigGui::new));
+
+        // Curios 兼容
+        if (ModList.get().isLoaded(CompatRegistry.CURIOS)) {
+            evt.enqueueWork(CuriosCompat::registerScreen);
+        }
     }
 }

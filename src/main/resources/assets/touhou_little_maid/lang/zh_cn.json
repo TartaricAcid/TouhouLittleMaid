@@ -510,6 +510,8 @@
   "gui.touhou_little_maid.default_task_config.title": "当前工作任务没有任何配置项……",
   "gui.touhou_little_maid.bauble_button.open.desc": "打开女仆饰品栏",
   "gui.touhou_little_maid.bauble_button.close.desc": "关闭女仆饰品栏",
+  "gui.touhou_little_maid.curios_button.open.desc": "打开女仆 Curios 饰品栏",
+  "gui.touhou_little_maid.curios_button.close.desc": "关闭女仆 Curios 饰品栏",
   "gui.touhou_little_maid.bauble_button.need_favorability_level": "需要 %d 级好感度来解锁",
   "pack.touhou_little_maid.legacy_resources_pack.title": "TLM 旧版材质",
   "pack.touhou_little_maid.legacy_resources_pack.desc": "车万女仆模组旧版材质包",

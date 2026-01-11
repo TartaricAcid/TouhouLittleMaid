@@ -18,6 +18,7 @@ import com.github.tartaricacid.touhoulittlemaid.capability.MaidNumCapabilityProv
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
+import com.github.tartaricacid.touhoulittlemaid.compat.curios.CuriosCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.domesticationinnovation.PetBedDrop;
 import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.ysm.YsmCompat;
@@ -1498,6 +1499,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             case TabIndex.MAID_CONFIG -> MaidConfigContainer.create(getId());
             case TabIndex.MAID_AI_CHAT_CONFIG -> MaidAIChatConfigContainer.create(this);
             case TabIndex.BAUBLE -> BaubleContainer.create(this);
+            case TabIndex.CURIOS -> CuriosCompat.create(this);
             default -> this.getMaidBackpackType().getGuiProvider(getId());
         };
     }

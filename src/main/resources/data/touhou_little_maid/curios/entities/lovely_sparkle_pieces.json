@@ -1,0 +1,23 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "lovely_sparkle_pieces"
+    }
+  ],
+  "entities": [
+    "touhou_little_maid:maid"
+  ],
+  "slots": [
+    "legendarycurios",
+    "unlegendarycurios",
+    "boot",
+    "set_source",
+    "set_diverse",
+    "set_unity",
+    "set_threshold",
+    "set_final",
+    "glasses",
+    "hipornament"
+  ]
+}

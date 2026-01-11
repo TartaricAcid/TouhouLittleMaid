@@ -242,7 +242,6 @@ dependencies {
     // 地图相关模组兼容
     runtimeOnly fg.deobf("maven.modrinth:xaeros-minimap:25.2.10_Forge_1.20")
     runtimeOnly fg.deobf("maven.modrinth:xaeros-world-map:1.39.12_Forge_1.20")
-    runtimeOnly fg.deobf("maven.modrinth:journeymap:1.20.1-5.10.3-forge")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
@@ -265,6 +264,8 @@ dependencies {
     // runtimeOnly fg.deobf("curse.maven:maid-storage-manager-1210244:6315697")
     // runtimeOnly fg.deobf("curse.maven:lavafishing-1035887:5432767")
     // runtimeOnly fg.deobf("curse.maven:catalogue-459701:4766090")
+    // runtimeOnly fg.deobf("maven.modrinth:journeymap:1.20.1-5.10.3-forge")
+    //runtimeOnly fg.deobf("maven.modrinth:moonstone:1.5.3.7-fusion-forge")
 }
 
 shadowJar {

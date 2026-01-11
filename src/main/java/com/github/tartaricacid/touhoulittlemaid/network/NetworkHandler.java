@@ -130,6 +130,8 @@ public final class NetworkHandler {
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
         CHANNEL.registerMessage(51, SyncBaubleMessage.class, SyncBaubleMessage::encode, SyncBaubleMessage::decode, SyncBaubleMessage::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        CHANNEL.registerMessage(52, CuriosS2CUpdateMessage.class, CuriosS2CUpdateMessage::encode, CuriosS2CUpdateMessage::decode, CuriosS2CUpdateMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 
     public static void sendToClientPlayer(Object message, Player player) {

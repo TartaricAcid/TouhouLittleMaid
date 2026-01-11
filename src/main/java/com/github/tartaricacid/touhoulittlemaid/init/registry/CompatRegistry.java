@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.init.registry;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.mod.ClothConfigScreen;
 import com.github.tartaricacid.touhoulittlemaid.compat.carryon.BlackList;
 import com.github.tartaricacid.touhoulittlemaid.compat.cloth.MenuIntegration;
+import com.github.tartaricacid.touhoulittlemaid.compat.curios.CuriosCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.patchouli.PatchouliCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.sbackpack.SBackpackCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.top.TheOneProbeInfo;
@@ -20,8 +21,9 @@ public final class CompatRegistry {
     public static final String TOP = "theoneprobe";
     public static final String PATCHOULI = "patchouli";
     public static final String CLOTH_CONFIG = "cloth_config";
-    public static final String CARRY_ON_ID = "carryon";
+    public static final String CARRY_ON = "carryon";
     public static final String SBACKPACK = "sophisticatedbackpacks";
+    public static final String CURIOS = "curios";
 
     @SubscribeEvent
     public static void onEnqueue(final InterModEnqueueEvent event) {
@@ -37,8 +39,9 @@ public final class CompatRegistry {
                 ClothConfigScreen.registerNoClothConfigPage();
             }
         });
-        event.enqueueWork(() -> checkModLoad(CARRY_ON_ID, BlackList::addBlackList));
+        event.enqueueWork(() -> checkModLoad(CARRY_ON, BlackList::addBlackList));
         event.enqueueWork(() -> checkModLoad(SBACKPACK, SBackpackCompat::init));
+        event.enqueueWork(() -> checkModLoad(CURIOS, CuriosCompat::init));
     }
 
     private static void checkModLoad(String modId, Runnable runnable) {

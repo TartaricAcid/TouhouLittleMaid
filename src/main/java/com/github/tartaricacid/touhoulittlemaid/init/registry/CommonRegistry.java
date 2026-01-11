@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.SerializerRegister;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.FunctionCallRegister;
 import com.github.tartaricacid.touhoulittlemaid.block.multiblock.MultiBlockManager;
+import com.github.tartaricacid.touhoulittlemaid.compat.curios.menu.CuriosContainer;
 import com.github.tartaricacid.touhoulittlemaid.compat.ysm.YsmCompat;
 import com.github.tartaricacid.touhoulittlemaid.debug.target.DebugMaidManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.ExtraMaidBrainManager;
@@ -20,9 +21,13 @@ import com.github.tartaricacid.touhoulittlemaid.inventory.chest.ChestManager;
 import com.github.tartaricacid.touhoulittlemaid.item.bauble.BaubleManager;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.util.AnnotatedInstanceUtil;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegisterEvent;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class CommonRegistry {
@@ -32,6 +37,20 @@ public final class CommonRegistry {
         event.enqueueWork(NetworkHandler::init);
         event.enqueueWork(CommonRegistry::modApiInit);
         event.enqueueWork(YsmCompat::init);
+    }
+
+    @SubscribeEvent
+    public static void onRegisterEvent(RegisterEvent event) {
+        var registryKey = event.getRegistryKey();
+        var menuTypes = ForgeRegistries.MENU_TYPES.getRegistryKey();
+
+        if (registryKey.equals(menuTypes)) {
+            // Curios 兼容
+            if (ModList.get().isLoaded(CompatRegistry.CURIOS)) {
+                ResourceLocation id = new ResourceLocation(TouhouLittleMaid.MOD_ID, "curios_container");
+                event.register(menuTypes, id, () -> CuriosContainer.TYPE);
+            }
+        }
     }
 
     private static void modApiInit() {
