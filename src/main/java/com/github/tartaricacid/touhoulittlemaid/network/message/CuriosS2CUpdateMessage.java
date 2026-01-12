@@ -18,7 +18,7 @@ public record CuriosS2CUpdateMessage(int page) {
     public static void handle(CuriosS2CUpdateMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
         NetworkEvent.Context context = contextSupplier.get();
         if (context.getDirection().getReceptionSide().isClient()) {
-            context.enqueueWork(() -> CuriosCompat.handleClient(message));
+            context.enqueueWork(() -> CuriosCompat.clientUpdatePage(message.page()));
         }
         context.setPacketHandled(true);
     }

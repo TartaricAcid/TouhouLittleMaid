@@ -21,7 +21,7 @@ public abstract class AbstractMaidContainer extends AbstractContainerMenu {
         }
     }
 
-    private void addPlayerInv(Inventory playerInventory) {
+    protected void addPlayerInv(Inventory playerInventory) {
         for (int row = 0; row < 3; ++row) {
             for (int col = 0; col < 9; ++col) {
                 this.addSlot(new Slot(playerInventory, col + row * 9 + 9, 88 + col * 18, 174 + row * 18));

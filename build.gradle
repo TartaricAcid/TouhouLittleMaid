@@ -217,7 +217,7 @@ dependencies {
     implementation fg.deobf("curse.maven:timeless-and-classics-zero-1028108:6518539-sources-6518544")
 
     implementation fg.deobf("maven.modrinth:simple-hats:1.20.1-0.3.2-forge")
-    implementation fg.deobf("maven.modrinth:curios:5.9.1+1.20.1-forge")
+    implementation fg.deobf("maven.modrinth:curios:5.14.1+1.20.1-forge")
 
     compileOnly fg.deobf("maven.modrinth:torohealth-damage-indicators-updated:1.20.1-forge-1")
 
@@ -265,7 +265,9 @@ dependencies {
     // runtimeOnly fg.deobf("curse.maven:lavafishing-1035887:5432767")
     // runtimeOnly fg.deobf("curse.maven:catalogue-459701:4766090")
     // runtimeOnly fg.deobf("maven.modrinth:journeymap:1.20.1-5.10.3-forge")
-    //runtimeOnly fg.deobf("maven.modrinth:moonstone:1.5.3.7-fusion-forge")
+    // runtimeOnly fg.deobf("maven.modrinth:moonstone:1.5.3.7-fusion-forge")
+    // runtimeOnly fg.deobf("maven.modrinth:octo-lib:0.5.0.1-forge,1.20.1")
+    // runtimeOnly fg.deobf("maven.modrinth:relics-mod:0.8.0.11-forge,1.20.1")
 }
 
 shadowJar {

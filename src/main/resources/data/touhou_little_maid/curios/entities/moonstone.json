@@ -9,11 +9,14 @@
     "touhou_little_maid:maid"
   ],
   "slots": [
+    "nightmare",
     "medicine",
     "necora",
     "nanos",
     "ncrdna",
     "dna",
-    "zombie"
+    "crystal",
+    "stone",
+    "man"
   ]
 }

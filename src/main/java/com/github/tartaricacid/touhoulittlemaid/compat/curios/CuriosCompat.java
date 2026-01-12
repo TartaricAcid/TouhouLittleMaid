@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.compat.curios;
 import com.github.tartaricacid.touhoulittlemaid.compat.curios.client.CuriosContainerScreen;
 import com.github.tartaricacid.touhoulittlemaid.compat.curios.menu.CuriosContainer;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.network.message.CuriosS2CUpdateMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.world.MenuProvider;
@@ -37,11 +36,21 @@ public class CuriosCompat {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static void handleClient(CuriosS2CUpdateMessage message) {
+    public static void clientUpdatePage(int page) {
         if (isLoaded()) {
             Minecraft mc = Minecraft.getInstance();
             if (mc.screen instanceof CuriosContainerScreen screen) {
-                screen.updatePage(message.page());
+                screen.updatePage(page);
+            }
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void clientResetPage() {
+        if (isLoaded()) {
+            Minecraft mc = Minecraft.getInstance();
+            if (mc.screen instanceof CuriosContainerScreen screen) {
+                screen.updatePage(screen.getPage());
             }
         }
     }

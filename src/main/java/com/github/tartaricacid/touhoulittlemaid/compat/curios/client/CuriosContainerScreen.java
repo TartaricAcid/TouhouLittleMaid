@@ -64,7 +64,10 @@ public class CuriosContainerScreen extends AbstractMaidContainerGui<CuriosContai
         this.maxPages = (maxSlots - 1) / 36;
         this.page = Math.min(page, this.maxPages);
         this.slotCount = Math.min(maxSlots - this.page * 36, 36);
-        this.getMenu().updatePage(page, null);
+        this.getMenu().updatePage(page, getMinecraft().player);
+
+        // 更新按钮信息
+        this.init();
     }
 
     @Override
@@ -149,5 +152,9 @@ public class CuriosContainerScreen extends AbstractMaidContainerGui<CuriosContai
                 graphics.blit(CURIOS_BG, leftPos + 142, topPos + 36, 57, 0, width, 18);
             }
         }
+    }
+
+    public int getPage() {
+        return page;
     }
 }

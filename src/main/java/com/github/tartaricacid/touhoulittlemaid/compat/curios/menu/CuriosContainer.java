@@ -17,7 +17,6 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.common.util.LazyOptional;
-import org.jetbrains.annotations.Nullable;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
@@ -32,9 +31,7 @@ public class CuriosContainer extends MaidMainContainer {
 
     private static final int PREV = 0;
     private static final int NEXT = 1;
-
     private static final int SLOTS_PER_PAGE = 36;
-    private static final int START_SLOT_INDEX = 42;
 
     private final LazyOptional<ICuriosItemHandler> curiosHandler;
 
@@ -49,7 +46,7 @@ public class CuriosContainer extends MaidMainContainer {
         this.page = Math.min(page, this.maxPages);
         // 延迟添加 Curios 物品栏
         if (maid != null) {
-            this.addCuriosInv();
+            this.curiosHandler.ifPresent(this::addCuriosSlotsForPage);
         }
     }
 
@@ -83,18 +80,23 @@ public class CuriosContainer extends MaidMainContainer {
         return true;
     }
 
-    private void clearCuriosSlots() {
-        this.slots.subList(START_SLOT_INDEX, this.slots.size()).clear();
-        this.lastSlots.subList(START_SLOT_INDEX, this.lastSlots.size()).clear();
-        this.remoteSlots.subList(START_SLOT_INDEX, this.remoteSlots.size()).clear();
-    }
-
-    public void updatePage(int page, @Nullable Player player) {
-        clearCuriosSlots();
-        int curiosSlotsCount = curiosHandler.map(ICuriosItemHandler::getVisibleSlots).orElse(0);
+    public void updatePage(int page, Player player) {
+        int curiosSlotsCount = this.curiosHandler.map(ICuriosItemHandler::getVisibleSlots).orElse(0);
         this.maxPages = (curiosSlotsCount - 1) / SLOTS_PER_PAGE;
         this.page = Math.min(page, this.maxPages);
-        this.addCuriosInv();
+
+        this.curiosHandler.ifPresent(handler -> {
+            // 清空当前所有槽位，重新添加
+            this.slots.clear();
+            this.lastSlots.clear();
+            this.remoteSlots.clear();
+
+            // 重新添加槽位
+            this.addPlayerInv(player.getInventory());
+            this.addMaidArmorInv();
+            this.addMaidHandInv();
+            this.addCuriosSlotsForPage(handler);
+        });
 
         // 发送更新数据包到客户端
         if (player instanceof ServerPlayer serverPlayer) {
@@ -116,8 +118,11 @@ public class CuriosContainer extends MaidMainContainer {
         // 留空，因为父子类执行顺序的问题，我们需要延迟添加 Curios 物品栏
     }
 
-    protected void addCuriosInv() {
-        this.curiosHandler.ifPresent(this::addCuriosSlotsForPage);
+    @Override
+    public void setItem(int slotId, int pStateId, ItemStack pStack) {
+        if (slotId < this.slots.size()) {
+            super.setItem(slotId, pStateId, pStack);
+        }
     }
 
     @Override
