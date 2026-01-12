@@ -47,7 +47,7 @@ public class BaubleContainerScreen extends AbstractMaidContainerGui<BaubleContai
         this.addRenderableWidget(baubleButton);
 
         // 添加 curios 兼容按钮
-        if (CuriosCompat.isLoaded()) {
+        if (CuriosCompat.isLoadedOrEnable()) {
             this.addRenderableWidget(this.getCuriosButton(maid, leftPos, topPos));
         }
     }

@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.compat.curios;
 
 import com.github.tartaricacid.touhoulittlemaid.compat.curios.client.CuriosContainerScreen;
 import com.github.tartaricacid.touhoulittlemaid.compat.curios.menu.CuriosContainer;
+import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -22,8 +23,12 @@ public class CuriosCompat {
         return IS_LOADED;
     }
 
+    public static boolean isLoadedOrEnable() {
+        return isLoaded() && MaidConfig.ENABLE_MAID_CURIOS.get();
+    }
+
     public static MenuProvider create(EntityMaid maid) {
-        if (isLoaded()) {
+        if (isLoadedOrEnable()) {
             return CuriosContainer.create(maid);
         } else {
             return maid.getMaidBackpackType().getGuiProvider(maid.getId());
@@ -37,7 +42,7 @@ public class CuriosCompat {
 
     @OnlyIn(Dist.CLIENT)
     public static void clientUpdatePage(int page) {
-        if (isLoaded()) {
+        if (isLoadedOrEnable()) {
             Minecraft mc = Minecraft.getInstance();
             if (mc.screen instanceof CuriosContainerScreen screen) {
                 screen.updatePage(page);
@@ -47,7 +52,7 @@ public class CuriosCompat {
 
     @OnlyIn(Dist.CLIENT)
     public static void clientResetPage() {
-        if (isLoaded()) {
+        if (isLoadedOrEnable()) {
             Minecraft mc = Minecraft.getInstance();
             if (mc.screen instanceof CuriosContainerScreen screen) {
                 screen.updatePage(screen.getPage());

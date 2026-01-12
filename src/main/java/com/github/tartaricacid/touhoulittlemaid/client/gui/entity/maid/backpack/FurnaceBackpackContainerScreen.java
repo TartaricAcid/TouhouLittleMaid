@@ -7,7 +7,6 @@ import com.github.tartaricacid.touhoulittlemaid.compat.curios.CuriosCompat;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.backpack.FurnaceBackpackContainer;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -37,7 +36,7 @@ public class FurnaceBackpackContainerScreen extends AbstractMaidContainerGui<Fur
         this.addRenderableWidget(button);
 
         // 添加 curios 兼容按钮
-        if (CuriosCompat.isLoaded()) {
+        if (CuriosCompat.isLoadedOrEnable()) {
             this.addRenderableWidget(this.getCuriosButton(maid, leftPos, topPos));
         }
     }

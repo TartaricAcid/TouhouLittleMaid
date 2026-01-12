@@ -614,6 +614,8 @@
   "config.touhou_little_maid.maid.maid_tamed_item.tooltip": "这个物品可以右击女仆进行驯服",
   "config.touhou_little_maid.maid.maid_temptation_item": "吸引女仆的物品",
   "config.touhou_little_maid.maid.maid_temptation_item.tooltip": "这个物品能够吸引女仆",
+  "config.touhou_little_maid.maid.enable_maid_curios": "启用女仆 Curios 饰品栏支持",
+  "config.touhou_little_maid.maid.enable_maid_curios.tooltip": "当安装了 Curios 模组后，是否启用女仆的 Curios 饰品栏支持",
   "config.touhou_little_maid.maid.maid_work_range": "女仆工作范围",
   "config.touhou_little_maid.maid.maid_work_range.tooltip": "女仆处于工作模式时的最大范围",
   "config.touhou_little_maid.maid.maid_idle_range": "女仆休息范围",

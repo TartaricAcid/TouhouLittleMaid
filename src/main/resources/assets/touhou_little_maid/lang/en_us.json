@@ -612,6 +612,8 @@
   "config.touhou_little_maid.maid.global_maid_show_chat_bubble.tooltip": "This is a global config that applies to all maids: Whether or not to display chat bubbles",
   "config.touhou_little_maid.maid.maid_tamed_item": "Maid Tamed Item",
   "config.touhou_little_maid.maid.maid_tamed_item.tooltip": "The item that can tame a maid \nUse the registered name of the item directly or write the tag name with # as prefix",
+  "config.touhou_little_maid.maid.enable_maid_curios": "Enable Maid Curios",
+  "config.touhou_little_maid.maid.enable_maid_curios.tooltip": "When installed Curios mod, whether to enable maid curios slot support",
   "config.touhou_little_maid.maid.maid_temptation_item": "Maid Temptation Item",
   "config.touhou_little_maid.maid.maid_temptation_item.tooltip": "The item that can tempt a maid \nUse the registered name of the item directly or write the tag name with # as prefix",
   "config.touhou_little_maid.maid.maid_work_range": "Maid Work Range",

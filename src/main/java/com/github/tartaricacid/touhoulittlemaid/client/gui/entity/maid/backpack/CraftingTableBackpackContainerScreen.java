@@ -39,7 +39,7 @@ public class CraftingTableBackpackContainerScreen extends AbstractMaidContainerG
         this.addRenderableWidget(button);
 
         // 添加 curios 兼容按钮
-        if (CuriosCompat.isLoaded()) {
+        if (CuriosCompat.isLoadedOrEnable()) {
             this.addRenderableWidget(this.getCuriosButton(maid, leftPos, topPos));
         }
     }

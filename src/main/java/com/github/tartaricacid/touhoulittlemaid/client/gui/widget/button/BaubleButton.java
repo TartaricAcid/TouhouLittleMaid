@@ -16,9 +16,9 @@ public class BaubleButton extends Button implements ITooltipButton {
     private final Component tooltip;
 
     public BaubleButton(int x, int y, boolean isOpen, OnPress onPress) {
-        super(x + 85, y + 97, 54, CuriosCompat.isLoaded() ? 31 : 63, Component.empty(), onPress, DEFAULT_NARRATION);
+        super(x + 85, y + 97, 54, CuriosCompat.isLoadedOrEnable() ? 31 : 63, Component.empty(), onPress, DEFAULT_NARRATION);
         this.vStart = isOpen ? this.getHeight() : 0;
-        this.uStart = CuriosCompat.isLoaded() ? 54 : 0;
+        this.uStart = CuriosCompat.isLoadedOrEnable() ? 54 : 0;
         if (isOpen) {
             this.tooltip = Component.translatable("gui.touhou_little_maid.bauble_button.close.desc");
         } else {
