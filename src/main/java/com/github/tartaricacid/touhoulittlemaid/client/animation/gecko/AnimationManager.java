@@ -374,6 +374,8 @@ public final class AnimationManager {
 
             // 如果咏唱被取消，跳过当前提供器，检查下一个
             if (state != null && state.isCancelled()) {
+                // 清理取消标记，避免提供器没有清除状态
+                state.setCancelled(false);
                 continue;
             }
 
