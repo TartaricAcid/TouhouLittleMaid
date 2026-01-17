@@ -401,7 +401,7 @@ public final class AnimationManager {
             // 尝试获取自定义动画
             AnimationBuilder builder = provider.getAnimationBuilder(maid, state);
             if (builder != null) {
-                if (lastPhase == IMagicCastingState.CastingPhase.NONE) {
+                if (lastPhase != IMagicCastingState.CastingPhase.START && lastPhase != IMagicCastingState.CastingPhase.CASTING) {
                     controller.markNeedsReload();
                 }
                 controller.setAnimation(builder);
