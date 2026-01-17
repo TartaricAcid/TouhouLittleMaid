@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.entity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.animation.IMagicCastingState;
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.HardcodedAnimationManger;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.AnimationManager;
@@ -43,6 +44,11 @@ public class GeckoMaidEntity<T extends Mob> extends AnimatableEntity<T> implemen
      * 沉浸式奏乐兼容数据缓存
      */
     private ImmersiveMelodiesCompat.ImmersiveMelodiesData imData = new ImmersiveMelodiesCompat.ImmersiveMelodiesData();
+
+    /**
+     * 上一次的魔法咏唱阶段，用于判断阶段过渡时的动画行为
+     */
+    private IMagicCastingState.CastingPhase lastCastingPhase = IMagicCastingState.CastingPhase.NONE;
 
     public GeckoMaidEntity(T mob, IMaid maid) {
         super(mob, FPS);
@@ -184,6 +190,14 @@ public class GeckoMaidEntity<T extends Mob> extends AnimatableEntity<T> implemen
 
     public ImmersiveMelodiesCompat.ImmersiveMelodiesData getImmersiveMelodiesData() {
         return imData;
+    }
+
+    public IMagicCastingState.CastingPhase getLastCastingPhase() {
+        return lastCastingPhase;
+    }
+
+    public void setLastCastingPhase(IMagicCastingState.CastingPhase phase) {
+        this.lastCastingPhase = phase;
     }
 
     private static class MaidState<T extends Mob> {
