@@ -14,7 +14,6 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.MaidGameRecordMan
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.PlayState;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.AnimationBuilder;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.ILoopType;
-import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.builder.RawAnimation;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.event.predicate.AnimationEvent;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.resource.GeckoLibCache;
 import com.github.tartaricacid.touhoulittlemaid.network.message.MaidAnimationMessage;
@@ -364,41 +363,60 @@ public final class AnimationManager {
         if (maid == null) {
             return PlayState.STOP;
         }
-        if (event.getController().getAnimationState() != com.github.tartaricacid.touhoulittlemaid.geckolib3.core.AnimationState.STOPPED
-            && event.getController().getCurrentAnimation() != null
-            && event.getController().getCurrentAnimation().loop ==  ILoopType.EDefaultLoopTypes.PLAY_ONCE) {
-            return PlayState.CONTINUE;
-        }
+
+        var controller = event.getController();
+        var geckoEntity = event.getAnimatableEntity();
+        var lastPhase = geckoEntity.getLastCastingPhase();
 
         // 遍历所有注册的提供器，按优先级顺序
         for (IMagicCastingAnimationProvider provider : MagicCastingAnimationManager.getProviders()) {
             IMagicCastingState state = provider.getMagicCastingState(maid);
 
-            // 检查状态是否有效
-            if (state == null || state.getCurrentPhase() == IMagicCastingState.CastingPhase.NONE) {
+            // 如果咏唱被取消，跳过当前提供器，检查下一个
+            if (state != null && state.isCancelled()) {
+                // 清理取消标记，避免提供器没有清除状态
+                state.setCancelled(false);
                 continue;
             }
 
-            // 如果咏唱被取消，跳过当前提供器，检查下一个附属
-            if (state.isCancelled()) {
+            // 获取当前 phase
+            var currentPhase = (state != null) ? state.getCurrentPhase() : IMagicCastingState.CastingPhase.NONE;
+
+            // 检查状态是否有效
+            if (currentPhase == IMagicCastingState.CastingPhase.NONE) {
+                // 当前 phase 为 NONE，检查是否需要让动画播放完毕
+                // 从 INSTANT 或 END 过渡到 NONE 时，继续播放直到动画结束
+                if ((lastPhase == IMagicCastingState.CastingPhase.INSTANT || lastPhase == IMagicCastingState.CastingPhase.END)
+                        && controller.getAnimationState() != com.github.tartaricacid.touhoulittlemaid.geckolib3.core.AnimationState.STOPPED) {
+                    return PlayState.CONTINUE;
+                }
+                // 从 START 或 CASTING 过渡到 NONE 时，允许终止
+                geckoEntity.setLastCastingPhase(IMagicCastingState.CastingPhase.NONE);
                 continue;
             }
+
+            // 更新 lastPhase
+            geckoEntity.setLastCastingPhase(currentPhase);
 
             // 尝试获取自定义动画
             AnimationBuilder builder = provider.getAnimationBuilder(maid, state);
             if (builder != null) {
-                for (RawAnimation rawAnimation : builder.getRawAnimationList()) {
-                    if (rawAnimation.loopType == ILoopType.EDefaultLoopTypes.PLAY_ONCE) {
-                        event.getController().markNeedsReload();
-                        break;
-                    }
+                if (lastPhase != IMagicCastingState.CastingPhase.START && lastPhase != IMagicCastingState.CastingPhase.CASTING) {
+                    controller.markNeedsReload();
                 }
-                event.getController().setAnimation(builder);
+                controller.setAnimation(builder);
+                return PlayState.CONTINUE;
+            }
+
+            // builder 为 null，但 phase 有效，继续播放当前动画
+            if (controller.getAnimationState() != com.github.tartaricacid.touhoulittlemaid.geckolib3.core.AnimationState.STOPPED) {
                 return PlayState.CONTINUE;
             }
         }
 
         // 没有任何附属提供有效的动画
+        geckoEntity.setLastCastingPhase(IMagicCastingState.CastingPhase.NONE);
+        controller.clearAnimationCache();
         return PlayState.STOP;
     }
 

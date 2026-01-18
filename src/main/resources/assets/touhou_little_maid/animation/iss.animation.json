@@ -715,6 +715,7 @@
 			}
 		},
 		"iss:long_cast": {
+			"loop": true,
 			"animation_length": 5,
 			"bones": {
 				"UpBody": {
@@ -976,6 +977,7 @@
 			}
 		},
 		"iss:continuous_overhead": {
+			"loop": true,
 			"animation_length": 0.88,
 			"bones": {
 				"UpBody": {
@@ -1676,6 +1678,7 @@
 			}
 		},
 		"iss:continuous_thrust": {
+			"loop": true,
 			"animation_length": 0.44,
 			"bones": {
 				"UpBody": {
