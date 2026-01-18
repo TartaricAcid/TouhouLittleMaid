@@ -89,7 +89,8 @@
 			"animation": [
 				"geckolib:animation/winefox_magical.main.animation.json",
 				"geckolib:animation/winefox_magical.condition.animation.json",
-				"geckolib:animation/foxmaid.tac.animation.json"
+				"geckolib:animation/winefox_magical.iss.animation.json",
+                "geckolib:animation/foxmaid.tac.animation.json"
 			],
 			"render_entity_scale": 0.65,
 			"description": ["{model.geckolib.winefox_magical.desc}"]

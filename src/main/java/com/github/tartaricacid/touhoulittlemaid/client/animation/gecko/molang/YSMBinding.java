@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.molang;
 
 import com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.molang.functions.*;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.molang.variable.LadderFacingVariable;
+import com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.molang.variable.MoveInputVariable;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.event.predicate.AnimationEvent;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.molang.binding.ContextBinding;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.molang.builtin.query.EmptyFunction;
@@ -40,6 +41,9 @@ public class YSMBinding extends ContextBinding {
         var("weather", ctx -> getWeather(ctx.level()));
         var("dimension_name", ctx -> ctx.level().dimension().location().toString());
         var("fps", ctx -> Minecraft.getInstance().getFps());
+
+        entityVar("input_vertical", MoveInputVariable::getVertical);
+        entityVar("input_horizontal", MoveInputVariable::getHorizontal);
 
         entityVar("is_passenger", ctx -> ctx.entity().isPassenger());
         entityVar("is_sleep", ctx -> ctx.entity().getPose() == Pose.SLEEPING);
