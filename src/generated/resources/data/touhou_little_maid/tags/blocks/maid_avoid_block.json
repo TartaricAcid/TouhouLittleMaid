@@ -1,0 +1,60 @@
+{
+  "values": [
+    {
+      "id": "create:mechanical_saw",
+      "required": false
+    },
+    {
+      "id": "create:crushing_wheel",
+      "required": false
+    },
+    {
+      "id": "create:crushing_wheel_controller",
+      "required": false
+    },
+    {
+      "id": "the_bumblezone:heavy_air",
+      "required": false
+    },
+    {
+      "id": "the_bumblezone:windy_air",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:stove",
+      "required": false
+    },
+    {
+      "id": "twilightforest:hedge",
+      "required": false
+    },
+    {
+      "id": "twilightforest:fiery_block",
+      "required": false
+    },
+    {
+      "id": "twilightforest:knightmetal_block",
+      "required": false
+    },
+    {
+      "id": "alexscaves:primal_magma",
+      "required": false
+    },
+    {
+      "id": "alexscaves:primal_magma",
+      "required": false
+    },
+    {
+      "id": "mekanismgenerators:fission_reactor_casing",
+      "required": false
+    },
+    {
+      "id": "mekanismgenerators:fusion_reactor_frame",
+      "required": false
+    },
+    {
+      "id": "mekanismgenerators:reactor_glass",
+      "required": false
+    }
+  ]
+}

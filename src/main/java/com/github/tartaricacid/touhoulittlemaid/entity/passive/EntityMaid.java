@@ -27,6 +27,7 @@ import com.github.tartaricacid.touhoulittlemaid.config.ServerConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MiscConfig;
 import com.github.tartaricacid.touhoulittlemaid.datagen.tag.EntityTypeGenerator;
+import com.github.tartaricacid.touhoulittlemaid.datagen.tag.TagBlock;
 import com.github.tartaricacid.touhoulittlemaid.datagen.tag.TagItem;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidBrain;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
@@ -2715,6 +2716,13 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     }
 
     private boolean canTeleportTo(BlockPos pos) {
+        // 先检查下方方块是否在黑名单中
+        BlockState blockState = this.level().getBlockState(pos.below());
+        if (blockState.is(TagBlock.MAID_AVOID_BLOCK)) {
+            return false;
+        }
+
+        // 再检查路径节点类型和碰撞箱
         BlockPathTypes pathNodeType = WalkNodeEvaluator.getBlockPathTypeStatic(this.level(), pos.mutable());
         if (pathNodeType == BlockPathTypes.WALKABLE || pathNodeType == BlockPathTypes.WATER) {
             BlockPos blockPos = pos.subtract(this.blockPosition());
