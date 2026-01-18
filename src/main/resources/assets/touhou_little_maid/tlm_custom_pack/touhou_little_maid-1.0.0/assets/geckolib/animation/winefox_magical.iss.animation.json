@@ -431,6 +431,7 @@
 			}
 		},
 		"iss:continuous_thrust": {
+			"loop": true,
 			"animation_length": 3,
 			"bones": {
 				"ysmGlowmofazhen14": {
@@ -595,6 +596,7 @@
 			}
 		},
 		"iss:continuous_overhead": {
+			"loop": true,
 			"animation_length": 4,
 			"bones": {
 				"UpBody": {
@@ -849,6 +851,7 @@
 			}
 		},
 		"iss:long_cast": {
+			"loop": true,
 			"animation_length": 10,
 			"bones": {
 				"LeftArm": {
