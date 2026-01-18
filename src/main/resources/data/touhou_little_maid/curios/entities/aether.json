@@ -1,0 +1,19 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "aether"
+    }
+  ],
+  "entities": [
+    "touhou_little_maid:maid"
+  ],
+  "slots": [
+    "aether_accessory",
+    "aether_cape",
+    "aether_gloves",
+    "aether_pendant",
+    "aether_ring",
+    "aether_shield"
+  ]
+}
