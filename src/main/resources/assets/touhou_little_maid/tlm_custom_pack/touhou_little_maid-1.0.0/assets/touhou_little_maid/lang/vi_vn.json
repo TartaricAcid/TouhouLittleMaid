@@ -299,7 +299,7 @@
   "model.touhou_little_maid.morichika_rinnosuke.name": "Morichika Rinnosuke",
   "model.touhou_little_maid.morichika_rinnosuke.desc": "§7Chủ Cửa Tiệm Kourindou",
   "model.touhou_little_maid.lucky_cat_2m.name": "Mèo Thần Tài",
-  "model.touhou_little_maid.lucky_cat_2m.desc": "§7Chúc mừng lượt tải xuống mod touhou little maid vượt trên 2 triệu.",
+  "model.touhou_little_maid.lucky_cat_2m.desc": "§7Chúc mừng lượt tải xuống mod touhou little maid đạt trên 2 triệu.",
   "model.touhou_little_maid.satsuki_rin.name": "Rin Satsuki",
   "model.touhou_little_maid.satsuki_rin.desc": "§7Thiết lập nhân vật là tái tạo",
   "model.touhou_little_maid.yumemi_strawberry_milk.name": "Sữa Dâu Yumemi",
@@ -309,6 +309,8 @@
   "model.touhou_little_maid.chimi_houjuu.desc": "§7Quái Thú Phản Cốt Không Rõ Nguyên Hình",
   "model.touhou_little_maid.ubame_chirizuka.name": "Chirizuka Ubame",
   "model.touhou_little_maid.ubame_chirizuka.desc": "§7Thủ Lĩnh Yamanba Trú Ngụ Tại Thánh Vực",
+  "model.touhou_little_maid.ariya_iwanaga.name": "Iwanaga Ariya",
+  "model.touhou_little_maid.ariya_iwanaga.desc": "§7Công Chúa của Sự Vĩnh Hằng",
   "model.touhou_little_maid.legendary_pig_man.name": "Tượng Người Lợn Huyền Thoại",
   "model.touhou_little_maid.head_of_academycraft.name": "Tượng Tác Giả AcademyCraft"
 }
