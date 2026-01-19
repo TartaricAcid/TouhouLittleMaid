@@ -14,6 +14,7 @@ import net.minecraft.network.chat.FormattedText;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
+import org.jetbrains.annotations.ApiStatus;
 import org.joml.Matrix4f;
 
 public class EntityGraphics {
@@ -189,6 +190,16 @@ public class EntityGraphics {
     }
 
     public PoseStack getPoseStack() {
+        return pose;
+    }
+
+    @ApiStatus.AvailableSince("1.4.7")
+    public MultiBufferSource getBufferSource() {
+        return bufferSource;
+    }
+
+    @ApiStatus.AvailableSince("1.4.7")
+    public PoseStack getPose() {
         return pose;
     }
 }
