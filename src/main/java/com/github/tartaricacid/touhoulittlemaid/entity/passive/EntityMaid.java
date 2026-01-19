@@ -634,7 +634,13 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             this.level.getProfiler().push("maidCooldowns");
             this.cooldowns.tick();
             if (this.passiveUseShieldTick > 0) {
-                this.passiveUseShieldTick--;
+                // 如果没有拿着盾牌，直接取消计时，避免疯狂挥手
+                ItemStack offHandItem = this.getItemInHand(InteractionHand.OFF_HAND);
+                if (offHandItem.canPerformAction(ToolActions.SHIELD_BLOCK)) {
+                    this.passiveUseShieldTick--;
+                } else {
+                    this.passiveUseShieldTick = 1;
+                }
                 // 最后 1 tick 取消盾牌
                 if (this.passiveUseShieldTick == 1 && this.isUsingItem() && this.getUsedItemHand() == InteractionHand.OFF_HAND) {
                     this.stopUsingItem();
