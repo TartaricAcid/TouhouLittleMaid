@@ -3,8 +3,10 @@ package com.github.tartaricacid.touhoulittlemaid.compat.gun.common.ai;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.compat.gun.common.GunCommonUtil;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitAttribute;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
@@ -64,6 +66,11 @@ public class GunShootTargetTask extends Behavior<EntityMaid> {
                     // 由于部分枪包作者可能在写 lua 脚本时没有规范书写，导致 lua 脚本抛出异常
                     // 所以这里捕获异常，避免因为 lua 脚本错误导致游戏崩溃
                     this.attackCooldown = GunCommonUtil.performGunAttack(owner, target, mainHandItem);
+                    // 根据攻击速度属性调整攻击冷却时间
+                    AttributeInstance attribute = owner.getAttribute(InitAttribute.MAID_GUN_ATTACK_SPEED.get());
+                    if (attribute != null) {
+                        this.attackCooldown = (int) (attackCooldown / attribute.getValue());
+                    }
                 } catch (Exception e) {
                     TouhouLittleMaid.LOGGER.error("Error while performing gun attack for EntityMaid: {}", owner.getUUID(), e);
                     // 如果发生异常，重置攻击冷却时间

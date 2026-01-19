@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.kubejs.register.task;
 
 import com.github.tartaricacid.touhoulittlemaid.api.task.IAttackTask;
+import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidMeleeAttack;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidUseShieldTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
@@ -54,7 +55,7 @@ public class MeleeTaskJS implements IAttackTask {
         BehaviorControl<EntityMaid> findTargetTask = StopAttackingIfTargetInvalid.create(target ->
                 !isWeapon(maid, maid.getMainHandItem()) || maid.distanceTo(target) > maid.getRestrictRadius());
         BehaviorControl<Mob> moveToTargetTask = SetWalkTargetFromAttackTargetIfTargetOutOfReach.create(builder.walkSpeed);
-        BehaviorControl<Mob> attackTargetTask = MeleeAttack.create(builder.meleeCooldownTick);
+        BehaviorControl<EntityMaid> attackTargetTask = MaidMeleeAttack.create(builder.meleeCooldownTick);
         MaidUseShieldTask maidUseShieldTask = new MaidUseShieldTask();
 
         List<Pair<Integer, BehaviorControl<? super EntityMaid>>> tasks = Lists.newArrayList(
@@ -76,7 +77,7 @@ public class MeleeTaskJS implements IAttackTask {
                 isWeapon(m, m.getMainHandItem()), IAttackTask::findFirstValidAttackTarget);
         BehaviorControl<EntityMaid> findTargetTask = StopAttackingIfTargetInvalid.create(target ->
                 !isWeapon(maid, maid.getMainHandItem()) || farAway(target, maid));
-        BehaviorControl<Mob> attackTargetTask = MeleeAttack.create(builder.meleeCooldownTick);
+        BehaviorControl<EntityMaid> attackTargetTask = MaidMeleeAttack.create(builder.meleeCooldownTick);
         MaidUseShieldTask maidUseShieldTask = new MaidUseShieldTask();
 
         List<Pair<Integer, BehaviorControl<? super EntityMaid>>> tasks = Lists.newArrayList(

@@ -46,10 +46,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityTombstone;
 import com.github.tartaricacid.touhoulittlemaid.entity.projectile.MaidFishingHook;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskIdle;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
-import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
-import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
-import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
-import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
+import com.github.tartaricacid.touhoulittlemaid.init.*;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.backpack.BaubleContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.config.MaidAIChatConfigContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.config.MaidConfigContainer;
@@ -356,6 +353,11 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         this(TYPE, worldIn);
     }
 
+    /**
+     * 如果其他模组想要给女仆添加额外属性
+     * <p>
+     * 可通过 forge 的 EntityAttributeModificationEvent 添加
+     */
     public static AttributeSupplier.Builder createAttributes() {
         return LivingEntity.createLivingAttributes()
                 // 目前仅用于寻路，女仆最大可寻路 64 格
@@ -364,8 +366,19 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
                 .add(Attributes.ATTACK_DAMAGE)
                 // 幸运值，目前暂时没用，保留为未来添加更多趣味内容
                 .add(Attributes.LUCK)
+                // 女仆攻击速度，这个数字表示每秒可施展的攻击次数，默认每秒一次
+                .add(Attributes.ATTACK_SPEED, 1)
                 // 用于女仆近战的范围判断
-                .add(ForgeMod.ENTITY_REACH.get(), 2);
+                .add(ForgeMod.ENTITY_REACH.get(), 2)
+                // 部分本模组新增属性
+                .add(InitAttribute.MAID_USE_ITEM_SPEED.get())
+                .add(InitAttribute.MAID_CROSSBOW_ATTACK_SPEED.get())
+                .add(InitAttribute.MAID_GUN_ATTACK_SPEED.get())
+                .add(InitAttribute.MAID_SHOOT_COOLDOWN.get())
+                .add(InitAttribute.MAID_TRIDENT_COOLDOWN.get())
+                .add(InitAttribute.MAID_PICKUP_RANGE.get())
+                .add(InitAttribute.MAID_PASSIVE_USE_SHIELD_TICK.get())
+                .add(InitAttribute.MAID_HUNGER.get());
     }
 
     public static boolean canInsertItem(ItemStack stack) {
@@ -695,8 +708,15 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         super.pushEntities();
         // 只有拾物模式开启，驯服状态下才可以捡起物品
         if (this.isPickup() && this.isTame()) {
-            List<Entity> entityList = this.level.getEntities(this,
-                    this.getBoundingBox().inflate(0.5, 0, 0.5), this::canPickup);
+            AABB pickupBox;
+            AttributeInstance attribute = this.getAttribute(InitAttribute.MAID_PICKUP_RANGE.get());
+            if (attribute != null) {
+                pickupBox = this.getBoundingBox().inflate(attribute.getValue());
+            } else {
+                pickupBox = this.getBoundingBox().inflate(0.5);
+            }
+
+            List<Entity> entityList = this.level.getEntities(this, pickupBox, this::canPickup);
             if (!entityList.isEmpty() && this.isAlive()) {
                 for (Entity entityPickup : entityList) {
                     // 如果是物品
@@ -969,7 +989,12 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             if (!isUsingShield) {
                 this.startUsingItem(InteractionHand.OFF_HAND);
                 // 使用五秒的盾牌
-                this.passiveUseShieldTick = 100;
+                AttributeInstance attribute = this.getAttribute(InitAttribute.MAID_PASSIVE_USE_SHIELD_TICK.get());
+                if (attribute != null) {
+                    this.passiveUseShieldTick = (int) attribute.getValue();
+                } else {
+                    this.passiveUseShieldTick = 100;
+                }
             }
         }
         return super.hurt(source, amount);
@@ -1828,12 +1853,11 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     }
 
     /**
-     * @deprecated 给 BehaviorUtils.isWithinAttackRange() 用的 <br>
-     * 但是目前为了实现超远视距打击，已经不用原版提供的这个了 <br>
-     * 故这里返回 true 还是 false 都不影响了
+     * 给 MaidMeleeAttack 使用，用于判断当前任务是否能够近战
+     * <p>
+     * 如果返回 true，则表示当前是远程攻击，不是近战攻击
      */
     @Override
-    @Deprecated
     public boolean canFireProjectileWeapon(ProjectileWeaponItem shootableItem) {
         return getTask() instanceof IRangedAttackTask;
     }
@@ -1931,6 +1955,19 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     public void swing(InteractionHand pHand) {
         SlashBladeCompat.swingSlashBlade(this, getItemInHand(pHand));
         super.swing(pHand);
+    }
+
+    @Override
+    protected void updateUsingItem(ItemStack usingItem) {
+        if (!usingItem.isEmpty()) {
+            AttributeInstance attribute = this.getAttribute(InitAttribute.MAID_USE_ITEM_SPEED.get());
+            if (attribute != null) {
+                // MAID_USE_ITEM_SPEED 默认是 1
+                // 故这里减去属性值再加 1，保证属性值为 1 时行为和原版一致
+                this.useItemRemaining = this.useItemRemaining - (int) attribute.getValue() + 1;
+            }
+        }
+        super.updateUsingItem(usingItem);
     }
 
     @Override

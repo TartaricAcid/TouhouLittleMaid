@@ -1,10 +1,12 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitAttribute;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
@@ -15,14 +17,26 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import java.util.Optional;
 
 public class MaidShootTargetTask extends Behavior<EntityMaid> {
-    private final int attackCooldown;
+    /**
+     * @deprecated 该字段已弃用，现在已经使用属性 {@link InitAttribute#MAID_SHOOT_COOLDOWN} 来调整攻击间隔
+     */
+    @Deprecated(since = "1.4.7")
+    private final int attackCooldown = 2;
+
     private int attackTime = -1;
     private int seeTime;
 
-    public MaidShootTargetTask(int attackCooldown) {
+    public MaidShootTargetTask() {
         super(ImmutableMap.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED,
                 MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT), 1200);
-        this.attackCooldown = attackCooldown;
+    }
+
+    /**
+     * @deprecated 现在已经使用属性 {@link InitAttribute#MAID_SHOOT_COOLDOWN} 来调整攻击间隔
+     */
+    @Deprecated(since = "1.4.7")
+    public MaidShootTargetTask(int attackCooldown) {
+        this();
     }
 
     @Override
@@ -84,7 +98,13 @@ public class MaidShootTargetTask extends Behavior<EntityMaid> {
                         owner.stopUsingItem();
                         int powerTime = Math.max(ticksUsingItem, 20);
                         owner.performRangedAttack(target, BowItem.getPowerForTime(powerTime));
-                        this.attackTime = this.attackCooldown;
+                        // 依据属性调整攻击间隔
+                        AttributeInstance attributeInstance = owner.getAttribute(InitAttribute.MAID_SHOOT_COOLDOWN.get());
+                        if (attributeInstance != null) {
+                            this.attackTime = (int) attributeInstance.getValue();
+                        } else {
+                            this.attackTime = this.attackCooldown;
+                        }
                     }
                 }
             } else if (--this.attackTime <= 0 && this.seeTime >= -60) {
