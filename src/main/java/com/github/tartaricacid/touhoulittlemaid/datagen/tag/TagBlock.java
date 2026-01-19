@@ -53,9 +53,18 @@ public class TagBlock extends BlockTagsProvider {
                 // Alex 的洞穴
                 .addOptional(new ResourceLocation("alexscaves:primal_magma"))
                 .addOptional(new ResourceLocation("alexscaves:primal_magma"))
-                // MEK 反应堆
-                .addOptional(new ResourceLocation("mekanismgenerators:fission_reactor_casing"))
+                // MEK 反应堆的聚变堆和超临界移相器
                 .addOptional(new ResourceLocation("mekanismgenerators:fusion_reactor_frame"))
-                .addOptional(new ResourceLocation("mekanismgenerators:reactor_glass"));
+                .addOptional(new ResourceLocation("mekanism:sps_casing"))
+                // 机械动力附属的铁丝网
+                .addOptional(new ResourceLocation("createaddition:barbed_wire"))
+                // 沉浸工程的铁丝网
+                .addOptional(new ResourceLocation("immersiveengineering:razor_wire"))
+                // 铁魔法的两个火堆
+                .addOptional(new ResourceLocation("irons_spellbooks:brazier"))
+                .addOptional(new ResourceLocation("irons_spellbooks:brazier_soul"))
+                // 刷怪塔实用设备的锥刺和研磨机
+                .addOptional(new ResourceLocation("mob_grinding_utils:spikes"))
+                .addOptional(new ResourceLocation("mob_grinding_utils:saw"));
     }
 }

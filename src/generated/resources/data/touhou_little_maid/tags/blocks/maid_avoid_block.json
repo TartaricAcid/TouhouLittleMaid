@@ -45,15 +45,35 @@
       "required": false
     },
     {
-      "id": "mekanismgenerators:fission_reactor_casing",
-      "required": false
-    },
-    {
       "id": "mekanismgenerators:fusion_reactor_frame",
       "required": false
     },
     {
-      "id": "mekanismgenerators:reactor_glass",
+      "id": "mekanism:sps_casing",
+      "required": false
+    },
+    {
+      "id": "createaddition:barbed_wire",
+      "required": false
+    },
+    {
+      "id": "immersiveengineering:razor_wire",
+      "required": false
+    },
+    {
+      "id": "irons_spellbooks:brazier",
+      "required": false
+    },
+    {
+      "id": "irons_spellbooks:brazier_soul",
+      "required": false
+    },
+    {
+      "id": "mob_grinding_utils:spikes",
+      "required": false
+    },
+    {
+      "id": "mob_grinding_utils:saw",
       "required": false
     }
   ]
