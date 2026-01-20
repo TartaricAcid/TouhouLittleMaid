@@ -1240,6 +1240,18 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         return super.canAttack(target);
     }
 
+    /**
+     * 女仆在危险情况（比如附近有苦力怕）下是否应该停止骑乘或待命状态
+     */
+    public boolean shouldLeaveMountOrSitForDanger() {
+        // 如果女仆和玩家骑乘同一个扫帚
+        Entity vehicle = this.getVehicle();
+        if (vehicle != null && vehicle.getControllingPassenger() instanceof Player) {
+            return false;
+        }
+        return true;
+    }
+
     public void sendItemBreakMessage(ItemStack stack) {
         if (!this.level.isClientSide) {
             NetworkHandler.sendToNearby(this, new ItemBreakMessage(this.getId(), stack));
