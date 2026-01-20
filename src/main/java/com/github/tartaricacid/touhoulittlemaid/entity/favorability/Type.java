@@ -5,13 +5,20 @@ public class Type {
     public static final Type COMPUTER = new Type("Computer", 2, 24000);
     public static final Type KEYBOARD = new Type("Keyboard", 2, 24000);
     public static final Type GOMOKU = new Type("Gomoku", 2, 24000);
+
     public static final Type SLEEP = new Type("Sleep", 2, 24000);
+
     public static final Type GOMOKU_WIN = new Type("GomokuWin", 8, 12000);
     public static final Type CCHESS_WIN = new Type("CChessWin", 4, 18000);
     public static final Type WCHESS_WIN = new Type("CChessWin", 4, 18000);
-    public static final Type WORK_MEAL = new Type("WorkMeal", 1, 2 * 60 * 20);
+
+    public static final Type WORK_MEAL = new Type("WorkMeal", 1, 3 * 60 * 20);
     public static final Type ON_HOME_MEAL = new Type("OnHomeMeal", 1, 24000);
     public static final Type HOME_MEAL = new Type("HomeMeal", 1, 60 * 20);
+
+    // 女仆偷吃方块食物增加的好感度
+    public static final Type STEAL_EDIBLE_BLOCK = new Type("StealEdibleBlock", 1, 3 * 60 * 20);
+
     public static final Type DEATH = new Type("Death", -2, 12000);
 
     private final String typeName;

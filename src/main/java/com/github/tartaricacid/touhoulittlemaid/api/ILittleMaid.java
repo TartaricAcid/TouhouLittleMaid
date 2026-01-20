@@ -10,6 +10,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityMai
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.GeckoEntityMaidRenderer;
 import com.github.tartaricacid.touhoulittlemaid.debug.target.DebugTarget;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.ExtraMaidBrainManager;
+import com.github.tartaricacid.touhoulittlemaid.entity.ai.edible.MaidEdibleBlockManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleRegister;
 import com.github.tartaricacid.touhoulittlemaid.entity.data.TaskDataRegister;
@@ -128,6 +129,17 @@ public interface ILittleMaid {
      * 给女仆模组的作物模式添加特判
      */
     default void registerSpecialCropHandler(SpecialCropManager register) {
+    }
+
+    /**
+     * 注册女仆可食用方块
+     * <p>
+     * 女仆会在工作日程时寻找并食用周围实现了此接口的方块食物。
+     * 此外，女仆还可以将背包中的食物物品放置为方块食物后再进行食用。
+     *
+     * @param manager 注册器
+     */
+    default void registerMaidEdibleBlock(MaidEdibleBlockManager manager) {
     }
 
     /**

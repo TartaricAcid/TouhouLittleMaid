@@ -34,7 +34,8 @@ public final class MaidBrain {
                 MemoryModuleType.WALK_TARGET,
                 MemoryModuleType.ATTACK_TARGET,
                 MemoryModuleType.ATTACK_COOLING_DOWN,
-                InitEntities.TARGET_POS.get()
+                InitEntities.TARGET_POS.get(),
+                InitEntities.MAID_EDIBLE_BLOCK_ACTION.get()
         );
         ExtraMaidBrainManager.EXTRA_MAID_BRAINS.forEach(extra -> defaultTypes.addAll(extra.getExtraMemoryTypes()));
         return ImmutableList.copyOf(defaultTypes);
@@ -128,8 +129,14 @@ public final class MaidBrain {
         } else {
             pairMaidList.add(updateActivity);
         }
+        // 拿着蛋糕祈求动作
         pairMaidList.add(Pair.of(6, new MaidBegTask()));
+        // 女仆工作餐
         pairMaidList.add(Pair.of(7, new MaidWorkMealTask()));
+        // 女仆偷吃
+        pairMaidList.add(Pair.of(8, new MaidStealEdibleMoveBlockTask(0.6f)));
+        pairMaidList.add(Pair.of(8, new MaidStealEdibleUseTask(2)));
+        // 女仆随机走动
         pairMaidList.add(Pair.of(20, getLookAndRandomWalk(e -> e.getTask().enableLookAndRandomWalk(e) && !e.getSwimManager().isGoingToBreath())));
 
         for (IExtraMaidBrain extra : ExtraMaidBrainManager.EXTRA_MAID_BRAINS) {

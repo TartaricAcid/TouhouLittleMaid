@@ -10,6 +10,7 @@ import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
 import net.minecraft.world.entity.ai.behavior.BlockPosTracker;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Map;
 
@@ -47,7 +48,7 @@ public abstract class MaidMoveToBlockTask extends MaidCheckRateTask {
     protected final void searchForDestination(ServerLevel worldIn, EntityMaid maid) {
         MaidPathFindingBFS pathFinding = getOrCreateArrivalMap(worldIn, maid);
         BlockPos centrePos = this.getWorkSearchPos(maid);
-        int searchRange = (int) maid.getRestrictRadius();
+        int searchRange = this.getHorizontalSearchRange(maid);
         BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
         for (int y = this.verticalSearchStart; y <= this.verticalSearchRange; y = y > 0 ? -y : 1 - y) {
             for (int i = 0; i < searchRange; ++i) {
@@ -69,6 +70,14 @@ public abstract class MaidMoveToBlockTask extends MaidCheckRateTask {
         }
         this.currentWorkPos = null;
         this.clearCurrentArrivalMap(pathFinding);
+    }
+
+    /**
+     * 获取水平搜索范围
+     */
+    @ApiStatus.AvailableSince("1.4.7")
+    protected int getHorizontalSearchRange(EntityMaid maid) {
+        return (int) maid.getRestrictRadius();
     }
 
     protected void clearCurrentArrivalMap(MaidPathFindingBFS pathFinding) {

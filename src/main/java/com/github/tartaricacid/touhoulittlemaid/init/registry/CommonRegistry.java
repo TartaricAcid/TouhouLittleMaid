@@ -8,6 +8,7 @@ import com.github.tartaricacid.touhoulittlemaid.compat.curios.menu.CuriosContain
 import com.github.tartaricacid.touhoulittlemaid.compat.ysm.YsmCompat;
 import com.github.tartaricacid.touhoulittlemaid.debug.target.DebugMaidManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.ExtraMaidBrainManager;
+import com.github.tartaricacid.touhoulittlemaid.entity.ai.edible.MaidEdibleBlockManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.fishing.FishingTypeManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleRegister;
@@ -70,5 +71,6 @@ public final class CommonRegistry {
         DebugMaidManager.init();
         BroomControlManager.init();
         SpecialCropManager.init();
+        MaidEdibleBlockManager.init();
     }
 }
