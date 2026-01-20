@@ -347,6 +347,9 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         this.navigationManager = new MaidNavigationManager(this);
 
         this.cooldowns = new ItemCooldowns();
+
+        // 启用实体持久化，也许能解决难以复现的女仆实体丢失问题
+        this.setPersistenceRequired();
     }
 
     public EntityMaid(Level worldIn) {
