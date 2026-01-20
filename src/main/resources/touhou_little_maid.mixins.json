@@ -16,6 +16,7 @@
     "PersistentEntitySectionManagerMixin",
     "PlayerMixin",
     "StructureTemplateMixin",
+    "SweetBerryBushBlockMixin",
     "ThrownTridentMixin",
     "accessor.ArrowAccessor",
     "accessor.CropBlockAccessor",
