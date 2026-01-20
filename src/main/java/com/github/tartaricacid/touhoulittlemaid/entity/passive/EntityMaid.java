@@ -369,8 +369,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
                 .add(Attributes.ATTACK_DAMAGE)
                 // 幸运值，目前暂时没用，保留为未来添加更多趣味内容
                 .add(Attributes.LUCK)
-                // 女仆攻击速度，这个数字表示每秒可施展的攻击次数，默认每秒一次
-                .add(Attributes.ATTACK_SPEED, 1)
+                // 女仆攻击速度，这个数字表示每秒可施展的攻击次数，会受武器本身的攻击速度影响
+                .add(Attributes.ATTACK_SPEED)
                 // 用于女仆近战的范围判断
                 .add(ForgeMod.ENTITY_REACH.get(), 2)
                 // 部分本模组新增属性
