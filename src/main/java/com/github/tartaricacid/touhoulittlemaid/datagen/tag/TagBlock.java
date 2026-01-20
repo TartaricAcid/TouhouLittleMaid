@@ -16,14 +16,43 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.CompletableFuture;
 
 public class TagBlock extends BlockTagsProvider {
-    public static final TagKey<Block> MAID_JUMP_FORBIDDEN_BLOCK = TagKey.create(Registries.BLOCK, new ResourceLocation(TouhouLittleMaid.MOD_ID, "maid_jump_forbidden_block"));
-    public static final TagKey<Block> MAID_AVOID_BLOCK = TagKey.create(Registries.BLOCK, new ResourceLocation(TouhouLittleMaid.MOD_ID, "maid_avoid_block"));
+    /**
+     * 女仆有时候会在一些不该触发跳跃逻辑的方块上反复尝试跳来跳去，
+     * 故添加此标签来将一些方块放入黑名单中
+     */
+    public static final TagKey<Block> MAID_JUMP_FORBIDDEN_BLOCK = createTagKey("maid_jump_forbidden_block");
 
-    public static final TagKey<Block> ALTAR_TORII = TagKey.create(Registries.BLOCK, new ResourceLocation(TouhouLittleMaid.MOD_ID, "altar_torii"));
-    public static final TagKey<Block> ALTAR_PILLAR = TagKey.create(Registries.BLOCK, new ResourceLocation(TouhouLittleMaid.MOD_ID, "altar_pillar"));
+    /**
+     * 女仆避让方块标签，女仆在寻路、传送时会尽可能避让这些方块
+     */
+    public static final TagKey<Block> MAID_AVOID_BLOCK = createTagKey("maid_avoid_block");
 
-    public TagBlock(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, String modId, @Nullable ExistingFileHelper existingFileHelper) {
+    /**
+     * 在修建祭坛时，可以当做祭坛鸟居部分的方块
+     */
+    public static final TagKey<Block> ALTAR_TORII = createTagKey("altar_torii");
+
+    /**
+     * 在修建祭坛时，可以当做祭坛柱子材料的方块；
+     * <p>
+     * 默认已经包含 <code>#minecraft:logs</code> 标签
+     */
+    public static final TagKey<Block> ALTAR_PILLAR = createTagKey("altar_pillar");
+
+    /**
+     * 女仆有偷吃方块食物的机制，但是这可能会误把一些拿来做装饰的食物方块也偷吃掉
+     * <p>
+     * 故我们现在为一些方块添加 tag，只有放在此方块上承载的食物方块女仆才会偷吃
+     */
+    public static final TagKey<Block> MAID_SNACK_STAND_BLOCK = createTagKey("maid_snack_stand_block");
+
+    public TagBlock(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider,
+                    String modId, @Nullable ExistingFileHelper existingFileHelper) {
         super(output, lookupProvider, modId, existingFileHelper);
+    }
+
+    public static TagKey<Block> createTagKey(String name) {
+        return TagKey.create(Registries.BLOCK, new ResourceLocation(TouhouLittleMaid.MOD_ID, name));
     }
 
     @Override
@@ -33,10 +62,28 @@ public class TagBlock extends BlockTagsProvider {
                 .addTag(BlockTags.FENCES)
                 .addTag(BlockTags.CLIMBABLE);
 
-        tag(ALTAR_TORII).add(Blocks.RED_WOOL, Blocks.RED_CONCRETE).addOptional(new ResourceLocation("biomesoplenty:redwood_planks"));
+        tag(ALTAR_TORII)
+                .add(Blocks.RED_WOOL, Blocks.RED_CONCRETE)
+                .addOptional(new ResourceLocation("biomesoplenty:redwood_planks"));
+
         tag(ALTAR_PILLAR).addTag(BlockTags.LOGS);
 
+        tag(MAID_SNACK_STAND_BLOCK)
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:table_oak"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:table_spruce"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:table_acacia"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:table_bamboo"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:table_birch"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:table_cherry"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:table_crimson"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:table_dark_oak"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:table_jungle"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:table_mangrove"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:table_warped"));
+
         tag(MAID_AVOID_BLOCK)
+                // 怎么能在吃饭的桌子上跳来跳去呢
+                .addTag(MAID_SNACK_STAND_BLOCK)
                 // 机械动力
                 .addOptional(new ResourceLocation("create:mechanical_saw"))
                 .addOptional(new ResourceLocation("create:crushing_wheel"))

@@ -5,13 +5,15 @@ import com.github.tartaricacid.touhoulittlemaid.entity.ai.edible.MaidEdibleBlock
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.edible.MaidEdibleBlockManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Type;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.MaidPathFindingBFS;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.items.wrapper.RangedWrapper;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -25,13 +27,17 @@ public class MaidStealEdibleMoveBlockTask extends MaidMoveToBlockTask {
      * 当搜索成功后，女仆下一次偷吃的检查间隔
      */
     private static final int NEXT_CHECK_TICK_COUNT = 10 * 20;
+    /**
+     * 检查方块可达性的范围，默认检查寻路点周围 3x3x3 范围内的方块的可达性
+     */
+    private static final BoundingBox CHECK_RANGE = new BoundingBox(-1, -1, -1, 1, 1, 1);
 
     private final MemoryModuleType<MaidEdibleBlockAction> action;
 
     private @Nullable ItemStack placedStack;
 
     public MaidStealEdibleMoveBlockTask(float movementSpeed) {
-        super(movementSpeed);
+        super(movementSpeed, 2);
         this.setMaxCheckRate(NEXT_CHECK_TICK_COUNT);
         this.action = InitEntities.MAID_EDIBLE_BLOCK_ACTION.get();
     }
@@ -49,7 +55,7 @@ public class MaidStealEdibleMoveBlockTask extends MaidMoveToBlockTask {
 
         if (memory.isPresent() && memory.get() == MaidEdibleBlockAction.TRY_STEAL) {
             // 检查背包内有可放置食物么，有就切放置状态
-            RangedWrapper inv = maid.getAvailableBackpackInv();
+            CombinedInvWrapper inv = maid.getAvailableInv(true);
             for (int i = 0; i < inv.getSlots(); i++) {
                 ItemStack stack = inv.getStackInSlot(i);
                 if (stack.isEmpty()) {
@@ -91,6 +97,20 @@ public class MaidStealEdibleMoveBlockTask extends MaidMoveToBlockTask {
             } else {
                 if (edibleBlock.shouldMoveTo(maid, pos, blockState)) {
                     return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    protected boolean checkPathReach(EntityMaid maid, MaidPathFindingBFS pathFinding, BlockPos pos) {
+        for (int x = CHECK_RANGE.minX(); x <= CHECK_RANGE.maxX(); x++) {
+            for (int y = CHECK_RANGE.minY(); y <= CHECK_RANGE.maxY(); y++) {
+                for (int z = CHECK_RANGE.minZ(); z <= CHECK_RANGE.maxZ(); z++) {
+                    if (pathFinding.canPathReach(pos.offset(x, y, z))) {
+                        return true;
+                    }
                 }
             }
         }

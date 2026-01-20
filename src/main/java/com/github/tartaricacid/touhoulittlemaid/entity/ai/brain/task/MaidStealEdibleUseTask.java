@@ -19,7 +19,7 @@ import net.minecraft.world.entity.ai.memory.WalkTarget;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.items.wrapper.RangedWrapper;
+import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 
 import java.util.Optional;
 
@@ -78,7 +78,7 @@ public class MaidStealEdibleUseTask extends Behavior<EntityMaid> {
                 }
             }
         } else {
-            RangedWrapper inv = maid.getAvailableBackpackInv();
+            CombinedInvWrapper inv = maid.getAvailableInv(true);
             for (int i = 0; i < inv.getSlots(); i++) {
                 ItemStack stack = inv.getStackInSlot(i);
                 if (stack.isEmpty()) {

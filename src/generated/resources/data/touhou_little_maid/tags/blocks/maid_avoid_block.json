@@ -1,5 +1,6 @@
 {
   "values": [
+    "#touhou_little_maid:maid_snack_stand_block",
     {
       "id": "create:mechanical_saw",
       "required": false

@@ -1,0 +1,48 @@
+{
+  "values": [
+    {
+      "id": "kaleidoscope_cookery:table_oak",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:table_spruce",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:table_acacia",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:table_bamboo",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:table_birch",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:table_cherry",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:table_crimson",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:table_dark_oak",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:table_jungle",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:table_mangrove",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:table_warped",
+      "required": false
+    }
+  ]
+}

@@ -1,8 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.datagen;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.datagen.tag.DamageTypeGenerator;
-import com.github.tartaricacid.touhoulittlemaid.datagen.tag.EntityTypeGenerator;
+import com.github.tartaricacid.touhoulittlemaid.datagen.tag.TagDamage;
+import com.github.tartaricacid.touhoulittlemaid.datagen.tag.TagEntity;
 import com.github.tartaricacid.touhoulittlemaid.datagen.tag.TagBlock;
 import com.github.tartaricacid.touhoulittlemaid.datagen.tag.TagItem;
 import net.minecraft.core.HolderLookup;
@@ -51,8 +51,8 @@ public class MaidDataGenerator {
         // Tags
         var blockTagsProvider = vanillaPack.addProvider(output -> new TagBlock(output, registries, TouhouLittleMaid.MOD_ID, existingFileHelper));
         vanillaPack.addProvider(output -> new TagItem(output, registries, blockTagsProvider.contentsGetter(), TouhouLittleMaid.MOD_ID, existingFileHelper));
-        generator.addProvider(event.includeServer(), new DamageTypeGenerator(packOutput, registries, existingFileHelper));
-        generator.addProvider(event.includeServer(), new EntityTypeGenerator(packOutput, registries, existingFileHelper));
+        generator.addProvider(event.includeServer(), new TagDamage(packOutput, registries, existingFileHelper));
+        generator.addProvider(event.includeServer(), new TagEntity(packOutput, registries, existingFileHelper));
 
         //generator.addProvider(true, new LanguageGenerator(packOutput));
         generator.addProvider(event.includeClient(), new ItemModelGenerator(packOutput, existingFileHelper));
