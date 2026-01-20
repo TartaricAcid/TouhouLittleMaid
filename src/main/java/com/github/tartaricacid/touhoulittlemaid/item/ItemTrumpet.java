@@ -32,10 +32,9 @@ public class ItemTrumpet extends Item {
 
     @Override
     public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int timeLeft) {
-        if (entityLiving instanceof Player && timeLeft >= MIN_USE_DURATION) {
-            Player player = (Player) entityLiving;
-            if (worldIn instanceof ServerLevel) {
-                ((ServerLevel) worldIn).getEntities(EntityMaid.TYPE, Entity::isAlive).stream()
+        if (entityLiving instanceof Player player && timeLeft >= MIN_USE_DURATION) {
+            if (worldIn instanceof ServerLevel serverLevel) {
+                serverLevel.getEntities(EntityMaid.TYPE, Entity::isAlive).stream()
                         .filter(maid -> maid.isOwnedBy(player))
                         .forEach(maid -> teleportToOwner(maid, player));
                 MaidWorldData data = MaidWorldData.get(worldIn);
@@ -55,6 +54,10 @@ public class ItemTrumpet extends Item {
 
     private void teleportToOwner(EntityMaid maid, Player player) {
         maid.setHomeModeEnable(false);
+        // 如果女仆是骑乘某个实体的，先让女仆下来
+        if (maid.isPassenger()) {
+            maid.stopRiding();
+        }
         maid.teleportTo(player.getX() + player.getRandom().nextInt(3) - 1, player.getY(), player.getZ() + player.getRandom().nextInt(3) - 1);
     }
 
