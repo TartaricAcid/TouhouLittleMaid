@@ -2,16 +2,21 @@ package com.github.tartaricacid.touhoulittlemaid.block;
 
 import com.github.tartaricacid.touhoulittlemaid.datagen.tag.TagBlock;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntitySnackCabinet;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.*;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -28,6 +33,8 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 @SuppressWarnings("deprecation")
 public class BlockSnackCabinet extends BaseEntityBlock {
@@ -60,13 +67,20 @@ public class BlockSnackCabinet extends BaseEntityBlock {
             if (neighborState.is(TagBlock.SNACK_CABINET_FULL)) {
                 return state.setValue(TYPE, TYPE_FULL);
             }
-            return state.setValue(TYPE, TYPE_NONE);
         }
         return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
     }
 
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        // 如果是手持方块物品并点击上方，那么不打开界面，方便放置方块
+        Direction direction = hit.getDirection();
+        ItemStack heldItem = player.getItemInHand(hand);
+        if (direction == Direction.UP && heldItem.getItem() instanceof BlockItem) {
+            return InteractionResult.PASS;
+        }
+
+        // 否则打开界面
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
@@ -137,5 +151,10 @@ public class BlockSnackCabinet extends BaseEntityBlock {
     @Override
     public RenderShape getRenderShape(BlockState state) {
         return RenderShape.ENTITYBLOCK_ANIMATED;
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
+        tooltip.add(Component.translatable("block.touhou_little_maid.snack_cabinet.tip").withStyle(ChatFormatting.GRAY));
     }
 }

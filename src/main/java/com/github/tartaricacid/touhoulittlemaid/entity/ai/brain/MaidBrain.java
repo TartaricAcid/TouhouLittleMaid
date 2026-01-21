@@ -112,10 +112,15 @@ public final class MaidBrain {
         Pair<Integer, BehaviorControl<? super EntityMaid>> beg = Pair.of(5, new MaidBegTask());
         Pair<Integer, BehaviorControl<? super EntityMaid>> homeMeal = Pair.of(6, new MaidFindHomeMealTask(0.6f, 2));
         Pair<Integer, BehaviorControl<? super EntityMaid>> joy = Pair.of(7, new MaidJoyTask(0.6f, 2));
+
+        // 女仆偷吃
+        Pair<Integer, BehaviorControl<? super EntityMaid>> stealEdibleMove = Pair.of(8, new MaidStealEdibleMoveBlockTask(0.6f));
+        Pair<Integer, BehaviorControl<? super EntityMaid>> stealEdibleUse = Pair.of(8, new MaidStealEdibleUseTask(2));
+
         Pair<Integer, BehaviorControl<? super EntityMaid>> supplemented = Pair.of(20, getLookAndRandomWalk(maid -> !maid.getSwimManager().isGoingToBreath()));
         Pair<Integer, BehaviorControl<? super EntityMaid>> updateActivity = Pair.of(99, new MaidUpdateActivityFromSchedule());
 
-        List<Pair<Integer, BehaviorControl<? super EntityMaid>>> behaviors = Lists.newArrayList(beg, homeMeal, joy, supplemented, updateActivity);
+        List<Pair<Integer, BehaviorControl<? super EntityMaid>>> behaviors = Lists.newArrayList(beg, homeMeal, joy, stealEdibleMove, stealEdibleUse, supplemented, updateActivity);
         ExtraMaidBrainManager.EXTRA_MAID_BRAINS.forEach(extra -> behaviors.addAll(extra.getIdleBehaviors()));
         brain.addActivity(Activity.IDLE, ImmutableList.copyOf(behaviors));
     }

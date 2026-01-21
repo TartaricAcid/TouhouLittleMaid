@@ -1,0 +1,34 @@
+{
+  "type": "touhou_little_maid:altar_crafting",
+  "output": {
+    "type": "minecraft:item",
+    "nbt": {
+      "Item": {
+        "id": "touhou_little_maid:snack_cabinet",
+        "Count": 1
+      }
+    }
+  },
+  "power": 0.1,
+  "ingredients": [
+    {
+      "item": "minecraft:barrel"
+    },
+    {
+      "tag": "minecraft:planks"
+    },
+    {
+      "tag": "minecraft:planks"
+    },
+    {
+      "tag": "minecraft:planks"
+    },
+    {
+      "tag": "forge:glass_panes"
+    },
+    {
+      "tag": "forge:glass_panes"
+    }
+  ]
+}
+

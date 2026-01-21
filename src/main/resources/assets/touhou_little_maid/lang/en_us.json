@@ -254,6 +254,7 @@
   "block.touhou_little_maid.keyboard.tip": "This brings joy and increases favorability of your maid.",
   "block.touhou_little_maid.bookshelf.tip": "This brings joy and increases favorability of your maid.",
   "block.touhou_little_maid.scarecrow.tip": "When placed on the ground, it prevents fairy maids from spawning in a square area.",
+  "block.touhou_little_maid.snack_cabinet.tip": "Storage container for items. Maids will eat block food placed on top and place block food from their inventory.",
   "tooltips.touhou_little_maid.chair.place.desc": "Right click on the top of a block to place it.",
   "tooltips.touhou_little_maid.chair.destroy.desc": "Crouch left click to destroy.",
   "tooltips.touhou_little_maid.chair.gui.desc": "Crouch right click to open skin gui.",

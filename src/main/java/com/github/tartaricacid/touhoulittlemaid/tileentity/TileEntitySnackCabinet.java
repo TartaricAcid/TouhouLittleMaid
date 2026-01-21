@@ -129,7 +129,7 @@ public class TileEntitySnackCabinet extends RandomizableContainerBlockEntity {
             double y = this.worldPosition.getY() + 0.5 + facing.getY() / 2.0;
             double z = this.worldPosition.getZ() + 0.5 + facing.getZ() / 2.0;
             this.level.playSound(null, x, y, z, sound, SoundSource.BLOCKS, 0.5F,
-                    this.level.random.nextFloat() * 0.1F + 0.9F);
+                    this.level.random.nextFloat() * 0.1F + 0.8F);
         }
     }
 }

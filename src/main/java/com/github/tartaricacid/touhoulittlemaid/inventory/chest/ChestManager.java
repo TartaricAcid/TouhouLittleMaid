@@ -20,6 +20,7 @@ public class ChestManager {
         ChestManager manager = new ChestManager();
         manager.add(new VanillaChestType());
         manager.add(new BarrelChestType());
+        manager.add(new SnackCabinetType());
         IronChestType.register(manager);
         for (ILittleMaid littleMaid : TouhouLittleMaid.EXTENSIONS) {
             littleMaid.addChestType(manager);
