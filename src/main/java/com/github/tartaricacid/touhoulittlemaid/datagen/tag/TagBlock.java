@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.datagen.tag;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitBlocks;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
@@ -46,6 +47,18 @@ public class TagBlock extends BlockTagsProvider {
      */
     public static final TagKey<Block> MAID_SNACK_STAND_BLOCK = createTagKey("maid_snack_stand_block");
 
+    /**
+     * 零食柜会在上方摆放特定方块时，渲染出玻璃橱窗的效果
+     * <p>
+     * 在此标签中的方块才会让下方零食柜渲染完整玻璃橱窗
+     */
+    public static final TagKey<Block> SNACK_CABINET_FULL = createTagKey("snack_cabinet_full");
+
+    /**
+     * 在此标签中的方块才会让下方零食柜渲染半高玻璃橱窗
+     */
+    public static final TagKey<Block> SNACK_CABINET_HALF = createTagKey("snack_cabinet_half");
+
     public TagBlock(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider,
                     String modId, @Nullable ExistingFileHelper existingFileHelper) {
         super(output, lookupProvider, modId, existingFileHelper);
@@ -69,17 +82,59 @@ public class TagBlock extends BlockTagsProvider {
         tag(ALTAR_PILLAR).addTag(BlockTags.LOGS);
 
         tag(MAID_SNACK_STAND_BLOCK)
-                .addOptional(new ResourceLocation("kaleidoscope_cookery:table_oak"))
-                .addOptional(new ResourceLocation("kaleidoscope_cookery:table_spruce"))
-                .addOptional(new ResourceLocation("kaleidoscope_cookery:table_acacia"))
-                .addOptional(new ResourceLocation("kaleidoscope_cookery:table_bamboo"))
-                .addOptional(new ResourceLocation("kaleidoscope_cookery:table_birch"))
-                .addOptional(new ResourceLocation("kaleidoscope_cookery:table_cherry"))
-                .addOptional(new ResourceLocation("kaleidoscope_cookery:table_crimson"))
-                .addOptional(new ResourceLocation("kaleidoscope_cookery:table_dark_oak"))
-                .addOptional(new ResourceLocation("kaleidoscope_cookery:table_jungle"))
-                .addOptional(new ResourceLocation("kaleidoscope_cookery:table_mangrove"))
-                .addOptional(new ResourceLocation("kaleidoscope_cookery:table_warped"));
+                .add(InitBlocks.SNACK_CABINET.get())
+                .addOptionalTag(new ResourceLocation("kaleidoscope_cookery:table"));
+
+        tag(SNACK_CABINET_FULL)
+                // 蛋糕全部是完整玻璃橱窗
+                .add(Blocks.CAKE)
+                .addOptionalTag(new ResourceLocation("forge:cakes"))
+                .addOptionalTag(new ResourceLocation("c:cakes"))
+                .addOptionalTag(new ResourceLocation("jmc:cakes"));
+
+        tag(SNACK_CABINET_HALF)
+                // 森罗物语的方块菜，后续应该让森罗物语添加专门的 tag
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:dark_cuisine"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:suspicious_stir_fry"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:slime_ball_meal"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:fondant_pie"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:dongpo_pork"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:fondant_spider_eye"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:chorus_fried_egg"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:braised_fish"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:golden_salad"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:spicy_chicken"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:yakitori"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:pan_seared_knight_steak"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:stargazy_pie"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:sweet_and_sour_ender_pearls"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:crystal_lamb_chop"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:blaze_lamb_chop"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:frost_lamb_chop"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:nether_style_sashimi"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:end_style_sashimi"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:desert_style_sashimi"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:tundra_style_sashimi"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:cold_style_sashimi"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:shengjian_mantou"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:candied_potato"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:dough_drop_soup"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:stuffed_tiger_skin_pepper"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:spicy_rabbit_head"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:four_joy_meatball_soup"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:numbing_spicy_chicken"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:fried_caterpillar"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:fried_spring_roll"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:spicy_blood_stew"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:fruit_platter"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:braised_pork_ribs"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:cold_roasted_meat"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:oil_splashed_fish"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:brown_mushroom_pot_soup"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:red_mushroom_pot_soup"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:warped_fungus_pot_soup"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:crimson_fungus_pot_soup"))
+                .addOptional(new ResourceLocation("kaleidoscope_cookery:buddha_jumps_over_the_wall"));
 
         tag(MAID_AVOID_BLOCK)
                 // 怎么能在吃饭的桌子上跳来跳去呢

@@ -82,6 +82,7 @@ public class InitCreativeTabs {
                 output.accept(MAID_BED.get());
                 output.accept(PICNIC_BASKET.get());
                 output.accept(MAID_BEACON.get());
+                output.accept(SNACK_CABINET.get());
                 output.accept(SHRINE.get());
                 output.accept(MODEL_SWITCHER.get());
                 output.accept(CHAIR_SHOW.get());

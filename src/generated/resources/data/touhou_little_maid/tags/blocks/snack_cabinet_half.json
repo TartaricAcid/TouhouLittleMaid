@@ -1,0 +1,168 @@
+{
+  "values": [
+    {
+      "id": "kaleidoscope_cookery:dark_cuisine",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:suspicious_stir_fry",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:slime_ball_meal",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:fondant_pie",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:dongpo_pork",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:fondant_spider_eye",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:chorus_fried_egg",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:braised_fish",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:golden_salad",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:spicy_chicken",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:yakitori",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:pan_seared_knight_steak",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:stargazy_pie",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:sweet_and_sour_ender_pearls",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:crystal_lamb_chop",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:blaze_lamb_chop",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:frost_lamb_chop",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:nether_style_sashimi",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:end_style_sashimi",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:desert_style_sashimi",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:tundra_style_sashimi",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:cold_style_sashimi",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:shengjian_mantou",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:candied_potato",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:dough_drop_soup",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:stuffed_tiger_skin_pepper",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:spicy_rabbit_head",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:four_joy_meatball_soup",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:numbing_spicy_chicken",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:fried_caterpillar",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:fried_spring_roll",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:spicy_blood_stew",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:fruit_platter",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:braised_pork_ribs",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:cold_roasted_meat",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:oil_splashed_fish",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:brown_mushroom_pot_soup",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:red_mushroom_pot_soup",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:warped_fungus_pot_soup",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:crimson_fungus_pot_soup",
+      "required": false
+    },
+    {
+      "id": "kaleidoscope_cookery:buddha_jumps_over_the_wall",
+      "required": false
+    }
+  ]
+}
