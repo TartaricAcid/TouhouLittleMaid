@@ -1981,6 +1981,18 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     @Override
     protected void updateUsingItem(ItemStack usingItem) {
+
+        // 处理问题 https://github.com/TartaricAcid/TouhouLittleMaid/issues/1003
+        // 检测女仆是否处于异常的进食状态：正在使用物品但手中物品不是可正常使用状态下的物品
+        if (this.isUsingItem()) {
+            ItemStack currentItem = this.getUseItem();
+            // 如果正在使用物品但该物品无法继续使用（例如食物已被移除），则强制停止使用
+            if (currentItem.isEmpty() || currentItem.getUseDuration() <= 0) {
+                this.stopUsingItem();
+                return;
+            }
+        }
+
         if (!usingItem.isEmpty()) {
             AttributeInstance attribute = this.getAttribute(InitAttribute.MAID_USE_ITEM_SPEED.get());
             if (attribute != null) {
