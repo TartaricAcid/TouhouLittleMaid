@@ -5419,8 +5419,13 @@
 					]
 				},
 				{
-					"name": "ysmGlowmofazhenL",
+					"name": "MfazhenL",
 					"parent": "UpperBody",
+					"pivot": [0.70064, 21.40444, 1.48042]
+				},
+				{
+					"name": "ysmGlowmofazhenL",
+					"parent": "MfazhenL",
 					"pivot": [41.90668, 22.81241, -28.6414],
 					"cubes": [
 						{
@@ -5492,8 +5497,13 @@
 					]
 				},
 				{
-					"name": "ysmGlowmofazhenR",
+					"name": "MfazhenR",
 					"parent": "UpperBody",
+					"pivot": [0.70064, 21.40444, 1.48042]
+				},
+				{
+					"name": "ysmGlowmofazhenR",
+					"parent": "MfazhenR",
 					"pivot": [-41.09332, 22.81241, -28.6414],
 					"cubes": [
 						{

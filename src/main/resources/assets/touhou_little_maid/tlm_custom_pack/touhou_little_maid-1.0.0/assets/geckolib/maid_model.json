@@ -27,6 +27,14 @@
 			"description": ["{model.geckolib.winefox.desc}"]
 		},
 		{
+			"model_id": "geckolib:winefox_nine_tailed",
+			"is_gecko": true,
+			"extra_textures": ["geckolib:textures/entity/winefox_nine_tailed_1.png"],
+			"description": ["{model.geckolib.winefox_nine_tailed.desc}"],
+			"animation": ["geckolib:animation/winefox_nine_tailed.main.animation.json", "geckolib:animation/winefox_nine_tailed.condition.animation.json"],
+			"render_entity_scale": 0.65
+		},
+		{
 			"model_id": "geckolib:winefox_hanfu",
 			"is_gecko": true,
 			"animation": ["geckolib:animation/winefox_hanfu.animation.json"],
@@ -90,7 +98,7 @@
 				"geckolib:animation/winefox_magical.main.animation.json",
 				"geckolib:animation/winefox_magical.condition.animation.json",
 				"geckolib:animation/winefox_magical.iss.animation.json",
-                "geckolib:animation/foxmaid.tac.animation.json"
+				"geckolib:animation/foxmaid.tac.animation.json"
 			],
 			"render_entity_scale": 0.65,
 			"description": ["{model.geckolib.winefox_magical.desc}"]
@@ -127,7 +135,18 @@
 			"description": ["{model.geckolib.winefox_momo.desc}"],
 			"extra_textures": ["geckolib:textures/entity/winefox_momo_1.png"],
 			"animation": ["geckolib:animation/winefox_momo.main.animation.json", "geckolib:animation/winefox_momo.condition.animation.json"],
-			"render_entity_scale": 0.7
+			"render_entity_scale": 0.65
+		},
+		{
+			"model_id": "geckolib:winefox_wedding",
+			"is_gecko": true,
+			"description": ["{model.geckolib.winefox_wedding.desc}"],
+			"animation": [
+				"geckolib:animation/winefox_wedding.main.animation.json",
+				"geckolib:animation/winefox_wedding.condition.animation.json",
+				"geckolib:animation/winefox_wedding.tac.animation.json"
+			],
+			"render_entity_scale": 0.65
 		},
 		{
 			"model_id": "geckolib:sta",
