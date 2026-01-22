@@ -13,26 +13,6 @@
       "required": false
     },
     {
-      "id": "farmersdelight:roast_chicken_block",
-      "required": false
-    },
-    {
-      "id": "farmersdelight:stuffed_pumpkin_block",
-      "required": false
-    },
-    {
-      "id": "farmersdelight:honey_glazed_ham_block",
-      "required": false
-    },
-    {
-      "id": "farmersdelight:shepherds_pie_block",
-      "required": false
-    },
-    {
-      "id": "farmersdelight:rice_roll_medley_block",
-      "required": false
-    },
-    {
       "id": "kaleidoscope_cookery:dark_cuisine",
       "required": false
     },
