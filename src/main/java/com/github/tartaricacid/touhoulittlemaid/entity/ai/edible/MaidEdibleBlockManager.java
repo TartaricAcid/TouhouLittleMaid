@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.ai.edible;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.block.IMaidEdibleBlock;
+import com.github.tartaricacid.touhoulittlemaid.compat.farmersdelight.FarmersDelightCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.jmc.JmcCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.kaleidoscope.KaleidoscopeCompat;
 import com.google.common.collect.ImmutableList;
@@ -23,6 +24,7 @@ public class MaidEdibleBlockManager {
 
         KaleidoscopeCompat.addBlockFoods(manager);
         JmcCompat.addJmcEdible(manager);
+        FarmersDelightCompat.addFarmersDelightEdible(manager);
 
         for (ILittleMaid littleMaid : TouhouLittleMaid.EXTENSIONS) {
             littleMaid.registerMaidEdibleBlock(manager);

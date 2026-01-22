@@ -94,9 +94,19 @@ public class TagBlock extends BlockTagsProvider {
                 .add(Blocks.CAKE)
                 .addOptionalTag(new ResourceLocation("forge:cakes"))
                 .addOptionalTag(new ResourceLocation("c:cakes"))
-                .addOptionalTag(new ResourceLocation("jmc:cakes"));
+                .addOptionalTag(new ResourceLocation("jmc:cakes"))
+                // 农夫乐事的盛宴
+                .addOptional(new ResourceLocation("farmersdelight:roast_chicken_block"))
+                .addOptional(new ResourceLocation("farmersdelight:stuffed_pumpkin_block"))
+                .addOptional(new ResourceLocation("farmersdelight:honey_glazed_ham_block"))
+                .addOptional(new ResourceLocation("farmersdelight:shepherds_pie_block"))
+                .addOptional(new ResourceLocation("farmersdelight:rice_roll_medley_block"));
 
         tag(SNACK_CABINET_HALF)
+                // 农夫乐事的糕点
+                .addOptional(new ResourceLocation("farmersdelight:apple_pie"))
+                .addOptional(new ResourceLocation("farmersdelight:sweet_berry_cheesecake"))
+                .addOptional(new ResourceLocation("farmersdelight:chocolate_pie"))
                 // 森罗物语的方块菜，后续应该让森罗物语添加专门的 tag
                 .addOptional(new ResourceLocation("kaleidoscope_cookery:dark_cuisine"))
                 .addOptional(new ResourceLocation("kaleidoscope_cookery:suspicious_stir_fry"))
