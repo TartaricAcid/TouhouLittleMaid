@@ -6,7 +6,12 @@
       "entries": [
         {
           "type": "item",
-          "name": "touhou_little_maid:smart_slab_init"
+          "name": "touhou_little_maid:smart_slab_init",
+          "functions": [
+            {
+              "function": "touhou_little_maid:set_init_maid_owner"
+            }
+          ]
         }
       ]
     }

@@ -273,6 +273,7 @@
   "tooltips.touhou_little_maid.photo.maid.desc": "女仆名称：%s",
   "tooltips.touhou_little_maid.camera.desc": "能够捕获女仆，至少在大多数情况下是这样……",
   "tooltips.touhou_little_maid.smart_slab.desc": "可重复使用的工具，右击释放/捕捉女仆",
+  "tooltips.touhou_little_maid.smart_slab.not_your_maid": "这不是你的女仆！",
   "tooltips.touhou_little_maid.smart_slab.maid_name": "女仆名称：%s",
   "tooltips.touhou_little_maid.smart_slab.maid_name.unknown": "未知",
   "tooltips.touhou_little_maid.trumpet.desc.usage": "召回所有女仆",

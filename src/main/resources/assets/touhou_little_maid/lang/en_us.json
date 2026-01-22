@@ -275,6 +275,7 @@
   "tooltips.touhou_little_maid.photo.maid.desc": "Maid Name: %s",
   "tooltips.touhou_little_maid.camera.desc": "Can capture a maid, at least in most cases...",
   "tooltips.touhou_little_maid.smart_slab.desc": "Reusable tool, right click to place or retract the maid",
+  "tooltips.touhou_little_maid.smart_slab.not_your_maid": "This is not your maid",
   "tooltips.touhou_little_maid.smart_slab.maid_name": "Maid Name: %s",
   "tooltips.touhou_little_maid.smart_slab.maid_name.unknown": "Unknown",
   "tooltips.touhou_little_maid.trumpet.desc.usage": "Recall all of your maids",
