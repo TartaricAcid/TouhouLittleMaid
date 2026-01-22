@@ -11,6 +11,10 @@
     {
       "type": "single",
       "resource": "touhou_little_maid:slot/empty_back_show_slot"
+    },
+    {
+      "type": "single",
+      "resource": "touhou_little_maid:bedrock/block/snack_cabinet"
     }
   ]
 }

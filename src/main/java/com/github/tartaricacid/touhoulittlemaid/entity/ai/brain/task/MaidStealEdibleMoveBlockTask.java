@@ -9,6 +9,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.MaidPathFindingBF
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.VisibleForDebug;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
@@ -31,6 +32,11 @@ public class MaidStealEdibleMoveBlockTask extends MaidMoveToBlockTask {
      * 检查方块可达性的范围，默认检查寻路点周围 3x3x3 范围内的方块的可达性
      */
     private static final BoundingBox CHECK_RANGE = new BoundingBox(-1, -1, -1, 1, 1, 1);
+    /**
+     * 仅供开发调试，用来缩短女仆偷吃方块的冷却时间
+     */
+    @VisibleForDebug
+    public static boolean DEBUG = false;
 
     private final MemoryModuleType<MaidEdibleBlockAction> action;
 
@@ -44,6 +50,9 @@ public class MaidStealEdibleMoveBlockTask extends MaidMoveToBlockTask {
 
     @Override
     protected boolean checkExtraStartConditions(ServerLevel worldIn, EntityMaid owner) {
+        if (DEBUG) {
+            return true;
+        }
         // 检查是否已经过了冷却期
         return super.checkExtraStartConditions(worldIn, owner)
                && owner.getFavorabilityManager().canAdd(Type.STEAL_EDIBLE_BLOCK.getTypeName());

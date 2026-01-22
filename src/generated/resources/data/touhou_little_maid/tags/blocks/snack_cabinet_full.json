@@ -1,0 +1,17 @@
+{
+  "values": [
+    "minecraft:cake",
+    {
+      "id": "#forge:cakes",
+      "required": false
+    },
+    {
+      "id": "#c:cakes",
+      "required": false
+    },
+    {
+      "id": "#jmc:cakes",
+      "required": false
+    }
+  ]
+}

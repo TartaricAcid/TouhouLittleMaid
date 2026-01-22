@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.debug.command;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidStealEdibleMoveBlockTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.BoolArgumentType;
@@ -39,6 +40,8 @@ public final class MaidDebugCommand {
     private static final String SET_FARM = "set_farm";
     private static final String SIZE = "size";
 
+    private static final String STEAL_EDIBLE = "steal_edible";
+
     public static LiteralArgumentBuilder<CommandSourceStack> get() {
         LiteralArgumentBuilder<CommandSourceStack> debug = Commands.literal(MAID_DEBUG_NAME);
 
@@ -57,6 +60,11 @@ public final class MaidDebugCommand {
         LiteralArgumentBuilder<CommandSourceStack> setFarm = Commands.literal(SET_FARM);
         RequiredArgumentBuilder<CommandSourceStack, Integer> size = Commands.argument(SIZE, IntegerArgumentType.integer());
         debug.then(setFarm.then(size.executes(MaidDebugCommand::setFarm)));
+
+        // 开启女仆偷吃方块调试，主要是减少冷却时间
+        LiteralArgumentBuilder<CommandSourceStack> stealEdible = Commands.literal(STEAL_EDIBLE);
+        RequiredArgumentBuilder<CommandSourceStack, Boolean> stealValue = Commands.argument(VALUE, BoolArgumentType.bool());
+        debug.then(stealEdible.then(stealValue.executes(MaidDebugCommand::stealEdible)));
 
         return debug;
     }
@@ -130,6 +138,11 @@ public final class MaidDebugCommand {
             }
         }
 
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int stealEdible(CommandContext<CommandSourceStack> context) {
+        MaidStealEdibleMoveBlockTask.DEBUG = BoolArgumentType.getBool(context, VALUE);
         return Command.SINGLE_SUCCESS;
     }
 }
