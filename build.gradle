@@ -243,6 +243,12 @@ dependencies {
     runtimeOnly fg.deobf("maven.modrinth:xaeros-minimap:25.2.10_Forge_1.20")
     runtimeOnly fg.deobf("maven.modrinth:xaeros-world-map:1.39.12_Forge_1.20")
 
+    // 农夫乐事
+    implementation fg.deobf("maven.modrinth:farmers-delight:1.20.1-1.2.6-forge")
+    // 更多蛋糕
+    implementation fg.deobf("maven.modrinth:common-network:1.0.5-1.20.1-forge")
+    implementation fg.deobf("maven.modrinth:just-more-cakes:1.18.1-forge,1.20.1")
+
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     // runtimeOnly fg.deobf("curse.maven:carry-on-274259:4882500")

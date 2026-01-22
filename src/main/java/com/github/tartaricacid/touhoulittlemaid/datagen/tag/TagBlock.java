@@ -68,6 +68,10 @@ public class TagBlock extends BlockTagsProvider {
         return TagKey.create(Registries.BLOCK, new ResourceLocation(TouhouLittleMaid.MOD_ID, name));
     }
 
+    public static TagKey<Block> createTagKey(ResourceLocation resourceLocation) {
+        return TagKey.create(Registries.BLOCK, resourceLocation);
+    }
+
     @Override
     protected void addTags(HolderLookup.Provider provider) {
         tag(MAID_JUMP_FORBIDDEN_BLOCK)

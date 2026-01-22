@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai.edible;
 
 import com.github.tartaricacid.touhoulittlemaid.api.block.IMaidEdibleBlock;
-import com.github.tartaricacid.touhoulittlemaid.datagen.tag.TagBlock;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
@@ -13,14 +12,14 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CakeBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
+import static com.github.tartaricacid.touhoulittlemaid.api.block.IMaidEdibleBlock.belowIsSnackStand;
+
 public class CakeEdible implements IMaidEdibleBlock {
     @Override
     public boolean shouldMoveTo(EntityMaid maid, BlockPos pos, BlockState state) {
         if (state.is(Blocks.CAKE)) {
             // 检查下方是否是零食架
-            BlockPos belowPos = pos.below();
-            BlockState belowState = maid.level.getBlockState(belowPos);
-            return belowState.is(TagBlock.MAID_SNACK_STAND_BLOCK);
+            return belowIsSnackStand(maid, pos);
         }
         return false;
     }
@@ -33,15 +32,14 @@ public class CakeEdible implements IMaidEdibleBlock {
     @Override
     public boolean consume(EntityMaid maid, BlockPos pos, BlockState state) {
         int bites = state.getValue(CakeBlock.BITES);
-        // 女仆随机吃一两口
-        int eatBites = maid.getRandom().nextInt(2) + 1;
         Level level = maid.level;
         if (bites < CakeBlock.MAX_BITES) {
-            int currentBites = Math.min(bites + eatBites, CakeBlock.MAX_BITES);
+            int currentBites = Math.min(bites + 1, CakeBlock.MAX_BITES);
             level.setBlock(pos, state.setValue(CakeBlock.BITES, currentBites), Block.UPDATE_ALL);
         } else {
             level.removeBlock(pos, false);
         }
+        maid.spawnItemParticles(new ItemStack(Items.CAKE), 8);
         maid.playSound(SoundEvents.GENERIC_EAT);
         return true;
     }
@@ -49,32 +47,5 @@ public class CakeEdible implements IMaidEdibleBlock {
     @Override
     public boolean canPlaceAsFood(EntityMaid maid, ItemStack stack, int slotIndex) {
         return stack.is(Items.CAKE);
-    }
-
-    @Override
-    public boolean shouldPlaceTo(EntityMaid maid, BlockPos pos, BlockState state, ItemStack stack) {
-        // 蛋糕不能放在脚下
-        if (pos.equals(maid.blockPosition())) {
-            return false;
-        }
-        // 目标位置能放东西
-        if (!state.canBeReplaced()) {
-            return false;
-        }
-        // 蛋糕必须放在零食架上
-        BlockState belowState = maid.level.getBlockState(pos.below());
-        return belowState.is(TagBlock.MAID_SNACK_STAND_BLOCK);
-    }
-
-    @Override
-    public boolean placeAsFood(EntityMaid maid, BlockPos pos, ItemStack stack, int slotIndex) {
-        ItemStack stackExtra = maid.getAvailableInv(true).extractItem(slotIndex, 1, false);
-        if (stackExtra.isEmpty()) {
-            return false;
-        }
-        Block cakeBlock = Blocks.CAKE;
-        maid.level.setBlock(pos, cakeBlock.defaultBlockState(), Block.UPDATE_ALL);
-        maid.playSound(SoundEvents.WOOL_PLACE);
-        return true;
     }
 }

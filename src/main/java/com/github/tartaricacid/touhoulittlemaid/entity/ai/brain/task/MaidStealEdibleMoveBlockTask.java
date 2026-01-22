@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task;
 import com.github.tartaricacid.touhoulittlemaid.api.block.IMaidEdibleBlock;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.edible.MaidEdibleBlockAction;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.edible.MaidEdibleBlockManager;
-import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Type;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.MaidPathFindingBFS;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
@@ -27,7 +26,7 @@ public class MaidStealEdibleMoveBlockTask extends MaidMoveToBlockTask {
     /**
      * 当搜索成功后，女仆下一次偷吃的检查间隔
      */
-    private static final int NEXT_CHECK_TICK_COUNT = 10 * 20;
+    private static final int NEXT_CHECK_TICK_COUNT = 45 * 20;
     /**
      * 检查方块可达性的范围，默认检查寻路点周围 3x3x3 范围内的方块的可达性
      */
@@ -53,9 +52,7 @@ public class MaidStealEdibleMoveBlockTask extends MaidMoveToBlockTask {
         if (DEBUG) {
             return true;
         }
-        // 检查是否已经过了冷却期
-        return super.checkExtraStartConditions(worldIn, owner)
-               && owner.getFavorabilityManager().canAdd(Type.STEAL_EDIBLE_BLOCK.getTypeName());
+        return super.checkExtraStartConditions(worldIn, owner);
     }
 
     @Override

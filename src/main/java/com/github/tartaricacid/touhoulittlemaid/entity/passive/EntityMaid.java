@@ -26,8 +26,8 @@ import com.github.tartaricacid.touhoulittlemaid.compat.ysm.event.YsmMaidClientTi
 import com.github.tartaricacid.touhoulittlemaid.config.ServerConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MiscConfig;
-import com.github.tartaricacid.touhoulittlemaid.datagen.tag.TagEntity;
 import com.github.tartaricacid.touhoulittlemaid.datagen.tag.TagBlock;
+import com.github.tartaricacid.touhoulittlemaid.datagen.tag.TagEntity;
 import com.github.tartaricacid.touhoulittlemaid.datagen.tag.TagItem;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidBrain;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
@@ -72,6 +72,7 @@ import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -2803,5 +2804,26 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     public void setAiming(boolean aiming) {
         this.entityData.set(DATA_IS_AIMING, aiming);
+    }
+
+    public void spawnItemParticles(ItemStack stack, int amount) {
+        for (int i = 0; i < amount; ++i) {
+            Vec3 speed = new Vec3((this.random.nextFloat() - 0.5) * 0.1, Math.random() * 0.1 + 0.1, 0.0);
+            speed = speed.xRot(-this.getXRot() * Mth.DEG_TO_RAD);
+            speed = speed.yRot(-this.getYRot() * Mth.DEG_TO_RAD);
+
+            double yOffset = -this.random.nextFloat() * 0.6 - 0.3;
+            Vec3 pos = new Vec3((this.random.nextFloat() - 0.5) * 0.3, yOffset, 0.6);
+            pos = pos.xRot(-this.getXRot() * Mth.DEG_TO_RAD);
+            pos = pos.yRot(-this.getYRot() * Mth.DEG_TO_RAD);
+            pos = pos.add(this.getX(), this.getEyeY(), this.getZ());
+
+            ItemParticleOption option = new ItemParticleOption(ParticleTypes.ITEM, stack);
+            if (this.level instanceof ServerLevel serverLevel) {
+                serverLevel.sendParticles(option, pos.x, pos.y, pos.z, 1, speed.x, speed.y + 0.05, speed.z, 0.0);
+            } else {
+                this.level.addParticle(option, pos.x, pos.y, pos.z, speed.x, speed.y + 0.05, speed.z);
+            }
+        }
     }
 }

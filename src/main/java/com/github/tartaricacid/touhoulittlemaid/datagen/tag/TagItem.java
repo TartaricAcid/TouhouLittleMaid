@@ -51,8 +51,12 @@ public class TagItem extends ItemTagsProvider {
         super(pOutput, pLookupProvider, pBlockTags, modId, existingFileHelper);
     }
 
-    private static TagKey<Item> createTagKey(String name) {
+    public static TagKey<Item> createTagKey(String name) {
         return TagKey.create(Registries.ITEM, new ResourceLocation(TouhouLittleMaid.MOD_ID, name));
+    }
+
+    public static TagKey<Item> createTagKey(ResourceLocation resourceLocation) {
+        return TagKey.create(Registries.ITEM, resourceLocation);
     }
 
     @Override

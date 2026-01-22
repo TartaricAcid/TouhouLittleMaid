@@ -1,9 +1,11 @@
 package com.github.tartaricacid.touhoulittlemaid.api.block;
 
+import com.github.tartaricacid.touhoulittlemaid.datagen.tag.TagBlock;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import org.jetbrains.annotations.ApiStatus;
 
 /**
@@ -21,6 +23,15 @@ import org.jetbrains.annotations.ApiStatus;
  */
 @ApiStatus.AvailableSince("1.4.7")
 public interface IMaidEdibleBlock {
+    /**
+     * 工具方法，用于判断指定方块下方是否为零食架方块。
+     */
+    static boolean belowIsSnackStand(EntityMaid maid, BlockPos pos) {
+        BlockPos belowPos = pos.below();
+        BlockState belowState = maid.level.getBlockState(belowPos);
+        return belowState.is(TagBlock.MAID_SNACK_STAND_BLOCK);
+    }
+
     /**
      * 判断女仆是否应该移动到该方块食物处进行食用。
      * <p>
@@ -82,7 +93,16 @@ public interface IMaidEdibleBlock {
      * @return 若女仆应将该物品放置到此位置返回 {@code true}，否则返回 {@code false}
      */
     default boolean shouldPlaceTo(EntityMaid maid, BlockPos pos, BlockState state, ItemStack stack) {
-        return false;
+        // 不能放在脚下
+        if (pos.equals(maid.blockPosition())) {
+            return false;
+        }
+        // 目标位置能放东西
+        if (!state.canBeReplaced()) {
+            return false;
+        }
+        // 必须放在零食架上
+        return belowIsSnackStand(maid, pos);
     }
 
     /**
@@ -97,6 +117,11 @@ public interface IMaidEdibleBlock {
      * @return 若放置成功返回 {@code true}，女仆将播放挥动手臂的动画；否则返回 {@code false}
      */
     default boolean placeAsFood(EntityMaid maid, BlockPos pos, ItemStack stack, int slotIndex) {
-        return false;
+        CombinedInvWrapper availableInv = maid.getAvailableInv(true);
+        ItemStack stackExtra = availableInv.extractItem(slotIndex, 1, false);
+        if (stackExtra.isEmpty()) {
+            return false;
+        }
+        return maid.placeItemBlock(pos, stackExtra);
     }
 }
