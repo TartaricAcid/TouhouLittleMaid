@@ -18,6 +18,10 @@ public class MaidNavigationManager {
     private final EntityMaid maid;
     private final Level level;
     private Mode mode = Mode.GROUND;
+    // 添加模式切换冷却时间（单位：游戏刻，20游戏刻=1秒）
+    private int modeSwitchCooldown = 0;
+    // 冷却时间常量（20游戏刻）
+    private static final int COOLDOWN_TICKS = 20;
 
     public MaidNavigationManager(EntityMaid maid) {
         this.maid = maid;
@@ -29,97 +33,145 @@ public class MaidNavigationManager {
 
     public void tick() {
         if (!level.isClientSide && maid.isEffectiveAi()) {
-            if (mode != Mode.WATER && maid.isInWater() && shouldStartOrStopSwim(5)) {
-                // 对于一般寻路，当满足：女仆接触到水，前方有长水面时，切换到水中寻路
-                if (switchToNavigation(Mode.WATER, waterNavigation)) {
-                    maid.getSwimManager().setWantToSwim(true);
-                    maid.getSwimManager().setReadyToLand(false);
-                }
-            } else if (mode != Mode.WATER && maid.isUnderWater() && mayBeStuckUnderWater(maid.blockPosition())) {
-                // 如果女仆发现其所在位置不能上浮，那么也应该进入游泳状态（顶着头呆呆的）
-                if (switchToNavigation(Mode.WATER, waterNavigation)) {
-                    maid.getSwimManager().setWantToSwim(true);
-                    maid.getSwimManager().setReadyToLand(false);
-                }
-            } else if (mode != Mode.WATER && maid.isInWater() && targetingUnderWater()) {
-                // 如果目标在水下，那么女仆显然也应该进行水下寻路
-                if (switchToNavigation(Mode.WATER, waterNavigation)) {
-                    maid.getSwimManager().setWantToSwim(true);
-                    maid.getSwimManager().setReadyToLand(false);
-                }
-            } else if (mode == Mode.WATER) {
-                // 女仆当前正在使用水下寻路（不保证游泳的状态）
-                // 如果满足使用水下寻路的附加条件，则不进行下面的判断（目标水下或者无法上浮），防止状态之间的闪烁
-                boolean shouldUseWater = (maid.isInWater() && targetingUnderWater())
-                                         || (maid.isUnderWater() && mayBeStuckUnderWater(maid.blockPosition()));
-                // 要判断出水，需要当前存在路径
-                BlockPos endPos = getEndPos(waterNavigation);
-                if (!shouldUseWater && endPos != null) {
-                    if (!shouldStartOrStopSwim(2)) {
-                        // 即将走到水中寻路的尽头，你的女仆是否还需要游泳呢？
-                        if (!level.isWaterAt(endPos) && !level.isWaterAt(endPos.below())) {
-                            // a：如果最终女仆是要上岸的，那么这时就没必要继续游泳了。立刻停止并切换到常规模式
-                            if (switchToNavigation(Mode.GROUND, basicNavigation)) {
-                                maid.getSwimManager().setReadyToLand(true);
-                                maid.getSwimManager().setWantToSwim(false);
-                            }
-                        } else if (isWaterSurface(endPos)) {
-                            // b：女仆最终来到了水面上
-                            maid.getSwimManager().setWantToSwim(false);
-                            maid.getSwimManager().setReadyToLand(false);
-                        } else {
-                            // c：仅仅是走到头了（
-                            maid.getSwimManager().setWantToSwim(true);
-                            maid.getSwimManager().setReadyToLand(false);
-                        }
-                    } else if (!maid.isInWater()) {
-                        // b：女仆上岸了，立刻切换到常规寻路
-                        if (switchToNavigation(Mode.GROUND, basicNavigation)) {
-                            maid.getSwimManager().setWantToSwim(false);
-                            maid.getSwimManager().setReadyToLand(false);
-                        }
-                    } else if (!maid.isUnderWater()) {
-                        // 女仆半身入水（那貌似游泳就不大礼貌了）
-                        maid.getSwimManager().setWantToSwim(false);
-                    } else {
-                        maid.getSwimManager().setWantToSwim(true);
-                        maid.getSwimManager().setSwimTarget(endPos);
-                    }
-                } else if (endPos == null && maid.getSwimManager().isGoingToBreath()) {
-                    // 有一种走完路径的特殊情况：女仆是想要去呼吸的。此时依然走的是水中寻路，但是应该取消游泳状态
-                    maid.getSwimManager().setWantToSwim(false);
-                } else if (shouldUseWater) {
-                    // 当前满足游泳的条件（见上）
-                    maid.getSwimManager().setWantToSwim(true);
-                    // 没有走完路径，更新终点
-                    if (endPos != null) {
-                        maid.getSwimManager().setSwimTarget(endPos);
-                    }
-                }
+            // 更新冷却计时器
+            if (modeSwitchCooldown > 0) {
+                modeSwitchCooldown--;
+            }
 
+            if (mode != Mode.WATER) {
+                handleGroundMode();
+            } else {
+                handleWaterMode();
             }
         }
-        // 其他情况，如女仆进行一次传送，可能导致寻路中断，因此需要重新设置女仆是否要游泳
+
+        // 确保非游泳模式下不会保持游泳状态
         if (mode != Mode.WATER) {
             maid.getSwimManager().setWantToSwim(false);
         }
     }
 
+    /**
+     * 处理地面模式下的导航逻辑
+     */
+    private void handleGroundMode() {
+        // 检查是否需要切换到水中寻路
+        boolean shouldSwitchToWater = false;
+
+        if (maid.isInWater() && shouldStartOrStopSwim(5)) {
+            // 前方有长水面时切换到水中寻路
+            shouldSwitchToWater = true;
+        } else if (maid.isUnderWater() && mayBeStuckUnderWater(maid.blockPosition())) {
+            // 被卡在水下时切换到水中寻路
+            shouldSwitchToWater = true;
+        } else if (maid.isInWater() && targetingUnderWater()) {
+            // 目标在水下时切换到水中寻路
+            shouldSwitchToWater = true;
+        }
+
+        // 只有在冷却时间结束后才允许切换模式
+        if (shouldSwitchToWater && modeSwitchCooldown <= 0 && switchToNavigation(Mode.WATER, waterNavigation)) {
+            // 设置游泳状态
+            setSwimmingState(true, false);
+            // 重置冷却计时器
+            modeSwitchCooldown = COOLDOWN_TICKS;
+        }
+    }
+
+    /**
+     * 处理水中模式下的导航逻辑
+     */
+    private void handleWaterMode() {
+        boolean shouldUseWater = (maid.isInWater() && targetingUnderWater())
+                || (maid.isUnderWater() && mayBeStuckUnderWater(maid.blockPosition()));
+        BlockPos endPos = getEndPos(waterNavigation);
+
+        if (!shouldUseWater && endPos != null) {
+            if (!shouldStartOrStopSwim(2)) {
+                handleWaterPathEnd(endPos);
+            } else if (!maid.isInWater()) {
+                // 女仆已上岸，切换到地面寻路
+                switchToGroundNavigation();
+            } else if (!maid.isUnderWater()) {
+                // 女仆半身入水，取消游泳状态
+                setSwimmingState(false, false);
+            } else {
+                // 女仆完全在水中，保持游泳状态并更新目标
+                setSwimmingState(true, false);
+                maid.getSwimManager().setSwimTarget(endPos);
+            }
+        } else if (endPos == null && maid.getSwimManager().isGoingToBreath()) {
+            // 走到路径尽头且正在呼吸，取消游泳状态
+            setSwimmingState(false, false);
+        } else if (shouldUseWater) {
+            // 满足游泳条件，保持游泳状态
+            setSwimmingState(true, false);
+            if (endPos != null) {
+                maid.getSwimManager().setSwimTarget(endPos);
+            }
+        }
+    }
+
+    /**
+     * 处理水中寻路路径尽头的逻辑
+     */
+    private void handleWaterPathEnd(BlockPos endPos) {
+        if (!level.isWaterAt(endPos) && !level.isWaterAt(endPos.below())) {
+            // 路径尽头是陆地，切换到地面寻路
+            switchToGroundNavigation(true);
+        } else if (isWaterSurface(endPos)) {
+            // 路径尽头是水面，取消游泳状态
+            setSwimmingState(false, false);
+        } else {
+            // 路径尽头仍在水中，保持游泳状态
+            setSwimmingState(true, false);
+        }
+    }
+
+    /**
+     * 切换到地面寻路模式
+     */
+    private void switchToGroundNavigation() {
+        switchToGroundNavigation(false);
+    }
+
+    /**
+     * 切换到地面寻路模式并设置是否准备上岸
+     */
+    private void switchToGroundNavigation(boolean readyToLand) {
+        // 只有在冷却时间结束后才允许切换模式
+        if (modeSwitchCooldown <= 0 && switchToNavigation(Mode.GROUND, basicNavigation)) {
+            setSwimmingState(false, readyToLand);
+            // 重置冷却计时器
+            modeSwitchCooldown = COOLDOWN_TICKS;
+        }
+    }
+
+    /**
+     * 设置游泳状态
+     * @param wantToSwim 是否想要游泳
+     * @param readyToLand 是否准备上岸
+     */
+    private void setSwimmingState(boolean wantToSwim, boolean readyToLand) {
+        maid.getSwimManager().setWantToSwim(wantToSwim);
+        maid.getSwimManager().setReadyToLand(readyToLand);
+    }
+
+    /**
+     * 判断目标是否在水下
+     */
     private boolean targetingUnderWater() {
-        // 判断 Target 是否在水下
         if (!maid.getBrain().hasMemoryValue(MemoryModuleType.WALK_TARGET)) {
             return false;
         }
-        return isUnderWater(maid
-                .getBrain()
-                .getMemory(MemoryModuleType.WALK_TARGET)
-                .get()
-                .getTarget()
-                .currentBlockPosition()
-        );
+        BlockPos targetPos = maid.getBrain().getMemory(MemoryModuleType.WALK_TARGET)
+                .get().getTarget().currentBlockPosition();
+        return isUnderWater(targetPos);
     }
 
-
+    /**
+     * 切换导航模式
+     */
     @SuppressWarnings("all")
     private boolean switchToNavigation(Mode mode, PathNavigation navigation) {
         PathNavigation currentNavigation = maid.getNavigation();
@@ -127,7 +179,7 @@ public class MaidNavigationManager {
             Path path = navigation.createPath(currentNavigation.getPath().getEndNode().asBlockPos(), 0);
             if (path != null && path.canReach()) {
                 if (navigation.moveTo(path, ((INavigationMixin) currentNavigation).touhouLittleMaid$GetSpeedModifier())) {
-                    // 删除第一个寻路节点，有助于路径切换更加平滑（第一个巡路点的 center 可能会出现在身后）
+                    // 删除第一个寻路节点，有助于路径切换更加平滑
                     path.advance();
                     maid.setNavigation(navigation);
                     this.mode = mode;
@@ -144,6 +196,9 @@ public class MaidNavigationManager {
         return false;
     }
 
+    /**
+     * 判断是否应该开始或停止游泳
+     */
     private boolean shouldStartOrStopSwim(int minimumDistance) {
         Path path = maid.getNavigation().getPath();
         if (path == null || path.isDone() || path.getNextNodeIndex() > path.getNodeCount() - minimumDistance) {
@@ -159,10 +214,18 @@ public class MaidNavigationManager {
 
     /**
      * 判断女仆是否可能被卡在水下（头顶方块）
-     * 即判断在水中的女仆头顶有没有方块
      */
     private boolean mayBeStuckUnderWater(BlockPos pos) {
         return level.isWaterAt(pos) && !level.getBlockState(pos.above()).isPathfindable(level, pos, PathComputationType.LAND);
+    }
+
+    /**
+     * 判断目标位置是否在水下两格或更深
+     */
+    private boolean isUnderWater(BlockPos blockPos) {
+        return level.isWaterAt(blockPos)
+                && level.isWaterAt(blockPos.above())
+                && level.isWaterAt(blockPos.above(2));
     }
 
     public PathNavigation getBasicNavigation() {
@@ -176,25 +239,13 @@ public class MaidNavigationManager {
     public boolean isWaterSurface(BlockPos pos) {
         // 向上两层（主人浮在水上的话 target 可能是 -1Y 的），向上一层（寻路规则）
         return (level.isWaterAt(pos) && level.getBlockState(pos.above()).isAir())
-               || (level.isWaterAt(pos.below()) && level.getBlockState(pos).isAir())
-               || (level.isWaterAt(pos.above()) && level.getBlockState(pos.above(2)).isAir());
-    }
-
-    /**
-     * 判断目标位置是否两格或更深
-     */
-    private boolean isUnderWater(BlockPos blockPos) {
-        return level.isWaterAt(blockPos)
-               && level.isWaterAt(blockPos.above())
-               && level.isWaterAt(blockPos.above(2));
+                || (level.isWaterAt(pos.below()) && level.getBlockState(pos).isAir())
+                || (level.isWaterAt(pos.above()) && level.getBlockState(pos.above(2)).isAir());
     }
 
     @Nullable
     public BlockPos getEndPos(PathNavigation navigation) {
-        if (navigation.getPath() == null) {
-            return null;
-        }
-        if (navigation.getPath().getEndNode() == null) {
+        if (navigation.getPath() == null || navigation.getPath().getEndNode() == null) {
             return null;
         }
         return navigation.getPath().getEndNode().asBlockPos();
@@ -204,9 +255,10 @@ public class MaidNavigationManager {
         maid.setNavigation(basicNavigation);
         basicNavigation.stop();
         waterNavigation.stop();
-        maid.getSwimManager().setWantToSwim(false);
-        maid.getSwimManager().setReadyToLand(false);
+        setSwimmingState(false, false);
         mode = Mode.GROUND;
+        // 重置冷却计时器
+        modeSwitchCooldown = 0;
     }
 
     public enum Mode {
