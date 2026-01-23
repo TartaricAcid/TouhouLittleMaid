@@ -5316,12 +5316,6 @@
 				"LeftEyelidBase": {
 					"position": ["ysm.head_yaw/180", "ysm.head_pitch/720", 0]
 				},
-				"AllBody": {
-					"scale": "(query.health/query.max_health)<0.2?0:1"
-				},
-				"FOX": {
-					"scale": "(query.health/query.max_health)<0.2?1:0"
-				},
 				"RightEyePublic": {
 					"position": ["ysm.head_yaw/360", "ysm.head_pitch/360", 0]
 				},

@@ -4895,7 +4895,7 @@
 			"loop": true,
 			"bones": {
 				"Root": {
-					"position": [0, -17, 0]
+					"position": [0, -18, 0]
 				},
 				"UpBody": {
 					"rotation": [20, 0, 0]
@@ -5042,7 +5042,7 @@
 					"position": [0, 0, -0.8]
 				},
 				"AllBody2": {
-					"rotation": [-52.5, 0, 0],
+					"rotation": [-27.5, 0, 0],
 					"position": [0, 12, 0],
 					"scale": 1
 				},
@@ -5050,14 +5050,14 @@
 					"rotation": [55, 0, 0]
 				},
 				"Arm2": {
-					"rotation": [50, 0, 0]
+					"rotation": [5, 0, 0]
 				},
 				"wb": {
 					"rotation": [65, 0, 0]
 				},
 				"Leg": {
-					"rotation": [-35, 0, 0],
-					"position": [0, 1.60045, -0.0324]
+					"rotation": [-57.5, 0, 0],
+					"position": [0, 3.19707, -0.86355]
 				},
 				"kua": {
 					"position": [0, 0, -0.25]
@@ -6484,7 +6484,7 @@
 			"loop": true,
 			"bones": {
 				"Root": {
-					"position": [0, -16, 0]
+					"position": [0, -6, -3]
 				},
 				"UpBody": {
 					"rotation": [0, 0, 0]
@@ -6648,7 +6648,7 @@
 			"loop": true,
 			"bones": {
 				"Root": {
-					"position": [0, -14.25, 2]
+					"position": [0, -15.25, 2]
 				},
 				"UpBody": {
 					"rotation": [20, 0, 0]
