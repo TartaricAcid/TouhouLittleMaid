@@ -18,6 +18,10 @@ public class MaidNavigationManager {
     private final EntityMaid maid;
     private final Level level;
     private Mode mode = Mode.GROUND;
+    // 添加模式切换冷却时间（单位：游戏刻，20游戏刻=1秒）
+    private int modeSwitchCooldown = 0;
+    // 冷却时间常量（20游戏刻）
+    private static final int COOLDOWN_TICKS = 20;
 
     public MaidNavigationManager(EntityMaid maid) {
         this.maid = maid;
@@ -29,6 +33,11 @@ public class MaidNavigationManager {
 
     public void tick() {
         if (!level.isClientSide && maid.isEffectiveAi()) {
+            // 更新冷却计时器
+            if (modeSwitchCooldown > 0) {
+                modeSwitchCooldown--;
+            }
+
             if (mode != Mode.WATER) {
                 handleGroundMode();
             } else {
@@ -60,9 +69,12 @@ public class MaidNavigationManager {
             shouldSwitchToWater = true;
         }
 
-        if (shouldSwitchToWater && switchToNavigation(Mode.WATER, waterNavigation)) {
+        // 只有在冷却时间结束后才允许切换模式
+        if (shouldSwitchToWater && modeSwitchCooldown <= 0 && switchToNavigation(Mode.WATER, waterNavigation)) {
             // 设置游泳状态
             setSwimmingState(true, false);
+            // 重置冷却计时器
+            modeSwitchCooldown = COOLDOWN_TICKS;
         }
     }
 
@@ -127,13 +139,18 @@ public class MaidNavigationManager {
      * 切换到地面寻路模式并设置是否准备上岸
      */
     private void switchToGroundNavigation(boolean readyToLand) {
-        if (switchToNavigation(Mode.GROUND, basicNavigation)) {
+        // 只有在冷却时间结束后才允许切换模式
+        if (modeSwitchCooldown <= 0 && switchToNavigation(Mode.GROUND, basicNavigation)) {
             setSwimmingState(false, readyToLand);
+            // 重置冷却计时器
+            modeSwitchCooldown = COOLDOWN_TICKS;
         }
     }
 
     /**
      * 设置游泳状态
+     * @param wantToSwim 是否想要游泳
+     * @param readyToLand 是否准备上岸
      */
     private void setSwimmingState(boolean wantToSwim, boolean readyToLand) {
         maid.getSwimManager().setWantToSwim(wantToSwim);
@@ -240,6 +257,8 @@ public class MaidNavigationManager {
         waterNavigation.stop();
         setSwimmingState(false, false);
         mode = Mode.GROUND;
+        // 重置冷却计时器
+        modeSwitchCooldown = 0;
     }
 
     public enum Mode {
