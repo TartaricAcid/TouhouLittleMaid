@@ -23,7 +23,7 @@ public class MaidPathFindingBFS {
     private final Queue<Node> queueNode = Lists.newLinkedList();
     private final NodeEvaluator nodeEvaluator;
     private final BlockPos centerPos;
-    private final double maxDistance;
+    private final double maxDistanceSquared; // 预计算平方值
     private final int verticalSearchRange;
 
     private boolean isFinished = false;
@@ -42,10 +42,10 @@ public class MaidPathFindingBFS {
     public MaidPathFindingBFS(NodeEvaluator nodeEvaluator, ServerLevel level, EntityMaid maid, BlockPos centerPos, float maxDistance, int verticalSearchRange) {
         this.nodeEvaluator = nodeEvaluator;
         this.centerPos = centerPos;
-        this.maxDistance = maxDistance;
+        this.maxDistanceSquared = maxDistance * maxDistance;
         this.verticalSearchRange = verticalSearchRange;
 
-        int offset = (int) Math.ceil(this.maxDistance);
+        int offset = (int) Math.ceil(maxDistance);
         PathNavigationRegion region = new PathNavigationRegion(level,
                 centerPos.offset(-offset, -verticalSearchRange, -offset),
                 centerPos.offset(offset, verticalSearchRange, offset));
@@ -92,21 +92,25 @@ public class MaidPathFindingBFS {
         }
         Node node = queueNode.poll();
         int neighbors = this.nodeEvaluator.getNeighbors(tmpNode, node);
+        // 重用BlockPos,减少for循环中创建对象
+        BlockPos.MutableBlockPos mutableOffset = new BlockPos.MutableBlockPos();
         for (int i = 0; i < neighbors; i++) {
-            if (cachePos.isVis(tmpNode[i].asBlockPos())) {
+            BlockPos nodePos = tmpNode[i].asBlockPos();
+            if (cachePos.isVis(nodePos)) {
                 continue;
             }
-            BlockPos offset = tmpNode[i].asBlockPos().subtract(centerPos);
-            if (verticalSearchRange < offset.getY() || offset.getY() < -verticalSearchRange) {
+            // 计算偏移量
+            mutableOffset.set(nodePos.getX() - centerPos.getX(), nodePos.getY() - centerPos.getY(), nodePos.getZ() - centerPos.getZ());
+            if (verticalSearchRange < mutableOffset.getY() || mutableOffset.getY() < -verticalSearchRange) {
                 continue;
             }
-            double neighborDistance = offset.getX() * offset.getX() + offset.getZ() * offset.getZ();
-            if (neighborDistance > maxDistance * maxDistance) {
+            double neighborDistance = mutableOffset.getX() * mutableOffset.getX() + mutableOffset.getZ() * mutableOffset.getZ();
+            if (neighborDistance > this.maxDistanceSquared) {
                 continue;
             }
-            cachePos.markVis(tmpNode[i].asBlockPos());
+            cachePos.markVis(nodePos);
             if (this.nodeEvaluator instanceof ICachedEvaluator ice) {
-                ice.markVis(tmpNode[i].asBlockPos());
+                ice.markVis(nodePos);
             }
             queueNode.add(tmpNode[i]);
         }
