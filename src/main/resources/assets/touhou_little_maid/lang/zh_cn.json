@@ -771,6 +771,8 @@
   "config.touhou_little_maid.global_ai.maid_max_history_llm_size.tooltip": "女仆最大能够记住的历史聊天长度，用于 AI 的聊天的上下文分析。",
   "config.touhou_little_maid.global_ai.max_tokens_per_player": "每位玩家最大 Token 数",
   "config.touhou_little_maid.global_ai.max_tokens_per_player.tooltip": "每个玩家最大可使用的 token 数量",
+  "config.touhou_little_maid.global_ai.maid_max_ai_function_call": "AI最大工具调用数",
+  "config.touhou_little_maid.global_ai.maid_max_ai_function_call.tooltip": "大语言模型一次对话最多调用的工具个数",
   "task.touhou_little_maid.idle": "空闲",
   "task.touhou_little_maid.attack": "攻击",
   "task.touhou_little_maid.ranged_attack": "弓兵",

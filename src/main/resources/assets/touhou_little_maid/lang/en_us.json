@@ -769,6 +769,8 @@
   "config.touhou_little_maid.global_ai.maid_max_history_llm_size.tooltip": "The maid's maximum cached conversation history length.",
   "config.touhou_little_maid.global_ai.max_tokens_per_player": "Max Tokens Per Player",
   "config.touhou_little_maid.global_ai.max_tokens_per_player.tooltip": "The maximum tokens that a player can use",
+  "config.touhou_little_maid.global_ai.maid_max_ai_function_call": "Max AI Function Call",
+  "config.touhou_little_maid.global_ai.maid_max_ai_function_call.tooltip": "Maximum number of function calls in one LLM chat",
   "task.touhou_little_maid.idle": "Idle",
   "task.touhou_little_maid.attack": "Attack",
   "task.touhou_little_maid.ranged_attack": "Bow",

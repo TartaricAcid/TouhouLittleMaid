@@ -14,6 +14,7 @@ public class AIConfig {
     public static ForgeConfigSpec.IntValue LLM_MAX_TOKEN;
     public static ForgeConfigSpec.IntValue MAID_MAX_HISTORY_LLM_SIZE;
     public static ForgeConfigSpec.IntValue MAX_TOKENS_PER_PLAYER;
+    public static ForgeConfigSpec.IntValue MAX_AI_FUNCTION_CALL;
 
     public static ForgeConfigSpec.BooleanValue TTS_ENABLED;
     public static ForgeConfigSpec.ConfigValue<String> TTS_LANGUAGE;
@@ -76,6 +77,9 @@ public class AIConfig {
 
         builder.comment("STT Proxy Address, such as 127.0.0.1:1080, empty is no proxy, SOCKS proxies are not supported");
         STT_PROXY_ADDRESS = builder.define("STTProxyAddress", "");
+
+        builder.comment("Maximum number of function call for llm in single chat");
+        MAX_AI_FUNCTION_CALL = builder.defineInRange("MaidMaxAIFunctionCall", 3, 0, 32);
 
         builder.pop();
     }

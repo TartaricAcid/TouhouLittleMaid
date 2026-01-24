@@ -37,7 +37,6 @@ import java.util.Optional;
 import java.util.Set;
 
 public class LLMCallback implements ResponseCallback<ResponseChat> {
-    private static final int MAX_CALL_COUNT = 3;
     protected final EntityMaid maid;
     protected final MaidAIChatManager chatManager;
     /**
@@ -181,8 +180,8 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
             String response = toolResponse.message();
             chatManager.addToolHistory(response, toolCall.getId());
             messages.add(LLMMessage.toolChat(maid, response, toolCall.getId()));
-            if (this.callCount >= MAX_CALL_COUNT) {
-                TouhouLittleMaid.LOGGER.error("Function call count exceed max count: {}", MAX_CALL_COUNT);
+            if (this.callCount >= AIConfig.MAX_AI_FUNCTION_CALL.get()) {
+                TouhouLittleMaid.LOGGER.error("Function call count exceed max count: {}", AIConfig.MAX_AI_FUNCTION_CALL.get());
             } else {
                 LLMConfig keepConfig = new LLMConfig(config.model(), config.maid(), ChatType.MULTI_FUNCTION_CALL);
                 client.chat(messages, keepConfig, this);
