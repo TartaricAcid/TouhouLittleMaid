@@ -134,7 +134,7 @@ export default defineUserConfig({
             //   },
             //   chartjs: true,      // 启用 chart.js
             //   echarts: true,      // 启用 ECharts
-            //   mermaid: true,      // 启用 mermaid
+            mermaid: true,      // 启用 mermaid
             //   flowchart: true,    // 启用 flowchart
             //   image: {
             //     figure: true,     // 启用 figure
