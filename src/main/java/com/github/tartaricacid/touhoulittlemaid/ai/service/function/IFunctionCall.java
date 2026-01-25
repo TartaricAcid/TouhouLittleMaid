@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.ai.service.function;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.response.ToolResponse;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.ObjectParameter;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.Parameter;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMConfig;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai.request.ChatCompletion;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.serialization.Codec;
@@ -59,5 +60,5 @@ public interface IFunctionCall<T> {
      * @param maid   正在对话的女仆
      * @return 该函数执行完毕后，返回的工具结果
      */
-    ToolResponse onToolCall(T result, EntityMaid maid);
+    ToolResponse onToolCall(T result, EntityMaid maid, LLMConfig config);
 }

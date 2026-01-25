@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.ai.service.function.response.Too
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.BoolParameter;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.ObjectParameter;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.Parameter;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.serialization.Codec;
@@ -51,7 +52,7 @@ public class SwitchFollowStateFunction implements IFunctionCall<SwitchFollowStat
     }
 
     @Override
-    public ToolResponse onToolCall(Result result, EntityMaid maid) {
+    public ToolResponse onToolCall(Result result, EntityMaid maid, LLMConfig config) {
         boolean toFollow = result.follow;
         boolean isHome = maid.isHomeModeEnable();
         if (toFollow) {
