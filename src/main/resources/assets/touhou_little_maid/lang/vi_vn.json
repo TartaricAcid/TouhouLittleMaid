@@ -255,7 +255,7 @@
   "block.touhou_little_maid.bookshelf.tip": "Khối này có thể mang lại niềm vui cho maid, từ đó làm tăng độ thiện cảm của maid.",
   "block.touhou_little_maid.scarecrow.tip": "Đặt trên mặt đất, có thể ngăn maid tiên nữ sinh ra trong khu vực nhất định.",
   "block.touhou_little_maid.snack_cabinet.tip": "Có thể lưu trữ vật phẩm. Maid sẽ ăn các khối thức ăn được đặt ở phía trên, đồng thời cũng sẽ tự đặt các khối thức ăn có trong túi đồ của mình lên trên đó.",
-  "tooltips.touhou_little_maid.chair.place.desc": "Nhấn chuột phải vào đỉnh của khối để đặt.",
+  "tooltips.touhou_little_maid.chair.place.desc": "Nhấn chuột phải vào mặt trên của khối để đặt.",
   "tooltips.touhou_little_maid.chair.destroy.desc": "Nhấn shift chuột trái để phá hủy.",
   "tooltips.touhou_little_maid.chair.gui.desc": "Nhấn shift chuột phải để mở giao diện skin.",
   "tooltips.touhou_little_maid.schedule.desc": "§7Nhấn để đổi lịch trình",
