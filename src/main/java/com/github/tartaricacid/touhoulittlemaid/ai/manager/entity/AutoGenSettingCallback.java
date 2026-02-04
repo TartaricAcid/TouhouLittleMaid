@@ -22,7 +22,8 @@ public class AutoGenSettingCallback extends LLMCallback {
             onFailure(null, new Throwable("Error in Response Chat: %s".formatted(responseChat)), ErrorCode.CHAT_TEXT_IS_EMPTY);
             return;
         }
-        chatManager.customSetting = result.replaceAll("\n+", "\n\n");
+        final int max_length = 4096;
+        chatManager.customSetting = result.replaceAll("\n+", "\n\n").substring(Math.max(0, result.length() - max_length));
         LivingEntity owner = maid.getOwner();
         if (owner instanceof Player player) {
             player.sendSystemMessage(Component.translatable("ai.touhou_little_maid.chat.llm.auto_gen_setting").withStyle(ChatFormatting.GRAY));
