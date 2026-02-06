@@ -2,10 +2,13 @@ package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task;
 
 import com.github.tartaricacid.touhoulittlemaid.api.task.meal.IMaidMeal;
 import com.github.tartaricacid.touhoulittlemaid.api.task.meal.MaidMealType;
+import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.favorability.FavorabilityManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Type;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.meal.MaidMealManager;
+import com.github.tartaricacid.touhoulittlemaid.event.MaidMealRegConfigEvent;
+import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -65,6 +68,9 @@ public class MaidWorkMealTask extends MaidCheckRateTask {
         // 尝试在背包中寻找食物放入
         boolean hasFood = false;
         RangedWrapper backpackInv = maid.getAvailableBackpackInv();
+        ItemsUtil.findStackSlot(backpackInv, stack ->
+                stack.isEdible() && !IMaidMeal.isBlockList(stack, MaidConfig.MAID_WORK_MEALS_BLOCK_LIST.get())
+                && !IMaidMeal.isBlockList(stack, MaidMealRegConfigEvent.WORK_MEAL_REGEX));
         swapItemCheck:
         for (int i = 0; i < backpackInv.getSlots(); i++) {
             ItemStack stack = backpackInv.getStackInSlot(i);

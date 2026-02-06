@@ -53,6 +53,7 @@ import com.github.tartaricacid.touhoulittlemaid.inventory.container.config.MaidC
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.BaubleItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.MaidBackpackHandler;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.MaidHandsInvWrapper;
+import com.github.tartaricacid.touhoulittlemaid.inventory.handler.MaidInvWrapper;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemFilm;
 import com.github.tartaricacid.touhoulittlemaid.mixin.accessor.ArrowAccessor;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
@@ -2318,9 +2319,9 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         return maidInv;
     }
 
-    public CombinedInvWrapper getAvailableInv(boolean handsFirst) {
+    public MaidInvWrapper getAvailableInv(boolean handsFirst) {
         RangedWrapper combinedInvWrapper = this.getAvailableBackpackInv();
-        return handsFirst ? new CombinedInvWrapper(handsInvWrapper, combinedInvWrapper) : new CombinedInvWrapper(combinedInvWrapper, handsInvWrapper);
+        return handsFirst ? new MaidInvWrapper(this, handsInvWrapper, combinedInvWrapper) : new MaidInvWrapper(this, combinedInvWrapper, handsInvWrapper);
     }
 
     public RangedWrapper getAvailableBackpackInv() {

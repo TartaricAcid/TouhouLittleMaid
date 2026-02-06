@@ -25,6 +25,7 @@ public class SBackpackCuriosCompat {
         IS_LOADED = true;
         MinecraftForge.EVENT_BUS.register(new BackpackCuriosEquipEventHandler());
         MinecraftForge.EVENT_BUS.register(new BackpackPickupEventHandler());
+        MinecraftForge.EVENT_BUS.register(new BackpackRequestItemEventHandler());
     }
 
     public static boolean isLoaded() {

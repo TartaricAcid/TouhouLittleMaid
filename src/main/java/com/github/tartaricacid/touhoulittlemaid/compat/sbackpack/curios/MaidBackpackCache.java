@@ -8,12 +8,14 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.p3pp3rf1y.sophisticatedbackpacks.api.CapabilityBackpackWrapper;
 import net.p3pp3rf1y.sophisticatedcore.inventory.ITrackedContentsItemHandler;
+import net.p3pp3rf1y.sophisticatedcore.inventory.ItemStackKey;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.WeakHashMap;
 
 /**
@@ -38,6 +40,7 @@ public class MaidBackpackCache {
 
         @Override
         public boolean containing(ItemStack itemToCheck) {
+            // EntityMaid 里就没找着 O(1) 的方法，遂遍历
             IItemHandler inv = maid.getAvailableInv(false);
             for (int i = 0; i < inv.getSlots(); i++) {
                 ItemStack stackInSlot = inv.getStackInSlot(i);
@@ -90,12 +93,9 @@ public class MaidBackpackCache {
             return backpackStack.getCapability(CapabilityBackpackWrapper.getCapabilityInstance())
                     .map(wrapper -> {
                         ITrackedContentsItemHandler inv = wrapper.getInventoryForUpgradeProcessing();
-                        for (int i = 0; i < inv.getSlots(); i++) {
-                            ItemStack stackInSlot = inv.getStackInSlot(i);
-                            if (stackInSlot.isEmpty()) continue;
-                            if (ItemStack.isSameItemSameTags(stackInSlot, itemToCheck)) return true;
-                        }
-                        return false;
+                        Set<ItemStackKey> trackedStacks = inv.getTrackedStacks();
+                        return trackedStacks.stream()
+                                .anyMatch(key -> ItemStack.isSameItemSameTags(key.getStack(), itemToCheck));
                     })
                     .orElse(false);
         }
