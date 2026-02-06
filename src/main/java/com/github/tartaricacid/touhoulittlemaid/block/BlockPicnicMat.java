@@ -240,6 +240,16 @@ public class BlockPicnicMat extends Block implements EntityBlock {
         return AABB;
     }
 
+    @Override
+    public BlockState rotate(BlockState pState, Rotation pRot) {
+        return pState.setValue(FACING, pRot.rotate(pState.getValue(FACING)));
+    }
+
+    @Override
+    public BlockState mirror(BlockState pState, Mirror pMirror) {
+        return pState.rotate(pMirror.getRotation(pState.getValue(FACING)));
+    }
+
     private static void handlePicnicMatRemove(Level world, BlockPos pos, BlockState state) {
         if (world.isClientSide) {
             return;
