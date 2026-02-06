@@ -23,7 +23,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
@@ -87,11 +86,13 @@ public abstract class BlockJoy extends BaseEntityBlock {
 
     @Override
     public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-        BlockEntity blockEntity = worldIn.getBlockEntity(pos);
-        if (blockEntity instanceof TileEntityJoy joy && worldIn instanceof ServerLevel serverLevel) {
-            Entity entity = serverLevel.getEntity(joy.getSitId());
-            if (entity instanceof EntitySit) {
-                entity.discard();
+        if (!state.is(newState.getBlock())) {
+            BlockEntity blockEntity = worldIn.getBlockEntity(pos);
+            if (blockEntity instanceof TileEntityJoy joy && worldIn instanceof ServerLevel serverLevel) {
+                Entity entity = serverLevel.getEntity(joy.getSitId());
+                if (entity instanceof EntitySit) {
+                    entity.discard();
+                }
             }
         }
         super.onRemove(state, worldIn, pos, newState, isMoving);

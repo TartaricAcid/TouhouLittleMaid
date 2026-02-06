@@ -73,7 +73,9 @@ public class BlockGarageKit extends Block implements EntityBlock {
 
     @Override
     public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-        popResource(worldIn, pos, getGarageKitFromWorld(worldIn, pos));
+        if (!state.is(newState.getBlock()) && !isMoving) {
+            popResource(worldIn, pos, getGarageKitFromWorld(worldIn, pos));
+        }
         super.onRemove(state, worldIn, pos, newState, isMoving);
     }
 

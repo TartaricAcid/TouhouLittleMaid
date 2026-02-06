@@ -80,7 +80,7 @@ public class BlockAltar extends Block implements EntityBlock {
 
     @Override
     public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-        if (!worldIn.isClientSide) {
+        if (!worldIn.isClientSide && !state.is(newState.getBlock()) && !isMoving) {
             this.getAltar(worldIn, pos).ifPresent(altar -> {
                 ItemStack stack = altar.handler.getStackInSlot(0);
                 if (!stack.isEmpty()) {

@@ -155,9 +155,11 @@ public class BlockModelSwitcher extends BaseEntityBlock {
 
     @Override
     public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-        BlockEntity te = worldIn.getBlockEntity(pos);
-        if (te instanceof TileEntityModelSwitcher) {
-            popResource(worldIn, pos, ItemModelSwitcher.tileEntityToItemStack((TileEntityModelSwitcher) te));
+        if (!state.is(newState.getBlock()) && !isMoving) {
+            BlockEntity te = worldIn.getBlockEntity(pos);
+            if (te instanceof TileEntityModelSwitcher) {
+                popResource(worldIn, pos, ItemModelSwitcher.tileEntityToItemStack((TileEntityModelSwitcher) te));
+            }
         }
         super.onRemove(state, worldIn, pos, newState, isMoving);
     }

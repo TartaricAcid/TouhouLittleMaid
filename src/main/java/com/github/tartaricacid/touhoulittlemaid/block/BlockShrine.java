@@ -98,11 +98,13 @@ public class BlockShrine extends BaseEntityBlock {
 
     @Override
     public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-        BlockEntity blockEntity = worldIn.getBlockEntity(pos);
-        if (blockEntity instanceof TileEntityShrine shrine) {
-            ItemStack storageItem = shrine.extractStorageItem();
-            if (!storageItem.isEmpty()) {
-                Block.popResource(worldIn, pos.offset(0, 1, 0), storageItem);
+        if (!state.is(newState.getBlock()) && !isMoving) {
+            BlockEntity blockEntity = worldIn.getBlockEntity(pos);
+            if (blockEntity instanceof TileEntityShrine shrine) {
+                ItemStack storageItem = shrine.extractStorageItem();
+                if (!storageItem.isEmpty()) {
+                    Block.popResource(worldIn, pos.offset(0, 1, 0), storageItem);
+                }
             }
         }
         super.onRemove(state, worldIn, pos, newState, isMoving);
