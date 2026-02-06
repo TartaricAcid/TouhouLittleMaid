@@ -122,7 +122,7 @@
   "model.touhou_little_maid.yorigami_jyoon.name": "Yorigami Joon",
   "model.touhou_little_maid.reisen.name": "Reisen",
   "model.touhou_little_maid.hakurei_reimu.desc": "§7Vu Nữ Chốn Lạc Viên",
-  "model.touhou_little_maid.yakumo_ran.desc": "§7Thức Thần Của Yêu Quái Vết Nứt",
+  "model.touhou_little_maid.yakumo_ran.desc": "§7Thức Thần Của Yêu Quái Khe Nứt",
   "model.touhou_little_maid.inubashiri_momizi.desc": "§7Thiên Cẩu Tuần Tra Cấp Thấp",
   "model.touhou_little_maid.komeiji_satori.desc": "§7Thiếu Nữ Mà Cả Oán Linh Cũng Khiếp Sợ",
   "model.touhou_little_maid.reisen_udongein_inaba.desc": "§7Thỏ Mặt Trăng Điên Loạn",
@@ -312,5 +312,8 @@
   "model.touhou_little_maid.ariya_iwanaga.name": "Iwanaga Ariya",
   "model.touhou_little_maid.ariya_iwanaga.desc": "§7Công Chúa của Sự Vĩnh Hằng",
   "model.touhou_little_maid.legendary_pig_man.name": "Tượng Người Lợn Huyền Thoại",
-  "model.touhou_little_maid.head_of_academycraft.name": "Tượng Tác Giả AcademyCraft"
+  "model.touhou_little_maid.head_of_academycraft.name": "Tượng Tác Giả AcademyCraft",
+  "model.touhou_little_maid.fogg05.name": "Tượng tác giả Fogg05",
+  "model.touhou_little_maid.crystalizedsuns_moms_tombstone.name": "Bia Mộ của Mẹ Crystalizedsun",
+  "model.touhou_little_maid.native_drum.name": "Trống Bản Địa"
 }
