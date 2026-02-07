@@ -50,6 +50,7 @@ public class ClearMaidAIDataMessage {
         if (entity instanceof EntityMaid maid && maid.isOwnedBy(player)) {
             if (message.msgIndex == ALL_MSG_INDEX) {
                 maid.getAiChatManager().getHistory().getDeque().clear();
+                maid.getAiChatManager().clearPendingCall();
             }
         }
     }

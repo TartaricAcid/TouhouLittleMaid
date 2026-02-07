@@ -42,7 +42,7 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
     /**
      * 函数调用计数器，防止无限循环调用
      */
-    protected int callCount = 0;
+    protected int callCount;
     /**
      * 等待气泡的 ID，在获取到 LLM 传递的信息后，需要移除它
      */
@@ -50,10 +50,15 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
     protected String message;
 
     public LLMCallback(MaidAIChatManager chatManager, String message, long waitingChatBubbleId) {
+        this(chatManager, message, waitingChatBubbleId, 0);
+    }
+
+    public LLMCallback(MaidAIChatManager chatManager, String message, long waitingChatBubbleId, int callCount) {
         this.maid = chatManager.getMaid();
         this.chatManager = chatManager;
         this.message = message;
         this.waitingChatBubbleId = waitingChatBubbleId;
+        this.callCount = callCount;
     }
 
     @Override
@@ -173,18 +178,28 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
         Object finalResult = result;
         serverLevel.getServer().submit(() -> {
             // 工具调用必须在主线程，否则可能会出奇怪的问题
-            ToolResponse toolResponse = functionCall.onToolCall(finalResult, maid, toolCall.getId());
-            // 继续进行下一轮 AI 对话
             // 计数增加，避免循环触发
             this.callCount = this.callCount + 1;
-            String response = toolResponse.message();
-            chatManager.addToolHistory(response, toolCall.getId());
-            messages.add(LLMMessage.toolChat(maid, response, toolCall.getId()));
+            // 告诉manager，正在处理这些tool call
+            PendingToolCall pending = new PendingToolCall(toolCall.getId(), this.callCount, this.waitingChatBubbleId);
+            chatManager.addPendingCall(pending);
             if (this.callCount >= AIConfig.MAX_AI_FUNCTION_CALL.get()) {
-                TouhouLittleMaid.LOGGER.error("Function call count exceed max count: {}", AIConfig.MAX_AI_FUNCTION_CALL.get());
+                // 超出调用数量
+                String message = "Exceeded maximun tool call count.";
+                TouhouLittleMaid.LOGGER.warn(message);
+                chatManager.onPendingComplete(toolCall.getId(), "Error: " + message);
+                return;
+            }
+
+            ToolResponse toolResponse = functionCall.onToolCall(finalResult, maid, toolCall.getId());
+            // 处理延迟完成的工具调用
+            if (toolResponse.isPending()) {
+                TouhouLittleMaid.LOGGER.debug("Tool call {} is pending async completion", toolCall.getId());
+                return;
             } else {
-                LLMConfig keepConfig = new LLMConfig(config.model(), config.maid(), ChatType.MULTI_FUNCTION_CALL);
-                client.chat(messages, keepConfig, this);
+                // 立即完成的tool call, 继续进行下一轮 AI 对话
+                String response = toolResponse.message();
+                chatManager.onPendingComplete(toolCall.getId(), response);
             }
         });
     }

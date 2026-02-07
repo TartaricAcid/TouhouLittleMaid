@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.manager.entity;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.papi.PapiReplacer;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.papi.StringConstant;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.*;
@@ -35,8 +36,42 @@ import java.util.Map;
 import static com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.papi.StringConstant.AUTO_GEN_SETTING;
 
 public final class MaidAIChatManager extends MaidAIChatData {
+    private final Map<String, PendingToolCall> pendingCalls = Maps.newHashMap();
+
     public MaidAIChatManager(EntityMaid maid) {
         super(maid);
+    }
+
+    public void addPendingCall(PendingToolCall pending) { pendingCalls.put(pending.toolCallId(), pending); }
+
+    public boolean hasPendingCall() { return !pendingCalls.isEmpty(); }
+
+    public void clearPendingCall() { pendingCalls.clear(); }
+
+    public void onPendingComplete(String toolCallId, String response) {
+        PendingToolCall pending = pendingCalls.remove(toolCallId);
+        if (pending == null) {
+            TouhouLittleMaid.LOGGER.warn("No pending call found for ID: {}", toolCallId);
+            return;
+        }
+        // TODO: language
+        List<LLMMessage> messages = getChatCompletion(this, AIConfig.TTS_LANGUAGE.get());
+        addToolHistory(response, pending.toolCallId());
+        messages.add(LLMMessage.toolChat(maid, response, pending.toolCallId()));
+
+        LLMSite site = getLLMSite();
+        if (site == null || !site.enabled()) {
+            TouhouLittleMaid.LOGGER.error("LLM site not available for async resume");
+            return;
+        }
+
+        if (hasPendingCall()) return;
+
+        // 恢复对话
+        LLMConfig keepConfig = new LLMConfig(getLLMModel(), maid, ChatType.MULTI_FUNCTION_CALL);
+        // message为空，应该没有影响。恢复的LLMCallBack的callCount不为0，不会被添加到历史记录里。
+        LLMCallback callback = new LLMCallback(this, "", pending.waitingChatBubbleId(), pending.callCount());
+        site.client().chat(messages, keepConfig, callback);
     }
 
     public void chat(String message, ChatClientInfo clientInfo, ServerPlayer sender) {

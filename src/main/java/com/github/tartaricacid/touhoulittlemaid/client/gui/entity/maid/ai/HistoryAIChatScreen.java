@@ -83,6 +83,7 @@ public class HistoryAIChatScreen extends Screen {
                     this.history.clear();
                     this.historyWidgets.clear();
                     this.maid.getAiChatManager().getHistory().getDeque().clear();
+                    this.maid.getAiChatManager().clearPendingCall();
                     NetworkHandler.CHANNEL.sendToServer(new ClearMaidAIDataMessage(this.maid.getId()));
                 }
                 this.getMinecraft().setScreen(this);
