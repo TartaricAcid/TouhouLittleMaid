@@ -3,6 +3,10 @@
     {
       "id": "create:carriage_contraption",
       "required": false
+    },
+    {
+      "id": "create:seat",
+      "required": false
     }
   ]
 }
