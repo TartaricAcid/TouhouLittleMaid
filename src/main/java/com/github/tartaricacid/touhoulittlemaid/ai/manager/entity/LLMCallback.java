@@ -173,7 +173,7 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
         Object finalResult = result;
         serverLevel.getServer().submit(() -> {
             // 工具调用必须在主线程，否则可能会出奇怪的问题
-            ToolResponse toolResponse = functionCall.onToolCall(finalResult, maid, config);
+            ToolResponse toolResponse = functionCall.onToolCall(finalResult, maid, toolCall.getId());
             // 继续进行下一轮 AI 对话
             // 计数增加，避免循环触发
             this.callCount = this.callCount + 1;

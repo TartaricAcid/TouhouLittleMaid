@@ -120,7 +120,7 @@ public class GlobalAIIntegration {
                 .setSaveConsumer(AIConfig.MAX_TOKENS_PER_PLAYER::set).build());
 
         builder.add(entryBuilder.startIntSlider(Component.translatable("config.touhou_little_maid.global_ai.maid_max_ai_function_call"),
-                        AIConfig.MAX_AI_FUNCTION_CALL.get(), 0, 32).setDefaultValue(8)
+                        AIConfig.MAX_AI_FUNCTION_CALL.get(), 0, 32).setDefaultValue(3)
                 .setTooltip(Component.translatable("config.touhou_little_maid.global_ai.maid_max_ai_function_call.tooltip"))
                 .setSaveConsumer(AIConfig.MAX_AI_FUNCTION_CALL::set).build());
 

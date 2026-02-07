@@ -6,7 +6,6 @@ import com.github.tartaricacid.touhoulittlemaid.ai.service.function.response.Too
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.ObjectParameter;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.Parameter;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.StringParameter;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMConfig;
 import com.github.tartaricacid.touhoulittlemaid.api.task.FunctionCallSwitchResult;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -65,7 +64,7 @@ public class SwitchWorkTaskFunction implements IFunctionCall<SwitchWorkTaskFunct
     }
 
     @Override
-    public ToolResponse onToolCall(Result result, EntityMaid maid, LLMConfig config) {
+    public ToolResponse onToolCall(Result result, EntityMaid maid) {
         String id = result.id;
         ResourceLocation taskId = new ResourceLocation(TouhouLittleMaid.MOD_ID, id);
         Optional<IMaidTask> optional = TaskManager.findTask(taskId);

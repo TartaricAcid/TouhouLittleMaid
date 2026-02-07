@@ -60,5 +60,17 @@ public interface IFunctionCall<T> {
      * @param maid   正在对话的女仆
      * @return 该函数执行完毕后，返回的工具结果
      */
-    ToolResponse onToolCall(T result, EntityMaid maid, LLMConfig config);
+    ToolResponse onToolCall(T result, EntityMaid maid);
+
+    /**
+     * Wrapper
+     *
+     * @param result 解码后的对象
+     * @param maid   正在对话的女仆
+     * @param toolCallId 工具id
+     * @return 该函数执行完毕后，返回的工具结果
+     */
+    default ToolResponse onToolCall(T result, EntityMaid maid, String toolCallId) {
+        return onToolCall(result, maid);
+    }
 }
