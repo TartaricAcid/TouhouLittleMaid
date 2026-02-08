@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.mixin;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityBroom;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -33,21 +34,25 @@ public class EntityMixin {
         }
     }
 
+    /**
+     * 修改为在 Entity.move() 中 collide() 调用的前后设置 inPhysicalCheck 标志
+     * 以避免其它 mod 对 collide() 的修改导致 inPhysicalCheck 永久卡在 true 的问题
+     */
     @Inject(
-            method = "collide(Lnet/minecraft/world/phys/Vec3;)Lnet/minecraft/world/phys/Vec3;",
-            at = @At("HEAD")
+            method = "move(Lnet/minecraft/world/entity/MoverType;Lnet/minecraft/world/phys/Vec3;)V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;collide(Lnet/minecraft/world/phys/Vec3;)Lnet/minecraft/world/phys/Vec3;")
     )
-    private void onCollide(Vec3 pVec, CallbackInfoReturnable<Vec3> cir) {
+    private void beforeCollide(MoverType type, Vec3 movement, CallbackInfo ci) {
         if ((Object) this instanceof EntityBroom broom) {
             broom.inPhysicalCheck = true;
         }
     }
 
     @Inject(
-            method = "collide(Lnet/minecraft/world/phys/Vec3;)Lnet/minecraft/world/phys/Vec3;",
-            at = @At("RETURN")
+            method = "move(Lnet/minecraft/world/entity/MoverType;Lnet/minecraft/world/phys/Vec3;)V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;collide(Lnet/minecraft/world/phys/Vec3;)Lnet/minecraft/world/phys/Vec3;", shift = At.Shift.AFTER)
     )
-    private void onCollideReturn(Vec3 pVec, CallbackInfoReturnable<Vec3> cir) {
+    private void afterCollide(MoverType type, Vec3 movement, CallbackInfo ci) {
         if ((Object) this instanceof EntityBroom broom) {
             broom.inPhysicalCheck = false;
         }
