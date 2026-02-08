@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.util;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.wrapper.RangedWrapper;
 
 import java.util.function.Predicate;
 
@@ -19,7 +18,7 @@ public final class TaskEquipUtil {
         if (predicate.test(maid.getMainHandItem())) {
             return true;
         }
-        RangedWrapper backpack = maid.getAvailableBackpackInv();
+        var backpack = maid.getAvailableBackpackInv();
         int slot = ItemsUtil.findStackSlot(backpack, predicate);
         if (slot >= 0) {
             int count = backpack.getStackInSlot(slot).getCount();
@@ -43,7 +42,7 @@ public final class TaskEquipUtil {
         if (maid.getMainHandItem().isEmpty()) {
             return false;
         }
-        RangedWrapper backpack = maid.getAvailableBackpackInv();
+        var backpack = maid.getAvailableBackpackInv();
         ItemStack mainHandItem = maid.getMainHandItem();
         for (int i = 0; i < backpack.getSlots(); i++) {
             ItemStack stackInSlot = backpack.getStackInSlot(i);

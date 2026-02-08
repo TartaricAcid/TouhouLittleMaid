@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.advancements.maid.TriggerType;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IFeedTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
+import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.google.common.collect.ImmutableMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
@@ -57,6 +58,10 @@ public class MaidFeedOwnerTask extends MaidCheckRateTask {
             IntList highFoods = new IntArrayList();
 
             CombinedInvWrapper inv = maid.getAvailableInv(true);
+
+            // 若没有食物则借助此调用触发 MaidRequestItemEvent 来尝试获取食物
+            ItemsUtil.findStackSlot(inv, stack -> task.isFood(stack, player));
+
             for (int i = 0; i < inv.getSlots(); ++i) {
                 ItemStack stack = inv.getStackInSlot(i);
                 if (task.isFood(stack, player)) {

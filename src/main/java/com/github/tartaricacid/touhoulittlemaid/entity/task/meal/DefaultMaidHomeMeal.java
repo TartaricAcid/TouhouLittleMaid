@@ -15,10 +15,15 @@ import net.minecraft.world.item.ItemStack;
 public class DefaultMaidHomeMeal implements IMaidMeal {
     private static final int MAX_PROBABILITY = 15;
 
+    public static boolean isHomeMeal(ItemStack stack) {
+        return stack.isEdible()
+               && !IMaidMeal.isBlockList(stack, MaidConfig.MAID_HOME_MEALS_BLOCK_LIST.get())
+               && !IMaidMeal.isBlockList(stack, MaidMealRegConfigEvent.HOME_MEAL_REGEX);
+    }
+
     @Override
     public boolean canMaidEat(EntityMaid maid, ItemStack stack, InteractionHand hand) {
-        return stack.isEdible() && !IMaidMeal.isBlockList(stack, MaidConfig.MAID_HOME_MEALS_BLOCK_LIST.get())
-                && !IMaidMeal.isBlockList(stack, MaidMealRegConfigEvent.HOME_MEAL_REGEX);
+        return isHomeMeal(stack);
     }
 
     @Override

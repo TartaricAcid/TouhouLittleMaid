@@ -1,8 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.util;
 
 import com.github.tartaricacid.touhoulittlemaid.api.bauble.IMaidBauble;
+import com.github.tartaricacid.touhoulittlemaid.api.event.MaidRequestItemEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.BaubleItemHandler;
+import com.github.tartaricacid.touhoulittlemaid.inventory.handler.MaidInvWrapper;
 import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
@@ -12,6 +14,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.wrapper.PlayerMainInvWrapper;
@@ -58,12 +61,46 @@ public final class ItemsUtil {
      * @return 如果没找到，返回 -1
      */
     public static int findStackSlot(IItemHandler handler, Predicate<ItemStack> filter) {
+        return findStackSlot(handler, filter, -1);
+    }
+
+    /**
+     * 如果传入的 handler 是 {@link MaidInvWrapper}，
+     * 在物品栏中找不到时会触发 {@link MaidRequestItemEvent} 事件尝试从外部存储请求物品到物品栏，再次查找。
+     *
+     * @return 如果没找到，返回 -1
+     */
+    public static int findStackSlot(IItemHandler handler, Predicate<ItemStack> filter, int maxCount) {
+        // 先正常在普通物品栏中查找
         for (int i = 0; i < handler.getSlots(); i++) {
             ItemStack stack = handler.getStackInSlot(i);
             if (filter.test(stack)) {
                 return i;
             }
         }
+
+        // 如果没找到，并且 handler 是 MaidInvWrapper，就触发事件请求物品后再找一次
+        if (!(handler instanceof MaidInvWrapper maidInv) || maidInv.getMaid().level.isClientSide) {
+            return -1;
+        }
+
+        // 触发事件请求物品，让外部存储（如精妙背包等）把物品放到物品栏里
+        MaidRequestItemEvent event = new MaidRequestItemEvent(maidInv.getMaid(), filter, maxCount);
+        MinecraftForge.EVENT_BUS.post(event);
+        ItemStack requested = event.getRequestedItem();
+        // 如果请求的物品为空，说明没有外部存储提供物品，直接返回 -1
+        if (requested.isEmpty()) {
+            return -1;
+        }
+
+        // 再次查找物品栏，找到该物品
+        for (int i = 0; i < handler.getSlots(); i++) {
+            ItemStack stack = handler.getStackInSlot(i);
+            if (filter.test(stack)) {
+                return i;
+            }
+        }
+
         return -1;
     }
 

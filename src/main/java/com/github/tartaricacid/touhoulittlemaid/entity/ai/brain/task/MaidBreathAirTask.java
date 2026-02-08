@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.BaubleItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.SpawnParticleMessage;
+import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
@@ -25,7 +26,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.NodeEvaluator;
-import net.minecraftforge.items.wrapper.RangedWrapper;
 
 import java.util.List;
 import java.util.Optional;
@@ -122,7 +122,11 @@ public class MaidBreathAirTask extends Behavior<EntityMaid> {
 
         // 尝试在背包中寻找食物放入
         boolean hasFood = false;
-        RangedWrapper backpackInv = maid.getAvailableBackpackInv();
+        var backpackInv = maid.getAvailableBackpackInv();
+
+        // 若没有食物则借助此调用触发 MaidRequestItemEvent 来尝试获取食物
+        ItemsUtil.findStackSlot(backpackInv, stack -> this.isBreatheFood(maid, stack));
+
         for (int i = 0; i < backpackInv.getSlots(); i++) {
             ItemStack stack = backpackInv.getStackInSlot(i);
             if (stack.isEmpty()) {
