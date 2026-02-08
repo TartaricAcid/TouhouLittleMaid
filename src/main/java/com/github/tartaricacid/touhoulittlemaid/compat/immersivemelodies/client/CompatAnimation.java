@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.compat.immersivemelodies;
+package com.github.tartaricacid.touhoulittlemaid.compat.immersivemelodies.client;
 
 import com.github.tartaricacid.simplebedrockmodel.client.bedrock.model.BedrockPart;
 import com.github.tartaricacid.touhoulittlemaid.api.animation.ICustomAnimation;

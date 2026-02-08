@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.compat.immersivemelodies;
+package com.github.tartaricacid.touhoulittlemaid.compat.immersivemelodies.client;
 
 import com.github.tartaricacid.touhoulittlemaid.client.animation.HardcodedAnimationManger;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.molang.CtrlBinding;

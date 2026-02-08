@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.compat.immersivemelodies;
+package com.github.tartaricacid.touhoulittlemaid.compat.immersivemelodies.client;
 
 import com.github.tartaricacid.simplebedrockmodel.client.bedrock.model.BedrockPart;
 import immersive_melodies.client.animation.accessors.ModelAccessor;
