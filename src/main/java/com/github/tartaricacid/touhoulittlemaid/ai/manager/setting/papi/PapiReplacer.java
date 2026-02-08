@@ -180,7 +180,7 @@ public class PapiReplacer {
 
     private static String getInventoryItems(EntityMaid maid, String chatLanguage) {
         List<String> names = Lists.newArrayList();
-        RangedWrapper backpack = maid.getAvailableBackpackInv();
+        var backpack = maid.getAvailableBackpackInv();
         for (int i = 0; i < backpack.getSlots(); i++) {
             ItemStack stack = backpack.getStackInSlot(i);
             if (!stack.isEmpty()) {

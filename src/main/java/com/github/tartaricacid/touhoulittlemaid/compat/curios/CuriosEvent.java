@@ -42,18 +42,25 @@ public class CuriosEvent {
      */
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onMaidTombstone(MaidTombstoneEvent event) {
-        if (event.isCanceled()) return;
-        if (!CuriosCompat.isLoadedOrEnable()) return;
-        
+        if (event.isCanceled()) {
+            return;
+        }
+        if (!CuriosCompat.isLoadedOrEnable()) {
+            return;
+        }
+
         EntityTombstone tombstone = event.getTombstone();
-        EntityMaid      maid      = event.getMaid();
-        
+        EntityMaid maid = event.getMaid();
+
         CuriosApi.getCuriosInventory(maid).ifPresent(handler -> {
-            for (ICurioStacksHandler stacksHandler : handler.getCurios().values()) {
+            var values = handler.getCurios().values();
+            for (ICurioStacksHandler stacksHandler : values) {
                 IDynamicStackHandler stacks = stacksHandler.getStacks();
                 for (int i = 0; i < stacks.getSlots(); i++) {
                     ItemStack stack = stacks.extractItem(i, stacks.getSlotLimit(i), false);
-                    if (!stack.isEmpty()) tombstone.insertItem(stack);
+                    if (!stack.isEmpty()) {
+                        tombstone.insertItem(stack);
+                    }
                 }
             }
         });

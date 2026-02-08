@@ -772,13 +772,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             if (!simulate) {
                 // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画和音效
                 this.take(entityItem, count - itemstack.getCount());
-                if (!MinecraftForge.EVENT_BUS.post(new MaidPlaySoundEvent(this))) {
-                    pickupSoundCount--;
-                    if (pickupSoundCount == 0) {
-                        this.playSound(InitSounds.MAID_ITEM_GET.get(), 1, 1);
-                        pickupSoundCount = 5;
-                    }
-                }
+                this.tryPlayMaidPickupSound();
                 ItemStack copy = new ItemStack(itemstack.getItem(), count - itemstack.getCount());
                 // 如果遍历塞完后发现为空了
                 if (itemstack.isEmpty()) {
@@ -803,13 +797,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         if (!this.level.isClientSide && entityXPOrb.isAlive() && entityXPOrb.tickCount > 2) {
             // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画和音效
             this.take(entityXPOrb, 1);
-            if (!MinecraftForge.EVENT_BUS.post(new MaidPlaySoundEvent(this))) {
-                pickupSoundCount--;
-                if (pickupSoundCount == 0) {
-                    this.playSound(InitSounds.MAID_ITEM_GET.get(), 1, 1);
-                    pickupSoundCount = 5;
-                }
-            }
+            this.tryPlayMaidPickupSound();
 
             // 对经验修补的应用，因为全部来自于原版，所以效果也是相同的
             IItemHandler allItems = new CombinedInvWrapper(armorInvWrapper, handsInvWrapper, maidBauble);
@@ -834,13 +822,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         if (!this.level.isClientSide && powerPoint.isAlive() && powerPoint.throwTime == 0) {
             // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画和音效
             powerPoint.take(this, 1);
-            if (!MinecraftForge.EVENT_BUS.post(new MaidPlaySoundEvent(this))) {
-                pickupSoundCount--;
-                if (pickupSoundCount == 0) {
-                    this.playSound(InitSounds.MAID_ITEM_GET.get(), 1, 1);
-                    pickupSoundCount = 5;
-                }
-            }
+            this.tryPlayMaidPickupSound();
 
             // 对经验修补的应用，因为全部来自于原版，所以效果也是相同的
             LazyOptional<IItemHandler> allItems = this.getCapability(ForgeCapabilities.ITEM_HANDLER, null);
@@ -896,18 +878,22 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             if (!simulate) {
                 // 这是向客户端同步数据用的，如果加了这个方法，会有短暂的拾取动画和音效
                 this.take(arrow, 1);
-                if (!MinecraftForge.EVENT_BUS.post(new MaidPlaySoundEvent(this))) {
-                    pickupSoundCount--;
-                    if (pickupSoundCount == 0) {
-                        this.playSound(InitSounds.MAID_ITEM_GET.get(), 1, 1);
-                        pickupSoundCount = 5;
-                    }
-                }
+                this.tryPlayMaidPickupSound();
                 arrow.discard();
             }
             return true;
         }
         return false;
+    }
+
+    public void tryPlayMaidPickupSound() {
+        if (!MinecraftForge.EVENT_BUS.post(new MaidPlaySoundEvent(this))) {
+            pickupSoundCount--;
+            if (pickupSoundCount == 0) {
+                this.playSound(InitSounds.MAID_ITEM_GET.get(), 1, 1);
+                pickupSoundCount = 5;
+            }
+        }
     }
 
     private ItemStack getArrowFromEntity(AbstractArrow entity) {
@@ -2319,13 +2305,23 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         return maidInv;
     }
 
+    /**
+     * 返回 MaidInvWrapper，方便触发 MaidRequestItemEvent 事件时使用
+     */
     public MaidInvWrapper getAvailableInv(boolean handsFirst) {
-        RangedWrapper combinedInvWrapper = this.getAvailableBackpackInv();
-        return handsFirst ? new MaidInvWrapper(this, handsInvWrapper, combinedInvWrapper) : new MaidInvWrapper(this, combinedInvWrapper, handsInvWrapper);
+        int maxContainerIndex = getMaidBackpackType().getAvailableMaxContainerIndex();
+        RangedWrapper combinedInvWrapper = new RangedWrapper(maidInv, 0, maxContainerIndex);
+        return handsFirst ? new MaidInvWrapper(this, handsInvWrapper, combinedInvWrapper)
+                : new MaidInvWrapper(this, combinedInvWrapper, handsInvWrapper);
     }
 
-    public RangedWrapper getAvailableBackpackInv() {
-        return new RangedWrapper(maidInv, 0, getMaidBackpackType().getAvailableMaxContainerIndex());
+    /**
+     * 返回 MaidInvWrapper，方便触发 MaidRequestItemEvent 事件时使用
+     */
+    public MaidInvWrapper getAvailableBackpackInv() {
+        int maxContainerIndex = getMaidBackpackType().getAvailableMaxContainerIndex();
+        RangedWrapper rangedWrapper = new RangedWrapper(maidInv, 0, maxContainerIndex);
+        return new MaidInvWrapper(this, rangedWrapper);
     }
 
     public EntityHandsInvWrapper getHandsInvWrapper() {
@@ -2838,5 +2834,23 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
                 this.level.addParticle(option, pos.x, pos.y, pos.z, speed.x, speed.y + 0.05, speed.z);
             }
         }
+    }
+
+    /**
+     * 因为部分 idea 插件会检查 Map 类里，这些对象做 key 时，是否重写了 equals 和 hashCode 方法，
+     * 故这里必须重写这两个方法，但实际上并不需要修改默认父类的实现
+     */
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    /**
+     * 因为部分 idea 插件会检查 Map 类里，这些对象做 key 时，是否重写了 equals 和 hashCode 方法，
+     * 故这里必须重写这两个方法，但实际上并不需要修改默认父类的实现
+     */
+    @Override
+    public boolean equals(Object pObject) {
+        return super.equals(pObject);
     }
 }

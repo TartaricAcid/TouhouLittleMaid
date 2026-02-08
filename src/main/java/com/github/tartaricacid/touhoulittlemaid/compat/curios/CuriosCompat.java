@@ -2,8 +2,6 @@ package com.github.tartaricacid.touhoulittlemaid.compat.curios;
 
 import com.github.tartaricacid.touhoulittlemaid.compat.curios.client.CuriosContainerScreen;
 import com.github.tartaricacid.touhoulittlemaid.compat.curios.menu.CuriosContainer;
-import com.github.tartaricacid.touhoulittlemaid.compat.sbackpack.SBackpackCompat;
-import com.github.tartaricacid.touhoulittlemaid.compat.sbackpack.curios.SBackpackCuriosCompat;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.client.Minecraft;
@@ -19,8 +17,6 @@ public class CuriosCompat {
     public static void init() {
         IS_LOADED = true;
         MinecraftForge.EVENT_BUS.register(new CuriosEvent());
-
-        if (SBackpackCompat.isLoaded()) SBackpackCuriosCompat.init();
     }
 
     public static boolean isLoaded() {

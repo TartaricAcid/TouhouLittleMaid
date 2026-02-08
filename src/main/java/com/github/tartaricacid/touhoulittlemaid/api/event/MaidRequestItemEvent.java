@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.api.event;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.Event;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.function.Predicate;
 
@@ -10,11 +11,12 @@ import java.util.function.Predicate;
  * 当女仆需要从外部获取物品到自己物品栏时触发此事件。
  * 此事件可取消。如果取消，表示已处理完毕，不再继续传递给其他处理器。
  */
+@ApiStatus.AvailableSince("1.5.1")
 public class MaidRequestItemEvent extends Event {
-    private final EntityMaid           maid;
+    private final EntityMaid maid;
     private final Predicate<ItemStack> itemFilter;
-    private final int                  maxCount;
-    private       ItemStack            requestedItem = ItemStack.EMPTY;
+    private final int maxCount;
+    private ItemStack requestedItem = ItemStack.EMPTY;
 
     /**
      * @param maid       请求物品的女仆
@@ -22,9 +24,9 @@ public class MaidRequestItemEvent extends Event {
      * @param maxCount   最大请求数量
      */
     public MaidRequestItemEvent(EntityMaid maid, Predicate<ItemStack> itemFilter, int maxCount) {
-        this.maid       = maid;
+        this.maid = maid;
         this.itemFilter = itemFilter;
-        this.maxCount   = maxCount;
+        this.maxCount = maxCount;
     }
 
     public EntityMaid getMaid() {

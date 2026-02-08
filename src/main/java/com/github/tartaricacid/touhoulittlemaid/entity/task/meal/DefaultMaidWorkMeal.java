@@ -15,10 +15,15 @@ import net.minecraft.world.item.ItemStack;
 public class DefaultMaidWorkMeal implements IMaidMeal {
     private static final int MAX_PROBABILITY = 100;
 
+    public static boolean isWorkMeal(ItemStack stack) {
+        return stack.isEdible()
+               && !IMaidMeal.isBlockList(stack, MaidConfig.MAID_WORK_MEALS_BLOCK_LIST.get())
+               && !IMaidMeal.isBlockList(stack, MaidMealRegConfigEvent.WORK_MEAL_REGEX);
+    }
+
     @Override
     public boolean canMaidEat(EntityMaid maid, ItemStack stack, InteractionHand hand) {
-        return stack.isEdible() && !IMaidMeal.isBlockList(stack, MaidConfig.MAID_WORK_MEALS_BLOCK_LIST.get())
-               && !IMaidMeal.isBlockList(stack, MaidMealRegConfigEvent.WORK_MEAL_REGEX);
+        return isWorkMeal(stack);
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.compat.gun.tacz;
 
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.inventory.handler.MaidInvWrapper;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.tacz.guns.api.TimelessAPI;
 import com.tacz.guns.api.entity.IGunOperator;
@@ -128,12 +129,11 @@ public class TacInnerCompat {
 
         if (result == ShootResult.NO_AMMO) {
             // reload 不会触发 MaidRequestItemEvent，此处手动请求弹药
-            ItemsUtil.findStackSlot(
-                shooter.getAvailableInv(true),
-                stack -> {
-                    IAmmo ammo = IAmmo.getIAmmoOrNull(stack);
-                    return ammo != null && ammo.isAmmoOfGun(gunItem, stack);
-                });
+            MaidInvWrapper availableInv = shooter.getAvailableInv(true);
+            ItemsUtil.findStackSlot(availableInv, stack -> {
+                IAmmo ammo = IAmmo.getIAmmoOrNull(stack);
+                return ammo != null && ammo.isAmmoOfGun(gunItem, stack);
+            });
             gunOperator.reload();
             float emptyTime = gunData.getReloadData().getCooldown().getEmptyTime();
             return Math.round(emptyTime * 20) + 2;

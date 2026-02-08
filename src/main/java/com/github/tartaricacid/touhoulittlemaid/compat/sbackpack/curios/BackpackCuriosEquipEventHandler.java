@@ -10,7 +10,9 @@ public class BackpackCuriosEquipEventHandler {
 
     @SubscribeEvent
     public void onCurioChange(CurioChangeEvent event) {
-        if (!(event.getEntity() instanceof EntityMaid maid)) return;
+        if (!(event.getEntity() instanceof EntityMaid maid)) {
+            return;
+        }
 
         ItemStack from = event.getFrom();
         ItemStack to = event.getTo();
@@ -20,8 +22,12 @@ public class BackpackCuriosEquipEventHandler {
         boolean wasBackpack = SBackpackCompat.isBackpack(from);
         boolean isBackpack = SBackpackCompat.isBackpack(to);
 
-        if (wasBackpack && !isBackpack) MaidBackpackCache.onUnequipped(maid, slotType, slotIndex);
-        else if (!wasBackpack && isBackpack) MaidBackpackCache.onEquipped(maid, slotType, slotIndex);
+        if (wasBackpack && !isBackpack) {
+            MaidBackpackCache.onUnequipped(maid, slotType, slotIndex);
+        } else if (!wasBackpack && isBackpack) {
+            MaidBackpackCache.onEquipped(maid, slotType, slotIndex);
+        }
+
         // 如果背包被替换为另一个背包，槽位引用不变，不需要更新
     }
 }

@@ -3,12 +3,13 @@ package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task;
 import com.github.tartaricacid.touhoulittlemaid.api.task.meal.IMaidMeal;
 import com.github.tartaricacid.touhoulittlemaid.api.task.meal.MaidMealType;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.entity.task.meal.DefaultMaidHealSelfMeal;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.meal.MaidMealManager;
+import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.wrapper.RangedWrapper;
 
 import java.util.List;
 
@@ -63,7 +64,11 @@ public class MaidHealSelfTask extends MaidCheckRateTask {
 
         // 尝试在背包中寻找食物放入
         boolean hasFood = false;
-        RangedWrapper backpackInv = maid.getAvailableBackpackInv();
+        var backpackInv = maid.getAvailableBackpackInv();
+
+        // 若没有食物则借助此调用触发 MaidRequestItemEvent 来尝试获取食物
+        ItemsUtil.findStackSlot(backpackInv, DefaultMaidHealSelfMeal::isHealMeal);
+
         swapItemCheck:
         for (int i = 0; i < backpackInv.getSlots(); i++) {
             ItemStack stack = backpackInv.getStackInSlot(i);

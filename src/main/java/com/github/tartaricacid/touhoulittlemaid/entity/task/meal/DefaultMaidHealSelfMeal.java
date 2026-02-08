@@ -14,10 +14,15 @@ import net.minecraft.world.item.ItemStack;
 public class DefaultMaidHealSelfMeal implements IMaidMeal {
     private static final int MAX_PROBABILITY = 5;
 
+    public static boolean isHealMeal(ItemStack stack) {
+        return stack.isEdible()
+               && !IMaidMeal.isBlockList(stack, MaidConfig.MAID_HEAL_MEALS_BLOCK_LIST.get())
+               && !IMaidMeal.isBlockList(stack, MaidMealRegConfigEvent.HEAL_MEAL_REGEX);
+    }
+
     @Override
     public boolean canMaidEat(EntityMaid maid, ItemStack stack, InteractionHand hand) {
-        return stack.isEdible() && !IMaidMeal.isBlockList(stack, MaidConfig.MAID_HEAL_MEALS_BLOCK_LIST.get())
-               && !IMaidMeal.isBlockList(stack, MaidMealRegConfigEvent.HEAL_MEAL_REGEX);
+        return isHealMeal(stack);
     }
 
     @Override
