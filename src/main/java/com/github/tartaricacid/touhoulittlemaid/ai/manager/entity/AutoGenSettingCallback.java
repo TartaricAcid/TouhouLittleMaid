@@ -23,6 +23,13 @@ public class AutoGenSettingCallback extends LLMCallback {
             return;
         }
         chatManager.customSetting = result.replaceAll("\n+", "\n\n");
+
+        // 有可能人设提示词会超过 4096 字符长度，故额外检查并适当截断
+        // 留部分冗余，故意设置为 4000 而非 4096
+        if (chatManager.customSetting.length() > 4000) {
+            chatManager.customSetting = chatManager.customSetting.substring(0, 4000);
+        }
+
         LivingEntity owner = maid.getOwner();
         if (owner instanceof Player player) {
             player.sendSystemMessage(Component.translatable("ai.touhou_little_maid.chat.llm.auto_gen_setting").withStyle(ChatFormatting.GRAY));
