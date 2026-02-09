@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class PlayerBroomControl implements IBroomControl {
     private final EntityBroom broom;
+    private float FCMP_THRE = 1e-4f;
 
     public PlayerBroomControl(EntityBroom broom) {
         this.broom = broom;
@@ -27,10 +28,10 @@ public class PlayerBroomControl implements IBroomControl {
 
     @Override
     public void travel(Player player, EntityMaid maid) {
-        boolean keyForward = player.zza > 0;
-        boolean keyBack = player.zza < 0;
-        boolean keyLeft = player.xxa > 0;
-        boolean keyRight = player.xxa < 0;
+        boolean keyForward = player.zza > FCMP_THRE;
+        boolean keyBack = player.zza < -FCMP_THRE;
+        boolean keyLeft = player.xxa > FCMP_THRE;
+        boolean keyRight = player.xxa < -FCMP_THRE;
         boolean keySneak = player.isShiftKeyDown();
         boolean keyJump = IBroomControl.keyJump(player);
 
@@ -38,7 +39,7 @@ public class PlayerBroomControl implements IBroomControl {
         boolean hasInput = keyForward || keyBack || keyLeft || keyRight || keyJump || keySneak;
 
         if (hasInput) {
-            float strafe = keyLeft ? 0.2f : (keyRight ? -0.2f : 0);
+            float strafe = player.xxa * 0.2f;
             float vertical = 0;
 
             // 垂直移动控制
@@ -51,7 +52,7 @@ public class PlayerBroomControl implements IBroomControl {
                 vertical = -(player.getXRot() - 10) / 360f;
             }
 
-            float forward = keyForward ? 0.375f : (keyBack ? -0.2f : 0);
+            float forward = keyForward ? player.zza * 0.375f : player.zza * 0.2f;
 
             // 玩家基础速度是 0.1，速度二效果是 0.14，为了增加速度效果带来的增益，故这样计算
             double playerSpeed = player.getAttributeValue(Attributes.MOVEMENT_SPEED);
