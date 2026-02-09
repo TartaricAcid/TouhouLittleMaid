@@ -246,6 +246,16 @@ public class EntityBroom extends AbstractEntityFromItem implements OwnableEntity
         return this.isAlive();
     }
 
+    /**
+     * 当玩家骑在扫帚上时，让扫帚本体不可被选中
+     * 防止其碰撞箱影响正常交互
+     */
+    @Override
+    public boolean isPickable() {
+        boolean hasPlayer = this.getPassengers().stream().anyMatch(e -> e instanceof Player);
+        return hasPlayer ? false : super.isPickable();
+    }
+
     @Override
     protected boolean canAddPassenger(Entity entity) {
         return this.getPassengers().size() < 2;
