@@ -4505,7 +4505,7 @@
 						0,
 						"(math.random(0,query.max_health/2)<query.health)?0:math.random(-1,1)"
 					],
-					"scale": "(math.random(0,query.max_health/2)<query.health)&&fn.halo_battery_indicator(4)?1:0"
+					"scale": "(math.random(0,query.max_health/2)<query.health)?1:0"
 				},
 				"ysmGlow_nei3": {
 					"position": [
@@ -4513,7 +4513,7 @@
 						0,
 						"(math.random(0,query.max_health/2)<query.health)?0:math.random(-1,1)"
 					],
-					"scale": "(math.random(0,query.max_health/2)<query.health)&&fn.halo_battery_indicator(3)?1:0"
+					"scale": "(math.random(0,query.max_health/2)<query.health)?1:0"
 				},
 				"ysmGlow_nei2": {
 					"position": [
@@ -4521,7 +4521,7 @@
 						0,
 						"(math.random(0,query.max_health/2)<query.health)?0:math.random(-1,1)"
 					],
-					"scale": "(math.random(0,query.max_health/2)<query.health)&&fn.halo_battery_indicator(2)?1:0"
+					"scale": "(math.random(0,query.max_health/2)<query.health)?1:0"
 				},
 				"ysmGlow_nei1": {
 					"position": [
@@ -4529,7 +4529,7 @@
 						0,
 						"(math.random(0,query.max_health/2)<query.health)?0:math.random(-1,1)"
 					],
-					"scale": "(math.random(0,query.max_health/2)<query.health)&&fn.halo_battery_indicator(1)?1:0"
+					"scale": "(math.random(0,query.max_health/2)<query.health)?1:0"
 				},
 				"ysmGlow_wai1": {
 					"position": [
