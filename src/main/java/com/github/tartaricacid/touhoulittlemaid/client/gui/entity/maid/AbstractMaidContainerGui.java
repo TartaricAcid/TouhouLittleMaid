@@ -47,6 +47,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.ModList;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.text.DecimalFormat;
@@ -670,6 +671,11 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
 
     public EntityMaid getMaid() {
         return maid;
+    }
+
+    @ApiStatus.AvailableSince("1.5.1")
+    public Map<String, AbstractWidget> getEventAddButtons() {
+        return eventAddButtons;
     }
 
     private void renderTransTooltip(ImageButton button, GuiGraphics graphics, int x, int y, String key) {
