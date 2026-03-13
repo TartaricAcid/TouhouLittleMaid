@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.inventory.handler.BaubleItemHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.SpawnParticleMessage;
+import com.github.tartaricacid.touhoulittlemaid.util.HandUtils;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.util.Pair;
@@ -99,7 +100,7 @@ public class MaidBreathAirTask extends Behavior<EntityMaid> {
 
     private boolean eatBreatheItem(EntityMaid maid) {
         // 先查询手部的物品能否吃：能就直接开吃，否就进行后续工作
-        for (InteractionHand hand : InteractionHand.values()) {
+        for (InteractionHand hand : HandUtils.NATIVE_HANDS) {
             ItemStack itemInHand = maid.getItemInHand(hand);
             if (itemInHand.isEmpty()) {
                 continue;
@@ -112,7 +113,7 @@ public class MaidBreathAirTask extends Behavior<EntityMaid> {
 
         // 对手部进行处理：如果没有空的手部，那就取副手
         InteractionHand eanHand = InteractionHand.OFF_HAND;
-        for (InteractionHand hand : InteractionHand.values()) {
+        for (InteractionHand hand : HandUtils.NATIVE_HANDS) {
             if (maid.getItemInHand(hand).isEmpty()) {
                 eanHand = hand;
                 break;

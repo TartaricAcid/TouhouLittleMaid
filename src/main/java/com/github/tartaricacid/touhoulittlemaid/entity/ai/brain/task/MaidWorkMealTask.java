@@ -7,6 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.favorability.Type;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.meal.DefaultMaidWorkMeal;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.meal.MaidMealManager;
+import com.github.tartaricacid.touhoulittlemaid.util.HandUtils;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.server.level.ServerLevel;
@@ -38,7 +39,7 @@ public class MaidWorkMealTask extends MaidCheckRateTask {
         List<IMaidMeal> maidMeals = MaidMealManager.getMaidMeals(MaidMealType.WORK_MEAL);
 
         // 先查询手部的物品能否吃：能就直接开吃，否就进行后续工作
-        for (InteractionHand hand : InteractionHand.values()) {
+        for (InteractionHand hand : HandUtils.NATIVE_HANDS) {
             ItemStack itemInHand = maid.getItemInHand(hand);
 
             if (itemInHand.isEmpty()) {
@@ -55,7 +56,7 @@ public class MaidWorkMealTask extends MaidCheckRateTask {
 
         // 对手部进行处理：如果没有空的手部，那就取副手
         InteractionHand eanHand = InteractionHand.OFF_HAND;
-        for (InteractionHand hand : InteractionHand.values()) {
+        for (InteractionHand hand : HandUtils.NATIVE_HANDS) {
             if (maid.getItemInHand(hand).isEmpty()) {
                 eanHand = hand;
                 break;
