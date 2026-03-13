@@ -20,10 +20,16 @@ public class ChatCompletion {
     private ResponseFormat responseFormat = ResponseFormat.text();
 
     @SerializedName("max_tokens")
-    private int maxTokens = 4096;
+    private Integer maxTokens = 4096;
+
+    @SerializedName("max_completion_tokens")
+    private Integer maxCompletionTokens = null;
 
     @SerializedName("temperature")
-    private double temperature = 0.5;
+    private Double temperature = 0.5;
+
+    @SerializedName("reasoning_effort")
+    private String reasoningEffort = null;
 
     public static ChatCompletion create() {
         return new ChatCompletion();
@@ -36,6 +42,11 @@ public class ChatCompletion {
 
     public ChatCompletion systemChat(String message) {
         this.messages.add(ChatMessage.systemChat(message));
+        return this;
+    }
+
+    public ChatCompletion developerChat(String message) {
+        this.messages.add(ChatMessage.developerChat(message));
         return this;
     }
 
@@ -69,6 +80,13 @@ public class ChatCompletion {
 
     public ChatCompletion maxTokens(int maxTokens) {
         this.maxTokens = maxTokens;
+        this.maxCompletionTokens = null;
+        return this;
+    }
+
+    public ChatCompletion maxCompletionTokens(int maxCompletionTokens) {
+        this.maxCompletionTokens = maxCompletionTokens;
+        this.maxTokens = null;
         return this;
     }
 
@@ -78,8 +96,18 @@ public class ChatCompletion {
         return this;
     }
 
+    public ChatCompletion clearTemperature() {
+        this.temperature = null;
+        return this;
+    }
+
     public ChatCompletion setResponseFormat(ResponseFormat responseFormat) {
         this.responseFormat = responseFormat;
+        return this;
+    }
+
+    public ChatCompletion reasoningEffort(String reasoningEffort) {
+        this.reasoningEffort = reasoningEffort;
         return this;
     }
 }

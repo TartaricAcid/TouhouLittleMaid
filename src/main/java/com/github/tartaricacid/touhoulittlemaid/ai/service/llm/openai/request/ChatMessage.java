@@ -26,6 +26,10 @@ public class ChatMessage {
         return new ChatMessage(Role.SYSTEM.getId(), content);
     }
 
+    public static ChatMessage developerChat(String content) {
+        return new ChatMessage("developer", content);
+    }
+
     public static ChatMessage userChat(String content) {
         return new ChatMessage(Role.USER.getId(), content);
     }

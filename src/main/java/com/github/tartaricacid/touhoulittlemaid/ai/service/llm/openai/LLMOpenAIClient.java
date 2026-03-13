@@ -25,12 +25,14 @@ import com.google.common.net.MediaType;
 import net.minecraft.server.level.ServerPlayer;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.annotation.Nullable;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.List;
+import java.util.Locale;
 
 public final class LLMOpenAIClient implements LLMClient {
     private static final Duration MAX_TIMEOUT = Duration.ofSeconds(60);
@@ -52,10 +54,23 @@ public final class LLMOpenAIClient implements LLMClient {
         int maxTokens = config.maxTokens();
         EntityMaid maid = config.maid();
         ChatType chatType = config.chatType();
+        OpenAIChatCompatibility compatibility = OpenAIChatCompatibility.from(this.site.url(), model);
 
         // 构建对话
-        ChatCompletion chatCompletion = ChatCompletion.create().model(model).maxTokens(maxTokens)
-                .temperature(temperature).setResponseFormat(ResponseFormat.text());
+        ChatCompletion chatCompletion = ChatCompletion.create().model(model).setResponseFormat(ResponseFormat.text());
+        if (compatibility.useMaxCompletionTokens()) {
+            chatCompletion.maxCompletionTokens(maxTokens);
+        } else {
+            chatCompletion.maxTokens(maxTokens);
+        }
+        if (compatibility.sendTemperature()) {
+            chatCompletion.temperature(temperature);
+        } else {
+            chatCompletion.clearTemperature();
+        }
+        if (compatibility.defaultReasoningEffort() != null) {
+            chatCompletion.reasoningEffort(compatibility.defaultReasoningEffort());
+        }
         // 添加消息
         for (LLMMessage message : messages) {
             if (message.role() == Role.USER) {
@@ -67,7 +82,11 @@ public final class LLMOpenAIClient implements LLMClient {
                     chatCompletion.assistantChat(message.message(), message.toolCalls());
                 }
             } else if (message.role() == Role.SYSTEM) {
-                chatCompletion.systemChat(message.message());
+                if (compatibility.useDeveloperMessages()) {
+                    chatCompletion.developerChat(message.message());
+                } else {
+                    chatCompletion.systemChat(message.message());
+                }
             } else if (message.role() == Role.TOOL) {
                 chatCompletion.toolChat(message.message(), message.toolCallId());
             }
@@ -149,5 +168,33 @@ public final class LLMOpenAIClient implements LLMClient {
             return;
         }
         callback.onSuccess(new ResponseChat(content));
+    }
+
+    private record OpenAIChatCompatibility(boolean useDeveloperMessages,
+                                           boolean useMaxCompletionTokens,
+                                           boolean sendTemperature,
+                                           @Nullable String defaultReasoningEffort) {
+        private static final OpenAIChatCompatibility DEFAULT =
+                new OpenAIChatCompatibility(false, false, true, null);
+
+        private static OpenAIChatCompatibility from(String url, String model) {
+            String normalizedUrl = StringUtils.defaultString(url).toLowerCase(Locale.ROOT);
+            String normalizedModel = StringUtils.defaultString(model).toLowerCase(Locale.ROOT);
+
+            if (!normalizedUrl.contains("api.openai.com")) {
+                return DEFAULT;
+            }
+
+            boolean isReasoningFamily = normalizedModel.startsWith("gpt-5")
+                    || normalizedModel.startsWith("o1")
+                    || normalizedModel.startsWith("o3")
+                    || normalizedModel.startsWith("o4");
+            if (!isReasoningFamily) {
+                return DEFAULT;
+            }
+
+            String reasoningEffort = normalizedModel.startsWith("gpt-5-pro") ? "high" : "medium";
+            return new OpenAIChatCompatibility(true, true, false, reasoningEffort);
+        }
     }
 }

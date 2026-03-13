@@ -125,7 +125,10 @@ public final class LLMOpenAISite implements LLMSite, SupportModelSelect {
                     "https://api.openai.com/v1/chat/completions", false,
                     StringUtils.EMPTY, Map.of(),
                     List.of("gpt-4o", "chatgpt-4o-latest", "gpt-4o-mini",
-                            "o1", "o1-mini", "o3-mini", "o1-preview"));
+                            "gpt-5", "gpt-5-mini", "gpt-5-nano",
+                            "gpt-5.2", "gpt-5.2-chat-latest",
+                            "gpt-5.4", "gpt-5.4-mini", "gpt-5.4-nano", "gpt-5.4-chat-latest",
+                            "o1", "o1-mini", "o3-mini", "o4-mini", "o1-preview"));
         }
 
         @Override
