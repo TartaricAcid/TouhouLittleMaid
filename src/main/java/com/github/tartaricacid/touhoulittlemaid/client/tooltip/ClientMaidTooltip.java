@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.tooltip;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.compat.ysm.YsmCompat;
@@ -102,7 +103,7 @@ public class ClientMaidTooltip implements ClientTooltipComponent {
                 return Objects.requireNonNullElseGet(e, () -> new EntityMaid(world));
             });
         } catch (ExecutionException | ClassCastException e) {
-            e.printStackTrace();
+            TouhouLittleMaid.LOGGER.error("Failed to render maid tooltip preview", e);
             return;
         }
         clearMaidDataResidue(maid, false);

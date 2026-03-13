@@ -60,7 +60,7 @@ public class TileEntityStatueRenderer implements BlockEntityRenderer<TileEntityS
                     try {
                         renderEntity(te, poseStack, bufferIn, combinedLightIn, data, world, type);
                     } catch (ExecutionException e) {
-                        e.printStackTrace();
+                        TouhouLittleMaid.LOGGER.error("Failed to render statue preview entity", e);
                     }
                 }
         );

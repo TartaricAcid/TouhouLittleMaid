@@ -102,7 +102,7 @@ public class CustomPackLoader {
                         TouhouLittleMaid.LOGGER.error("{} file is corrupt and cannot be loaded.", file.getName());
                     }
                 } catch (IOException ioException) {
-                    ioException.printStackTrace();
+                    LOGGER.error(MARKER, "Failed to inspect custom pack file {}", file.getName(), ioException);
                 }
             }
             if (file.isDirectory()) {
@@ -128,7 +128,7 @@ public class CustomPackLoader {
                 }
             }
         } catch (IOException ioException) {
-            ioException.printStackTrace();
+            LOGGER.error(MARKER, "Failed to read custom pack folder {}", root, ioException);
         }
     }
 
@@ -149,7 +149,7 @@ public class CustomPackLoader {
                 LanguageLoader.readLanguageFile(zipFile, filePath);
             }
         } catch (IOException ioException) {
-            ioException.printStackTrace();
+            LOGGER.error(MARKER, "Failed to read custom pack zip {}", file.getName(), ioException);
         }
     }
 
@@ -177,10 +177,9 @@ public class CustomPackLoader {
             }
             MAID_MODELS.addPack(pack);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.warn(MARKER, "Failed to load maid model pack in domain {}", domain, e);
         } catch (JsonSyntaxException e) {
-            LOGGER.warn(MARKER, "Fail to parse model pack in domain {}", domain);
-            e.printStackTrace();
+            LOGGER.warn(MARKER, "Fail to parse model pack in domain {}", domain, e);
         }
         LOGGER.debug(MARKER, "Touhou little maid mod's model is loaded");
     }
@@ -307,10 +306,9 @@ public class CustomPackLoader {
             }
             MAID_MODELS.addPack(pack);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.warn(MARKER, "Failed to load maid model pack in domain {}", domain, e);
         } catch (JsonSyntaxException e) {
-            LOGGER.warn(MARKER, "Fail to parse model pack in domain {}", domain);
-            e.printStackTrace();
+            LOGGER.warn(MARKER, "Fail to parse model pack in domain {}", domain, e);
         }
         LOGGER.debug(MARKER, "Touhou little maid mod's model is loaded");
     }
@@ -463,8 +461,7 @@ public class CustomPackLoader {
         } catch (IOException ignore) {
             // 忽略错误，因为资源域很多
         } catch (JsonSyntaxException e) {
-            LOGGER.warn(MARKER, "Fail to parse model pack in domain {}", domain);
-            e.printStackTrace();
+            LOGGER.warn(MARKER, "Fail to parse model pack in domain {}", domain, e);
         }
         LOGGER.debug(MARKER, "Touhou little maid mod's model is loaded");
     }
@@ -517,8 +514,7 @@ public class CustomPackLoader {
         } catch (IOException ignore) {
             // 忽略错误，因为资源域很多
         } catch (JsonSyntaxException e) {
-            LOGGER.warn(MARKER, "Fail to parse model pack in domain {}", domain);
-            e.printStackTrace();
+            LOGGER.warn(MARKER, "Fail to parse model pack in domain {}", domain, e);
         }
         LOGGER.debug(MARKER, "Touhou little maid mod's model is loaded");
     }
@@ -578,8 +574,7 @@ public class CustomPackLoader {
             LOGGER.warn(MARKER, "{} model version is not 1.10.0 or 1.12.0", modelLocation);
         } catch (IOException ioe) {
             // 可能用来判定错误，打印下
-            LOGGER.warn(MARKER, "Failed to load model: {}", modelLocation);
-            ioe.printStackTrace();
+            LOGGER.warn(MARKER, "Failed to load model: {}", modelLocation, ioe);
         }
         // 如果前面出了错，返回 Null
         return null;
@@ -621,8 +616,7 @@ public class CustomPackLoader {
             LOGGER.warn(MARKER, "{} model version is not 1.10.0 or 1.12.0", modelLocation);
         } catch (IOException ioe) {
             // 可能用来判定错误，打印下
-            LOGGER.warn(MARKER, "Failed to load model: {}", modelLocation);
-            ioe.printStackTrace();
+            LOGGER.warn(MARKER, "Failed to load model: {}", modelLocation, ioe);
         }
         // 如果前面出了错，返回 Null
         return null;
@@ -663,8 +657,7 @@ public class CustomPackLoader {
             LOGGER.warn(MARKER, "{} model version is not 1.10.0 or 1.12.0", modelLocation);
         } catch (IOException ioe) {
             // 可能用来判定错误，打印下
-            LOGGER.warn(MARKER, "Failed to load model: {}", modelLocation);
-            ioe.printStackTrace();
+            LOGGER.warn(MARKER, "Failed to load model: {}", modelLocation, ioe);
         }
         // 如果前面出了错，返回 Null
         return null;
@@ -706,8 +699,7 @@ public class CustomPackLoader {
             LOGGER.warn(MARKER, "{} model version is not 1.10.0 or 1.12.0", modelLocation);
         } catch (IOException ioe) {
             // 可能用来判定错误，打印下
-            LOGGER.warn(MARKER, "Failed to load model: {}", modelLocation);
-            ioe.printStackTrace();
+            LOGGER.warn(MARKER, "Failed to load model: {}", modelLocation, ioe);
         }
         // 如果前面出了错，返回 Null
         return null;

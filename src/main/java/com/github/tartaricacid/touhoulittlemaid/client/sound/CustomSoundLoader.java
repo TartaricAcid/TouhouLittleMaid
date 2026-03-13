@@ -84,10 +84,9 @@ public class CustomSoundLoader {
             SoundCache soundCache = new SoundCache(info, loadSoundEvent(soundsFolder));
             CACHE.put(id, soundCache);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.warn(MARKER, "Failed to load sound pack {}", id, e);
         } catch (JsonSyntaxException e) {
-            LOGGER.warn(MARKER, "Fail to parse sound pack in id {}", id);
-            e.printStackTrace();
+            LOGGER.warn(MARKER, "Fail to parse sound pack in id {}", id, e);
         }
         LOGGER.debug(MARKER, "Loaded {} sound pack.", id);
     }
@@ -194,10 +193,9 @@ public class CustomSoundLoader {
             SoundCache soundCache = new SoundCache(info, loadSoundEvent(zipFile, id));
             CACHE.put(id, soundCache);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.warn(MARKER, "Failed to load sound pack {}", id, e);
         } catch (JsonSyntaxException e) {
-            LOGGER.warn(MARKER, "Fail to parse sound pack in id {}", id);
-            e.printStackTrace();
+            LOGGER.warn(MARKER, "Fail to parse sound pack in id {}", id, e);
         }
         LOGGER.debug(MARKER, "Loaded {} sound pack.", id);
     }

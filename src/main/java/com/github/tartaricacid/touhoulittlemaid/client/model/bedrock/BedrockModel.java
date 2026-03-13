@@ -4,6 +4,7 @@ import com.github.tartaricacid.simplebedrockmodel.client.bedrock.AbstractBedrock
 import com.github.tartaricacid.simplebedrockmodel.client.bedrock.model.BedrockPart;
 import com.github.tartaricacid.simplebedrockmodel.client.bedrock.pojo.BedrockModelPOJO;
 import com.github.tartaricacid.simplebedrockmodel.client.bedrock.pojo.BedrockVersion;
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.CustomJsAnimationManger;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.HardcodedAnimationManger;
@@ -80,7 +81,7 @@ public class BedrockModel<T extends LivingEntity> extends AbstractBedrockEntityM
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            TouhouLittleMaid.LOGGER.error("Failed to apply maid animation for model {}", entityIn.getModelId(), e);
             CustomPackLoader.MAID_MODELS.removeAnimation(entityIn.getModelId());
         }
     }
@@ -98,7 +99,7 @@ public class BedrockModel<T extends LivingEntity> extends AbstractBedrockEntityM
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            TouhouLittleMaid.LOGGER.error("Failed to apply chair animation for model {}", entityIn.getModelId(), e);
             CustomPackLoader.CHAIR_MODELS.removeAnimation(entityIn.getModelId());
         }
     }

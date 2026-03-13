@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.tileentity;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.EntityChairRenderer;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
@@ -41,7 +42,7 @@ public class TileEntityItemStackChairRenderer extends BlockEntityWithoutLevelRen
                 return Objects.requireNonNullElseGet(e, () -> new EntityChair(world));
             });
         } catch (ExecutionException | ClassCastException e) {
-            e.printStackTrace();
+            TouhouLittleMaid.LOGGER.error("Failed to render chair item preview", e);
             return;
         }
         entityChair.setModelId(data.getModelId());

@@ -65,7 +65,7 @@ public class ClientPackDownloadManager {
             File packFile = InfoGetManager.getPackFolder().resolve(fileName).toFile();
             downloadPack(url, packFile, proxy);
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            TouhouLittleMaid.LOGGER.error("Invalid custom pack download URL: {}", urlText, e);
         }
     }
 

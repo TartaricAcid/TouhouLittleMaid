@@ -79,8 +79,7 @@ public class LanguageLoader {
         try (InputStream stream = zipFile.getInputStream(entry)) {
             readLanguages(langData, stream, newFormat);
         } catch (IOException ioe) {
-            TouhouLittleMaid.LOGGER.warn("Failed to load language file: {}", filePath);
-            ioe.printStackTrace();
+            TouhouLittleMaid.LOGGER.warn("Failed to load language file: {}", filePath, ioe);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.texture;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.platform.TextureUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -30,7 +31,7 @@ public class ZipPackTexture extends SizeTexture {
             ZipEntry entry = zipFile.getEntry(String.format("assets/%s/%s", texturePath.getNamespace(), texturePath.getPath()));
             return entry != null;
         } catch (IOException e) {
-            e.printStackTrace();
+            TouhouLittleMaid.LOGGER.error("Failed to inspect zip texture {}", texturePath, e);
         }
         return false;
     }
@@ -57,10 +58,10 @@ public class ZipPackTexture extends SizeTexture {
                 TextureUtil.prepareImage(this.getId(), 0, width, height);
                 imageIn.upload(0, 0, 0, 0, 0, width, height, false, false, false, true);
             } catch (IOException e) {
-                e.printStackTrace();
+                TouhouLittleMaid.LOGGER.error("Failed to load zip texture {}", texturePath, e);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            TouhouLittleMaid.LOGGER.error("Failed to open zip texture {}", texturePath, e);
         }
     }
 

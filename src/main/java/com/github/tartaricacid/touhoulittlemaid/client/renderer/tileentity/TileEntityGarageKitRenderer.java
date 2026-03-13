@@ -58,7 +58,7 @@ public class TileEntityGarageKitRenderer implements BlockEntityRenderer<TileEnti
                     try {
                         renderEntity(te, poseStack, bufferIn, combinedLightIn, data, world, type);
                     } catch (ExecutionException e) {
-                        e.printStackTrace();
+                        TouhouLittleMaid.LOGGER.error("Failed to render garage kit entity", e);
                     }
                 }
         );

@@ -33,7 +33,7 @@ public final class GetJarResources {
                 FileUtils.copyURLToFile(url, destPath.resolve(fileName).toFile());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            TouhouLittleMaid.LOGGER.error("Failed to copy built-in resource {}", filePath, e);
         }
     }
 
@@ -45,7 +45,7 @@ public final class GetJarResources {
                 return url.openStream();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            TouhouLittleMaid.LOGGER.error("Failed to read built-in resource {}", filePath, e);
         }
         return null;
     }

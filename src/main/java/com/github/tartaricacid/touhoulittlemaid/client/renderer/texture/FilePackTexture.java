@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.texture;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.platform.TextureUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -48,7 +49,7 @@ public class FilePackTexture extends SizeTexture {
                 TextureUtil.prepareImage(this.getId(), 0, width, height);
                 imageIn.upload(0, 0, 0, 0, 0, width, height, false, false, false, true);
             } catch (IOException e) {
-                e.printStackTrace();
+                TouhouLittleMaid.LOGGER.error("Failed to load file texture {}", texturePath, e);
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.animation;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.animation.inner.InnerAnimation;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.IModelInfo;
 import com.google.common.collect.Lists;
@@ -81,7 +82,7 @@ public class CustomJsAnimationManger {
             CUSTOM_ANIMATION_MAP.put(resourceLocation, scriptObject);
             return scriptObject;
         } catch (IOException | ScriptException e) {
-            e.printStackTrace();
+            TouhouLittleMaid.LOGGER.error("Failed to load custom animation {}", resourceLocation, e);
         }
         return null;
     }
@@ -107,7 +108,7 @@ public class CustomJsAnimationManger {
             CUSTOM_ANIMATION_MAP.put(resourceLocation, scriptObject);
             return scriptObject;
         } catch (IOException | ScriptException e) {
-            e.printStackTrace();
+            TouhouLittleMaid.LOGGER.error("Failed to load custom animation {}", resourceLocation, e);
         }
         return null;
     }

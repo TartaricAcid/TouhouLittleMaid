@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.block;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.detail.MaidModelDetailsGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.model.AbstractModelGui;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
@@ -124,7 +125,7 @@ public class ModelSwitcherModelGui extends AbstractModelGui<EntityMaid, MaidMode
                 return Objects.requireNonNullElseGet(e, () -> new EntityMaid(world));
             });
         } catch (ExecutionException | ClassCastException e) {
-            e.printStackTrace();
+            TouhouLittleMaid.LOGGER.error("Failed to render maid model preview", e);
             return;
         }
 
