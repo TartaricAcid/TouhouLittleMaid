@@ -48,14 +48,27 @@ public class LLMOpenAIClient implements LLMClient {
         URI url = URI.create(this.site.url());
         String apiKey = this.site.secretKey();
         String model = config.model();
+        boolean isReasoningModel = this.site.isReasoningModel(model);
         double temperature = config.temperature();
         int maxTokens = config.maxTokens();
         EntityMaid maid = config.maid();
         ChatType chatType = config.chatType();
 
         // 构建对话
-        ChatCompletion chatCompletion = ChatCompletion.create().model(model).maxTokens(maxTokens)
-                .temperature(temperature).setResponseFormat(ResponseFormat.text());
+        ChatCompletion chatCompletion;
+
+        // 如果是新版 open ai reasoning 模型
+        // 没有 temperature 和 maxTokens 参数
+        if (isReasoningModel) {
+            chatCompletion = ChatCompletion.create().model(model)
+                    .maxCompletionTokens(maxTokens)
+                    .setResponseFormat(ResponseFormat.text());
+        } else {
+            chatCompletion = ChatCompletion.create().model(model)
+                    .maxTokens(maxTokens)
+                    .temperature(temperature)
+                    .setResponseFormat(ResponseFormat.text());
+        }
 
         // 添加额外参数
         chatCompletion = this.extraArgs(chatCompletion);
@@ -71,7 +84,12 @@ public class LLMOpenAIClient implements LLMClient {
                     chatCompletion.assistantChat(message.message(), message.toolCalls());
                 }
             } else if (message.role() == Role.SYSTEM) {
-                chatCompletion.systemChat(message.message());
+                // reasoning 使用 developer 模式，系统消息需要特殊处理
+                if (isReasoningModel) {
+                    chatCompletion.developerChat(message.message());
+                } else {
+                    chatCompletion.systemChat(message.message());
+                }
             } else if (message.role() == Role.TOOL) {
                 chatCompletion.toolChat(message.message(), message.toolCallId());
             }

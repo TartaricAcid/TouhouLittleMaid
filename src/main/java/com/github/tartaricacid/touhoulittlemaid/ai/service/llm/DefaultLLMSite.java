@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai.LLMOpenAIS
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
 import java.util.Map;
 
 public final class DefaultLLMSite {
@@ -36,7 +37,11 @@ public final class DefaultLLMSite {
     }
 
     public static LLMOpenAISite createSite(String name, String url, boolean enabled, Map<String, String> header, String... models) {
-        return new LLMOpenAISite(name, SerializableSite.defaultIcon(name), url, enabled, StringUtils.EMPTY, header, Lists.newArrayList(models));
+        List<LLMOpenAISite.ModelEntry> modelEntries = Lists.newArrayList();
+        for (String modelName : models) {
+            modelEntries.add(new LLMOpenAISite.ModelEntry(modelName));
+        }
+        return new LLMOpenAISite(name, SerializableSite.defaultIcon(name), url, enabled, StringUtils.EMPTY, header, modelEntries);
     }
 
     public static void addDefaultSites() {

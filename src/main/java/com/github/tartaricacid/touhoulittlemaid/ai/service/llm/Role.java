@@ -6,7 +6,9 @@ public enum Role {
     SYSTEM("system"),
     USER("user"),
     ASSISTANT("assistant"),
-    TOOL("tool");
+    TOOL("tool"),
+    // 新版本 OpenAI api 添加的角色
+    DEVELOPER("developer");
 
     public static final Codec<Role> CODEC = Codec.STRING.xmap(Role::byId, Role::getId);
 
@@ -16,10 +18,6 @@ public enum Role {
         this.id = id;
     }
 
-    public String getId() {
-        return id;
-    }
-
     public static Role byId(String id) {
         for (Role role : values()) {
             if (role.id.equals(id)) {
@@ -27,5 +25,9 @@ public enum Role {
             }
         }
         return Role.ASSISTANT;
+    }
+
+    public String getId() {
+        return id;
     }
 }

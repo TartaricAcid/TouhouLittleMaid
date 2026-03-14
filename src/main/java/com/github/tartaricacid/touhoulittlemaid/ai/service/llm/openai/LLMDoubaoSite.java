@@ -18,12 +18,14 @@ public class LLMDoubaoSite extends LLMOpenAISite {
 
     public LLMDoubaoSite(String id, ResourceLocation icon, String url, boolean enabled,
                          String secretKey, Map<String, String> headers, Map<String, String> models) {
-        super(id, icon, url, enabled, secretKey, headers, models);
+        super(id, icon, url, enabled, secretKey, headers,
+                models.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> new ModelEntry(e.getValue()))));
     }
 
     public LLMDoubaoSite(String id, ResourceLocation icon, String url, boolean enabled,
                          String secretKey, Map<String, String> headers, List<String> models) {
-        super(id, icon, url, enabled, secretKey, headers, models);
+        super(id, icon, url, enabled, secretKey, headers,
+                models.stream().collect(Collectors.toMap(Function.identity(), ModelEntry::new)));
     }
 
     @Override
