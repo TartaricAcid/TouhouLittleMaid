@@ -46,7 +46,7 @@ public class MultipartBodyBuilder {
     }
 
     public MultipartBody build() throws IOException {
-        String boundary = new BigInteger(256, new SecureRandom()).toString();
+        String boundary = new BigInteger(256, new SecureRandom()).toString(16);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         for (MultiPartRecord record : parts) {
             out.write(this.getHead(record, boundary));

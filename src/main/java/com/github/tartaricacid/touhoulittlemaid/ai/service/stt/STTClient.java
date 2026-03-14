@@ -54,7 +54,7 @@ public interface STTClient extends Client {
                 T message = GSON.fromJson(string, type);
                 onSuccess.accept(message);
             } else {
-                String message = "HTTP Error Code: %d, Response %s".formatted(statusCode, response);
+                String message = "HTTP Error Code: %d, Response: %s, Response Body: %s".formatted(statusCode, response, string);
                 callback.onFailure(request, new Throwable(message), ErrorCode.REQUEST_RECEIVED_ERROR);
             }
         } catch (JsonSyntaxException e) {
