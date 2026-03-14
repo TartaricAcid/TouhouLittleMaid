@@ -9,6 +9,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.meal.MaidMealManager;
 import com.github.tartaricacid.touhoulittlemaid.init.InitTrigger;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityPicnicMat;
+import com.github.tartaricacid.touhoulittlemaid.util.HandUtils;
 import com.google.common.collect.ImmutableMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
@@ -63,7 +64,7 @@ public class MaidHomeMealTask extends MaidCheckRateTask {
 
         // 对手部进行处理：如果没有空的手部，那就取副手
         InteractionHand eanHand = InteractionHand.OFF_HAND;
-        for (InteractionHand hand : InteractionHand.values()) {
+        for (InteractionHand hand : HandUtils.NATIVE_HANDS) {
             if (maid.getItemInHand(hand).isEmpty()) {
                 eanHand = hand;
                 break;
