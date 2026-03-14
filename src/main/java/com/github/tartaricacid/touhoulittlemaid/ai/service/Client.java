@@ -8,6 +8,9 @@ import java.net.http.HttpResponse;
  * 所有服务的客户端接口
  */
 public interface Client {
+    /**
+     * 默认不序列化 null 值
+     */
     Gson GSON = new Gson();
 
     /**

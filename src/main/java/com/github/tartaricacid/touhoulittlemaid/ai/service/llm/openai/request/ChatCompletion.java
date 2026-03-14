@@ -25,6 +25,12 @@ public class ChatCompletion {
     @SerializedName("temperature")
     private double temperature = 0.5;
 
+    /**
+     * 仅适用于 doubao 模型的字段
+     */
+    @SerializedName("thinking")
+    private DoubaoThinking thinking = null;
+
     public static ChatCompletion create() {
         return new ChatCompletion();
     }
@@ -75,6 +81,14 @@ public class ChatCompletion {
     public ChatCompletion temperature(double temperature) {
         // 温度的范围是 [0,2)
         this.temperature = Math.min(temperature, 1.99);
+        return this;
+    }
+
+    /**
+     * 仅适用于 doubao 模型的字段
+     */
+    public ChatCompletion thinking(DoubaoThinking thinking) {
+        this.thinking = thinking;
         return this;
     }
 

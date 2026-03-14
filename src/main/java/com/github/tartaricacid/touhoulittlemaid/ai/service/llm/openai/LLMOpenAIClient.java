@@ -32,11 +32,11 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.List;
 
-public final class LLMOpenAIClient implements LLMClient {
-    private static final Duration MAX_TIMEOUT = Duration.ofSeconds(60);
+public class LLMOpenAIClient implements LLMClient {
+    protected static final Duration MAX_TIMEOUT = Duration.ofSeconds(60);
 
-    private final HttpClient httpClient;
-    private final LLMOpenAISite site;
+    protected final HttpClient httpClient;
+    protected final LLMOpenAISite site;
 
     public LLMOpenAIClient(HttpClient httpClient, LLMOpenAISite site) {
         this.httpClient = httpClient;
@@ -56,6 +56,10 @@ public final class LLMOpenAIClient implements LLMClient {
         // 构建对话
         ChatCompletion chatCompletion = ChatCompletion.create().model(model).maxTokens(maxTokens)
                 .temperature(temperature).setResponseFormat(ResponseFormat.text());
+
+        // 添加额外参数
+        chatCompletion = this.extraArgs(chatCompletion);
+
         // 添加消息
         for (LLMMessage message : messages) {
             if (message.role() == Role.USER) {
@@ -72,6 +76,7 @@ public final class LLMOpenAIClient implements LLMClient {
                 chatCompletion.toolChat(message.message(), message.toolCallId());
             }
         }
+
         // 添加 function call tool
         // 首次生成角色设定时不需要添加
         if (AIConfig.FUNCTION_CALL_ENABLED.get() && chatType != ChatType.AUTO_GEN_SETTING) {
@@ -95,7 +100,15 @@ public final class LLMOpenAIClient implements LLMClient {
                         handle(messages, config, callback, response, throwable, httpRequest));
     }
 
-    private void addFunctionCalls(EntityMaid maid, ChatCompletion chatCompletion) {
+    /**
+     * 用于添加额外的参数，主要用于一些非标准 OpenAI API 模型的额外参数添加
+     *
+     */
+    protected ChatCompletion extraArgs(ChatCompletion chatCompletion) {
+        return chatCompletion;
+    }
+
+    protected void addFunctionCalls(EntityMaid maid, ChatCompletion chatCompletion) {
         FunctionCallRegister.getFunctionCalls().forEach((key, value) -> {
             if (!value.addToChatCompletion(maid, chatCompletion)) {
                 return;
@@ -111,8 +124,8 @@ public final class LLMOpenAIClient implements LLMClient {
         });
     }
 
-    private void handle(List<LLMMessage> messages, LLMConfig config, ResponseCallback<ResponseChat> callback,
-                        HttpResponse<String> response, Throwable throwable, HttpRequest request) {
+    protected void handle(List<LLMMessage> messages, LLMConfig config, ResponseCallback<ResponseChat> callback,
+                          HttpResponse<String> response, Throwable throwable, HttpRequest request) {
         this.<ChatCompletionResponse>handleResponse(callback, response, throwable, request, chat -> {
             if (TouhouLittleMaid.DEBUG) {
                 TouhouLittleMaid.LOGGER.info(GSON.toJson(chat));
@@ -142,7 +155,7 @@ public final class LLMOpenAIClient implements LLMClient {
         }, ChatCompletionResponse.class);
     }
 
-    private void onTextCall(ResponseCallback<ResponseChat> callback, Message firstChoice) {
+    protected void onTextCall(ResponseCallback<ResponseChat> callback, Message firstChoice) {
         String content = firstChoice.getContent();
         if (StringUtils.isBlank(content)) {
             callback.onSuccess(new ResponseChat(StringUtils.EMPTY, StringUtils.EMPTY));

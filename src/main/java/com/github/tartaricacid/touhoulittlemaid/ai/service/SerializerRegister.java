@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.ai.service;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.site.AvailableSites;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMSite;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai.LLMDoubaoSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai.LLMOpenAISite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.STTSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.aliyun.STTAliyunSite;
@@ -29,6 +30,7 @@ public final class SerializerRegister {
         SerializerRegister register = new SerializerRegister();
 
         register.register(ServiceType.LLM, LLMOpenAISite.API_TYPE, new LLMOpenAISite.Serializer());
+        register.register(ServiceType.LLM, LLMDoubaoSite.API_TYPE, new LLMDoubaoSite.Serializer());
 
         register.register(ServiceType.STT, STTPlayer2Site.API_TYPE, new STTPlayer2Site.Serializer());
         register.register(ServiceType.STT, STTAliyunSite.API_TYPE, new STTAliyunSite.Serializer());
@@ -49,19 +51,6 @@ public final class SerializerRegister {
         STT_SERIALIZER = ImmutableMap.copyOf(STT_SERIALIZER);
 
         AvailableSites.init();
-    }
-
-    @SuppressWarnings("unchecked")
-    public void register(ServiceType type, String apiType, SerializableSite<? extends Site> serializableSite) {
-        if (type == ServiceType.LLM) {
-            LLM_SERIALIZER.put(apiType, (SerializableSite<LLMSite>) serializableSite);
-        } else if (type == ServiceType.TTS) {
-            TTS_SERIALIZER.put(apiType, (SerializableSite<TTSSite>) serializableSite);
-        } else if (type == ServiceType.STT) {
-            STT_SERIALIZER.put(apiType, (SerializableSite<STTSite>) serializableSite);
-        } else {
-            TouhouLittleMaid.LOGGER.error("Unknown service type {}", type);
-        }
     }
 
     @SuppressWarnings("all")
@@ -89,6 +78,19 @@ public final class SerializerRegister {
         } else {
             TouhouLittleMaid.LOGGER.error("Unknown service type {}", type);
             return null;
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public void register(ServiceType type, String apiType, SerializableSite<? extends Site> serializableSite) {
+        if (type == ServiceType.LLM) {
+            LLM_SERIALIZER.put(apiType, (SerializableSite<LLMSite>) serializableSite);
+        } else if (type == ServiceType.TTS) {
+            TTS_SERIALIZER.put(apiType, (SerializableSite<TTSSite>) serializableSite);
+        } else if (type == ServiceType.STT) {
+            STT_SERIALIZER.put(apiType, (SerializableSite<STTSite>) serializableSite);
+        } else {
+            TouhouLittleMaid.LOGGER.error("Unknown service type {}", type);
         }
     }
 }

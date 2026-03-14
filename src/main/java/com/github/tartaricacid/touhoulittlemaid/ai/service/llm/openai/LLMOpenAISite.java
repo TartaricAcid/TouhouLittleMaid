@@ -15,17 +15,17 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public final class LLMOpenAISite implements LLMSite, SupportModelSelect {
+public class LLMOpenAISite implements LLMSite, SupportModelSelect {
     public static final String API_TYPE = LLMApiType.OPENAI.getName();
 
-    private final String id;
-    private final ResourceLocation icon;
-    private final Map<String, String> headers;
-    private final Map<String, String> models;
+    protected final String id;
+    protected final ResourceLocation icon;
+    protected final Map<String, String> headers;
+    protected final Map<String, String> models;
 
-    private String url;
-    private boolean enabled;
-    private String secretKey;
+    protected String url;
+    protected boolean enabled;
+    protected String secretKey;
 
     public LLMOpenAISite(String id, ResourceLocation icon, String url, boolean enabled,
                          String secretKey, Map<String, String> headers, Map<String, String> models) {
@@ -105,7 +105,7 @@ public final class LLMOpenAISite implements LLMSite, SupportModelSelect {
     }
 
     public static class Serializer implements SerializableSite<LLMOpenAISite> {
-        private static final Codec<Map<String, String>> MODELS_CODEC = Codec.list(Codec.STRING).xmap(
+        protected static final Codec<Map<String, String>> MODELS_CODEC = Codec.list(Codec.STRING).xmap(
                 list -> list.stream().collect(Collectors.toMap(Function.identity(), Function.identity())),
                 map -> map.keySet().stream().toList());
 
