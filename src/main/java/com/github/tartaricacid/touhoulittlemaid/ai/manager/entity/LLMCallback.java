@@ -1,12 +1,14 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.manager.entity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.ISkill;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.SkillRegister;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.ITool;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.ToolRegister;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.response.ResponseChat;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.ErrorCode;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.ResponseCallback;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.ServiceType;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.function.FunctionCallRegister;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.function.IFunctionCall;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.response.ToolResponse;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.ChatType;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMClient;
@@ -37,7 +39,7 @@ import java.util.Optional;
 import java.util.Set;
 
 public class LLMCallback implements ResponseCallback<ResponseChat> {
-    private static final int MAX_CALL_COUNT = 3;
+    private static final int MAX_CALL_COUNT = 16;
     protected final EntityMaid maid;
     protected final MaidAIChatManager chatManager;
     /**
@@ -147,14 +149,16 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
         FunctionToolCall function = toolCall.getFunction();
         String name = function.getName();
         String arguments = function.getArguments();
-        IFunctionCall functionCall = FunctionCallRegister.getFunctionCall(name);
-        if (functionCall == null) {
+
+        ITool tool = ToolRegister.getTool(name);
+        if (tool == null) {
             return;
         }
+
         Object result = null;
         try {
             JsonObject parse = GsonHelper.parse(arguments);
-            Optional optional = functionCall.codec().parse(JsonOps.INSTANCE, parse).resultOrPartial(TouhouLittleMaid.LOGGER::error);
+            Optional optional = tool.codec().parse(JsonOps.INSTANCE, parse).resultOrPartial(TouhouLittleMaid.LOGGER::error);
             if (optional.isEmpty()) {
                 return;
             }
@@ -164,26 +168,57 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
             this.onFailure(null, new Throwable(message), ErrorCode.JSON_DECODE_ERROR);
             return;
         }
+
         // 需要记录下工具调用，方便 debug
-        TouhouLittleMaid.LOGGER.debug("Use function call: {}, arguments is {}", functionCall.getId(), arguments);
+        TouhouLittleMaid.LOGGER.debug("Use function call: {}, arguments is {}", tool.id(), arguments);
+
         // 因为获取网络流是在独立的线程上，所以需要推送到主线程执行
         EntityMaid maid = config.maid();
         if (!(maid.level instanceof ServerLevel serverLevel)) {
             return;
         }
+
         Object finalResult = result;
+        // 工具调用必须在主线程，否则可能会出奇怪的问题
         serverLevel.getServer().submit(() -> {
-            // 工具调用必须在主线程，否则可能会出奇怪的问题
-            ToolResponse toolResponse = functionCall.onToolCall(finalResult, maid);
-            // 继续进行下一轮 AI 对话
             // 计数增加，避免循环触发
             this.callCount = this.callCount + 1;
-            String response = toolResponse.message();
-            chatManager.addToolHistory(response, toolCall.getId());
-            messages.add(LLMMessage.toolChat(maid, response, toolCall.getId()));
-            if (this.callCount >= MAX_CALL_COUNT) {
+            if (this.callCount > MAX_CALL_COUNT) {
                 TouhouLittleMaid.LOGGER.error("Function call count exceed max count: {}", MAX_CALL_COUNT);
+            }
+
+            // 历史记录缓存
+            chatManager.addToolHistory("use tool: %s".format(toolCall.getId()), toolCall.getId());
+
+            // 继续进行下一轮 AI 对话
+            if (name == ToolRegister.USE_SKILL) {
+                // USE_SKILL 比较特殊
+                if (!(finalResult instanceof String skillId)) {
+                    // 此时 finalResult 必须是 string
+                    String message = "Invalid tool call arguments for use_skill, expected string but got %s".formatted(finalResult);
+                    this.onFailure(null, new Throwable(message), ErrorCode.JSON_DECODE_ERROR);
+                    return;
+                }
+
+                ISkill skill = SkillRegister.getSkill(skillId);
+                if (skill == null) {
+                    String message = "Skill %s is not available for use".formatted(skillId);
+                    this.onFailure(null, new Throwable(message), ErrorCode.JSON_DECODE_ERROR);
+                    return;
+                }
+
+                if (!skill.trigger(maid)) {
+                    return;
+                }
+
+                // 将 skill 的本体部分塞入 tool_result 里，而非系统提示词，这样可以让缓存系统缓存起作用
+                messages.add(LLMMessage.toolChat(maid, skill.body(maid), toolCall.getId()));
+                LLMConfig.SkillContext context = new LLMConfig.SkillContext(skillId);
+                LLMConfig keepConfig = new LLMConfig(config.model(), config.maid(), ChatType.MULTI_FUNCTION_CALL, context);
+                client.chat(messages, keepConfig, this);
             } else {
+                ToolResponse toolResponse = tool.onCall(finalResult, maid);
+                messages.add(LLMMessage.toolChat(maid, toolResponse.message(), toolCall.getId()));
                 LLMConfig keepConfig = new LLMConfig(config.model(), config.maid(), ChatType.MULTI_FUNCTION_CALL);
                 client.chat(messages, keepConfig, this);
             }

@@ -115,7 +115,10 @@ public interface ILittleMaid {
 
     /**
      * 注册一个自己的 function call
+     *
+     * @deprecated 自 1.5.1 起，更换为 skill 机制
      */
+    @Deprecated(since = "1.5.1")
     default void registerAIFunctionCall(FunctionCallRegister register) {
     }
 

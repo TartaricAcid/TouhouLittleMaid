@@ -2,18 +2,20 @@ package com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai;
 
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.ISkill;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.SkillRegister;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.ITool;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.ToolRegister;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.LLMCallback;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.response.ResponseChat;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.ErrorCode;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.ResponseCallback;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.function.FunctionCallRegister;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.FunctionTool;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.ObjectParameter;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.Parameter;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.*;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai.request.ChatCompletion;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai.request.ResponseFormat;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai.request.Tool;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai.response.ChatCompletionResponse;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai.response.Message;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai.response.Usage;
@@ -52,7 +54,6 @@ public class LLMOpenAIClient implements LLMClient {
         double temperature = config.temperature();
         int maxTokens = config.maxTokens();
         EntityMaid maid = config.maid();
-        ChatType chatType = config.chatType();
 
         // 构建对话
         ChatCompletion chatCompletion;
@@ -95,10 +96,10 @@ public class LLMOpenAIClient implements LLMClient {
             }
         }
 
-        // 添加 function call tool
-        // 首次生成角色设定时不需要添加
-        if (AIConfig.FUNCTION_CALL_ENABLED.get() && chatType != ChatType.AUTO_GEN_SETTING) {
-            this.addFunctionCalls(maid, chatCompletion);
+        // 添加 skill
+        // FIXME 修改配置名称
+        if (AIConfig.FUNCTION_CALL_ENABLED.get()) {
+            this.addRootSkills(maid, config, chatCompletion);
         }
 
         HttpRequest.Builder builder = HttpRequest.newBuilder()
@@ -126,19 +127,49 @@ public class LLMOpenAIClient implements LLMClient {
         return chatCompletion;
     }
 
-    protected void addFunctionCalls(EntityMaid maid, ChatCompletion chatCompletion) {
-        FunctionCallRegister.getFunctionCalls().forEach((key, value) -> {
-            if (!value.addToChatCompletion(maid, chatCompletion)) {
+    protected void addRootSkills(EntityMaid maid, LLMConfig config, ChatCompletion chatCompletion) {
+        ChatType chatType = config.chatType();
+
+        // 首次生成角色设定时不需要添加
+        if (chatType == ChatType.AUTO_GEN_SETTING) {
+            return;
+        }
+
+        // 首次对话只需要添加基本上 use_skill 的 skill
+        if (chatType == ChatType.NORMAL_CHAT) {
+            LLMConfig.SkillContext context = new LLMConfig.SkillContext(SkillRegister.USE_SKILL);
+            this.addSkillFromContext(maid, chatCompletion, context);
+            return;
+        }
+
+        // 多轮 Function call 需要按需加载
+        if (chatType == ChatType.MULTI_FUNCTION_CALL && config.skillContext() != null) {
+            LLMConfig.SkillContext context = config.skillContext();
+            this.addSkillFromContext(maid, chatCompletion, context);
+        }
+    }
+
+    protected void addSkillFromContext(EntityMaid maid, ChatCompletion chatCompletion, LLMConfig.SkillContext context) {
+        ISkill skill = SkillRegister.getSkill(context.skillId());
+        if (skill == null || !skill.trigger(maid)) {
+            return;
+        }
+
+        // 依据 skill 的 tool 按需加载
+        skill.tools(maid).forEach(toolId -> {
+            ITool<?> tool = ToolRegister.getTool(toolId);
+            if (tool == null || !tool.trigger(maid, chatCompletion)) {
                 return;
             }
-            String id = value.getId();
-            String description = value.getDescription(maid);
+            String summary = tool.summary(maid);
             ObjectParameter root = ObjectParameter.create();
-            Parameter parameter = value.addParameters(root, maid);
-            Tool tool = FunctionTool.create().setName(id)
-                    .setDescription(description)
-                    .setParameters(parameter).build();
-            chatCompletion.addTool(tool);
+            Parameter parameter = tool.parameters(root, maid);
+            chatCompletion.addTool(FunctionTool.create()
+                    .setName(toolId)
+                    .setDescription(summary)
+                    .setParameters(parameter)
+                    .build()
+            );
         });
     }
 

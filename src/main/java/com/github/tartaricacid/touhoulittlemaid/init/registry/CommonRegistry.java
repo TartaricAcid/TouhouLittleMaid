@@ -66,7 +66,7 @@ public final class CommonRegistry {
         TaskDataRegister.init();
         FishingTypeManager.init();
         SerializerRegister.init();
-        FunctionCallRegister.init();
+        // FunctionCallRegister.init();
         ChatBubbleRegister.init();
         DebugMaidManager.init();
         BroomControlManager.init();

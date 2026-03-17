@@ -1,28 +1,17 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.service.function;
 
-import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.function.implement.SwitchFollowStateFunction;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.function.implement.SwitchWorkTaskFunction;
-import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
-
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.Map;
 
+/**
+ * @deprecated 自 1.5.1 起，更换为 skill 机制
+ */
+@Deprecated(since = "1.5.1")
 public class FunctionCallRegister {
-    private static Map<String, IFunctionCall<?>> FUNCTION_CALLS = Maps.newHashMap();
+    private static Map<String, IFunctionCall<?>> FUNCTION_CALLS = Collections.emptyMap();
 
     public static void init() {
-        FunctionCallRegister register = new FunctionCallRegister();
-        register.register(new SwitchWorkTaskFunction());
-        register.register(new SwitchFollowStateFunction());
-
-        for (ILittleMaid littleMaid : TouhouLittleMaid.EXTENSIONS) {
-            littleMaid.registerAIFunctionCall(register);
-        }
-
-        FUNCTION_CALLS = ImmutableMap.copyOf(FUNCTION_CALLS);
     }
 
     public void register(IFunctionCall<?> functionCall) {

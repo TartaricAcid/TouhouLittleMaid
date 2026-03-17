@@ -11,7 +11,9 @@ import com.mojang.serialization.Codec;
  * 女仆能够执行的 Function Call 对象
  *
  * @param <T>
+ * @deprecated 自 1.5.1 起，更换为 skill 机制
  */
+@Deprecated(since = "1.5.1")
 public interface IFunctionCall<T> {
     /**
      * function 名称，建议小写英文、下划线
