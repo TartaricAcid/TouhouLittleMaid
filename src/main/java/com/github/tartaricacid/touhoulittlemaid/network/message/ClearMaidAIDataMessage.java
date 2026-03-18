@@ -49,7 +49,7 @@ public class ClearMaidAIDataMessage {
         Entity entity = player.level.getEntity(message.entityId);
         if (entity instanceof EntityMaid maid && maid.isOwnedBy(player)) {
             if (message.msgIndex == ALL_MSG_INDEX) {
-                maid.getAiChatManager().getHistory().getDeque().clear();
+                maid.getAiChatManager().clearAllChatMemory();
             }
         }
     }

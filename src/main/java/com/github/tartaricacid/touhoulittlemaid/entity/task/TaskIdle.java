@@ -82,4 +82,9 @@ public class TaskIdle implements IMaidTask {
         boolean moved = TaskEquipUtil.putMainHandBack(maid);
         return moved ? FunctionCallSwitchResult.OK : FunctionCallSwitchResult.NO_CHANGE;
     }
+
+    @Override
+    public String getMaidActionSummary() {
+        return "Stay idle and do not perform any work task.";
+    }
 }

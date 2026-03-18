@@ -200,4 +200,9 @@ public class TaskDanmakuAttack implements IRangedAttackTask {
     private boolean farAway(LivingEntity target, EntityMaid maid) {
         return maid.distanceTo(target) > this.searchRadius(maid);
     }
+
+    @Override
+    public String getMaidActionSummary() {
+        return "Use a Hakurei gohei to fire danmaku at nearby hostile mobs.";
+    }
 }

@@ -74,7 +74,7 @@ public class CharacterSetting {
     }
 
     public String getSetting(EntityMaid maid, String language) {
-        return PapiReplacer.replace(rawSetting, maid, language);
+        return PapiReplacer.replaceSetting(rawSetting, maid, language);
     }
 
     public String getAuthor() {

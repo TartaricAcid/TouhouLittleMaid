@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.manager.entity;
 
+import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.summary.HistorySummaryManager;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.papi.PapiReplacer;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.papi.StringConstant;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.*;
@@ -19,6 +20,7 @@ import com.github.tartaricacid.touhoulittlemaid.util.CappedQueue;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.MinecraftServer;
@@ -35,8 +37,16 @@ import java.util.Map;
 import static com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.papi.StringConstant.AUTO_GEN_SETTING;
 
 public final class MaidAIChatManager extends MaidAIChatData {
+    private final HistorySummaryManager historySummaryManager;
+
     public MaidAIChatManager(EntityMaid maid) {
         super(maid);
+        this.historySummaryManager = new HistorySummaryManager(this);
+    }
+
+    @Override
+    protected void onHistoryUpdated() {
+        this.historySummaryManager.onHistoryUpdated();
     }
 
     public void chat(String message, ChatClientInfo clientInfo, ServerPlayer sender) {
@@ -77,23 +87,38 @@ public final class MaidAIChatManager extends MaidAIChatData {
         }
     }
 
-    // 对话起始第二个如果是 tool，剔除，确保第二个为 user 或者 assistant
+    /**
+     * 跳过开头的 SYSTEM 消息后，丢弃对话区开头连续的 TOOL 消息。
+     * <p>
+     * 历史压缩可能删掉带 tool_calls 的 ASSISTANT 消消息，导致其后的 TOOL 消息
+     * 变成对话区的第一条。大多数 LLM API 要求 TOOL 消息前必须有对应的
+     * ASSISTANT tool_call，否则会报错，所以需要将这些孤儿 TOOL 消息剔除。
+     */
     private void filterConsecutiveToolMessages(List<LLMMessage> chatCompletion) {
         if (chatCompletion.size() <= 1) {
             return;
         }
 
-        // 保留第一个 system 消息，然后从第二个开始过滤连续的 tool 消息
-        LLMMessage firstMessage = chatCompletion.get(0);
+        // 先跳过开头连续的 SYSTEM 消息，定位到"对话区"的起始位置
+        int systemCount = 0;
+        while (systemCount < chatCompletion.size() && chatCompletion.get(systemCount).role() == Role.SYSTEM) {
+            systemCount++;
+        }
+        // 全都是 SYSTEM 消息，没有需要过滤的对话内容
+        if (systemCount >= chatCompletion.size()) {
+            return;
+        }
+
+        // 保留 SYSTEM 前缀，对话区部分丢弃开头连续的孤儿 TOOL 消息后重新拼接
+        List<LLMMessage> systemMessages = Lists.newArrayList(chatCompletion.subList(0, systemCount));
         List<LLMMessage> filteredMessages = chatCompletion.stream()
-                // 跳过第一个消息
-                .skip(1)
+                .skip(systemCount)
                 // 丢弃开头连续的 tool 消息
                 .dropWhile(msg -> Role.TOOL.equals(msg.role()))
                 .toList();
 
         chatCompletion.clear();
-        chatCompletion.add(firstMessage);
+        chatCompletion.addAll(systemMessages);
         chatCompletion.addAll(filteredMessages);
     }
 
@@ -147,32 +172,36 @@ public final class MaidAIChatManager extends MaidAIChatData {
         // 如果含有自定义设定，则直接使用自定义设定
         if (StringUtils.isNotBlank(chatManager.customSetting)) {
             EntityMaid maid = chatManager.getMaid();
-            String setting = PapiReplacer.replace(chatManager.customSetting, maid, language);
-            CappedQueue<LLMMessage> history = chatManager.getHistory();
-            List<LLMMessage> chatList = Lists.newArrayList();
-            chatList.add(LLMMessage.systemChat(maid, setting));
-            // 倒序遍历，将历史对话加载进去
-            history.getDeque().descendingIterator().forEachRemaining(chatList::add);
-            return chatList;
+            String setting = PapiReplacer.replaceSetting(chatManager.customSetting, maid, language);
+            return this.buildChatCompletion(setting, maid, chatManager.getHistory());
         }
 
         // 其他情况下，获取默认设定文件
         return chatManager.getSetting().map(s -> {
             EntityMaid maid = chatManager.getMaid();
             String setting = s.getSetting(maid, language);
-            CappedQueue<LLMMessage> history = chatManager.getHistory();
-            List<LLMMessage> chatList = Lists.newArrayList();
-            chatList.add(LLMMessage.systemChat(maid, setting));
-            // 倒序遍历，将历史对话加载进去
-            history.getDeque().descendingIterator().forEachRemaining(chatList::add);
-            return chatList;
+            return this.buildChatCompletion(setting, maid, chatManager.getHistory());
         }).orElse(Lists.newArrayList());
     }
 
+    /**
+     * 根据女仆的设定和历史记录，构建发送给 LLM 的完整消息列表。
+     * <p>
+     * 最终结构为：{@code [SYSTEM 设定, SYSTEM 摘要(可选), ...历史记录(从旧到新)]}
+     */
+    private List<LLMMessage> buildChatCompletion(String setting, EntityMaid maid, CappedQueue<LLMMessage> history) {
+        List<LLMMessage> chatList = Lists.newArrayList();
+        chatList.add(LLMMessage.systemChat(maid, setting));
+        this.historySummaryManager.appendSummaryMessage(chatList);
+        history.getDeque().descendingIterator().forEachRemaining(chatList::add);
+        return chatList;
+    }
+
     private LLMMessage autoGenSetting(EntityMaid maid, ChatClientInfo clientInfo) {
-        Map<String, String> valueMap = Maps.newHashMap();
-        valueMap.put("model_name", clientInfo.name());
-        valueMap.put("chat_language", clientInfo.language());
+        Map<String, String> valueMap = Util.make(Maps.newHashMap(), map -> {
+            map.put("model_name", clientInfo.name());
+            map.put("chat_language", clientInfo.language());
+        });
         String setting = new StrSubstitutor(valueMap).replace(AUTO_GEN_SETTING);
 
         // 如果有描述文本，那么就将描述文本也加入到设定中

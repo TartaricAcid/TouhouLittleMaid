@@ -64,4 +64,9 @@ public class TaskTorch implements IMaidTask {
         }
         return FunctionCallSwitchResult.MISSING_REQUIRED_ITEM;
     }
+
+    @Override
+    public String getMaidActionSummary() {
+        return "Place torches in nearby dark areas.";
+    }
 }

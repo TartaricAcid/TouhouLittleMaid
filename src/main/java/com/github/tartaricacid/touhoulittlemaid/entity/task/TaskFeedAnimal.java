@@ -140,4 +140,9 @@ public class TaskFeedAnimal implements IAttackTask {
     private boolean farAway(LivingEntity target, EntityMaid maid) {
         return maid.distanceTo(target) > MAX_STOP_ATTACK_DISTANCE;
     }
+
+    @Override
+    public String getMaidActionSummary() {
+        return "Breed nearby animals and optionally cull excess animals with a melee weapon.";
+    }
 }

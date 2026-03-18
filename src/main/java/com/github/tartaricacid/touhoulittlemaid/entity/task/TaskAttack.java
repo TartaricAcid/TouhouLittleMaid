@@ -128,4 +128,9 @@ public class TaskAttack implements IAttackTask {
         }
         return maid.distanceTo(target) > radius;
     }
+
+    @Override
+    public String getMaidActionSummary() {
+        return "Melee attack nearby hostile mobs with the main-hand weapon.";
+    }
 }

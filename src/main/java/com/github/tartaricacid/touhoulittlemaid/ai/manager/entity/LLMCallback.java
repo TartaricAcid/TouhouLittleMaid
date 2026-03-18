@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.ISkill;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.SkillRegister;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.ITool;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.ToolRegister;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.implement.UseSkillTool;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.response.ResponseChat;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.ErrorCode;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.ResponseCallback;
@@ -191,7 +192,7 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
             chatManager.addToolHistory("use tool: %s".format(toolCall.getId()), toolCall.getId());
 
             // 继续进行下一轮 AI 对话
-            if (name == ToolRegister.USE_SKILL) {
+            if (UseSkillTool.TOOL_ID.equals(name)) {
                 // USE_SKILL 比较特殊
                 if (!(finalResult instanceof String skillId)) {
                     // 此时 finalResult 必须是 string

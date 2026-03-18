@@ -51,4 +51,9 @@ public class TaskGrass implements IFarmTask {
     public ItemStack plant(EntityMaid maid, BlockPos basePos, BlockState baseState, ItemStack seed) {
         return seed;
     }
+
+    @Override
+    public String getMaidActionSummary() {
+        return "Clear nearby grass, flowers, and other tall plants.";
+    }
 }

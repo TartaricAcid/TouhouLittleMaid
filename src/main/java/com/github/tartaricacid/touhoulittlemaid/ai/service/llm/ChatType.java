@@ -6,6 +6,10 @@ public enum ChatType {
      */
     AUTO_GEN_SETTING,
     /**
+     * 历史对话摘要压缩
+     */
+    HISTORY_SUMMARY,
+    /**
      * 普通交谈
      */
     NORMAL_CHAT,

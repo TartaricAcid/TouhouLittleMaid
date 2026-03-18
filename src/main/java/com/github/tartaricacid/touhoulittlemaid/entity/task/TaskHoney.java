@@ -75,4 +75,9 @@ public class TaskHoney implements IMaidTask {
         }
         return FunctionCallSwitchResult.MISSING_REQUIRED_ITEM;
     }
+
+    @Override
+    public String getMaidActionSummary() {
+        return "Collect honey bottles or honeycombs from nearby beehives.";
+    }
 }

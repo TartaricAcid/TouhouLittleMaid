@@ -71,4 +71,9 @@ public class TaskFishing implements IMaidTask {
         }
         return FunctionCallSwitchResult.MISSING_REQUIRED_ITEM;
     }
+
+    @Override
+    public String getMaidActionSummary() {
+        return "Find a seat near water and start fishing with a fishing rod.";
+    }
 }

@@ -1,6 +1,11 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.agent.tool;
 
-import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.SkillRegister;
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.implement.QueryMaidContextTool;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.implement.SwitchFollowStateTool;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.implement.SwitchWorkTaskTool;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.implement.UseSkillTool;
+import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
@@ -8,12 +13,20 @@ import javax.annotation.Nullable;
 import java.util.Map;
 
 public class ToolRegister {
-    public static final String USE_SKILL = "use_skill";
-
-    private static Map<String, ITool<?>> TOOLS = Maps.newHashMap();
+    private static Map<String, ITool<?>> TOOLS = Maps.newLinkedHashMap();
 
     public static void init() {
-        SkillRegister register = new SkillRegister();
+        ToolRegister register = new ToolRegister();
+
+        register.register(new UseSkillTool());
+        register.register(new QueryMaidContextTool());
+        register.register(new SwitchFollowStateTool());
+        register.register(new SwitchWorkTaskTool());
+
+        for (ILittleMaid littleMaid : TouhouLittleMaid.EXTENSIONS) {
+            littleMaid.registerAITool(register);
+        }
+
         TOOLS = ImmutableMap.copyOf(TOOLS);
     }
 

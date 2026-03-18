@@ -100,4 +100,9 @@ public class TaskCocoa implements IFarmTask {
     public boolean checkCropPosAbove() {
         return false;
     }
+
+    @Override
+    public String getMaidActionSummary() {
+        return "Plant and harvest cocoa beans on nearby jungle logs.";
+    }
 }

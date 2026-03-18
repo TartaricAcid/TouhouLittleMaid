@@ -28,8 +28,13 @@ import java.util.Optional;
 @SuppressWarnings("all")
 public abstract class MaidAIChatData extends MaidAIChatSerializable {
     protected static final String MAID_HISTORY_CHAT_TAG = "MaidHistoryChat";
+    protected static final String MAID_HISTORY_SUMMARY_TAG = "MaidHistorySummary";
+
     protected final EntityMaid maid;
     protected final CappedQueue<LLMMessage> history;
+
+    protected String compressedSummary = StringUtils.EMPTY;
+    public volatile boolean historySummaryRunning = false;
 
     public MaidAIChatData(EntityMaid maid) {
         this.maid = maid;
@@ -53,6 +58,7 @@ public abstract class MaidAIChatData extends MaidAIChatSerializable {
                 TouhouLittleMaid.LOGGER.error("Failed to parse MaidHistoryChat", e);
             }
         }
+        this.compressedSummary = tag.getString(MAID_HISTORY_SUMMARY_TAG);
         return super.readFromTag(tag);
     }
 
@@ -67,6 +73,9 @@ public abstract class MaidAIChatData extends MaidAIChatSerializable {
             } catch (Exception e) {
                 TouhouLittleMaid.LOGGER.error("Failed to parse MaidHistoryChat", e);
             }
+        }
+        if (StringUtils.isNotBlank(this.compressedSummary)) {
+            tag.putString(MAID_HISTORY_SUMMARY_TAG, this.compressedSummary);
         }
         return super.writeToTag(tag);
     }
@@ -136,20 +145,42 @@ public abstract class MaidAIChatData extends MaidAIChatSerializable {
         return history;
     }
 
+    public String getCompressedSummary() {
+        return compressedSummary;
+    }
+
+    public void setCompressedSummary(String newSummary) {
+        this.compressedSummary = newSummary;
+    }
+
+    public boolean hasCompressedSummary() {
+        return StringUtils.isNotBlank(compressedSummary);
+    }
+
+    public void clearAllChatMemory() {
+        this.history.getDeque().clear();
+        this.compressedSummary = StringUtils.EMPTY;
+        this.historySummaryRunning = false;
+    }
+
     public void addUserHistory(String message) {
         this.history.add(LLMMessage.userChat(maid, message));
+        this.onHistoryUpdated();
     }
 
     public void addAssistantHistory(String message) {
         this.history.add(LLMMessage.assistantChat(maid, message));
+        this.onHistoryUpdated();
     }
 
     public void addAssistantHistory(String message, List<ToolCall> toolCalls) {
         this.history.add(LLMMessage.assistantChat(maid, message, toolCalls));
+        this.onHistoryUpdated();
     }
 
     public void addToolHistory(String message, String toolCallId) {
         this.history.add(LLMMessage.toolChat(maid, message, toolCallId));
+        this.onHistoryUpdated();
     }
 
     public EntityMaid getMaid() {
@@ -159,5 +190,8 @@ public abstract class MaidAIChatData extends MaidAIChatSerializable {
     public Optional<CharacterSetting> getSetting() {
         String modelId = this.maid.getModelId();
         return SettingReader.getSetting(modelId);
+    }
+
+    protected void onHistoryUpdated() {
     }
 }

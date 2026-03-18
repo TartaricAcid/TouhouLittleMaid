@@ -96,4 +96,9 @@ public class TaskMelon implements IFarmTask {
     public List<Pair<String, Predicate<EntityMaid>>> getConditionDescription(EntityMaid maid) {
         return Collections.singletonList(Pair.of("has_silk_touch", Predicates.alwaysTrue()));
     }
+
+    @Override
+    public String getMaidActionSummary() {
+        return "Harvest nearby melons or pumpkins, and use Silk Touch to collect whole melons.";
+    }
 }

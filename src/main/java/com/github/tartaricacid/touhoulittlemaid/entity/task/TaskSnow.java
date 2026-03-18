@@ -64,4 +64,9 @@ public class TaskSnow implements IFarmTask {
     public ItemStack plant(EntityMaid maid, BlockPos basePos, BlockState baseState, ItemStack seed) {
         return seed;
     }
+
+    @Override
+    public String getMaidActionSummary() {
+        return "Clear nearby snow, or collect snowballs when holding a shovel.";
+    }
 }

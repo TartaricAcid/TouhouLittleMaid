@@ -82,4 +82,9 @@ public class TaskSugarCane implements IFarmTask {
         }
         return false;
     }
+
+    @Override
+    public String getMaidActionSummary() {
+        return "Plant and harvest sugar cane around the maid.";
+    }
 }

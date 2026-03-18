@@ -4,6 +4,7 @@ package com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.ISkill;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.SkillRegister;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.implement.UseSkillSkill;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.ITool;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.ToolRegister;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.LLMCallback;
@@ -130,14 +131,14 @@ public class LLMOpenAIClient implements LLMClient {
     protected void addRootSkills(EntityMaid maid, LLMConfig config, ChatCompletion chatCompletion) {
         ChatType chatType = config.chatType();
 
-        // 首次生成角色设定时不需要添加
-        if (chatType == ChatType.AUTO_GEN_SETTING) {
+        // 首次生成角色设定时、生成历史摘要时不需要添加
+        if (chatType == ChatType.AUTO_GEN_SETTING || chatType == ChatType.HISTORY_SUMMARY) {
             return;
         }
 
         // 首次对话只需要添加基本上 use_skill 的 skill
         if (chatType == ChatType.NORMAL_CHAT) {
-            LLMConfig.SkillContext context = new LLMConfig.SkillContext(SkillRegister.USE_SKILL);
+            LLMConfig.SkillContext context = new LLMConfig.SkillContext(UseSkillSkill.ID);
             this.addSkillFromContext(maid, chatCompletion, context);
             return;
         }
