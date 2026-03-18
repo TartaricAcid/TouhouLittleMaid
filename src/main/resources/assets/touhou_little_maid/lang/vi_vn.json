@@ -747,8 +747,6 @@
   "config.touhou_little_maid.global_ai.auto_gen_setting_enabled.tooltip": "Có tự động tạo tính cách maid không",
   "config.touhou_little_maid.global_ai.llm_proxy_address": "Địa Chỉ Proxy LLM",
   "config.touhou_little_maid.global_ai.llm_proxy_address.tooltip": "Địa Chỉ Proxy AI LLM, ví dụ như 127.0.0.1:1080, để trống nghĩa là không dùng proxy, proxy SOCKS không được hỗ trợ",
-  "config.touhou_little_maid.global_ai.llm_max_token": "Token Tối Đa LLM",
-  "config.touhou_little_maid.global_ai.llm_max_token.tooltip": "Số token tối đa được hỗ trợ bởi LLM AI",
   "config.touhou_little_maid.global_ai.tts_enable": "Bật TTS",
   "config.touhou_little_maid.global_ai.tts_enable.tooltip": "Có bật chức năng Chuyển Văn Bản Thành Giọng Nói (TTS) AI không",
   "config.touhou_little_maid.global_ai.tts_language": "Ngôn Ngữ TTS",
