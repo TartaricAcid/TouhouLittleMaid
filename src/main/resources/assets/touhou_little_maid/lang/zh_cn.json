@@ -397,8 +397,6 @@
   "gui.touhou_little_maid.button.maid_ai_chat_config.clear_history_chat.confirm": "你是否要清除该女仆的 AI 聊天历史记录？",
   "gui.touhou_little_maid.button.maid_ai_chat_config.history_chat_is_empty": "没有任何 AI 历史聊天记录",
   "gui.touhou_little_maid.button.maid_ai_chat_config.history_chat.title": "女仆历史 AI 聊天记录",
-  "gui.touhou_little_maid.button.maid_ai_chat_config.history_chat.summary_title": "压缩摘要",
-  "gui.touhou_little_maid.button.maid_ai_chat_config.history_chat.summary_empty": "当前还没有压缩摘要",
   "gui.touhou_little_maid.button.maid_ai_chat_config.history_chat.days": "%d天前",
   "gui.touhou_little_maid.button.maid_ai_chat_config.history_chat.hours": "%d小时前",
   "gui.touhou_little_maid.button.maid_ai_chat_config.history_chat.just_now": "刚刚",
