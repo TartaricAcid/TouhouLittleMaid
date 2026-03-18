@@ -635,7 +635,6 @@
   "config.touhou_little_maid.global_ai.auto_gen_setting_enabled": "Pengaturan Auto Gen Diaktifkan",
   "config.touhou_little_maid.global_ai.auto_gen_setting_enabled.tooltip": "Iya atau tidak untuk secara automatis mengatur aturan Maid",
   "config.touhou_little_maid.global_ai.llm_proxy_address": "LLM Alamat Proxy",
-  "config.touhou_little_maid.global_ai.llm_max_token": "Token Maksimum LLM",
   "config.touhou_little_maid.global_ai.tts_enable": "Aktifkan TTS",
   "config.touhou_little_maid.global_ai.tts_enable.tooltip": "Iya atau tidak untuk mengaktifkan obrolan AI TTS",
   "config.touhou_little_maid.global_ai.tts_language": "Bahasa TTS",
