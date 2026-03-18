@@ -740,8 +740,6 @@
   "config.touhou_little_maid.global_ai.auto_gen_setting_enabled.tooltip": "Si se genera la configuración de la maid automáticamente",
   "config.touhou_little_maid.global_ai.llm_proxy_address": "Dirección Proxy de LLM",
   "config.touhou_little_maid.global_ai.llm_proxy_address.tooltip": "Dirección Proxy de IA LLM, como 127.0.0.1:1080, vacío no es proxy, los proxies SOCK no están permitidos",
-  "config.touhou_little_maid.global_ai.llm_max_token": "Token máximo de LLM",
-  "config.touhou_little_maid.global_ai.llm_max_token.tooltip": "El token máximo admitido por la IA LLM",
   "config.touhou_little_maid.global_ai.tts_enable": "Activar TTS",
   "config.touhou_little_maid.global_ai.tts_enable.tooltip": "Si estará o no activado el chat IA TTS",
   "config.touhou_little_maid.global_ai.tts_language": "Idioma TTS",
