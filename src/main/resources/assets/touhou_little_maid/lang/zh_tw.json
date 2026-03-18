@@ -743,8 +743,6 @@
   "config.touhou_little_maid.global_ai.auto_gen_setting_enabled.tooltip": "是否自動產生女僕的人設",
   "config.touhou_little_maid.global_ai.llm_proxy_address": "LLM 代理地址",
   "config.touhou_little_maid.global_ai.llm_proxy_address.tooltip": "LLM AI 代理地址，比如 127.0.0.1:1080，留空表示不使用代理，不支援 SOCKS 代理",
-  "config.touhou_little_maid.global_ai.llm_max_token": "LLM 最大 Token 數",
-  "config.touhou_little_maid.global_ai.llm_max_token.tooltip": "LLM AI 所支援的最大 Token 數",
   "config.touhou_little_maid.global_ai.tts_enable": "啟用 TTS",
   "config.touhou_little_maid.global_ai.tts_enable.tooltip": "是否啟用 AI TTS（文本轉語音）",
   "config.touhou_little_maid.global_ai.tts_language": "TTS 語言",
