@@ -749,8 +749,6 @@
   "config.touhou_little_maid.global_ai.auto_gen_setting_enabled.tooltip": "Whether to automatically generate the maid's settings",
   "config.touhou_little_maid.global_ai.llm_proxy_address": "LLM Proxy Address",
   "config.touhou_little_maid.global_ai.llm_proxy_address.tooltip": "LLM AI Proxy Address, such as 127.0.0.1:1080, empty is no proxy, SOCKS proxies are not supported",
-  "config.touhou_little_maid.global_ai.llm_max_token": "LLM Max Token",
-  "config.touhou_little_maid.global_ai.llm_max_token.tooltip": "The maximum token supported by the LLM AI",
   "config.touhou_little_maid.global_ai.tts_enable": "Enable TTS",
   "config.touhou_little_maid.global_ai.tts_enable.tooltip": "Whether or not to enable AI TTS",
   "config.touhou_little_maid.global_ai.tts_language": "TTS Language",

@@ -11,7 +11,6 @@ public class AIConfig {
     public static ForgeConfigSpec.BooleanValue FUNCTION_CALL_ENABLED;
     public static ForgeConfigSpec.BooleanValue AUTO_GEN_SETTING_ENABLED;
     public static ForgeConfigSpec.ConfigValue<String> LLM_PROXY_ADDRESS;
-    public static ForgeConfigSpec.IntValue LLM_MAX_TOKEN;
     public static ForgeConfigSpec.IntValue MAID_MAX_HISTORY_LLM_SIZE;
     public static ForgeConfigSpec.IntValue MAX_TOKENS_PER_PLAYER;
 
@@ -44,11 +43,8 @@ public class AIConfig {
         builder.comment("LLM AI Proxy Address, such as 127.0.0.1:1080, empty is no proxy, SOCKS proxies are not supported");
         LLM_PROXY_ADDRESS = builder.define("LLMProxyAddress", "");
 
-        builder.comment("The maximum token supported by the LLM AI");
-        LLM_MAX_TOKEN = builder.defineInRange("LLMMaxToken", 4096, 1, Integer.MAX_VALUE);
-
         builder.comment("The maximum historical conversation length cached by the maid");
-        MAID_MAX_HISTORY_LLM_SIZE = builder.defineInRange("MaidMaxHistoryLLMSize", 16, 1, 128);
+        MAID_MAX_HISTORY_LLM_SIZE = builder.defineInRange("MaidMaxHistoryLLMSize", 24, 1, 128);
 
         builder.comment("The maximum tokens that a player can use");
         MAX_TOKENS_PER_PLAYER = builder.defineInRange("MaxTokensPerPlayer", Integer.MAX_VALUE, 1, Integer.MAX_VALUE);

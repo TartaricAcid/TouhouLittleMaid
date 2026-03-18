@@ -53,7 +53,6 @@ public class LLMOpenAIClient implements LLMClient {
         String model = config.model();
         boolean isReasoningModel = this.site.isReasoningModel(model);
         double temperature = config.temperature();
-        int maxTokens = config.maxTokens();
         EntityMaid maid = config.maid();
 
         // 构建对话
@@ -63,11 +62,9 @@ public class LLMOpenAIClient implements LLMClient {
         // 没有 temperature 和 maxTokens 参数
         if (isReasoningModel) {
             chatCompletion = ChatCompletion.create().model(model)
-                    .maxCompletionTokens(maxTokens)
                     .setResponseFormat(ResponseFormat.text());
         } else {
             chatCompletion = ChatCompletion.create().model(model)
-                    .maxTokens(maxTokens)
                     .temperature(temperature)
                     .setResponseFormat(ResponseFormat.text());
         }

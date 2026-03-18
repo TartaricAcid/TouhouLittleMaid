@@ -26,13 +26,13 @@ public class QueryMaidContextTool implements ITool<String> {
 
     @Override
     public String summary(EntityMaid maid) {
-        return "Load one category of live maid context by category id.";
+        return "Load one maid context category by category id.";
     }
 
     @Override
     public Parameter parameters(ObjectParameter root, EntityMaid maid) {
         StringParameter categoryId = StringParameter.create();
-        List<ContextCategory> categories = MaidContextRegister.getAllCategories();
+        List<ContextCategory> categories = getAvailableCategories();
         categoryId.setDescription(buildDescription(categories));
         categories.stream().map(ContextCategory::id).forEach(categoryId::addEnumValues);
         root.addProperties(CATEGORY_ID, categoryId);
@@ -46,13 +46,21 @@ public class QueryMaidContextTool implements ITool<String> {
 
     @Override
     public ToolResponse onCall(String result, EntityMaid maid) {
+        List<String> values = getAvailableCategories().stream()
+                .map(ContextCategory::id).toList();
+
         if (!MaidContextRegister.hasCategory(result)) {
-            return new ToolResponse("Unknown maid context category: %s".formatted(result));
+            String text = "unknown maid context category '%s'".formatted(result);
+            return ToolErrorHelper.invalidParamToolResponse(CATEGORY_ID, values, text);
         }
+
         List<String> lines = MaidContextRegister.getContextDescriptionsByCategory(result, maid);
         if (lines.isEmpty()) {
-            return new ToolResponse("No context is available for category: %s".formatted(result));
+            // 上面其实已经检查一次了，一般不会触发此处
+            String text = "category '%s' currently has no available context".formatted(result);
+            return ToolErrorHelper.invalidParamToolResponse(CATEGORY_ID, values, text);
         }
+
         String summary = MaidContextRegister.getCategorySummary(result);
         String body = String.join("\n", lines);
         return new ToolResponse("""
@@ -76,5 +84,9 @@ public class QueryMaidContextTool implements ITool<String> {
                 Available categories:
                 %s
                 """.formatted(categoryList);
+    }
+
+    private static List<ContextCategory> getAvailableCategories() {
+        return MaidContextRegister.getAllCategories();
     }
 }

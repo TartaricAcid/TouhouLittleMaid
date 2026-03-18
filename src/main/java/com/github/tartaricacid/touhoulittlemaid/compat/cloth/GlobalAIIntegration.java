@@ -104,13 +104,8 @@ public class GlobalAIIntegration {
                 .setTooltip(Component.translatable("config.touhou_little_maid.global_ai.llm_proxy_address.tooltip"))
                 .setSaveConsumer(AIConfig.LLM_PROXY_ADDRESS::set).build());
 
-        builder.add(entryBuilder.startIntField(Component.translatable("config.touhou_little_maid.global_ai.llm_max_token"), AIConfig.LLM_MAX_TOKEN.get())
-                .setDefaultValue(4096)
-                .setTooltip(Component.translatable("config.touhou_little_maid.global_ai.llm_max_token.tooltip"))
-                .setSaveConsumer(AIConfig.LLM_MAX_TOKEN::set).build());
-
         builder.add(entryBuilder.startIntSlider(Component.translatable("config.touhou_little_maid.global_ai.maid_max_history_llm_size"),
-                        AIConfig.MAID_MAX_HISTORY_LLM_SIZE.get(), 1, 128).setDefaultValue(16)
+                        AIConfig.MAID_MAX_HISTORY_LLM_SIZE.get(), 1, 128).setDefaultValue(24)
                 .setTooltip(Component.translatable("config.touhou_little_maid.global_ai.maid_max_history_llm_size.tooltip"))
                 .setSaveConsumer(AIConfig.MAID_MAX_HISTORY_LLM_SIZE::set).build());
 

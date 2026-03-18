@@ -145,7 +145,7 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
         });
     }
 
-    @SuppressWarnings("all")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private void onSingleCall(List<LLMMessage> messages, LLMConfig config, LLMClient client, ToolCall toolCall) throws JsonSyntaxException {
         FunctionToolCall function = toolCall.getFunction();
         String name = function.getName();
@@ -153,25 +153,38 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
 
         ITool tool = ToolRegister.getTool(name);
         if (tool == null) {
+            String invalidMsg = """
+                    Invalid tool call: tool '%s' is not registered.
+                    Choose an existing tool id and try again.
+                    """.formatted(name);
+            this.onToolErrorCall(messages, config, client, toolCall, invalidMsg);
             return;
         }
 
-        Object result = null;
+        Object result;
         try {
             JsonObject parse = GsonHelper.parse(arguments);
             Optional optional = tool.codec().parse(JsonOps.INSTANCE, parse).resultOrPartial(TouhouLittleMaid.LOGGER::error);
             if (optional.isEmpty()) {
+                String invalidMsg = """
+                        Invalid tool call arguments for '%s': failed to parse arguments '%s'.
+                        Please check the parameter schema and try again.
+                        """.formatted(name, arguments);
+                this.onToolErrorCall(messages, config, client, toolCall, invalidMsg);
                 return;
             }
             result = optional.get();
         } catch (Exception exception) {
-            String message = "Exception %s, JSON is: %s".formatted(exception.getLocalizedMessage(), arguments);
-            this.onFailure(null, new Throwable(message), ErrorCode.JSON_DECODE_ERROR);
+            String invalidMsg = """
+                    Invalid tool call arguments for '%s': %s, JSON is: %s.
+                    Please fix the arguments and try again.
+                    """.formatted(name, exception.getLocalizedMessage(), arguments);
+            this.onToolErrorCall(messages, config, client, toolCall, invalidMsg);
             return;
         }
 
         // 需要记录下工具调用，方便 debug
-        TouhouLittleMaid.LOGGER.debug("Use function call: {}, arguments is {}", tool.id(), arguments);
+        TouhouLittleMaid.LOGGER.debug("Use function call: {}, arguments is {}", name, arguments);
 
         // 因为获取网络流是在独立的线程上，所以需要推送到主线程执行
         EntityMaid maid = config.maid();
@@ -189,7 +202,7 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
             }
 
             // 历史记录缓存
-            chatManager.addToolHistory("use tool: %s".format(toolCall.getId()), toolCall.getId());
+            chatManager.addToolHistory("use tool: %s".formatted(name), toolCall.getId());
 
             // 继续进行下一轮 AI 对话
             if (UseSkillTool.TOOL_ID.equals(name)) {
@@ -223,6 +236,31 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
                 LLMConfig keepConfig = new LLMConfig(config.model(), config.maid(), ChatType.MULTI_FUNCTION_CALL);
                 client.chat(messages, keepConfig, this);
             }
+        });
+    }
+
+    /**
+     * 如果大模型出现了幻觉，此时需要 tool result 里需要严肃指出，
+     * 让大模型自己意识到这一点，并且在下一轮对话里进行纠正。
+     */
+    private void onToolErrorCall(List<LLMMessage> messages, LLMConfig config, LLMClient client, ToolCall toolCall, String invalidMsg) {
+        EntityMaid maid = config.maid();
+        if (!(maid.level instanceof ServerLevel serverLevel)) {
+            return;
+        }
+
+        // 日志记录一下
+        FunctionToolCall function = toolCall.getFunction();
+        TouhouLittleMaid.LOGGER.warn("Tool call error: tool call is {}, arguments is {}",
+                function.getName(), function.getArguments());
+
+        // 必须在主线程，否则可能会出奇怪的问题
+        serverLevel.getServer().submit(() -> {
+            chatManager.addToolHistory(invalidMsg, toolCall.getId());
+            messages.add(LLMMessage.toolChat(maid, invalidMsg, toolCall.getId()));
+
+            LLMConfig keepConfig = new LLMConfig(config.model(), config.maid(), ChatType.MULTI_FUNCTION_CALL);
+            client.chat(messages, keepConfig, this);
         });
     }
 }

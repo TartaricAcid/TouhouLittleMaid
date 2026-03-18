@@ -14,9 +14,7 @@ import net.minecraft.core.BlockPos;
 public class SwitchFollowStateTool implements ITool<SwitchFollowStateTool.Result> {
     public static final String TOOL_ID = "switch_maid_follow_state";
 
-    private static final String TOOL_DESC = """
-            Set the maid's follow state. Use follow=true to make the maid follow the owner.
-            Use follow=false to stop following and enable home mode at the current position.""";
+    private static final String TOOL_DESC = "Set the maid's follow state.";
 
     private static final String FOLLOW_PARAM_ID = "follow";
     private static final String FOLLOW_PARAM_DESC = """

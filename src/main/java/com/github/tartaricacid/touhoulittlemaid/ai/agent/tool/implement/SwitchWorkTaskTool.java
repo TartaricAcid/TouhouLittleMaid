@@ -13,16 +13,14 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class SwitchWorkTaskTool implements ITool<SwitchWorkTaskTool.Result> {
     public static final String TOOL_ID = "switch_maid_work_task";
 
-    private static final String TOOL_DESC = """
-            Switch the maid to a specific work or combat task by task_id.
-            Use this when the player explicitly wants a different role, job, or combat mode.
-            """;
+    private static final String TOOL_DESC = "Switch the maid to a specific task by task_id.";
 
     private static final String TASK_ID_PARAMETER_ID = "task_id";
     private static final String TASK_ID_PARAMETER_DESC = """
@@ -30,7 +28,6 @@ public class SwitchWorkTaskTool implements ITool<SwitchWorkTaskTool.Result> {
             """;
 
     private static final String SUCCESS = "Successfully switched to %s task";
-    private static final String FAIL = "Switch failed and there is no task named %s";
     private static final String NO_CHANGE = "You're currently in %s task and don't need to switch";
     private static final String MISSING_REQUIRED = "Successfully switched to %s task, but required item is missing";
     private static final String PARTIAL = "Successfully switched to %s task, but some requirements are missing";
@@ -52,11 +49,13 @@ public class SwitchWorkTaskTool implements ITool<SwitchWorkTaskTool.Result> {
     @Override
     public Parameter parameters(ObjectParameter root, EntityMaid maid) {
         StringParameter taskId = StringParameter.create();
-        TaskManager.getTaskIndex().stream()
-                .map(IMaidTask::getUid)
+
+        List<IMaidTask> tasks = getAvailableTasks();
+        tasks.stream().map(IMaidTask::getUid)
                 .map(ResourceLocation::toString)
                 .forEach(taskId::addEnumValues);
-        String taskSummary = TaskManager.getTaskIndex().stream()
+
+        String taskSummary = tasks.stream()
                 .map(task -> "- %s: %s".formatted(task.getUid().toString(), task.getMaidActionSummary()))
                 .collect(Collectors.joining("\n"));
         taskId.setDescription(TASK_ID_PARAMETER_DESC + "\nAvailable tasks:\n" + taskSummary);
@@ -72,9 +71,16 @@ public class SwitchWorkTaskTool implements ITool<SwitchWorkTaskTool.Result> {
     @Override
     public ToolResponse onCall(Result result, EntityMaid maid) {
         ResourceLocation taskId = result.id;
+        List<IMaidTask> tasks = getAvailableTasks();
         Optional<IMaidTask> optional = TaskManager.findTask(taskId);
+
         if (optional.isEmpty()) {
-            return new ToolResponse(FAIL.formatted(taskId));
+            List<String> values = tasks.stream()
+                    .map(IMaidTask::getUid)
+                    .map(ResourceLocation::toString)
+                    .toList();
+            String text = "unknown task_id '%s'".formatted(taskId);
+            return ToolErrorHelper.invalidParamToolResponse(TASK_ID_PARAMETER_ID, values, text);
         }
 
         IMaidTask task = optional.get();
@@ -97,6 +103,10 @@ public class SwitchWorkTaskTool implements ITool<SwitchWorkTaskTool.Result> {
             case MISSING_REQUIRED_ITEM -> new ToolResponse(MISSING_REQUIRED.formatted(taskId));
             case PARTIAL_OK -> new ToolResponse(PARTIAL.formatted(taskId));
         };
+    }
+
+    private static List<IMaidTask> getAvailableTasks() {
+        return TaskManager.getTaskIndex();
     }
 
     public record Result(ResourceLocation id) {

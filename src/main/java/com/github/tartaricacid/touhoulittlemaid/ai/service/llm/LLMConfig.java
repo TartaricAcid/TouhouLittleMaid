@@ -10,24 +10,23 @@ import org.jetbrains.annotations.Nullable;
  *
  * @param model       模型名称
  * @param temperature 温度，控制生成文本的随机性
- * @param maxTokens   最大生成的 token 数量
  */
-public record LLMConfig(String model, double temperature, int maxTokens, EntityMaid maid,
+public record LLMConfig(String model, double temperature, EntityMaid maid,
                         ChatType chatType, @Nullable SkillContext skillContext) {
-    public LLMConfig(String model, double temperature, int maxTokens, EntityMaid maid, ChatType chatType) {
-        this(model, temperature, maxTokens, maid, chatType, null);
+    public LLMConfig(String model, double temperature, EntityMaid maid, ChatType chatType) {
+        this(model, temperature, maid, chatType, null);
     }
 
     public LLMConfig(String model, EntityMaid maid, ChatType chatType, SkillContext context) {
-        this(model, AIConfig.LLM_TEMPERATURE.get(), AIConfig.LLM_MAX_TOKEN.get(), maid, chatType, context);
+        this(model, AIConfig.LLM_TEMPERATURE.get(), maid, chatType, context);
     }
 
     public static LLMConfig normalChat(String model, EntityMaid maid) {
-        return new LLMConfig(model, AIConfig.LLM_TEMPERATURE.get(), AIConfig.LLM_MAX_TOKEN.get(), maid, ChatType.NORMAL_CHAT);
+        return new LLMConfig(model, AIConfig.LLM_TEMPERATURE.get(), maid, ChatType.NORMAL_CHAT);
     }
 
     public LLMConfig(String model, EntityMaid maid, ChatType chatType) {
-        this(model, AIConfig.LLM_TEMPERATURE.get(), AIConfig.LLM_MAX_TOKEN.get(), maid, chatType);
+        this(model, AIConfig.LLM_TEMPERATURE.get(), maid, chatType);
     }
 
     /**

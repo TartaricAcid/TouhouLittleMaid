@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class UseSkillTool implements ITool<String> {
     public static final String TOOL_ID = "use_skill";
     private static final String SKILL_ID_PARAMETER_ID = "skill_id";
-    private static final String SUMMARY = "Load one follow-up skill by its skill id.";
+    private static final String SUMMARY = "Load one follow-up skill by skill id.";
     private static final Codec<String> CODEC = Codec.STRING.fieldOf(SKILL_ID_PARAMETER_ID).codec();
 
     @Override
@@ -33,10 +33,7 @@ public class UseSkillTool implements ITool<String> {
     @Override
     public Parameter parameters(ObjectParameter root, EntityMaid maid) {
         StringParameter skillId = StringParameter.create();
-        List<ISkill> availableSkills = SkillRegister.getAllSkills().values().stream()
-                .filter(skill -> !UseSkillSkill.ID.equals(skill.id()))
-                .filter(skill -> skill.trigger(maid))
-                .toList();
+        List<ISkill> availableSkills = getAvailableSkills(maid);
         skillId.setDescription(buildDescription(maid, availableSkills));
         availableSkills.stream().map(ISkill::id).forEach(skillId::addEnumValues);
         root.addProperties(SKILL_ID_PARAMETER_ID, skillId);
@@ -50,6 +47,13 @@ public class UseSkillTool implements ITool<String> {
 
     @Override
     public ToolResponse onCall(String result, EntityMaid maid) {
+        List<ISkill> availableSkills = getAvailableSkills(maid);
+        boolean valid = availableSkills.stream().anyMatch(skill -> skill.id().equals(result));
+        if (!valid) {
+            List<String> values = availableSkills.stream().map(ISkill::id).toList();
+            String text = "unknown skill_id '%s'".formatted(result);
+            return ToolErrorHelper.invalidParamToolResponse(SKILL_ID_PARAMETER_ID, values, text);
+        }
         return new ToolResponse(result);
     }
 
@@ -64,5 +68,12 @@ public class UseSkillTool implements ITool<String> {
                 Available skills:
                 %s
                 """.formatted(skillList);
+    }
+
+    private static List<ISkill> getAvailableSkills(EntityMaid maid) {
+        return SkillRegister.getAllSkills().values().stream()
+                .filter(skill -> !UseSkillSkill.ID.equals(skill.id()))
+                .filter(skill -> skill.trigger(maid))
+                .toList();
     }
 }
