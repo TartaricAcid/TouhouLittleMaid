@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.stream.Collectors;
 
-final class HistorySummaryPrompts {
+public final class HistorySummaryPrompts {
     static final int MAX_SUMMARY_LENGTH = 1600;
     static final int MAX_SINGLE_LENGTH = 300;
     static final int MIN_MESSAGES_TO_COMPRESS = 4;
@@ -41,7 +41,7 @@ final class HistorySummaryPrompts {
                 """.formatted(previousSummary, historyBlock);
     }
 
-    static String buildSummaryEntry(LLMMessage message) {
+    public static String buildSummaryEntry(LLMMessage message) {
         Role role = message.role();
         String text = message.message();
 

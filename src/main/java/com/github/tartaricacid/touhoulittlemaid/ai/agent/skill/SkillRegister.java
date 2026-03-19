@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.ai.agent.skill;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.implement.MaidActionSkill;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.implement.MaidContextSkill;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.implement.MaidKnowledgeSkill;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.implement.UseSkillSkill;
 import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
 import com.google.common.collect.ImmutableMap;
@@ -20,6 +21,7 @@ public class SkillRegister {
         register.register(new UseSkillSkill());
         register.register(new MaidContextSkill());
         register.register(new MaidActionSkill());
+        register.register(new MaidKnowledgeSkill());
 
         for (ILittleMaid littleMaid : TouhouLittleMaid.EXTENSIONS) {
             littleMaid.registerAISkill(register);

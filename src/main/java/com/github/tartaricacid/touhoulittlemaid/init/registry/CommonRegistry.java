@@ -1,9 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.init.registry;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.MaidContextRegister;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.knowledge.KnowledgeRegister;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.SkillRegister;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.ToolRegister;
-import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.MaidContextRegister;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.SerializerRegister;
 import com.github.tartaricacid.touhoulittlemaid.block.multiblock.MultiBlockManager;
 import com.github.tartaricacid.touhoulittlemaid.compat.curios.menu.CuriosContainer;
@@ -70,6 +71,7 @@ public final class CommonRegistry {
         SerializerRegister.init();
         // FunctionCallRegister.init();
         MaidContextRegister.init();
+        KnowledgeRegister.init();
         SkillRegister.init();
         ToolRegister.init();
         ChatBubbleRegister.init();

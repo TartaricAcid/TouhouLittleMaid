@@ -29,8 +29,8 @@ public class PapiReplacer {
         Map<String, String> valueMap = Util.make(Maps.newHashMap(), map -> {
             map.put("main_setting", input);
             map.put("owner_name", getOwnerName(maid));
-            map.put("chat_language", language(language));
-            map.put("tts_language", language(maid.getAiChatManager().getTTSLanguage()));
+            map.put("chat_language", getChatLanguage(language));
+            map.put("tts_language", getTtsLanguage(maid));
         });
 
         String base = new StrSubstitutor(valueMap).replace(FULL_SETTING);
@@ -41,6 +41,22 @@ public class PapiReplacer {
         }
 
         return base;
+    }
+
+    public static String getChatLanguage(String languageTag) {
+        return language(languageTag);
+    }
+
+    public static String getTtsLanguage(EntityMaid maid) {
+        return language(maid.getAiChatManager().getTTSLanguage());
+    }
+
+    public static String getOwnerName(EntityMaid maid) {
+        String ownerName = maid.getAiChatManager().ownerName;
+        if (StringUtils.isBlank(ownerName)) {
+            return DEFAULT_OWNER_NAME;
+        }
+        return ownerName;
     }
 
     /**
@@ -55,11 +71,4 @@ public class PapiReplacer {
         return LANGUAGE_FORMAT.formatted(locale.getDisplayLanguage(), locale.getDisplayCountry());
     }
 
-    private static String getOwnerName(EntityMaid maid) {
-        String ownerName = maid.getAiChatManager().ownerName;
-        if (StringUtils.isBlank(ownerName)) {
-            return DEFAULT_OWNER_NAME;
-        }
-        return ownerName;
-    }
 }

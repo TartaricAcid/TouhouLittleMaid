@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.command.subcommand;
 
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.knowledge.KnowledgeRegister;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.site.AvailableSites;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -15,13 +16,19 @@ public class AIChatCommand {
         LiteralArgumentBuilder<CommandSourceStack> root = LiteralArgumentBuilder.literal(ROOT_NAME);
         LiteralArgumentBuilder<CommandSourceStack> reload = LiteralArgumentBuilder.literal(RELOAD_NAME);
         LiteralArgumentBuilder<CommandSourceStack> tokens = ChatTokensCommand.get();
+        LiteralArgumentBuilder<CommandSourceStack> knowledge = AIChatKnowledgeCommand.get();
+
         root.then(reload.executes(AIChatCommand::reload));
         root.then(tokens);
+        root.then(knowledge);
+
         return root;
     }
 
     private static int reload(CommandContext<CommandSourceStack> context) {
         AvailableSites.init();
+        KnowledgeRegister.reloadConfigKnowledge();
+
         context.getSource().sendSuccess(() -> Component.translatable("message.touhou_little_maid.ai_chat.reload_success"), true);
         return Command.SINGLE_SUCCESS;
     }

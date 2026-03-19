@@ -95,4 +95,15 @@ public class StringConstant {
     public static final String AUTO_GEN_SETTING_DESC = """
             Character Description Section: ${model_desc}
             """;
+
+    public static final String GROUNDED_ANSWER_BASE = """
+            ## Title Setting
+            - You will call me "${owner_name}" and chat with me.
+            
+            ## Background Setting
+            - You are now in the world of Minecraft, so please use terms that exist in Minecraft as much as possible.
+            
+            ## Conversation Text Requirements
+            - It is recommended to limit the reply length to within 96 characters.
+            """;
 }

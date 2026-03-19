@@ -1,12 +1,10 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.manager.entity;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.ISkill;
-import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.SkillRegister;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.implement.UseSkillSkill;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.ITool;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.ToolRegister;
-import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.implement.UseSkillTool;
+import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.grounded.GroundedAnswerPrompts;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.response.ResponseChat;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.ErrorCode;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.ResponseCallback;
@@ -201,45 +199,17 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
             if (this.callCount > MAX_CALL_COUNT) {
                 TouhouLittleMaid.LOGGER.error("Function call count exceed max count: {}", MAX_CALL_COUNT);
             }
-
             // 历史记录缓存
             chatManager.addToolHistory("use tool: %s".formatted(name), toolCall.getId());
-
-            // 继续进行下一轮 AI 对话
-            if (UseSkillTool.TOOL_ID.equals(name)) {
-                // USE_SKILL 比较特殊
-                if (!(finalResult instanceof String skillId)) {
-                    // 此时 finalResult 必须是 string
-                    String message = "Invalid tool call arguments for use_skill, expected string but got %s".formatted(finalResult);
-                    this.onFailure(null, new Throwable(message), ErrorCode.JSON_DECODE_ERROR);
-                    return;
-                }
-
-                ISkill skill = SkillRegister.getSkill(skillId);
-                if (skill == null) {
-                    String message = "Skill %s is not available for use".formatted(skillId);
-                    this.onFailure(null, new Throwable(message), ErrorCode.JSON_DECODE_ERROR);
-                    return;
-                }
-
-                if (!skill.trigger(maid)) {
-                    return;
-                }
-
-                // 将 skill 的本体部分塞入 tool_result 里，而非系统提示词，这样可以让缓存系统缓存起作用
-                messages.add(LLMMessage.toolChat(maid, skill.body(maid), toolCall.getId()));
-                LLMConfig.SkillContext context = new LLMConfig.SkillContext(skillId);
-                LLMConfig keepConfig = new LLMConfig(config.model(), config.maid(), ChatType.MULTI_FUNCTION_CALL, context);
-                client.chat(messages, keepConfig, this);
-            } else {
-                ToolResponse toolResponse = tool.onCall(finalResult, maid);
-                messages.add(LLMMessage.toolChat(maid, toolResponse.message(), toolCall.getId()));
-
-                // 普通的回调，只需要塞入路由 skill 即可
-                LLMConfig.SkillContext context = new LLMConfig.SkillContext(UseSkillSkill.ID);
-                LLMConfig keepConfig = new LLMConfig(config.model(), config.maid(), ChatType.MULTI_FUNCTION_CALL, context);
-                client.chat(messages, keepConfig, this);
-            }
+            // 执行 tool，获得返回结果
+            ToolResponse toolResponse = tool.onCall(finalResult, maid);
+            // 依据返回结果，构建工具的 tool_result 消息
+            messages.add(LLMMessage.toolChat(maid, toolResponse.message(), toolCall.getId()));
+            List<LLMMessage> nextMessages = this.buildNextMessages(messages, config, toolResponse);
+            // 依据返回结果，构建 LLM 配置信息
+            LLMConfig keepConfig = this.buildNextConfig(config, toolResponse);
+            // 再次和 LLM 通信
+            client.chat(nextMessages, keepConfig, this);
         });
     }
 
@@ -263,8 +233,51 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
             chatManager.addToolHistory(invalidMsg, toolCall.getId());
             messages.add(LLMMessage.toolChat(maid, invalidMsg, toolCall.getId()));
 
-            LLMConfig keepConfig = new LLMConfig(config.model(), config.maid(), ChatType.MULTI_FUNCTION_CALL);
+            // 错误时，需要把上一次对话的 skill 原样返回，让 LLM 重新调用一次
+            LLMConfig.SkillContext context = config.skillContext();
+            if (context == null) {
+                // 如果此时没有 skill 上下文，会退回主路由
+                context = new LLMConfig.SkillContext(UseSkillSkill.ID);
+            }
+
+            LLMConfig keepConfig = new LLMConfig(config.model(), config.maid(), ChatType.MULTI_FUNCTION_CALL, context);
             client.chat(messages, keepConfig, this);
         });
+    }
+
+    /**
+     * 依据返回结果，构建 LLM 配置信息
+     */
+    private LLMConfig buildNextConfig(LLMConfig current, ToolResponse response) {
+        ToolResponse.Continuation continuation = response.continuation();
+
+        // 如果工具本身就有自己的次级路由，那么调用工具本身的路由
+        if (continuation != null) {
+            return new LLMConfig(current.model(), current.temperature(), current.maid(),
+                    continuation.chatType(), continuation.skillContext());
+        }
+
+        // 否则，会退回主路由
+        LLMConfig.SkillContext context = new LLMConfig.SkillContext(UseSkillSkill.ID);
+        return new LLMConfig(current.model(), current.maid(), ChatType.MULTI_FUNCTION_CALL, context);
+    }
+
+    private List<LLMMessage> buildNextMessages(List<LLMMessage> currentMessages, LLMConfig config, ToolResponse response) {
+        ToolResponse.Continuation cont = response.continuation();
+
+        // 此时仅处理知识库类型的 chat
+        if (cont == null || cont.chatType() != ChatType.GROUNDED_ANSWER_PASS || cont.groundedAnswerContext() == null) {
+            return currentMessages;
+        }
+
+        // 知识库类型的回答，需要重新构建一个全新的，空白的聊天上下文
+        // 然后把对应的知识和玩家的提问发送给 LLM 进行总结回答
+        LLMConfig.GroundedAnswerContext context = cont.groundedAnswerContext();
+        String chatLanguage = maid.getAiChatManager().getChatLanguage();
+        String systemPrompt = GroundedAnswerPrompts.systemPrompt(maid, chatLanguage);
+        String userPrompt = GroundedAnswerPrompts.buildUserPrompt(context.question(), context.resolvedKnowledge());
+
+        // 最终构建一个干净的上下文
+        return Lists.newArrayList(LLMMessage.systemChat(maid, systemPrompt), LLMMessage.userChat(maid, userPrompt));
     }
 }

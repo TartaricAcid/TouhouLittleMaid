@@ -141,6 +141,13 @@ public abstract class MaidAIChatData extends MaidAIChatSerializable {
         return AIConfig.TTS_LANGUAGE.get();
     }
 
+    public String getChatLanguage() {
+        if (StringUtils.isNotBlank(chatLanguage)) {
+            return chatLanguage;
+        }
+        return "en_us";
+    }
+
     public CappedQueue<LLMMessage> getHistory() {
         return history;
     }

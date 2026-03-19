@@ -47,20 +47,23 @@ public class UseSkillTool implements ITool<String> {
 
     @Override
     public ToolResponse onCall(String result, EntityMaid maid) {
-        List<ISkill> availableSkills = getAvailableSkills(maid);
-        boolean valid = availableSkills.stream().anyMatch(skill -> skill.id().equals(result));
-        if (!valid) {
+        ISkill selected = SkillRegister.getSkill(result);
+
+        if (selected == null) {
+            List<ISkill> availableSkills = getAvailableSkills(maid);
             List<String> values = availableSkills.stream().map(ISkill::id).toList();
             String text = "unknown skill_id '%s'".formatted(result);
-            return ToolErrorHelper.invalidParamToolResponse(SKILL_ID_PARAMETER_ID, values, text);
+            return ToolResponse.invalidParam(SKILL_ID_PARAMETER_ID, values, text, UseSkillSkill.ID);
         }
-        return new ToolResponse(result);
+
+        return ToolResponse.continueWithSkill(selected.body(maid), selected.id());
     }
 
     private static String buildDescription(EntityMaid maid, List<ISkill> availableSkills) {
         String skillList = availableSkills.stream()
                 .map(skill -> "- %s: %s".formatted(skill.id(), skill.summary(maid)))
                 .collect(Collectors.joining("\n"));
+
         return """
                 skill_id (string, required): The id of the follow-up skill to load.
                 Choose one of the currently available skill ids below.

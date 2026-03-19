@@ -10,6 +10,7 @@ public class MaidAIChatSerializable {
     public String ttsSite = "";
     public String ttsModel = "";
     public String ttsLanguage = "";
+    public String chatLanguage = "";
 
     public String ownerName = "";
     public String customSetting = "";
@@ -20,6 +21,7 @@ public class MaidAIChatSerializable {
         ttsSite = buf.readUtf();
         ttsModel = buf.readUtf();
         ttsLanguage = buf.readUtf();
+        chatLanguage = buf.readUtf();
         ownerName = buf.readUtf();
         customSetting = buf.readUtf();
     }
@@ -30,6 +32,7 @@ public class MaidAIChatSerializable {
         buf.writeUtf(ttsSite);
         buf.writeUtf(ttsModel);
         buf.writeUtf(ttsLanguage);
+        buf.writeUtf(chatLanguage);
         buf.writeUtf(ownerName);
         buf.writeUtf(customSetting);
     }
@@ -40,6 +43,7 @@ public class MaidAIChatSerializable {
         ttsSite = data.ttsSite;
         ttsModel = data.ttsModel;
         ttsLanguage = data.ttsLanguage;
+        chatLanguage = data.chatLanguage;
         ownerName = data.ownerName;
         customSetting = data.customSetting;
     }
@@ -52,6 +56,7 @@ public class MaidAIChatSerializable {
             ttsSite = data.getString("TTSSiteName");
             ttsModel = data.getString("TTSModel");
             ttsLanguage = data.getString("TTSLanguage");
+            chatLanguage = data.getString("ChatLanguage");
             ownerName = data.getString("OwnerName");
             customSetting = data.getString("CustomSetting");
         }
@@ -66,6 +71,7 @@ public class MaidAIChatSerializable {
             data.putString("TTSSiteName", ttsSite);
             data.putString("TTSModel", ttsModel);
             data.putString("TTSLanguage", ttsLanguage);
+            data.putString("ChatLanguage", chatLanguage);
             data.putString("OwnerName", ownerName);
             data.putString("CustomSetting", customSetting);
         }

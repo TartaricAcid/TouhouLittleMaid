@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.implement;
 
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.implement.MaidActionSkill;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.ITool;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.response.ToolResponse;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.ObjectParameter;
@@ -80,7 +81,7 @@ public class SwitchWorkTaskTool implements ITool<SwitchWorkTaskTool.Result> {
                     .map(ResourceLocation::toString)
                     .toList();
             String text = "unknown task_id '%s'".formatted(taskId);
-            return ToolErrorHelper.invalidParamToolResponse(TASK_ID_PARAMETER_ID, values, text);
+            return ToolResponse.invalidParam(TASK_ID_PARAMETER_ID, values, text, MaidActionSkill.ID);
         }
 
         IMaidTask task = optional.get();

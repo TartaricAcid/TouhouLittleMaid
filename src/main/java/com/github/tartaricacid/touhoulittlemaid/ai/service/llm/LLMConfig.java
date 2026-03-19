@@ -34,4 +34,13 @@ public record LLMConfig(String model, double temperature, EntityMaid maid,
      */
     public record SkillContext(String skillId) {
     }
+
+    /**
+     * 仅用于知识库的参数
+     *
+     * @param question          玩家聊天记录
+     * @param resolvedKnowledge 知识库的内容
+     */
+    public record GroundedAnswerContext(String question, String resolvedKnowledge) {
+    }
 }

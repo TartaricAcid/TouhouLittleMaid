@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.implement;
 
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.ContextCategory;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.MaidContextRegister;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.implement.MaidContextSkill;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.ITool;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.response.ToolResponse;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.ObjectParameter;
@@ -51,14 +52,14 @@ public class QueryMaidContextTool implements ITool<String> {
 
         if (!MaidContextRegister.hasCategory(result)) {
             String text = "unknown maid context category '%s'".formatted(result);
-            return ToolErrorHelper.invalidParamToolResponse(CATEGORY_ID, values, text);
+            return ToolResponse.invalidParam(CATEGORY_ID, values, text, MaidContextSkill.ID);
         }
 
         List<String> lines = MaidContextRegister.getContextDescriptionsByCategory(result, maid);
         if (lines.isEmpty()) {
             // 上面其实已经检查一次了，一般不会触发此处
             String text = "category '%s' currently has no available context".formatted(result);
-            return ToolErrorHelper.invalidParamToolResponse(CATEGORY_ID, values, text);
+            return ToolResponse.invalidParam(CATEGORY_ID, values, text, MaidContextSkill.ID);
         }
 
         String summary = MaidContextRegister.getCategorySummary(result);

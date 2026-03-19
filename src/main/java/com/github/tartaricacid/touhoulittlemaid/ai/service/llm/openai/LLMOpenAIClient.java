@@ -128,8 +128,8 @@ public class LLMOpenAIClient implements LLMClient {
     protected void addRootSkills(EntityMaid maid, LLMConfig config, ChatCompletion chatCompletion) {
         ChatType chatType = config.chatType();
 
-        // 首次生成角色设定时、生成历史摘要时不需要添加
-        if (chatType == ChatType.AUTO_GEN_SETTING || chatType == ChatType.HISTORY_SUMMARY) {
+        // 部分类型不需要添加
+        if (ChatType.notNeedSkill(chatType)) {
             return;
         }
 

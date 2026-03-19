@@ -77,6 +77,7 @@ public final class MaidAIChatManager extends MaidAIChatData {
     }
 
     private void tryToChat(String message, ChatClientInfo clientInfo, @NotNull LLMSite site) {
+        this.chatLanguage = clientInfo.language();
         LLMClient chatClient = site.client();
         List<LLMMessage> chatCompletion = getChatCompletion(this, clientInfo.language());
         if (chatCompletion.isEmpty()) {
