@@ -399,6 +399,8 @@
   "gui.touhou_little_maid.button.maid_ai_chat_config.history_chat.title": "Maid History AI Record",
   "gui.touhou_little_maid.button.maid_ai_chat_config.history_chat.summary_title": "Compressed Summary",
   "gui.touhou_little_maid.button.maid_ai_chat_config.history_chat.summary_empty": "No compressed summary yet",
+  "gui.touhou_little_maid.button.maid_ai_chat_config.history_chat.tool_call.generic": "Called a tool",
+  "gui.touhou_little_maid.button.maid_ai_chat_config.history_chat.tool_call.named": "Called tool: %s",
   "gui.touhou_little_maid.button.maid_ai_chat_config.history_chat.days": "%dd ago",
   "gui.touhou_little_maid.button.maid_ai_chat_config.history_chat.hours": "%dh ago",
   "gui.touhou_little_maid.button.maid_ai_chat_config.history_chat.just_now": "just",

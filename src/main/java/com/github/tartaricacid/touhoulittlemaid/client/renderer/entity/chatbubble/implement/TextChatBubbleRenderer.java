@@ -15,8 +15,8 @@ import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public class TextChatBubbleRenderer implements IChatBubbleRenderer {
-    private static final int MAX_WIDTH = 240;
-    private static final int MAX_CENTER_WIDTH = 480;
+    private static final int MAX_WIDTH = 120;
+    private static final int MAX_CENTER_WIDTH = 200;
 
     private final List<FormattedCharSequence> split;
     private final Font font;

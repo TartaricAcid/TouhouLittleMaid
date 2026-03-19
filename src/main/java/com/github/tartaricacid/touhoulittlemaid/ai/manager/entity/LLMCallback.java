@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.ai.manager.entity;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.ISkill;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.SkillRegister;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.implement.UseSkillSkill;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.ITool;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.ToolRegister;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.implement.UseSkillTool;
@@ -233,7 +234,10 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
             } else {
                 ToolResponse toolResponse = tool.onCall(finalResult, maid);
                 messages.add(LLMMessage.toolChat(maid, toolResponse.message(), toolCall.getId()));
-                LLMConfig keepConfig = new LLMConfig(config.model(), config.maid(), ChatType.MULTI_FUNCTION_CALL);
+
+                // 普通的回调，只需要塞入路由 skill 即可
+                LLMConfig.SkillContext context = new LLMConfig.SkillContext(UseSkillSkill.ID);
+                LLMConfig keepConfig = new LLMConfig(config.model(), config.maid(), ChatType.MULTI_FUNCTION_CALL, context);
                 client.chat(messages, keepConfig, this);
             }
         });

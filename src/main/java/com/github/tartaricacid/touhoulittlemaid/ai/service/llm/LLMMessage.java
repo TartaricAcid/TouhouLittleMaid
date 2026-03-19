@@ -29,6 +29,10 @@ public record LLMMessage(Role role, String message, long gameTime, @Nullable Lis
     ).apply(instance, (role, message, gameTime, toolCalls, toolCallId)
             -> new LLMMessage(role, message.orElse(StringUtils.EMPTY), gameTime, toolCalls.orElse(null), toolCallId.orElse(null))));
 
+    public LLMMessage(Role role, String message, long gameTime) {
+        this(role, message, gameTime, null, null);
+    }
+
     public static LLMMessage userChat(EntityMaid maid, String message) {
         long time = maid.level.getGameTime();
         return new LLMMessage(Role.USER, message, time, null, null);
