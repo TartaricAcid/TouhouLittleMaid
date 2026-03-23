@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.init;
 
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.backpack.*;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.config.MaidAIChatConfigContainerGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.config.MaidConfigContainerGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.task.AttackTaskConfigGui;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.task.DefaultMaidTaskConfigGui;
@@ -10,7 +9,6 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.item.WirelessIOContai
 import com.github.tartaricacid.touhoulittlemaid.compat.curios.CuriosCompat;
 import com.github.tartaricacid.touhoulittlemaid.init.registry.CompatRegistry;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.backpack.*;
-import com.github.tartaricacid.touhoulittlemaid.inventory.container.config.MaidAIChatConfigContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.config.MaidConfigContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.other.PicnicBasketContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.other.WirelessIOContainer;
@@ -38,7 +36,6 @@ public final class InitContainerGui {
 
         evt.enqueueWork(() -> MenuScreens.register(BaubleContainer.TYPE, BaubleContainerScreen::new));
         evt.enqueueWork(() -> MenuScreens.register(MaidConfigContainer.TYPE, MaidConfigContainerGui::new));
-        evt.enqueueWork(() -> MenuScreens.register(MaidAIChatConfigContainer.TYPE, MaidAIChatConfigContainerGui::new));
         evt.enqueueWork(() -> MenuScreens.register(WirelessIOContainer.TYPE, WirelessIOContainerGui::new));
         evt.enqueueWork(() -> MenuScreens.register(PicnicBasketContainer.TYPE, PicnicBasketContainerScreen::new));
 

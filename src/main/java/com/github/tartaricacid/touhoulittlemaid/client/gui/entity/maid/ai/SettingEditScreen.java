@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.MaidAIChatMana
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.CharacterSetting;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.SettingReader;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.bean.MetaData;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.FlatColorButton;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -14,7 +15,6 @@ import com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.MultiLineEditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -30,6 +30,7 @@ import org.lwjgl.PointerBuffer;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.util.tinyfd.TinyFileDialogs;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
@@ -43,14 +44,21 @@ import static com.github.tartaricacid.touhoulittlemaid.util.EntityCacheUtil.clea
 public class SettingEditScreen extends Screen {
     private static final long MAX_TIP_TIME = 2000;
 
+    private final @Nullable Screen parent;
     private final EntityMaid maid;
     private final MaidAIChatManager manager;
+
     private EditBox ownerName;
     private MultiLineEditBox customSetting;
     private long tipTimestamp = -1;
 
     public SettingEditScreen(EntityMaid maid) {
+        this(null, maid);
+    }
+
+    public SettingEditScreen(@Nullable Screen parent, EntityMaid maid) {
         super(Component.literal("Setting Edit Screen"));
+        this.parent = parent;
         this.maid = maid;
         this.manager = maid.getAiChatManager();
     }
@@ -77,19 +85,23 @@ public class SettingEditScreen extends Screen {
         this.customSetting.setValueListener(s -> manager.customSetting = s);
 
         MutableComponent export = Component.translatable("gui.touhou_little_maid.button.maid_ai_chat_config.edit_custom_setting.export");
-        this.addRenderableWidget(Button.builder(export, b -> exportSetting(export))
-                .bounds(posX + 265, ownerName.getY(), 128, 20).build());
+        this.addRenderableWidget(new FlatColorButton(posX + 265, ownerName.getY(), 128, 20, export,
+                b -> exportSetting(export)));
 
-        this.addRenderableWidget(Button.builder(Component.translatable("selectWorld.edit.save"), b -> {
+        this.addRenderableWidget(new FlatColorButton(posX + 265, customSetting.getY(), 128, 20,
+                Component.translatable("selectWorld.edit.save"), b -> {
             this.saveConfig();
             this.tipTimestamp = System.currentTimeMillis();
-        }).bounds(posX + 265, customSetting.getY(), 128, 20).build());
+        }));
 
         MutableComponent saveQuit = Component.translatable("gui.touhou_little_maid.button.maid_ai_chat_config.edit_custom_setting.save_and_quit");
-        this.addRenderableWidget(Button.builder(saveQuit, b -> {
+        this.addRenderableWidget(new FlatColorButton(posX + 265, customSetting.getY() + 25, 128, 20, saveQuit, b -> {
             this.saveConfig();
-            Minecraft.getInstance().setScreen(null);
-        }).bounds(posX + 265, customSetting.getY() + 25, 128, 20).build());
+            this.onClose();
+        }));
+
+        this.addRenderableWidget(new FlatColorButton(posX + 265, customSetting.getY() + 50, 128, 20,
+                Component.translatable("gui.back"), b -> this.onClose()));
     }
 
     private void exportSetting(MutableComponent export) {
@@ -208,12 +220,20 @@ public class SettingEditScreen extends Screen {
         float renderItemScale = modelInfo.getRenderItemScale();
         InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, posX,
                 posY + (int) (45 * renderItemScale),
-                (int) (45 * renderItemScale), 25, 0, maid);
+                (int) (35 * renderItemScale), 25, 0, maid);
     }
 
     @Override
     public boolean isPauseScreen() {
         return false;
+    }
+
+    @Override
+    public void onClose() {
+        if (this.minecraft != null) {
+            Screen screen = Objects.requireNonNullElse(this.parent, new AIChatScreen(this.maid));
+            this.minecraft.setScreen(screen);
+        }
     }
 
     private void saveConfig() {

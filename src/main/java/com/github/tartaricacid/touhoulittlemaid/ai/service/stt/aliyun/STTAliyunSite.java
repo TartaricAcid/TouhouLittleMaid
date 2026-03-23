@@ -133,7 +133,7 @@ public class STTAliyunSite implements STTSite {
         return UrlTool.buildQueryString(this.getBaseUrl(), params);
     }
 
-    private String getBaseUrl() {
+    public String getBaseUrl() {
         return url;
     }
 
@@ -146,7 +146,7 @@ public class STTAliyunSite implements STTSite {
         return secretKey;
     }
 
-    private String getAppKey() {
+    public String getAppKey() {
         return appKey;
     }
 

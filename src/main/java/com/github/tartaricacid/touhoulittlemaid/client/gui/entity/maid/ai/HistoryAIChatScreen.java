@@ -4,17 +4,15 @@ import com.github.tartaricacid.touhoulittlemaid.ai.manager.response.ResponseChat
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMMessage;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.Role;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai.response.ToolCall;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.FlatColorButton;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.HistoryChatWidget;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.TabIndex;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.ClearMaidAIDataMessage;
-import com.github.tartaricacid.touhoulittlemaid.network.message.OpenMaidGuiMessage;
 import com.google.common.collect.Lists;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
@@ -30,6 +28,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Deque;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class HistoryAIChatScreen extends Screen {
@@ -51,6 +50,7 @@ public class HistoryAIChatScreen extends Screen {
     private static final int SUMMARY_MIN_HEIGHT = 48;
 
     private final EntityMaid maid;
+    private final @Nullable Screen parent;
     private final ResourceLocation playerSkin;
     private final List<LLMMessage> history = Lists.newArrayList();
     private final List<Renderable> historyWidgets = Lists.newArrayList();
@@ -72,7 +72,12 @@ public class HistoryAIChatScreen extends Screen {
     private @Nullable List<String> linesCache = null;
 
     public HistoryAIChatScreen(EntityMaid maid) {
+        this(null, maid);
+    }
+
+    public HistoryAIChatScreen(@Nullable Screen parent, EntityMaid maid) {
         super(Component.literal("Maid History AI Chat Screen"));
+        this.parent = parent;
         this.maid = maid;
         this.playerSkin = this.getPlayerSkin();
         this.summaryText = maid.getAiChatManager().getCompressedSummary();
@@ -122,7 +127,7 @@ public class HistoryAIChatScreen extends Screen {
     private void addButtons() {
         MutableComponent clearName = Component.translatable("gui.touhou_little_maid.button.maid_ai_chat_config.clear_history_chat");
         MutableComponent clearMsg = Component.translatable("gui.touhou_little_maid.button.maid_ai_chat_config.clear_history_chat.confirm");
-        this.addRenderableWidget(Button.builder(clearName, button -> {
+        this.addRenderableWidget(new FlatColorButton(this.getRightColumnLeft(), this.getClearButtonY(), SUMMARY_WIDTH, BUTTON_HEIGHT, clearName, button -> {
             this.getMinecraft().setScreen(new ConfirmScreen(yes -> {
                 if (yes) {
                     this.history.clear();
@@ -134,11 +139,9 @@ public class HistoryAIChatScreen extends Screen {
                 }
                 this.getMinecraft().setScreen(this);
             }, clearName, clearMsg));
-        }).bounds(this.getRightColumnLeft(), this.getClearButtonY(), SUMMARY_WIDTH, BUTTON_HEIGHT).build());
-        this.addRenderableWidget(Button.builder(CommonComponents.GUI_BACK, button -> {
-            OpenMaidGuiMessage message = new OpenMaidGuiMessage(this.maid.getId(), TabIndex.MAID_AI_CHAT_CONFIG);
-            NetworkHandler.CHANNEL.sendToServer(message);
-        }).bounds(this.getRightColumnLeft(), this.getBackButtonY(), SUMMARY_WIDTH, BUTTON_HEIGHT).build());
+        }));
+        this.addRenderableWidget(new FlatColorButton(this.getRightColumnLeft(), this.getBackButtonY(), SUMMARY_WIDTH, BUTTON_HEIGHT,
+                CommonComponents.GUI_BACK, button -> this.onClose()));
     }
 
     private int addHistoryWidget(LLMMessage message, int posX) {
@@ -212,6 +215,14 @@ public class HistoryAIChatScreen extends Screen {
     @Override
     public boolean isPauseScreen() {
         return false;
+    }
+
+    @Override
+    public void onClose() {
+        if (this.minecraft != null) {
+            Screen screen = Objects.requireNonNullElse(this.parent, new AIChatScreen(this.maid));
+            this.minecraft.setScreen(screen);
+        }
     }
 
     private void transformMessage() {
