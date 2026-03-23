@@ -20,8 +20,6 @@
   "ai.touhou_little_maid.chat.stt.no_microphone": "Nessun dispositivo microfono trovato!",
   "ai.touhou_little_maid.chat.disable": "La funzione di chat AI è stata disabilitata",
   "ai.touhou_little_maid.chat.input.tip": "Inserisci testo e premi il tasto Invio per inviare",
-  "ai.touhou_little_maid.chat.config.tip": "Fare clic per aprire la configurazione dei siti AI",
-  "ai.touhou_little_maid.chat.config.tip.under_construction": "La funzione di configurazione nel sito di gioco non è ancora completa, quindi per favore attendere un aggiornamento successivo",
   "ai.touhou_little_maid.chat.chat_bubble_waiting": "**La domestica sta pensando...**",
   "ai.touhou_little_maid.chat.need_player2_install": "[TLM] Dovrai installare ed eseguire il software Player2 per utilizzare la chat AI",
   "ai.touhou_little_maid.chat.player2_error": "Il software Player2 è in esecuzione anomala, codice HTTP: %d",
