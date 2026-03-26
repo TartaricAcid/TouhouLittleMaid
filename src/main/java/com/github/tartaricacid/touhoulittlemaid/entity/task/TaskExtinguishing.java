@@ -72,6 +72,6 @@ public class TaskExtinguishing implements IMaidTask {
 
     @Override
     public String getMaidActionSummary() {
-        return "Extinguish nearby fire with a fire extinguisher.";
+        return "Extinguish nearby fires using a fire extinguisher.";
     }
 }

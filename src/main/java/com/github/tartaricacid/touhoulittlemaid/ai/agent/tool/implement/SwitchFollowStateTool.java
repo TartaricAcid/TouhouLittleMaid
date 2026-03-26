@@ -14,11 +14,11 @@ import net.minecraft.core.BlockPos;
 public class SwitchFollowStateTool implements ITool<SwitchFollowStateTool.Result> {
     public static final String TOOL_ID = "switch_maid_follow_state";
 
-    private static final String TOOL_DESC = "Set the maid's follow state.";
+    private static final String TOOL_DESC = "Set the maid's follow or stay/home state. Use when the player asks the maid to follow, stay, wait, stop, or go home.";
 
     private static final String FOLLOW_PARAM_ID = "follow";
     private static final String FOLLOW_PARAM_DESC = """
-            follow (boolean, required): true = follow the owner; false = stay here and enable home mode at the current position.
+            follow (boolean, required): true = follow the owner (e.g. "follow me", "come with me"); false = stop following and stay at the current position in home mode (e.g. "stay here", "don't move", "wait here", "stop following").
             """;
 
     private static final String SUCCESS_FOLLOW_ON = "Follow mode enabled";

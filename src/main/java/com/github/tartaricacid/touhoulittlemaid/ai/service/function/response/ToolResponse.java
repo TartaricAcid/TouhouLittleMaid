@@ -48,7 +48,7 @@ public record ToolResponse(String message, @Nullable Continuation continuation) 
                                             String reason, String skillId) {
         String joined = String.join(", ", values);
         String correctUsage = "%s: choose one of [%s]".formatted(parameterName, joined);
-        String text = "Invalid tool parameters: %s, Correct parameters: %s".formatted(reason, correctUsage);
+        String text = "Invalid parameter: %s. Correct usage: %s".formatted(reason, correctUsage);
         return new ToolResponse(text, new Continuation(ChatType.MULTI_FUNCTION_CALL,
                 new SkillContext(skillId), null));
     }

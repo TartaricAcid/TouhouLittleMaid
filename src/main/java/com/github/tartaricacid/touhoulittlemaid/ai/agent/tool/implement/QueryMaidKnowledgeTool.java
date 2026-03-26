@@ -34,7 +34,7 @@ public class QueryMaidKnowledgeTool implements ITool<String> {
 
     @Override
     public String summary(EntityMaid maid) {
-        return "Load one custom knowledge entry by knowledge_id and answer from its full grounded content.";
+        return "Load a knowledge entry by id to answer from its grounded content.";
     }
 
     @Override

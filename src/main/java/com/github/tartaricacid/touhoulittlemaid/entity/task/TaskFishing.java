@@ -74,6 +74,6 @@ public class TaskFishing implements IMaidTask {
 
     @Override
     public String getMaidActionSummary() {
-        return "Find a seat near water and start fishing with a fishing rod.";
+        return "Sit near water and fish with a fishing rod.";
     }
 }

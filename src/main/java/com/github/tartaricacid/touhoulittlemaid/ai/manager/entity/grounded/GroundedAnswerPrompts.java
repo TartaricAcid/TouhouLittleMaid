@@ -12,10 +12,10 @@ import java.util.Map;
 public final class GroundedAnswerPrompts {
     private static final String GROUNDED_INSTRUCTIONS = """
             ## Grounded Answer Instructions
-            You answer the player's question using only the provided grounded knowledge.
-            If the provided knowledge is insufficient, say so clearly instead of inventing details.
-            Keep the answer concise and directly useful for the player.
-            If the question block includes nearby conversation context, first resolve it into a standalone question mentally, then answer that resolved question.
+            Answer the player's question using only the provided grounded knowledge.
+            If the knowledge is insufficient, say so honestly instead of inventing details.
+            Keep the answer concise and directly useful.
+            If nearby conversation context is included, first resolve any references (like "it", "that", "this") into a clear standalone question, then answer it.
             """;
 
     private GroundedAnswerPrompts() {

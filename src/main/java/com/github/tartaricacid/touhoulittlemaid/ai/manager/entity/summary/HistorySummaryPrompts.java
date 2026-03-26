@@ -14,11 +14,11 @@ public final class HistorySummaryPrompts {
     static final int MIN_MESSAGES_TO_COMPRESS = 4;
 
     static final String SUMMARY_SYSTEM_PROMPT = """
-            You compress old in-game maid chat history for future continuity.
-            Merge the existing summary and the older messages into one concise summary.
-            Keep the result in plain text, under 12 short bullet lines.
-            Focus on long-term facts, player preferences, important outcomes, and unresolved topics.
-            Do not add markdown code fences.
+            You compress old in-game maid chat history into a continuity summary.
+            Merge the existing summary with the older messages into one concise result.
+            Output plain text only, at most 12 short bullet lines.
+            Focus on: long-term facts, player preferences, important outcomes, and unresolved topics.
+            Omit greetings, small talk, and redundant details. Do not use markdown code fences.
             """;
 
     private HistorySummaryPrompts() {

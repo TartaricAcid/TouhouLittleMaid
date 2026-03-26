@@ -29,7 +29,7 @@ public class SwitchWorkTaskTool implements ITool<SwitchWorkTaskTool.Result> {
             """;
 
     private static final String SUCCESS = "Successfully switched to %s task";
-    private static final String NO_CHANGE = "You're currently in %s task and don't need to switch";
+    private static final String NO_CHANGE = "Already on %s task, no switch needed";
     private static final String MISSING_REQUIRED = "Successfully switched to %s task, but required item is missing";
     private static final String PARTIAL = "Successfully switched to %s task, but some requirements are missing";
 

@@ -29,20 +29,27 @@ public class MaidActionSkill implements ISkill {
 
     @Override
     public String summary(EntityMaid maid) {
-        return "This skill is maid control. Use it when the player wants you to change maid state or behavior, such as follow mode or work or combat task.";
+        return "Use to change the maid's mode: follow/home, work tasks, or combat style.";
     }
 
     @Override
     public String body(EntityMaid maid) {
         String taskList = TaskManager.getTaskIndex().stream()
-                .map(task -> "  - %s: %s".formatted(task.getUid().getPath(), task.getMaidActionSummary()))
+                .map(task -> "  - %s: %s".formatted(task.getUid().toString(), task.getMaidActionSummary()))
                 .collect(Collectors.joining("\n"));
         return ("""
                 ## Maid Control (maid_action)
-                - Use this skill only when the player wants you to change your behavior or mode.
-                - For follow or stay-home requests, use the follow-state tool.
-                - For work or combat role changes, use the work-task tool.
-                - If the player wants a change but the target mode is unclear, ask one concise follow-up question before calling a tool.
+                - Use when the player wants to change the maid's current mode or task.
+                - Act on both direct commands and implied intent. If the request clearly maps to a mode, switch directly instead of just explaining.
+                - follow-state tool: movement and position changes. Trigger examples: "follow me", "stay here", "don't move", "wait here", "stop following", "guard this place", "go home", or any instruction about where the maid should stay or whether to follow. Use follow=true for following, follow=false for staying/home mode.
+                - work-task tool: task/role changes. Common implied mappings:
+                  - The player says they are hungry, need food, ask for milk, or need healing food -> feed task
+                  - Play a game / board-game blocks -> board_games task
+                  - Combat help -> pick the task matching the weapon style (melee, bow, crossbow, trident, gun, danmaku)
+                  - Resource or utility work -> switch to the matching task if clearly identified
+                - The task list may include entries from other mods. Match them by reading their summary descriptions.
+                - Only choose from the registered tasks below. Do not invent task ids. Use the full namespaced id (e.g. namespace:task_name) when calling the tool.
+                - If one task clearly fits, call the tool immediately. If ambiguous, ask one follow-up question.
                 - Available registered tasks:
                 %s
                 """).formatted(taskList);

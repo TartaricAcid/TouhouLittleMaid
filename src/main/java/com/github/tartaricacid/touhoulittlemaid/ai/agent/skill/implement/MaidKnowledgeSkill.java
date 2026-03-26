@@ -18,10 +18,7 @@ public class MaidKnowledgeSkill implements ISkill {
 
     @Override
     public String summary(EntityMaid maid) {
-        return """
-                Use when the user's question might be answered by the knowledge base.
-                Check available entries below before answering from general knowledge.
-                """;
+        return "Use when the player's question may be answered by the built-in knowledge base.";
     }
 
     @Override
@@ -31,12 +28,11 @@ public class MaidKnowledgeSkill implements ISkill {
                 .collect(Collectors.joining("\n"));
         return """
                 ## Maid Knowledge
-                - The player is asking a question. The answer may exist in one of the knowledge entries listed below.
-                - Review the available entries and pick the one most relevant to the player's question.
-                - Call the knowledge tool with that entry's id to load its full content.
-                - Then use the loaded content to give the player a grounded, accurate answer.
-                - If none of the entries seem relevant, do not use this skill.
-                
+                - The player is asking a question that may be answered by a knowledge entry below.
+                - Pick the most relevant entry and call the knowledge tool with its id to load the full content.
+                - Use the loaded content to give a grounded, accurate answer.
+                - If no entry seems relevant, reply normally without this skill.
+
                 Available knowledge:
                 %s
                 """.formatted(knowledgeList);

@@ -18,7 +18,7 @@ public class MaidContextSkill implements ISkill {
 
     @Override
     public String summary(EntityMaid maid) {
-        return "Use when you need live game context, then choose one context category to load on demand.";
+        return "Use when you need live game context (items, health, world state). Load one category at a time.";
     }
 
     @Override

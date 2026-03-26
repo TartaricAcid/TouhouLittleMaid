@@ -153,8 +153,8 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
         ITool tool = ToolRegister.getTool(name);
         if (tool == null) {
             String invalidMsg = """
-                    Invalid tool call: tool '%s' is not registered.
-                    Choose an existing tool id and try again.
+                    Unknown tool '%s'. It is not registered.
+                    Use only tool ids from the provided schema and retry.
                     """.formatted(name);
             this.onToolErrorCall(messages, config, client, toolCall, invalidMsg);
             return;
@@ -166,8 +166,8 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
             Optional optional = tool.codec().parse(JsonOps.INSTANCE, parse).resultOrPartial(TouhouLittleMaid.LOGGER::error);
             if (optional.isEmpty()) {
                 String invalidMsg = """
-                        Invalid tool call arguments for '%s': failed to parse arguments '%s'.
-                        Please check the parameter schema and try again.
+                        Failed to parse arguments for tool '%s': '%s'.
+                        Check the parameter schema and retry with valid JSON.
                         """.formatted(name, arguments);
                 this.onToolErrorCall(messages, config, client, toolCall, invalidMsg);
                 return;
@@ -175,8 +175,8 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
             result = optional.get();
         } catch (Exception exception) {
             String invalidMsg = """
-                    Invalid tool call arguments for '%s': %s, JSON is: %s.
-                    Please fix the arguments and try again.
+                    Invalid arguments for tool '%s': %s (raw JSON: %s).
+                    Fix the arguments according to the schema and retry.
                     """.formatted(name, exception.getLocalizedMessage(), arguments);
             this.onToolErrorCall(messages, config, client, toolCall, invalidMsg);
             return;

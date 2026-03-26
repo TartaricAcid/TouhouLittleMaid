@@ -25,7 +25,7 @@ public class UseSkillSkill implements ISkill {
 
     @Override
     public String summary(EntityMaid maid) {
-        return "Root routing skill that lists all currently available follow-up skills and lets the model select one by id.";
+        return "Browse and select from available follow-up skills by id.";
     }
 
     @Override
