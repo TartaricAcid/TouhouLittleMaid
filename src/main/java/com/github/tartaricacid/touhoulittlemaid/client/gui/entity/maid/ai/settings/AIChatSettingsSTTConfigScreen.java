@@ -30,8 +30,8 @@ public class AIChatSettingsSTTConfigScreen extends AIChatSettingsHubScreen {
     private MaidChatDistanceSlider distanceSlider;
     private EditBox proxyInput;
 
-    public AIChatSettingsSTTConfigScreen(@Nullable Screen parent, SharedState state) {
-        super(parent, state);
+    public AIChatSettingsSTTConfigScreen(@Nullable Screen parent, SharedState state, boolean insufficientPermissions) {
+        super(parent, state, insufficientPermissions);
     }
 
     @Override

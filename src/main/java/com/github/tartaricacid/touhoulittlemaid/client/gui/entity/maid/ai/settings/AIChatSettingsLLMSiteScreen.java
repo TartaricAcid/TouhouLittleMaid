@@ -26,17 +26,18 @@ import java.util.Map;
 public class AIChatSettingsLLMSiteScreen extends AIChatSettingsHubScreen {
     private static final int ROW_HEIGHT = 24;
 
-    public AIChatSettingsLLMSiteScreen(@Nullable Screen parent, SharedState state) {
-        super(parent, state);
+    public AIChatSettingsLLMSiteScreen(@Nullable Screen parent, SharedState state, boolean insufficientPermissions) {
+        super(parent, state, insufficientPermissions);
         this.listScrollOffset = state.llmListScrollOffset;
     }
 
     public AIChatSettingsLLMSiteScreen(
             @Nullable Screen parent,
             Map<String, LLMSite> llmSites,
-            Map<String, TTSSite> ttsSites
+            Map<String, TTSSite> ttsSites,
+            boolean insufficientPermissions
     ) {
-        super(parent, llmSites, ttsSites);
+        super(parent, llmSites, ttsSites, insufficientPermissions);
     }
 
     @Override
@@ -64,7 +65,9 @@ public class AIChatSettingsLLMSiteScreen extends AIChatSettingsHubScreen {
             this.addRenderableWidget(new LLMSiteButton(sites.get(i), this, contentX, rowY, contentWidth));
         }
 
-        this.addLLMCreateButtons(contentX, contentWidth, createButtonY);
+        if (!this.insufficientPermissions) {
+            this.addLLMCreateButtons(contentX, contentWidth, createButtonY);
+        }
     }
 
     private void addLLMCreateButtons(int btnX, int btnWidth, int btnY) {
@@ -88,6 +91,7 @@ public class AIChatSettingsLLMSiteScreen extends AIChatSettingsHubScreen {
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.render(graphics, mouseX, mouseY, partialTick);
         this.renderListScrollbar(graphics, this.state.llmSites.size(), this.getVisibleListCount(ROW_HEIGHT));
+        this.renderInsufficientPermissions(graphics);
     }
 
     public void openLLMSiteEditor(String siteId) {

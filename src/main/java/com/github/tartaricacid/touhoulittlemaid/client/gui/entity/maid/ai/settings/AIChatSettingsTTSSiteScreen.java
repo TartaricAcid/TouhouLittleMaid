@@ -17,8 +17,8 @@ import java.util.List;
 public class AIChatSettingsTTSSiteScreen extends AIChatSettingsHubScreen {
     private static final int ROW_HEIGHT = 24;
 
-    public AIChatSettingsTTSSiteScreen(@Nullable Screen parent, SharedState state) {
-        super(parent, state);
+    public AIChatSettingsTTSSiteScreen(@Nullable Screen parent, SharedState state, boolean insufficientPermissions) {
+        super(parent, state, insufficientPermissions);
         this.listScrollOffset = state.ttsListScrollOffset;
     }
 
@@ -56,6 +56,7 @@ public class AIChatSettingsTTSSiteScreen extends AIChatSettingsHubScreen {
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.render(graphics, mouseX, mouseY, partialTick);
         this.renderListScrollbar(graphics, this.state.ttsSites.size(), this.getVisibleListCount(ROW_HEIGHT));
+        this.renderInsufficientPermissions(graphics);
     }
 
     public void openTTSSiteEditor(String siteId) {

@@ -7,10 +7,10 @@ import com.github.tartaricacid.touhoulittlemaid.ai.service.Site;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSSite;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.AIChatScreen;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.settings.AIChatSettingsHubScreen;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.settings.AIChatSettingsLLMSiteScreen;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.editor.LLMSiteEditorScreen;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.editor.TTSSiteEditorScreen;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.settings.AIChatSettingsHubScreen;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.settings.AIChatSettingsLLMSiteScreen;
 import com.google.common.collect.Maps;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
@@ -24,7 +24,8 @@ import java.util.function.Supplier;
 
 public record SyncAISitesMessage(
         Map<String, LLMSite> llmSites,
-        Map<String, TTSSite> ttsSites
+        Map<String, TTSSite> ttsSites,
+        boolean insufficientPermissions
 ) {
     public static void encode(SyncAISitesMessage message, FriendlyByteBuf buf) {
         buf.writeInt(message.llmSites.size());
@@ -40,6 +41,8 @@ public record SyncAISitesMessage(
             buf.writeUtf(value.getApiType());
             writeSiteToNetwork(value, buf);
         });
+
+        buf.writeBoolean(message.insufficientPermissions);
     }
 
     public static SyncAISitesMessage decode(FriendlyByteBuf buf) {
@@ -65,7 +68,9 @@ public record SyncAISitesMessage(
             }
         }
 
-        return new SyncAISitesMessage(llmSites, ttsSites);
+        boolean insufficientPermissions = buf.readBoolean();
+
+        return new SyncAISitesMessage(llmSites, ttsSites, insufficientPermissions);
     }
 
     public static void handle(SyncAISitesMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
@@ -86,9 +91,9 @@ public record SyncAISitesMessage(
         } else if (mc.screen instanceof AIChatSettingsHubScreen hubScreen) {
             hubScreen.reopenSelf(message.llmSites, message.ttsSites);
         } else if (mc.screen instanceof AIChatScreen screen) {
-            mc.setScreen(new AIChatSettingsLLMSiteScreen(screen, message.llmSites, message.ttsSites));
+            mc.setScreen(new AIChatSettingsLLMSiteScreen(screen, message.llmSites, message.ttsSites, message.insufficientPermissions));
         } else {
-            mc.setScreen(AIChatSettingsHubScreen.openDefault(null, message.llmSites, message.ttsSites));
+            mc.setScreen(AIChatSettingsHubScreen.openDefault(null, message.llmSites, message.ttsSites, message.insufficientPermissions));
         }
     }
 

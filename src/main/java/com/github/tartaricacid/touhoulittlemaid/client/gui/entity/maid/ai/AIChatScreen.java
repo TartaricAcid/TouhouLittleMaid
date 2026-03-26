@@ -699,6 +699,10 @@ public class AIChatScreen extends Screen {
         return output;
     }
 
+    public EntityMaid getMaid() {
+        return maid;
+    }
+
     /**
      * 下拉框的范围信息，包括位置、宽度和可见条目数量；
      * <p>

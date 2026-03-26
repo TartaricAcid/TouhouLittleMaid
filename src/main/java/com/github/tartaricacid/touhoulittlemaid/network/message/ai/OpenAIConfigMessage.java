@@ -39,11 +39,11 @@ public class OpenAIConfigMessage {
 
         // 是否发送站点数据
         if (GameModeUtil.canEditSite(player)) {
-            SyncAISitesMessage msg = new SyncAISitesMessage(AvailableSites.LLM_SITES, AvailableSites.TTS_SITES);
+            SyncAISitesMessage msg = new SyncAISitesMessage(AvailableSites.LLM_SITES, AvailableSites.TTS_SITES, false);
             NetworkHandler.sendToClientPlayer(msg, player);
         } else {
             // 否则发送一个空的站点数据
-            SyncAISitesMessage msg = new SyncAISitesMessage(Collections.emptyMap(), Collections.emptyMap());
+            SyncAISitesMessage msg = new SyncAISitesMessage(Collections.emptyMap(), Collections.emptyMap(), true);
             NetworkHandler.sendToClientPlayer(msg, player);
         }
     }

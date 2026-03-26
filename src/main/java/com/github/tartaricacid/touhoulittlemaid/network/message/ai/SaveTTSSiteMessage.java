@@ -77,7 +77,7 @@ public record SaveTTSSiteMessage(Action action, @Nullable String siteId, boolean
         }
 
         AvailableSites.saveSites();
-        NetworkHandler.sendToClientPlayer(new SyncAISitesMessage(AvailableSites.LLM_SITES, AvailableSites.TTS_SITES), player);
+        NetworkHandler.sendToClientPlayer(new SyncAISitesMessage(AvailableSites.LLM_SITES, AvailableSites.TTS_SITES, true), player);
     }
 
     private static boolean updateSite(@Nullable TTSSite site) {

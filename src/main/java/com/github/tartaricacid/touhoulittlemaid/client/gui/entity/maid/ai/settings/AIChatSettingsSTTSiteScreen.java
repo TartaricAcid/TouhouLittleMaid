@@ -21,8 +21,8 @@ import java.util.Objects;
 public class AIChatSettingsSTTSiteScreen extends AIChatSettingsHubScreen {
     private static final int ROW_HEIGHT = 24;
 
-    public AIChatSettingsSTTSiteScreen(Screen parent, SharedState state) {
-        super(parent, state);
+    public AIChatSettingsSTTSiteScreen(Screen parent, SharedState state, boolean insufficientPermissions) {
+        super(parent, state, insufficientPermissions);
         this.listScrollOffset = state.sttSiteListScrollOffset;
     }
 

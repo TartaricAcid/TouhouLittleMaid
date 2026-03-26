@@ -90,7 +90,7 @@ public record SaveLLMSiteMessage(Action action, @Nullable String siteId, boolean
         }
 
         AvailableSites.saveSites();
-        NetworkHandler.sendToClientPlayer(new SyncAISitesMessage(AvailableSites.LLM_SITES, AvailableSites.TTS_SITES), player);
+        NetworkHandler.sendToClientPlayer(new SyncAISitesMessage(AvailableSites.LLM_SITES, AvailableSites.TTS_SITES, false), player);
     }
 
     private static boolean createSite(@Nullable LLMSite site) {

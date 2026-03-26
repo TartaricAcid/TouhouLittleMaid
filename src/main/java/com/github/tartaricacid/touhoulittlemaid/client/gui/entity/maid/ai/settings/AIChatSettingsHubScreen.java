@@ -5,15 +5,19 @@ import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.STTApiType;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.STTSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSSite;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.AIChatScreen;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.ai.SideButton;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.ai.SideGroupWidget;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.FlatColorButton;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.AIConfig;
+import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
+import com.github.tartaricacid.touhoulittlemaid.network.message.ai.OpenMaidAIChatMessage;
 import com.github.tartaricacid.touhoulittlemaid.util.Rectangle;
 import com.google.common.collect.Maps;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -34,6 +38,7 @@ public abstract class AIChatSettingsHubScreen extends Screen {
     protected static final int CONTENT_WIDTH = BASE_WIDTH - CONTENT_X_OFFSET;
 
     protected final @Nullable Screen parent;
+    protected final boolean insufficientPermissions;
     /**
      * 标签页切换时保持各子页面的临时状态（滚动位置、输入值等）
      */
@@ -48,14 +53,16 @@ public abstract class AIChatSettingsHubScreen extends Screen {
     protected Rectangle listArea;
     protected int listScrollOffset;
 
-    protected AIChatSettingsHubScreen(@Nullable Screen parent, SharedState state) {
+    protected AIChatSettingsHubScreen(@Nullable Screen parent, SharedState state, boolean insufficientPermissions) {
         super(Component.literal("AI Chat Settings Hub"));
         this.parent = parent;
         this.state = state;
+        this.insufficientPermissions = insufficientPermissions;
     }
 
-    protected AIChatSettingsHubScreen(@Nullable Screen parent, Map<String, LLMSite> llmSites, Map<String, TTSSite> ttsSites) {
-        this(parent, SharedState.create(llmSites, ttsSites));
+    protected AIChatSettingsHubScreen(@Nullable Screen parent, Map<String, LLMSite> llmSites,
+                                      Map<String, TTSSite> ttsSites, boolean insufficientPermissions) {
+        this(parent, SharedState.create(llmSites, ttsSites), insufficientPermissions);
     }
 
     @Override
@@ -129,6 +136,16 @@ public abstract class AIChatSettingsHubScreen extends Screen {
     }
 
     /**
+     * 在 LLM 和 TTS 站点权限不足时绘制提示文本
+     */
+    protected void renderInsufficientPermissions(GuiGraphics graphics) {
+        if (this.insufficientPermissions) {
+            MutableComponent text = Component.translatable("ai.touhou_little_maid.chat.settings.hub.insufficient_permissions");
+            graphics.drawWordWrap(font, text, getContentX() + 20, getContentY() + 20, getContentWidth() - 60, 0xFFFF5555);
+        }
+    }
+
+    /**
      * 处理列表区域的滚轮滚动，返回 true 表示已消费事件
      */
     protected boolean handleListScroll(double mouseX, double mouseY, double delta, int totalCount, int visibleCount) {
@@ -159,10 +176,10 @@ public abstract class AIChatSettingsHubScreen extends Screen {
 
     protected AIChatSettingsHubScreen createTabScreen(Type type) {
         return switch (type) {
-            case LLM_SITE -> new AIChatSettingsLLMSiteScreen(this.parent, this.state);
-            case TTS_SITE -> new AIChatSettingsTTSSiteScreen(this.parent, this.state);
-            case STT_CONFIG -> new AIChatSettingsSTTConfigScreen(this.parent, this.state);
-            case STT_SITE -> new AIChatSettingsSTTSiteScreen(this.parent, this.state);
+            case LLM_SITE -> new AIChatSettingsLLMSiteScreen(this.parent, this.state, this.insufficientPermissions);
+            case TTS_SITE -> new AIChatSettingsTTSSiteScreen(this.parent, this.state, this.insufficientPermissions);
+            case STT_CONFIG -> new AIChatSettingsSTTConfigScreen(this.parent, this.state, this.insufficientPermissions);
+            case STT_SITE -> new AIChatSettingsSTTSiteScreen(this.parent, this.state, this.insufficientPermissions);
         };
     }
 
@@ -218,8 +235,10 @@ public abstract class AIChatSettingsHubScreen extends Screen {
 
     @Override
     public void onClose() {
-        if (this.minecraft != null) {
-            this.minecraft.setScreen(this.parent);
+        if (this.parent instanceof AIChatScreen chatScreen) {
+            NetworkHandler.CHANNEL.sendToServer(new OpenMaidAIChatMessage(chatScreen.getMaid()));
+        } else {
+            this.getMinecraft().setScreen(null);
         }
     }
 
@@ -231,9 +250,10 @@ public abstract class AIChatSettingsHubScreen extends Screen {
     public static AIChatSettingsHubScreen openDefault(
             @Nullable Screen parent,
             Map<String, LLMSite> llmSites,
-            Map<String, TTSSite> ttsSites
+            Map<String, TTSSite> ttsSites,
+            boolean insufficientPermissions
     ) {
-        return new AIChatSettingsLLMSiteScreen(parent, llmSites, ttsSites);
+        return new AIChatSettingsLLMSiteScreen(parent, llmSites, ttsSites, insufficientPermissions);
     }
 
     public static final class SharedState {
