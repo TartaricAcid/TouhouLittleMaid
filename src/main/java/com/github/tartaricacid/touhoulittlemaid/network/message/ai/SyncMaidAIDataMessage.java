@@ -1,13 +1,17 @@
 package com.github.tartaricacid.touhoulittlemaid.network.message.ai;
 
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.site.ClientAvailableSitesSync;
+import com.github.tartaricacid.touhoulittlemaid.capability.ChatTokensCapability;
+import com.github.tartaricacid.touhoulittlemaid.capability.ChatTokensCapabilityProvider;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.AIChatScreen;
+import com.github.tartaricacid.touhoulittlemaid.config.subconfig.AIConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -16,22 +20,29 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-public record SyncMaidAIDataMessage(int entityId, CompoundTag configData) {
-    public SyncMaidAIDataMessage(EntityMaid maid) {
-        this(maid.getId(), maid.getAiChatManager().writeToTag(new CompoundTag()));
+public record SyncMaidAIDataMessage(int entityId, CompoundTag configData, int currentTokens, int maxTokens) {
+    public SyncMaidAIDataMessage(EntityMaid maid, ServerPlayer player) {
+        this(maid.getId(), maid.getAiChatManager().writeToTag(new CompoundTag()),
+                player.getCapability(ChatTokensCapabilityProvider.CHAT_TOKENS_CAP).map(ChatTokensCapability::getCount).orElse(0),
+                AIConfig.MAX_TOKENS_PER_PLAYER.get()
+        );
     }
 
     public static void encode(SyncMaidAIDataMessage message, FriendlyByteBuf buf) {
         buf.writeVarInt(message.entityId);
         buf.writeNbt(message.configData);
         ClientAvailableSitesSync.writeToNetwork(buf);
+        buf.writeVarInt(message.currentTokens);
+        buf.writeVarInt(message.maxTokens);
     }
 
     public static SyncMaidAIDataMessage decode(FriendlyByteBuf buf) {
         int entityId = buf.readVarInt();
         CompoundTag configData = Objects.requireNonNullElse(buf.readNbt(), new CompoundTag());
         ClientAvailableSitesSync.readFromNetwork(buf);
-        return new SyncMaidAIDataMessage(entityId, configData);
+        int currentTokens = buf.readVarInt();
+        int maxTokens = buf.readVarInt();
+        return new SyncMaidAIDataMessage(entityId, configData, currentTokens, maxTokens);
     }
 
     public static void handle(SyncMaidAIDataMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
@@ -52,7 +63,10 @@ public record SyncMaidAIDataMessage(int entityId, CompoundTag configData) {
         Entity entity = level.getEntity(message.entityId);
         if (entity instanceof EntityMaid maid) {
             maid.getAiChatManager().readFromTag(message.configData);
-            Minecraft.getInstance().setScreen(new AIChatScreen(maid));
+
+            AIChatScreen chatScreen = new AIChatScreen(maid);
+            chatScreen.updateTokens(message.currentTokens, message.maxTokens);
+            Minecraft.getInstance().setScreen(chatScreen);
         }
     }
 }

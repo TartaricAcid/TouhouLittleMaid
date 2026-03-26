@@ -38,8 +38,8 @@ public record OpenMaidAIChatMessage(int entityId) {
         }
         Entity entity = player.level.getEntity(message.entityId);
         if (entity instanceof EntityMaid maid) {
-            // 发送同步信息
-            NetworkHandler.sendToClientPlayer(new SyncMaidAIDataMessage(maid), player);
+            // 发送同步信息（包含 Token 用量）
+            NetworkHandler.sendToClientPlayer(new SyncMaidAIDataMessage(maid, player), player);
         }
     }
 }

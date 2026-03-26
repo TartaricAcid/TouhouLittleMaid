@@ -35,6 +35,9 @@ public class AIChatScreen extends Screen {
     private final EntityMaid maid;
     private final MaidAIChatManager manager;
 
+    private int currentTokens = 0;
+    private int maxTokens = Integer.MAX_VALUE;
+
     private EditBox input;
 
     private FlatColorButton configButton;
@@ -61,6 +64,11 @@ public class AIChatScreen extends Screen {
         super(Component.literal("Maid AI Chat Screen"));
         this.maid = maid;
         this.manager = maid.getAiChatManager();
+    }
+
+    public void updateTokens(int current, int max) {
+        this.currentTokens = current;
+        this.maxTokens = max;
     }
 
     @Override
@@ -349,6 +357,7 @@ public class AIChatScreen extends Screen {
         }
 
         this.renderSelectionSummaries(graphics);
+        this.renderTokenUsage(graphics);
         super.render(graphics, mouseX, mouseY, partialTicks);
 
         if (this.openPopup != null) {
@@ -397,6 +406,43 @@ public class AIChatScreen extends Screen {
         graphics.drawString(this.font, trimmedRight, rightX, scaledY, 0xFFADADAD);
 
         graphics.pose().popPose();
+    }
+
+    private void renderTokenUsage(GuiGraphics graphics) {
+        int left = this.input.getX() - 6;
+        int right = this.input.getX() + this.input.getInnerWidth() + 6;
+        int tokenY = this.input.getY() - 14;
+        float scale = 0.5f;
+
+        String currentStr = formatTokenCount(this.currentTokens);
+        String text;
+        if (this.maxTokens == Integer.MAX_VALUE) {
+            text = "Token: %s / ∞".formatted(currentStr);
+        } else {
+            String maxStr = formatTokenCount(this.maxTokens);
+            double percent = this.maxTokens > 0 ? (double) this.currentTokens / this.maxTokens * 100 : 0;
+            text = "Token: %s / %s (%.1f%%)".formatted(currentStr, maxStr, percent);
+        }
+
+        graphics.pose().pushPose();
+        graphics.pose().scale(scale, scale, 1.0f);
+        int scaledX = Math.round((left + right) / 2.0f / scale) - this.font.width(text) / 2;
+        int scaledY = Math.round(tokenY / scale);
+        graphics.drawString(this.font, text, scaledX, scaledY, 0xFFADADAD, false);
+        graphics.pose().popPose();
+    }
+
+    private static String formatTokenCount(int count) {
+        if (count < 1000) {
+            return String.valueOf(count);
+        }
+        if (count < 1_000_000) {
+            return "%.1fK".formatted(count / 1000.0);
+        }
+        if (count < 1_000_000_000) {
+            return "%.1fM".formatted(count / 1_000_000.0);
+        }
+        return "%.1fG".formatted(count / 1_000_000_000.0);
     }
 
     private String trimToWidth(String text, int maxWidth) {
