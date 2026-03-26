@@ -9,7 +9,6 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkEvent;
@@ -51,14 +50,9 @@ public record SyncMaidAIDataMessage(int entityId, CompoundTag configData) {
             return;
         }
         Entity entity = level.getEntity(message.entityId);
-        if (entity instanceof EntityMaid maid && stillValid(player, maid)) {
+        if (entity instanceof EntityMaid maid) {
             maid.getAiChatManager().readFromTag(message.configData);
             Minecraft.getInstance().setScreen(new AIChatScreen(maid));
         }
-    }
-
-    // TODO：服务端鉴权
-    private static boolean stillValid(Player playerIn, EntityMaid maid) {
-        return maid.isOwnedBy(playerIn) && !maid.isSleeping() && maid.isAlive() && maid.distanceTo(playerIn) < 5.0F;
     }
 }

@@ -42,29 +42,34 @@ public class STTSiteButton extends Button {
         this.renderString(graphics, Minecraft.getInstance().font, 0xF3EFE0);
 
         RenderSystem.enableBlend();
-        // 启用按钮
-        graphics.blit(MISC, this.getX() + 4, this.getY() + 4, this.site.enabled() ? 16 : 0, 0, 16, 16);
-        // 编辑按钮
-        graphics.blit(MISC, this.getX() + 28, this.getY() + 4, 16, 16, 16, 16);
-        // 站点图标
-        graphics.blit(this.site.icon(), this.getX() + 52, this.getY() + 4, 0, 0, 16, 16, 16, 16);
+        // 站点图标（左侧）
+        graphics.blit(this.site.icon(), this.getX() + 6, this.getY() + 4, 0, 0, 16, 16, 16, 16);
+        // 启用按钮（右侧）
+        graphics.blit(MISC, this.getX() + this.width - 46, this.getY() + 4, this.site.enabled() ? 16 : 0, 0, 16, 16);
+        // 编辑按钮（最右侧）
+        graphics.blit(MISC, this.getX() + this.width - 24, this.getY() + 4, 16, 16, 16, 16);
         RenderSystem.disableBlend();
     }
 
     @Override
     public void onClick(double mouseX, double mouseY) {
-        if (this.getX() <= mouseX && mouseX <= this.getX() + 24) {
+        int right = this.getX() + this.width;
+
+        // 启用按钮
+        if (right - 50 <= mouseX && mouseX <= right - 26) {
             this.parent.toggleSTTSite(this.site.id());
             return;
         }
-        if (this.getX() + 24 <= mouseX && mouseX <= this.getX() + 48) {
+
+        // 编辑按钮
+        if (right - 28 <= mouseX && mouseX <= right - 4) {
             this.parent.openSTTSiteEditor(this.site.id());
         }
     }
 
     @Override
     public void renderString(GuiGraphics graphics, Font font, int color) {
-        graphics.drawString(font, this.getMessage(), this.getX() + 74, this.getY() + (this.height - 8) / 2,
-                this.site.enabled() ? 0xFFF3EFE0 : 0xFF333333, false);
+        graphics.drawString(font, this.getMessage(), this.getX() + 28, this.getY() + (this.height - 8) / 2,
+                this.site.enabled() ? 0xFF999999 : 0xFF444444, false);
     }
 }

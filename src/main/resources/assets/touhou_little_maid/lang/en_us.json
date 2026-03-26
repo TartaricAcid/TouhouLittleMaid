@@ -42,6 +42,7 @@
   "ai.touhou_little_maid.chat.settings.hub.enabled": "Enabled",
   "ai.touhou_little_maid.chat.settings.hub.disabled": "Disabled",
   "ai.touhou_little_maid.chat.settings.hub.type": "Type: %s",
+  "ai.touhou_little_maid.chat.settings.hub.delete_confirm": "Are you sure you want to delete site \"%s\"?",
   "ai.touhou_little_maid.chat.settings.hub.create": "New %s Site",
   "ai.touhou_little_maid.chat.settings.hub.add_model": "Add Model",
   "ai.touhou_little_maid.chat.settings.hub.site_id": "Site ID",

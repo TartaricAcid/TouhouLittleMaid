@@ -15,7 +15,7 @@ import java.util.List;
  * TTS 站点列表标签页，支持编辑站点配置
  */
 public class AIChatSettingsTTSSiteScreen extends AIChatSettingsHubScreen {
-    private static final int ROW_HEIGHT = 24;
+    private static final int ROW_HEIGHT = 26;
 
     public AIChatSettingsTTSSiteScreen(@Nullable Screen parent, SharedState state, boolean insufficientPermissions) {
         super(parent, state, insufficientPermissions);

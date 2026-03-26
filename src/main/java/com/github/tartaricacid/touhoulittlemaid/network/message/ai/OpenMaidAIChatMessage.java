@@ -5,7 +5,6 @@ import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.network.NetworkEvent;
 
 import javax.annotation.Nullable;
@@ -38,14 +37,9 @@ public record OpenMaidAIChatMessage(int entityId) {
             return;
         }
         Entity entity = player.level.getEntity(message.entityId);
-        if (entity instanceof EntityMaid maid && stillValid(player, maid)) {
+        if (entity instanceof EntityMaid maid) {
             // 发送同步信息
             NetworkHandler.sendToClientPlayer(new SyncMaidAIDataMessage(maid), player);
         }
-    }
-
-    // TODO：服务端鉴权
-    private static boolean stillValid(Player playerIn, EntityMaid maid) {
-        return maid.isOwnedBy(playerIn) && !maid.isSleeping() && maid.isAlive() && maid.distanceTo(playerIn) < 5.0F;
     }
 }

@@ -24,7 +24,7 @@ import java.util.Map;
  * LLM 站点列表标签页，支持新建 / 编辑 / 删除站点
  */
 public class AIChatSettingsLLMSiteScreen extends AIChatSettingsHubScreen {
-    private static final int ROW_HEIGHT = 24;
+    private static final int ROW_HEIGHT = 26;
 
     public AIChatSettingsLLMSiteScreen(@Nullable Screen parent, SharedState state, boolean insufficientPermissions) {
         super(parent, state, insufficientPermissions);

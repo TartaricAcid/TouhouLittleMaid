@@ -19,7 +19,7 @@ import java.util.Objects;
  * STT 站点列表标签页，站点数据保存在本地（非服务端同步）
  */
 public class AIChatSettingsSTTSiteScreen extends AIChatSettingsHubScreen {
-    private static final int ROW_HEIGHT = 24;
+    private static final int ROW_HEIGHT = 26;
 
     public AIChatSettingsSTTSiteScreen(Screen parent, SharedState state, boolean insufficientPermissions) {
         super(parent, state, insufficientPermissions);

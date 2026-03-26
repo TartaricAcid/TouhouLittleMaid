@@ -10,6 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -45,39 +46,49 @@ public class LLMSiteButton extends Button {
         this.renderString(graphics, Minecraft.getInstance().font, 0xF3EFE0);
 
         RenderSystem.enableBlend();
-        // 启用按钮
-        graphics.blit(MISC, this.getX() + 4, this.getY() + 4, this.site.enabled() ? 16 : 0, 0, 16, 16);
-        // 编辑按钮
-        graphics.blit(MISC, this.getX() + 28, this.getY() + 4, 16, 16, 16, 16);
-        // 站点图标
-        graphics.blit(this.site.icon(), this.getX() + 44 + 8, this.getY() + 4, 0, 0, 16, 16, 16, 16);
-        // 删除按钮
-        graphics.blit(MISC, this.getX() + this.width - 20, this.getY() + 4, 0, 16, 16, 16);
+        // 站点图标（左侧）
+        graphics.blit(this.site.icon(), this.getX() + 6, this.getY() + 4, 0, 0, 16, 16, 16, 16);
+        // 启用按钮（右侧）
+        graphics.blit(MISC, this.getX() + this.width - 68, this.getY() + 4, this.site.enabled() ? 16 : 0, 0, 16, 16);
+        // 编辑按钮（右侧）
+        graphics.blit(MISC, this.getX() + this.width - 46, this.getY() + 4, 16, 16, 16, 16);
+        // 删除按钮（最右侧）
+        graphics.blit(MISC, this.getX() + this.width - 24, this.getY() + 4, 0, 16, 16, 16);
         RenderSystem.disableBlend();
     }
 
     @Override
     public void onClick(double mouseX, double mouseY) {
-        // 如果是启用按钮范围
-        if (this.getX() <= mouseX && mouseX <= this.getX() + 24) {
+        int right = this.getX() + this.width;
+
+        // 启用按钮
+        if (right - 72 <= mouseX && mouseX <= right - 48) {
             NetworkHandler.CHANNEL.sendToServer(SaveLLMSiteMessage.toggle(site.id(), !site.enabled()));
             return;
         }
 
-        if (this.getX() + 24 <= mouseX && mouseX <= this.getX() + 44) {
+        // 编辑按钮
+        if (right - 50 <= mouseX && mouseX <= right - 26) {
             parent.openLLMSiteEditor(site.id());
             return;
         }
 
-        // 如果是删除按钮
-        if (this.getX() + this.width - 20 <= mouseX && mouseX <= this.getX() + this.width) {
-            NetworkHandler.CHANNEL.sendToServer(SaveLLMSiteMessage.delete(site.id()));
+        // 删除按钮（二次确认）
+        if (right - 28 <= mouseX && mouseX <= right - 4) {
+            Minecraft mc = Minecraft.getInstance();
+            Component title = Component.translatable("ai.touhou_little_maid.chat.settings.hub.delete_confirm", this.getMessage());
+            mc.setScreen(new ConfirmScreen(yes -> {
+                if (yes) {
+                    NetworkHandler.CHANNEL.sendToServer(SaveLLMSiteMessage.delete(site.id()));
+                }
+                mc.setScreen(parent);
+            }, title, Component.empty()));
         }
     }
 
     @Override
     public void renderString(GuiGraphics graphics, Font font, int color) {
-        graphics.drawString(font, this.getMessage(), this.getX() + 44 + 30, this.getY() + (this.height - 8) / 2,
-                this.site.enabled() ? 0xFFF3EFE0 : 0xFF333333, false);
+        graphics.drawString(font, this.getMessage(), this.getX() + 28, this.getY() + (this.height - 8) / 2,
+                this.site.enabled() ? 0xFF999999 : 0xFF444444, false);
     }
 }
