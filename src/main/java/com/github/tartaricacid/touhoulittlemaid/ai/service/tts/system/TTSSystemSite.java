@@ -60,6 +60,7 @@ public final class TTSSystemSite implements TTSSite {
         return enabled;
     }
 
+    @Override
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }

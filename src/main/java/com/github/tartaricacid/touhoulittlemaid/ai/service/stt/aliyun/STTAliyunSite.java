@@ -72,6 +72,7 @@ public class STTAliyunSite implements STTSite {
         return new STTAliyunClient(STT_HTTP_CLIENT, this);
     }
 
+    @Override
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
@@ -150,27 +151,27 @@ public class STTAliyunSite implements STTSite {
         return appKey;
     }
 
-    private String getVocabularyId() {
+    public String getVocabularyId() {
         return vocabularyId;
     }
 
-    private String getCustomizationId() {
+    public String getCustomizationId() {
         return customizationId;
     }
 
-    private boolean isEnablePunctuationPrediction() {
+    public boolean isEnablePunctuationPrediction() {
         return enablePunctuationPrediction;
     }
 
-    private boolean isEnableInverseTextNormalization() {
+    public boolean isEnableInverseTextNormalization() {
         return enableInverseTextNormalization;
     }
 
-    private boolean isEnableVoiceDetection() {
+    public boolean isEnableVoiceDetection() {
         return enableVoiceDetection;
     }
 
-    private boolean isDisfluency() {
+    public boolean isDisfluency() {
         return disfluency;
     }
 

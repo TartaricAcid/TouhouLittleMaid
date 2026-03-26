@@ -1,9 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.service;
 
-import com.google.common.annotations.Beta;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.Util;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.Comparator;
@@ -57,6 +55,11 @@ public interface Site {
     boolean enabled();
 
     /**
+     * 设置站点是否启用
+     */
+    void setEnabled(boolean enabled);
+
+    /**
      * 该站点的图标
      * 用于游戏内配置站点功能的显示
      */
@@ -98,18 +101,9 @@ public interface Site {
     }
 
     /**
-     * 站点名称，不一定会被使用
+     * 站点名称语言文件 key
      */
-    @Beta
-    default Component getName() {
-        return Component.translatable("ai.touhou_little_maid.chat.site.%s.name".formatted(id()));
-    }
-
-    /**
-     * 站点描述，不一定会被使用
-     */
-    @Beta
-    default Component getDesc() {
-        return Component.translatable("ai.touhou_little_maid.chat.site.%s.desc".formatted(id()));
+    default String getNameKey() {
+        return "ai.touhou_little_maid.chat.site.%s.name".formatted(id());
     }
 }

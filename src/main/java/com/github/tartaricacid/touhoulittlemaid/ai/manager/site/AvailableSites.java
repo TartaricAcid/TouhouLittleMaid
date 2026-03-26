@@ -82,7 +82,12 @@ public class AvailableSites {
         saveLLMSites(root);
         saveTTSSites(root);
         saveSTTSites(root);
-        refreshRuntimeState();
+        SettingReader.reloadSettings();
+    }
+
+    public static void saveSTTSitesOnly() {
+        Path root = createFolder();
+        saveSTTSites(root);
     }
 
     private static void saveLLMSites(Path root) {
@@ -113,11 +118,6 @@ public class AvailableSites {
         } catch (Exception e) {
             TouhouLittleMaid.LOGGER.error("Failed to save STT sites", e);
         }
-    }
-
-    private static void refreshRuntimeState() {
-        ClientAvailableSitesSync.init(LLM_SITES, TTS_SITES);
-        SettingReader.reloadSettings();
     }
 
     public static LLMSite getLLMSite(String siteName) {

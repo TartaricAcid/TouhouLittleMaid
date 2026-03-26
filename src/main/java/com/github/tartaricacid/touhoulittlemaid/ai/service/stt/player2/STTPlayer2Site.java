@@ -63,6 +63,7 @@ public class STTPlayer2Site implements STTSite {
         return this.enabled;
     }
 
+    @Override
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }

@@ -71,6 +71,7 @@ public class TTSPlayer2Site implements TTSSite, SupportModelSelect {
         return this.models;
     }
 
+    @Override
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }

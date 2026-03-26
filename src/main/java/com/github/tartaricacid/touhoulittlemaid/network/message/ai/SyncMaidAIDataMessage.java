@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.network.message;
+package com.github.tartaricacid.touhoulittlemaid.network.message.ai;
 
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.site.ClientAvailableSitesSync;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.AIChatScreen;
@@ -57,6 +57,7 @@ public record SyncMaidAIDataMessage(int entityId, CompoundTag configData) {
         }
     }
 
+    // TODO：服务端鉴权
     private static boolean stillValid(Player playerIn, EntityMaid maid) {
         return maid.isOwnedBy(playerIn) && !maid.isSleeping() && maid.isAlive() && maid.distanceTo(playerIn) < 5.0F;
     }

@@ -73,6 +73,7 @@ public class STTSiliconflowSite implements STTSite {
         return new STTSiliconflowClient(STT_HTTP_CLIENT, this);
     }
 
+    @Override
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }

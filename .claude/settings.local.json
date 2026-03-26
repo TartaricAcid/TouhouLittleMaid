@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash",
+      "Read",
+      "Write",
+      "Edit",
+      "Glob",
+      "Grep",
+      "Task",
+      "WebFetch",
+      "WebSearch",
+      "NotebookEdit",
+      "BashOutput",
+      "KillShell",
+      "TodoWrite",
+      "SlashCommand",
+      "Skill"
+    ],
+    "ask": [
+      "Bash(git push: *)"
+    ]
+  },
+  "defaultMode": "bypassPermissions",
+  "model": "opus",
+  "enabledPlugins": {
+    "jdtls-lsp@claude-plugins-official": true
+  },
+  "alwaysThinkingEnabled": true,
+  "skipDangerousModePermissionPrompt": true
+}

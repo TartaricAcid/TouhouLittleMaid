@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.network;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.network.message.*;
+import com.github.tartaricacid.touhoulittlemaid.network.message.ai.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -136,6 +137,14 @@ public final class NetworkHandler {
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
         CHANNEL.registerMessage(54, SyncMaidAIDataMessage.class, SyncMaidAIDataMessage::encode, SyncMaidAIDataMessage::decode, SyncMaidAIDataMessage::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        CHANNEL.registerMessage(55, OpenAIConfigMessage.class, OpenAIConfigMessage::encode, OpenAIConfigMessage::decode, OpenAIConfigMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        CHANNEL.registerMessage(56, SyncAISitesMessage.class, SyncAISitesMessage::encode, SyncAISitesMessage::decode, SyncAISitesMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        CHANNEL.registerMessage(57, SaveLLMSiteMessage.class, SaveLLMSiteMessage::encode, SaveLLMSiteMessage::decode, SaveLLMSiteMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        CHANNEL.registerMessage(58, SaveTTSSiteMessage.class, SaveTTSSiteMessage::encode, SaveTTSSiteMessage::decode, SaveTTSSiteMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
     }
 
     public static void sendToClientPlayer(Object message, Player player) {

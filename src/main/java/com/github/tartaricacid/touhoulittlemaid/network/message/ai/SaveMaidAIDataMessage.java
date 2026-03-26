@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.network.message;
+package com.github.tartaricacid.touhoulittlemaid.network.message.ai;
 
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.MaidAIChatSerializable;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;

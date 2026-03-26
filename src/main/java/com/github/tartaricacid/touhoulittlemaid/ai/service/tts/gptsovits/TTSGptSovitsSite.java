@@ -109,6 +109,7 @@ public final class TTSGptSovitsSite implements TTSSite {
         this.url = url;
     }
 
+    @Override
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }

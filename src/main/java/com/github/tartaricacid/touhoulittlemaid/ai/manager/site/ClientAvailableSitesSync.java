@@ -15,7 +15,7 @@ public class ClientAvailableSitesSync {
     private static volatile Map<String, Map<String, String>> CLIENT_LLM_SITES = Collections.emptyMap();
     private static volatile Map<String, Map<String, String>> CLIENT_TTS_SITES = Collections.emptyMap();
 
-    public static void init(Map<String, LLMSite> llmSites, Map<String, TTSSite> ttsSites) {
+    private static void init(Map<String, LLMSite> llmSites, Map<String, TTSSite> ttsSites) {
         Map<String, Map<String, String>> llmSnapshot = Maps.newLinkedHashMap();
         for (String key : llmSites.keySet()) {
             LLMSite llmSite = llmSites.get(key);
@@ -68,6 +68,10 @@ public class ClientAvailableSitesSync {
     }
 
     public static void writeToNetwork(FriendlyByteBuf buf) {
+        // 先从站点数据里读取
+        init(AvailableSites.LLM_SITES, AvailableSites.TTS_SITES);
+
+        // 然后再发送到客户端
         buf.writeInt(CLIENT_LLM_SITES.size());
         for (var entry : CLIENT_LLM_SITES.entrySet()) {
             buf.writeUtf(entry.getKey());

@@ -9,8 +9,9 @@ import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.SupportLanguage;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.FlatColorButton;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.SaveMaidAIDataMessage;
 import com.github.tartaricacid.touhoulittlemaid.network.message.SendUserChatMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.ai.OpenAIConfigMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.ai.SaveMaidAIDataMessage;
 import com.google.common.collect.Lists;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -113,8 +114,7 @@ public class AIChatScreen extends Screen {
 
         leftX = leftX + size + gap;
         this.configButton = this.addRenderableWidget(new FlatColorButton(leftX, y, size, size, Component.literal("⚙"), b -> {
-            AIChatSettingsHubScreen hubScreen = new AIChatSettingsHubScreen(this, this.maid);
-            this.getMinecraft().setScreen(hubScreen);
+            OpenAIConfigMessage.sendToServer();
         }).setTooltips("ai.touhou_little_maid.chat.button.config.tip"));
     }
 
