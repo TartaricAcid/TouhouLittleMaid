@@ -11,20 +11,13 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 
-public class SwitchFollowStateTool implements ITool<SwitchFollowStateTool.Result> {
+public class SwitchMaidFollowStateTool implements ITool<SwitchMaidFollowStateTool.Result> {
     public static final String TOOL_ID = "switch_maid_follow_state";
 
-    private static final String TOOL_DESC = "Set the maid's follow or stay/home state. Use when the player asks the maid to follow, stay, wait, stop, or go home.";
+    private static final String TOOL_DESC = "Toggle the maid's follow/home mode.";
 
     private static final String FOLLOW_PARAM_ID = "follow";
-    private static final String FOLLOW_PARAM_DESC = """
-            follow (boolean, required): true = follow the owner (e.g. "follow me", "come with me"); false = stop following and stay at the current position in home mode (e.g. "stay here", "don't move", "wait here", "stop following").
-            """;
-
-    private static final String SUCCESS_FOLLOW_ON = "Follow mode enabled";
-    private static final String SUCCESS_FOLLOW_OFF = "Home mode enabled (stop following)";
-    private static final String NO_CHANGE_FOLLOW_ON = "Already following the owner";
-    private static final String NO_CHANGE_FOLLOW_OFF = "Already in home mode";
+    private static final String FOLLOW_PARAM_DESC = "true = follow the owner; false = stay at current position (home mode).";
 
     private static final Codec<Result> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(Codec.BOOL.fieldOf(FOLLOW_PARAM_ID).forGetter(Result::follow))
@@ -59,19 +52,19 @@ public class SwitchFollowStateTool implements ITool<SwitchFollowStateTool.Result
         boolean isHome = maid.isHomeModeEnable();
         if (toFollow) {
             if (!isHome) {
-                return new ToolResponse(NO_CHANGE_FOLLOW_ON);
+                return new ToolResponse("Already following the owner");
             }
             maid.restrictTo(BlockPos.ZERO, MaidConfig.MAID_NON_HOME_RANGE.get());
             maid.setHomeModeEnable(false);
-            return new ToolResponse(SUCCESS_FOLLOW_ON);
+            return new ToolResponse("Follow mode enabled");
         }
 
         if (isHome) {
-            return new ToolResponse(NO_CHANGE_FOLLOW_OFF);
+            return new ToolResponse("Already in home mode");
         }
         maid.getSchedulePos().setHomeModeEnable(maid, maid.blockPosition());
         maid.setHomeModeEnable(true);
-        return new ToolResponse(SUCCESS_FOLLOW_OFF);
+        return new ToolResponse("Home mode enabled (stop following)");
     }
 
     public record Result(boolean follow) {

@@ -76,12 +76,10 @@ public class QueryMaidContextTool implements ITool<String> {
                 .map(category -> "- %s: %s".formatted(category.id(), category.summary()))
                 .collect(Collectors.joining("\n"));
         if (StringUtils.isBlank(categoryList)) {
-            categoryList = "- No context categories are currently registered.";
+            categoryList = "- No context categories";
         }
         return """
                 category_id (string, required): The maid context category to load.
-                Choose one category from the currently registered maid context categories.
-                
                 Available categories:
                 %s
                 """.formatted(categoryList);

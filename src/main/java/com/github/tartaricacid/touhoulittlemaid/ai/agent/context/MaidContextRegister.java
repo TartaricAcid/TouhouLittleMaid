@@ -1,10 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.agent.context;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.builtin.EquipmentMaidContexts;
-import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.builtin.OwnerMaidContexts;
-import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.builtin.StatusMaidContexts;
-import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.builtin.WorldMaidContexts;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.builtin.*;
 import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 
@@ -22,6 +19,9 @@ public final class MaidContextRegister {
         EquipmentMaidContexts.registerAll(register);
         OwnerMaidContexts.registerAll(register);
         StatusMaidContexts.registerAll(register);
+        BehaviorMaidContexts.registerAll(register);
+        PositionMaidContexts.registerAll(register);
+        NearbyEntityMaidContexts.registerAll(register);
 
         for (ILittleMaid littleMaid : TouhouLittleMaid.EXTENSIONS) {
             littleMaid.registerAIMaidContext(register);

@@ -103,7 +103,7 @@ public class HistoryChatWidget extends AbstractWidget {
         int offset = 6;
         int xOffset = this.isLeft ? (-size - offset) : this.getWidth() + offset;
         if (isLeft) {
-            graphics.blit(TEXTURE, this.getX() + xOffset, this.getHeightMiddle(size), 0, 32, size, size);
+            graphics.blit(TEXTURE, this.getX() + xOffset, this.getHeightMiddle(size), 0, 16, size, size, 128, 128);
         } else {
             PlayerFaceRenderer.draw(graphics, this.playerSkin, this.getX() + xOffset, this.getHeightMiddle(size), size);
         }

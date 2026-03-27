@@ -18,7 +18,7 @@ public class MaidContextSkill implements ISkill {
 
     @Override
     public String summary(EntityMaid maid) {
-        return "Use when you need live game context (items, health, world state). Load one category at a time.";
+        return "When requesting live game context about the maid or her surroundings (e.g., items, attributes, world state, owner, nearby entities), retrieve only one category of information at a time.";
     }
 
     @Override
@@ -28,7 +28,8 @@ public class MaidContextSkill implements ISkill {
                 .collect(Collectors.joining("\n"));
         return """
                 ## Maid Context
-                - Use this skill when you need live context about the maid, owner, items, or world state.
+                - Use this skill when you need any live context about the maid or her environment.
+                - Categories may be added by other mods — always check the full list below before deciding.
                 - Do not request all context at once. First choose the single most relevant category.
                 - Then call the context tool with the category id to load only that context group.
                 

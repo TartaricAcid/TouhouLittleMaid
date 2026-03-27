@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.implement;
 
-import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.implement.MaidActionSkill;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.implement.MaidWorkSkill;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.ITool;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.response.ToolResponse;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.ObjectParameter;
@@ -16,17 +16,14 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-public class SwitchWorkTaskTool implements ITool<SwitchWorkTaskTool.Result> {
+public class SwitchMaidWorkTaskTool implements ITool<SwitchMaidWorkTaskTool.Result> {
     public static final String TOOL_ID = "switch_maid_work_task";
 
     private static final String TOOL_DESC = "Switch the maid to a specific task by task_id.";
 
     private static final String TASK_ID_PARAMETER_ID = "task_id";
-    private static final String TASK_ID_PARAMETER_DESC = """
-            task_id (string, required): The exact task to switch to.
-            """;
+    private static final String TASK_ID_PARAMETER_DESC = "The full namespaced task id to switch to.";
 
     private static final String SUCCESS = "Successfully switched to %s task";
     private static final String NO_CHANGE = "Already on %s task, no switch needed";
@@ -56,10 +53,7 @@ public class SwitchWorkTaskTool implements ITool<SwitchWorkTaskTool.Result> {
                 .map(ResourceLocation::toString)
                 .forEach(taskId::addEnumValues);
 
-        String taskSummary = tasks.stream()
-                .map(task -> "- %s: %s".formatted(task.getUid().toString(), task.getMaidActionSummary()))
-                .collect(Collectors.joining("\n"));
-        taskId.setDescription(TASK_ID_PARAMETER_DESC + "\nAvailable tasks:\n" + taskSummary);
+        taskId.setDescription(TASK_ID_PARAMETER_DESC);
         root.addProperties(TASK_ID_PARAMETER_ID, taskId);
         return root;
     }
@@ -81,7 +75,7 @@ public class SwitchWorkTaskTool implements ITool<SwitchWorkTaskTool.Result> {
                     .map(ResourceLocation::toString)
                     .toList();
             String text = "unknown task_id '%s'".formatted(taskId);
-            return ToolResponse.invalidParam(TASK_ID_PARAMETER_ID, values, text, MaidActionSkill.ID);
+            return ToolResponse.invalidParam(TASK_ID_PARAMETER_ID, values, text, MaidWorkSkill.ID);
         }
 
         IMaidTask task = optional.get();
