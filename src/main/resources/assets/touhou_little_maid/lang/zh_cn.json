@@ -29,6 +29,7 @@
   "ai.touhou_little_maid.chat.summary.llm": "大语言模型：%s",
   "ai.touhou_little_maid.chat.summary.tts": "语音合成：%s / %s",
   "ai.touhou_little_maid.chat.chat_bubble_waiting": "**少女思考中……**",
+  "ai.touhou_little_maid.chat.chat_bubble_waiting_calling": "正在调用 %s",
   "ai.touhou_little_maid.chat.need_player2_install": "【车万女仆】你需要下载安装 Player2 软件后才可以使用 AI 聊天功能",
   "ai.touhou_little_maid.chat.player2_error": "Player2 软件运行异常，HTTP 错误码：%d",
   "ai.touhou_little_maid.chat.download_url": "下载链接：",

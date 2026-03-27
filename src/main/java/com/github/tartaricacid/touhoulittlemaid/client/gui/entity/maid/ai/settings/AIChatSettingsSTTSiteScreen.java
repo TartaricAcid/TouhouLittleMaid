@@ -77,6 +77,7 @@ public class AIChatSettingsSTTSiteScreen extends AIChatSettingsHubScreen {
             return;
         }
         this.saveLocalSTTSite(this.copySttSite(site, !site.enabled()));
+        this.init();
     }
 
     public void saveLocalSTTSite(STTSite site) {

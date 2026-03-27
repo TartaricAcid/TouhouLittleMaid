@@ -26,6 +26,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -199,6 +200,7 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
             if (this.callCount > MAX_CALL_COUNT) {
                 TouhouLittleMaid.LOGGER.error("Function call count exceed max count: {}", MAX_CALL_COUNT);
             }
+            this.refreshWaitingChatBubble(name);
             // 历史记录缓存
             chatManager.addToolHistory("use tool: %s".formatted(name), toolCall.getId());
             // 执行 tool，获得返回结果
@@ -211,6 +213,17 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
             // 再次和 LLM 通信
             client.chat(nextMessages, keepConfig, this);
         });
+    }
+
+    private void refreshWaitingChatBubble(String tool) {
+        Component secondaryText = Component
+                .translatable("ai.touhou_little_maid.chat.chat_bubble_waiting_calling", tool)
+                .withStyle(ChatFormatting.GRAY);
+        this.waitingChatBubbleId = maid.getChatBubbleManager().refreshThinkingText(
+                "ai.touhou_little_maid.chat.chat_bubble_waiting",
+                waitingChatBubbleId,
+                secondaryText
+        );
     }
 
     /**

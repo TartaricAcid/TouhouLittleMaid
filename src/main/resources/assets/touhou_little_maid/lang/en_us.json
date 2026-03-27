@@ -29,6 +29,7 @@
   "ai.touhou_little_maid.chat.summary.llm": "LLM: %s",
   "ai.touhou_little_maid.chat.summary.tts": "TTS: %s / %s",
   "ai.touhou_little_maid.chat.chat_bubble_waiting": "**The maid is thinking...**",
+  "ai.touhou_little_maid.chat.chat_bubble_waiting_calling": "Calling %s",
   "ai.touhou_little_maid.chat.need_player2_install": "[TLM] You'll need to install and run the Player2 software to use the AI chat",
   "ai.touhou_little_maid.chat.player2_error": "Player2 software is running abnormally, HTTP code: %d",
   "ai.touhou_little_maid.chat.download_url": "Download Url: ",

@@ -84,9 +84,21 @@ public class ChatBubbleManager {
     }
 
     public long addThinkingText(String langKey) {
+        return this.addThinkingText(langKey, null);
+    }
+
+    public long addThinkingText(String langKey, @Nullable Component secondaryText) {
         MutableComponent component = Component.translatable(langKey).withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC);
         ResourceLocation icon = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/entity/chat_bubble/yinyang_orb.png");
-        return this.addChatBubble(WaitingChatBubbleData.create(30 * 20, TYPE_2, DEFAULT_PRIORITY, component, icon));
+        return this.addChatBubble(WaitingChatBubbleData.create(30 * 20, TYPE_2, DEFAULT_PRIORITY, component, secondaryText, icon));
+    }
+
+    public long refreshThinkingText(String langKey, long previousChatBubbleId, @Nullable Component secondaryText) {
+        ChatBubbleDataCollection collection = this.getChatBubbleDataCollection();
+        if (previousChatBubbleId >= 0) {
+            collection.remove(previousChatBubbleId);
+        }
+        return this.addThinkingText(langKey, secondaryText);
     }
 
     public void addLLMChatText(String message, long waitingChatBubbleId) {
