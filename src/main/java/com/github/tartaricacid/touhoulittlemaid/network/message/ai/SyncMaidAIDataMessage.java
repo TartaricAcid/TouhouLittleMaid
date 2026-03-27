@@ -58,6 +58,7 @@ public record SyncMaidAIDataMessage(int entityId, CompoundTag configData, int cu
         ClientLevel level = Minecraft.getInstance().level;
         LocalPlayer player = Minecraft.getInstance().player;
         if (level == null || player == null) {
+            Minecraft.getInstance().setScreen(null);
             return;
         }
         Entity entity = level.getEntity(message.entityId);
@@ -67,6 +68,8 @@ public record SyncMaidAIDataMessage(int entityId, CompoundTag configData, int cu
             AIChatScreen chatScreen = new AIChatScreen(maid);
             chatScreen.updateTokens(message.currentTokens, message.maxTokens);
             Minecraft.getInstance().setScreen(chatScreen);
+        } else {
+            Minecraft.getInstance().setScreen(null);
         }
     }
 }

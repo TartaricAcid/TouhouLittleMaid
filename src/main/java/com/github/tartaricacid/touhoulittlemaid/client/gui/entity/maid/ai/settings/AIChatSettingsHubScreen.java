@@ -235,7 +235,7 @@ public abstract class AIChatSettingsHubScreen extends Screen {
 
     @Override
     public void onClose() {
-        if (this.parent instanceof AIChatScreen chatScreen) {
+        if (this.parent instanceof AIChatScreen chatScreen && chatScreen.getMaid().isAlive()) {
             NetworkHandler.CHANNEL.sendToServer(new OpenMaidAIChatMessage(chatScreen.getMaid()));
         } else {
             this.getMinecraft().setScreen(null);
