@@ -29,6 +29,7 @@
   "ai.touhou_little_maid.chat.summary.llm": "LLM: %s",
   "ai.touhou_little_maid.chat.summary.tts": "TTS: %s / %s",
   "ai.touhou_little_maid.chat.chat_bubble_waiting": "**Maid đang nghĩ...**",
+  "ai.touhou_little_maid.chat.chat_bubble_waiting_calling": "Đang gọi %s",
   "ai.touhou_little_maid.chat.need_player2_install": "[TLM] Bạn cần tải và cài đặt phần mềm Player2 trước khi có thể sử dụng chức năng trò chuyện AI",
   "ai.touhou_little_maid.chat.player2_error": "Phần mềm Player2 chạy bất thường, mã lỗi HTTP: %d",
   "ai.touhou_little_maid.chat.download_url": "Url Tải Xuống: ",
