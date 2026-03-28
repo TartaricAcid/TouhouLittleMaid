@@ -21,7 +21,6 @@ import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai.response.C
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai.response.Message;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai.response.Usage;
 import com.github.tartaricacid.touhoulittlemaid.capability.ChatTokensCapabilityProvider;
-import com.github.tartaricacid.touhoulittlemaid.config.subconfig.AIConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.net.HttpHeaders;
 import com.google.common.net.MediaType;
@@ -52,7 +51,6 @@ public class LLMOpenAIClient implements LLMClient {
         String apiKey = this.site.secretKey();
         String model = config.model();
         boolean isReasoningModel = this.site.isReasoningModel(model);
-        double temperature = config.temperature();
         EntityMaid maid = config.maid();
 
         // 构建对话
@@ -65,7 +63,6 @@ public class LLMOpenAIClient implements LLMClient {
                     .setResponseFormat(ResponseFormat.text());
         } else {
             chatCompletion = ChatCompletion.create().model(model)
-                    .temperature(temperature)
                     .setResponseFormat(ResponseFormat.text());
         }
 
@@ -95,9 +92,12 @@ public class LLMOpenAIClient implements LLMClient {
         }
 
         // 添加 skill
-        // FIXME 修改配置名称
-        if (AIConfig.FUNCTION_CALL_ENABLED.get()) {
-            this.addRootSkills(maid, config, chatCompletion);
+        this.addRootSkills(maid, config, chatCompletion);
+
+        // 如果是 minimax 站点，它不支持输入多个 system 消息，所以需要将 system 消息合并到一起
+        // https://github.com/MiniMax-AI/MiniMax-M2/issues/51#issuecomment-3570551456
+        if (this.site.id().equals(DefaultLLMSite.MINIMAX.id())) {
+            chatCompletion.mergeSystemMessages();
         }
 
         HttpRequest.Builder builder = HttpRequest.newBuilder()
@@ -122,6 +122,10 @@ public class LLMOpenAIClient implements LLMClient {
      *
      */
     protected ChatCompletion extraArgs(ChatCompletion chatCompletion) {
+        // 部分国内模型站点会添加此字段
+        if (this.site.hasThinkingField()) {
+            return chatCompletion.disableThinking();
+        }
         return chatCompletion;
     }
 

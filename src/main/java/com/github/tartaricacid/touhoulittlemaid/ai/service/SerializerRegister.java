@@ -3,7 +3,6 @@ package com.github.tartaricacid.touhoulittlemaid.ai.service;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.site.AvailableSites;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMSite;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai.LLMDoubaoSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai.LLMOpenAISite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.STTSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.aliyun.STTAliyunSite;
@@ -30,7 +29,6 @@ public final class SerializerRegister {
         SerializerRegister register = new SerializerRegister();
 
         register.register(ServiceType.LLM, LLMOpenAISite.API_TYPE, new LLMOpenAISite.Serializer());
-        register.register(ServiceType.LLM, LLMDoubaoSite.API_TYPE, new LLMDoubaoSite.Serializer());
 
         register.register(ServiceType.STT, STTPlayer2Site.API_TYPE, new STTPlayer2Site.Serializer());
         register.register(ServiceType.STT, STTAliyunSite.API_TYPE, new STTAliyunSite.Serializer());

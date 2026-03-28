@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.editor;
 
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMSite;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai.LLMDoubaoSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai.LLMOpenAISite;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.settings.AIChatSettingsHubScreen;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.settings.AIChatSettingsLLMSiteScreen;
@@ -325,19 +324,6 @@ public class LLMSiteEditorScreen extends Screen {
 
         // 秘钥可以为空（部分本地模型没有秘钥）
         String secretKey = this.secretInput.getValue();
-
-        // 豆包模型
-        if (this.sourceSite instanceof LLMDoubaoSite doubaoSite) {
-            List<String> models = Lists.newArrayList();
-            for (ModelRow row : rows) {
-                String modelName = row.name();
-                if (StringUtils.isBlank(modelName) || models.contains(modelName)) {
-                    continue;
-                }
-                models.add(modelName);
-            }
-            return new LLMDoubaoSite(siteId, doubaoSite.icon(), url, doubaoSite.enabled(), secretKey, doubaoSite.headers(), models);
-        }
 
         // 普通 OpenAI 模型
         List<LLMOpenAISite.ModelEntry> models = Lists.newArrayList();

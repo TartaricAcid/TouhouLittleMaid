@@ -27,6 +27,14 @@ public class ChatMessage {
         this.content = content;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
     public static ChatMessage systemChat(String content) {
         return new ChatMessage(Role.SYSTEM.getId(), content);
     }

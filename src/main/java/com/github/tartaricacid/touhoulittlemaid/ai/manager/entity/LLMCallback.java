@@ -266,7 +266,7 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
 
         // 如果工具本身就有自己的次级路由，那么调用工具本身的路由
         if (continuation != null) {
-            return new LLMConfig(current.model(), current.temperature(), current.maid(),
+            return new LLMConfig(current.model(), current.maid(),
                     continuation.chatType(), continuation.skillContext());
         }
 

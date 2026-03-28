@@ -21,6 +21,7 @@ public interface Site {
     String SECRET_KEY = "secret_key";
     String HEADERS = "headers";
     String MODELS = "models";
+    String HAS_THINKING_FIELD = "has_thinking_field";
 
     /**
      * 用于控制 JSON 序列化的字段顺序
