@@ -19,7 +19,7 @@ import static com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai
  * Player2 TTS：URL + 模型列表（无 Secret Key）
  */
 public class TTSPlayer2FormLayout extends TTSSiteFormLayout {
-    TTSPlayer2FormLayout(TTSSite sourceSite) {
+    public TTSPlayer2FormLayout(TTSSite sourceSite) {
         super(sourceSite);
     }
 

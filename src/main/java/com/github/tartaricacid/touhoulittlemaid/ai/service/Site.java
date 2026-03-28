@@ -22,6 +22,8 @@ public interface Site {
     String HEADERS = "headers";
     String MODELS = "models";
     String HAS_THINKING_FIELD = "has_thinking_field";
+    // 仅用于 MiniMax TTS，表示语音合成的模型，和 MODELS 里列出的模型不同，MODELS 里列出的是 voice_id，而 siteModel 是一个独立的参数
+    String SITE_MODEL = "site_model";
 
     /**
      * 用于控制 JSON 序列化的字段顺序

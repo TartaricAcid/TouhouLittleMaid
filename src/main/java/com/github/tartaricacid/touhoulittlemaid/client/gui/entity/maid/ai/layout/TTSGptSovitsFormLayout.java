@@ -2,6 +2,8 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.layou
 
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.gptsovits.TTSGptSovitsSite;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.editor.TTSSiteEditorScreen;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.FlatColorButton;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import org.apache.commons.lang3.StringUtils;
@@ -26,7 +28,7 @@ public class TTSGptSovitsFormLayout extends TTSSiteFormLayout {
     private String promptLangValue;
     private String textSplitMethodValue;
 
-    TTSGptSovitsFormLayout(TTSSite sourceSite) {
+    public TTSGptSovitsFormLayout(TTSSite sourceSite) {
         super(sourceSite);
         TTSGptSovitsSite site = (TTSGptSovitsSite) sourceSite;
         this.promptLangValue = site.promptLang();
@@ -42,6 +44,21 @@ public class TTSGptSovitsFormLayout extends TTSSiteFormLayout {
                 new FieldDescriptor(REF_AUDIO_PATH, site.refAudioPath(), true, false),
                 new FieldDescriptor(PROMPT_TEXT, site.promptText(), true, false)
         );
+    }
+
+    @Override
+    public int extraInit(int x, int y, int width, TTSSiteEditorScreen screen) {
+        int oneThirdWidth = width / 3;
+
+        screen.addRenderableWidget(new FlatColorButton(x, y + 2, oneThirdWidth, 18,
+                this.promptLangName(), b -> b.setMessage(this.nextPromptLang())
+        ));
+
+        screen.addRenderableWidget(new FlatColorButton(x + oneThirdWidth + 4, y + 2, oneThirdWidth * 2 - 4, 18,
+                this.textSplitMethodName(), b -> b.setMessage(this.nextTextSplitMethod())
+        ));
+
+        return 35;
     }
 
     public MutableComponent promptLangName() {

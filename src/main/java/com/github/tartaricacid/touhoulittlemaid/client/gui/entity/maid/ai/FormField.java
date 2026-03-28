@@ -10,6 +10,7 @@ import net.minecraft.network.chat.MutableComponent;
 public class FormField {
     public static final String URL = "url";
     public static final String SECRET_KEY = "secret_key";
+    public static final String MODEL = "model";
     public static final String MODELS = "models";
     public static final String APP_KEY = "app_key";
     public static final String REF_AUDIO_PATH = "ref_audio_path";

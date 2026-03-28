@@ -2,7 +2,6 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.edito
 
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSSite;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.FormField;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.layout.TTSGptSovitsFormLayout;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.layout.TTSSiteFormLayout;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.layout.TTSSiteFormLayout.FieldDescriptor;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.settings.AIChatSettingsHubScreen;
@@ -15,6 +14,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.Renderable;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
@@ -71,7 +73,7 @@ public class TTSSiteEditorScreen extends Screen {
     public TTSSiteEditorScreen(AIChatSettingsTTSSiteScreen parent, TTSSite sourceSite) {
         super(Component.literal("TTS Site Editor"));
         this.parent = parent;
-        this.layout = TTSSiteFormLayout.create(sourceSite);
+        this.layout = sourceSite.formLayout();
 
         String nameKey = sourceSite.getNameKey();
         this.siteDisplayName = I18n.exists(nameKey) ? I18n.get(nameKey) : sourceSite.id();
@@ -94,6 +96,12 @@ public class TTSSiteEditorScreen extends Screen {
     }
 
     @Override
+    @SuppressWarnings("all")
+    public <T extends GuiEventListener & Renderable & NarratableEntry> T addRenderableWidget(T pWidget) {
+        return super.addRenderableWidget(pWidget);
+    }
+
+    @Override
     protected void init() {
         // 在缩放窗口时，更新输入框的值
         this.fields.forEach(FormField::syncFromBox);
@@ -110,16 +118,28 @@ public class TTSSiteEditorScreen extends Screen {
 
         // 固定字段区（不滚动）
         int fieldY = this.startY + 28;
-        for (FormField field : this.fields) {
-            this.createFieldWidget(field, left, fieldY, contentWidth);
-            fieldY += FIELD_ROW_HEIGHT;
+        int fieldMaxSize = this.fields.size();
+        // 奇数，那么最后一个占一整行，否则是均分，左右各一个
+        boolean isOdd = fieldMaxSize % 2 == 1;
+        for (int i = 0; i < fieldMaxSize; i++) {
+            FormField field = this.fields.get(i);
+            // 最后一行，奇数，占一整行
+            if (isOdd && i == fieldMaxSize - 1) {
+                // 偶数且在中间位置，跳过到下一行
+                this.createFieldWidget(field, left, fieldY, contentWidth);
+                fieldY += FIELD_ROW_HEIGHT;
+            } else {
+                boolean isLeft = i % 2 == 0;
+                int fieldWidth = (contentWidth - 6) / 2;
+                this.createFieldWidget(field, left + (isLeft ? 0 : fieldWidth + 6), fieldY, fieldWidth);
+                if (!isLeft) {
+                    fieldY += FIELD_ROW_HEIGHT;
+                }
+            }
         }
 
-        // GptSovits 专用 prompt 选项行
-        if (this.layout instanceof TTSGptSovitsFormLayout gptLayout) {
-            this.createPromptOptionWidget(gptLayout, left, fieldY, contentWidth);
-            fieldY += FIELD_ROW_HEIGHT;
-        }
+        // 额外组件
+        fieldY += layout.extraInit(left, fieldY, contentWidth, this);
 
         // 可滚动模型区
         if (this.layout.supportsModelRows()) {
@@ -152,18 +172,6 @@ public class TTSSiteEditorScreen extends Screen {
         }
         this.addWidget(box);
         field.box = box;
-    }
-
-    private void createPromptOptionWidget(TTSGptSovitsFormLayout gptLayout, int left, int y, int width) {
-        int oneThirdWidth = width / 3;
-
-        this.addRenderableWidget(new FlatColorButton(left, y + 2, oneThirdWidth, 18,
-                gptLayout.promptLangName(), b -> b.setMessage(gptLayout.nextPromptLang())
-        ));
-
-        this.addRenderableWidget(new FlatColorButton(left + oneThirdWidth + 4, y + 2, oneThirdWidth * 2 - 4, 18,
-                gptLayout.textSplitMethodName(), b -> b.setMessage(gptLayout.nextTextSplitMethod())
-        ));
     }
 
     private void createModelRows(int left, int contentWidth) {
@@ -258,7 +266,7 @@ public class TTSSiteEditorScreen extends Screen {
         int top = (int) this.modelArea.y;
 
         // 主标题
-        graphics.drawString(this.font, MODELS_NAME, left + 2, top - 12, LABEL_COLOR, false);
+        graphics.drawString(this.font, this.layout.modelsTitle(), left + 2, top - 14, LABEL_COLOR, false);
 
         int visibleCount = this.getVisibleModelCount();
         int startIndex = this.modelScrollOffset;

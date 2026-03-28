@@ -13,14 +13,13 @@ import java.util.function.Function;
 
 import static com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.FormField.SECRET_KEY;
 import static com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.FormField.URL;
-import static com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.Translations.MODEL_IS_EMPTY;
-import static com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.Translations.URL_IS_EMPTY;
+import static com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.Translations.*;
 
 /**
  * FishAudio TTS：URL + Secret Key + 模型列表
  */
 public class TTSFishAudioFormLayout extends TTSSiteFormLayout {
-    TTSFishAudioFormLayout(TTSSite sourceSite) {
+    public TTSFishAudioFormLayout(TTSSite sourceSite) {
         super(sourceSite);
     }
 
@@ -49,6 +48,11 @@ public class TTSFishAudioFormLayout extends TTSSiteFormLayout {
         String url = fieldValues.apply(URL);
         if (StringUtils.isBlank(url)) {
             showStatus.accept(URL_IS_EMPTY);
+            return null;
+        }
+        String secretKey = fieldValues.apply(SECRET_KEY);
+        if (StringUtils.isBlank(secretKey)) {
+            showStatus.accept(SECRET_KEY_IS_EMPTY);
             return null;
         }
         if (models.isEmpty()) {

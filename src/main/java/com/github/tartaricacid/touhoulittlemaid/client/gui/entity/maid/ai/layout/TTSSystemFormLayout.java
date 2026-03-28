@@ -14,7 +14,7 @@ import java.util.function.Function;
  * 系统 TTS：无可编辑字段，仅显示提示文本
  */
 public class TTSSystemFormLayout extends TTSSiteFormLayout {
-    TTSSystemFormLayout(TTSSite sourceSite) {
+    public TTSSystemFormLayout(TTSSite sourceSite) {
         super(sourceSite);
     }
 
