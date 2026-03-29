@@ -1,10 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.editor;
 
 import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.STTSite;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.aliyun.STTAliyunSite;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.player2.STTPlayer2Site;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.siliconflow.STTSiliconflowSite;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.FormField;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.layout.FieldDescriptor;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.layout.STTSiteFormLayout;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.settings.AIChatSettingsSTTSiteScreen;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.FlatColorButton;
 import com.google.common.collect.Lists;
@@ -17,24 +16,20 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.util.FormattedCharSequence;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 
-import static com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.FormField.*;
-import static com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.Translations.*;
+import static com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.Translations.SAVE_NAME;
+import static com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.Translations.sttEditorTitle;
 import static net.minecraft.network.chat.CommonComponents.GUI_BACK;
 
-/**
- * STT 站点编辑器，根据站点类型展示不同的表单字段
- */
 public class STTSiteEditorScreen extends Screen {
     private static final int BASE_WIDTH = 400;
     private static final int BASE_HEIGHT = 230;
-    private static final int ROW_HEIGHT = 38;
+    private static final int FIELD_ROW_HEIGHT = 35;
 
     private final AIChatSettingsSTTSiteScreen parent;
-    private final STTSite sourceSite;
+    private final STTSiteFormLayout layout;
     private final String siteDisplayName;
 
     private final List<FormField> fields = Lists.newArrayList();
@@ -51,36 +46,19 @@ public class STTSiteEditorScreen extends Screen {
     public STTSiteEditorScreen(AIChatSettingsSTTSiteScreen parent, STTSite sourceSite) {
         super(Component.literal("STT Site Editor"));
         this.parent = parent;
-        this.sourceSite = sourceSite;
+        this.layout = sourceSite.formLayout();
 
         String nameKey = sourceSite.getNameKey();
         this.siteDisplayName = I18n.exists(nameKey) ? I18n.get(nameKey) : sourceSite.id();
 
-        this.initStateFromSite();
+        this.initStateFromLayout();
     }
 
-    private void initStateFromSite() {
+    private void initStateFromLayout() {
         this.fields.clear();
 
-        // Player2：仅 URL 可编辑，提示文本在 render 中直接画
-        if (this.sourceSite instanceof STTPlayer2Site site) {
-            this.fields.add(FormField.urlField(site.url()));
-            return;
-        }
-
-        // SiliconFlow：URL + Key + 单个模型名
-        if (this.sourceSite instanceof STTSiliconflowSite site) {
-            this.fields.add(FormField.urlField(site.url()));
-            this.fields.add(FormField.secretKeyField(site.getSecretKey()));
-            this.fields.add(FormField.modelsField(site.getModel()));
-            return;
-        }
-
-        // 阿里云：URL + Key + App Key
-        if (this.sourceSite instanceof STTAliyunSite site) {
-            this.fields.add(FormField.urlField(site.getBaseUrl()));
-            this.fields.add(FormField.secretKeyField(site.getSecretKey()));
-            this.fields.add(FormField.appKeyField(site.getAppKey()));
+        for (FieldDescriptor desc : this.layout.getFieldDescriptors()) {
+            this.fields.add(new FormField(desc.label(), desc.value(), desc.editable(), desc.secret()));
         }
     }
 
@@ -94,9 +72,25 @@ public class STTSiteEditorScreen extends Screen {
         this.startX = (this.width - BASE_WIDTH) / 2;
         this.startY = (this.height - BASE_HEIGHT) / 2;
 
-        for (int i = 0; i < this.fields.size(); i++) {
-            int y = this.startY + 34 + i * ROW_HEIGHT;
-            this.createFieldWidget(this.fields.get(i), this.startX + 12, y, BASE_WIDTH - 24);
+        int left = this.startX + 12;
+        int contentWidth = BASE_WIDTH - 24;
+
+        int fieldY = this.startY + 28;
+        int fieldMaxSize = this.fields.size();
+        boolean isOdd = fieldMaxSize % 2 == 1;
+        for (int i = 0; i < fieldMaxSize; i++) {
+            FormField field = this.fields.get(i);
+            if (isOdd && i == fieldMaxSize - 1) {
+                this.createFieldWidget(field, left, fieldY, contentWidth);
+                fieldY += FIELD_ROW_HEIGHT;
+            } else {
+                boolean isLeft = i % 2 == 0;
+                int fieldWidth = (contentWidth - 6) / 2;
+                this.createFieldWidget(field, left + (isLeft ? 0 : fieldWidth + 6), fieldY, fieldWidth);
+                if (!isLeft) {
+                    fieldY += FIELD_ROW_HEIGHT;
+                }
+            }
         }
 
         int bottomY = this.startY + BASE_HEIGHT - 24;
@@ -108,7 +102,7 @@ public class STTSiteEditorScreen extends Screen {
         EditBox box = new EditBox(this.font, left + 6, y + 14, width - 12, 16, field.i18nName());
         box.setMaxLength(512);
         box.setBordered(false);
-        box.visible = field.editable;
+        box.active = field.editable;
         box.setValue(field.value);
         if (field.secret) {
             box.setFormatter((text, pos) -> FormattedCharSequence.forward("·".repeat(text.length()), Style.EMPTY));
@@ -176,53 +170,12 @@ public class STTSiteEditorScreen extends Screen {
     }
 
     private void saveSite() {
-        STTSite site = this.buildSite();
+        STTSite site = this.layout.buildSite(this::getFieldValue, this::showStatus);
         if (site == null) {
             return;
         }
         this.parent.saveLocalSTTSite(site);
         this.onClose();
-    }
-
-    @Nullable
-    private STTSite buildSite() {
-        if (this.sourceSite instanceof STTPlayer2Site site) {
-            String url = StringUtils.trimToEmpty(this.getFieldValue(URL));
-            if (StringUtils.isBlank(url)) {
-                this.showStatus(URL_IS_EMPTY);
-                return null;
-            }
-            return new STTPlayer2Site(site.id(), site.icon(), url, site.enabled(), site.headers());
-        }
-
-        if (this.sourceSite instanceof STTSiliconflowSite site) {
-            String url = StringUtils.trimToEmpty(this.getFieldValue(URL));
-            if (StringUtils.isBlank(url)) {
-                this.showStatus(URL_IS_EMPTY);
-                return null;
-            }
-            return new STTSiliconflowSite(site.id(), site.icon(), site.enabled(), url,
-                    StringUtils.trimToEmpty(this.getFieldValue(SECRET_KEY)),
-                    StringUtils.trimToEmpty(this.getFieldValue(MODELS)));
-        }
-
-        if (this.sourceSite instanceof STTAliyunSite site) {
-            String baseUrl = StringUtils.trimToEmpty(this.getFieldValue(URL));
-            if (StringUtils.isBlank(baseUrl)) {
-                this.showStatus(URL_IS_EMPTY);
-                return null;
-            }
-            return new STTAliyunSite(site.id(), site.icon(), site.enabled(), baseUrl,
-                    StringUtils.trimToEmpty(this.getFieldValue(SECRET_KEY)),
-                    StringUtils.trimToEmpty(this.getFieldValue(APP_KEY)),
-                    site.getVocabularyId(),
-                    site.getCustomizationId(),
-                    site.isEnablePunctuationPrediction(),
-                    site.isEnableInverseTextNormalization(),
-                    site.isEnableVoiceDetection(),
-                    site.isDisfluency());
-        }
-        return null;
     }
 
     private String getFieldValue(String label) {

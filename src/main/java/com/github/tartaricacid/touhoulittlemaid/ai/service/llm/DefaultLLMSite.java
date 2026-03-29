@@ -54,6 +54,16 @@ public final class DefaultLLMSite {
             "kimi-k2.5", "kimi-k2-turbo-preview"
     );
 
+    public static LLMOpenAISite GEMINI = createSite("gemini",
+            "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
+            "gemini-3.1-pro-preview", "gemini-3-flash-preview", "gemini-3.1-flash-lite-preview"
+    );
+
+    public static LLMOpenAISite GROK = createSite("grok",
+            "https://api.x.ai/v1/chat/completions",
+            "grok-4.20-0309-non-reasoning", "grok-4-1-fast-non-reasoning"
+    );
+
     public static LLMOpenAISite createSite(String name, String url, String... models) {
         return createSite(name, url, false, Map.of(), models);
     }
@@ -83,5 +93,7 @@ public final class DefaultLLMSite {
         AvailableSites.LLM_SITES.put(ZHIPU.id(), ZHIPU);
         AvailableSites.LLM_SITES.put(MINIMAX.id(), MINIMAX);
         AvailableSites.LLM_SITES.put(KIMI.id(), KIMI);
+        AvailableSites.LLM_SITES.put(GEMINI.id(), GEMINI);
+        AvailableSites.LLM_SITES.put(GROK.id(), GROK);
     }
 }

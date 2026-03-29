@@ -4,6 +4,8 @@ import com.github.tartaricacid.touhoulittlemaid.ai.service.SerializableSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.STTApiType;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.STTClient;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.STTSite;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.layout.STTSiteFormLayout;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.layout.STTTencentFormLayout;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
@@ -61,6 +63,11 @@ public class STTTencentSite implements STTSite {
     @Override
     public STTClient client() {
         return new STTTencentClient(STT_HTTP_CLIENT, this);
+    }
+
+    @Override
+    public STTSiteFormLayout formLayout() {
+        return new STTTencentFormLayout(this);
     }
 
     @Override

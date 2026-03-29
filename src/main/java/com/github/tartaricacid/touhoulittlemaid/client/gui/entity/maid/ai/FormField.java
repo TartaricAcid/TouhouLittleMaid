@@ -9,10 +9,13 @@ import net.minecraft.network.chat.MutableComponent;
  */
 public class FormField {
     public static final String URL = "url";
+    public static final String SECRET_ID = "secret_id";
     public static final String SECRET_KEY = "secret_key";
     public static final String MODEL = "model";
     public static final String MODELS = "models";
     public static final String APP_KEY = "app_key";
+    public static final String ENG_SER_VICE_TYPE = "eng_ser_vice_type";
+    public static final String HOT_WORD = "hot_word";
     public static final String REF_AUDIO_PATH = "ref_audio_path";
     public static final String PROMPT_TEXT = "prompt_text";
 
@@ -28,22 +31,6 @@ public class FormField {
         this.value = value;
         this.editable = editable;
         this.secret = secret;
-    }
-
-    public static FormField urlField(String url) {
-        return new FormField(URL, url, true, false);
-    }
-
-    public static FormField secretKeyField(String secretKey) {
-        return new FormField(SECRET_KEY, secretKey, true, true);
-    }
-
-    public static FormField modelsField(String model) {
-        return new FormField(MODELS, model, true, false);
-    }
-
-    public static FormField appKeyField(String appKey) {
-        return new FormField(APP_KEY, appKey, true, false);
     }
 
     public void syncFromBox() {

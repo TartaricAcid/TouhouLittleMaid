@@ -2,8 +2,8 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.edito
 
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSSite;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.FormField;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.layout.FieldDescriptor;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.layout.TTSSiteFormLayout;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.layout.TTSSiteFormLayout.FieldDescriptor;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.settings.AIChatSettingsHubScreen;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.settings.AIChatSettingsTTSSiteScreen;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.FlatColorButton;
@@ -165,7 +165,7 @@ public class TTSSiteEditorScreen extends Screen {
         EditBox box = new EditBox(this.font, left + 6, y + 14, width - 12, 16, field.i18nName());
         box.setMaxLength(512);
         box.setBordered(false);
-        box.visible = field.editable;
+        box.active = field.editable;
         box.setValue(field.value);
         if (field.secret) {
             box.setFormatter((text, pos) -> FormattedCharSequence.forward("·".repeat(text.length()), Style.EMPTY));

@@ -4,6 +4,8 @@ import com.github.tartaricacid.touhoulittlemaid.ai.service.SerializableSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.STTApiType;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.STTClient;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.STTSite;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.layout.STTAliyunFormLayout;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.layout.STTSiteFormLayout;
 import com.github.tartaricacid.touhoulittlemaid.util.http.UrlTool;
 import com.google.common.collect.Maps;
 import com.mojang.serialization.Codec;
@@ -70,6 +72,11 @@ public class STTAliyunSite implements STTSite {
     @Override
     public STTClient client() {
         return new STTAliyunClient(STT_HTTP_CLIENT, this);
+    }
+
+    @Override
+    public STTSiteFormLayout formLayout() {
+        return new STTAliyunFormLayout(this);
     }
 
     @Override

@@ -52,7 +52,4 @@ public abstract class TTSSiteFormLayout {
     public MutableComponent modelsTitle() {
         return MODELS_NAME;
     }
-
-    public record FieldDescriptor(String label, String value, boolean editable, boolean secret) {
-    }
 }

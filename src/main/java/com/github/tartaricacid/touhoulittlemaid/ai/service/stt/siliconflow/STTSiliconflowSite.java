@@ -3,6 +3,8 @@ package com.github.tartaricacid.touhoulittlemaid.ai.service.stt.siliconflow;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.SerializableSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.STTApiType;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.STTSite;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.layout.STTSiliconflowFormLayout;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.layout.STTSiteFormLayout;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
@@ -71,6 +73,11 @@ public class STTSiliconflowSite implements STTSite {
     @Override
     public STTSiliconflowClient client() {
         return new STTSiliconflowClient(STT_HTTP_CLIENT, this);
+    }
+
+    @Override
+    public STTSiteFormLayout formLayout() {
+        return new STTSiliconflowFormLayout(this);
     }
 
     @Override

@@ -4,6 +4,8 @@ import com.github.tartaricacid.touhoulittlemaid.ai.service.SerializableSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.STTApiType;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.STTClient;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.STTSite;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.layout.STTPlayer2FormLayout;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.layout.STTSiteFormLayout;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
@@ -51,6 +53,11 @@ public class STTPlayer2Site implements STTSite {
     @Override
     public STTClient client() {
         return new STTPlayer2Client(STT_HTTP_CLIENT, this);
+    }
+
+    @Override
+    public STTSiteFormLayout formLayout() {
+        return new STTPlayer2FormLayout(this);
     }
 
     @Override

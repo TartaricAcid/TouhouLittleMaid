@@ -2,9 +2,6 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.setti
 
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.site.AvailableSites;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.STTSite;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.aliyun.STTAliyunSite;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.player2.STTPlayer2Site;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.siliconflow.STTSiliconflowSite;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.editor.STTSiteEditorScreen;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.ai.STTSiteButton;
 import com.github.tartaricacid.touhoulittlemaid.util.Rectangle;
@@ -13,7 +10,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * STT 站点列表标签页，站点数据保存在本地（非服务端同步）
@@ -76,7 +72,8 @@ public class AIChatSettingsSTTSiteScreen extends AIChatSettingsHubScreen {
         if (site == null) {
             return;
         }
-        this.saveLocalSTTSite(this.copySttSite(site, !site.enabled()));
+        site.setEnabled(!site.enabled());
+        this.saveLocalSTTSite(site);
         this.init();
     }
 
@@ -86,26 +83,6 @@ public class AIChatSettingsSTTSiteScreen extends AIChatSettingsHubScreen {
         AvailableSites.STT_SITES.clear();
         AvailableSites.STT_SITES.putAll(this.state.sttSites);
         AvailableSites.saveSTTSitesOnly();
-    }
-
-    private STTSite copySttSite(STTSite site, boolean enabled) {
-        if (site instanceof STTPlayer2Site player2Site) {
-            return new STTPlayer2Site(player2Site.id(), player2Site.icon(), player2Site.url(), enabled, player2Site.headers());
-        }
-
-        if (site instanceof STTSiliconflowSite siliconflowSite) {
-            return new STTSiliconflowSite(siliconflowSite.id(), siliconflowSite.icon(), enabled,
-                    siliconflowSite.url(), siliconflowSite.getSecretKey(), siliconflowSite.getModel());
-        }
-
-        if (site instanceof STTAliyunSite aliyunSite) {
-            return new STTAliyunSite(aliyunSite.id(), aliyunSite.icon(), enabled,
-                    aliyunSite.getBaseUrl(), aliyunSite.getSecretKey(), aliyunSite.getAppKey(),
-                    aliyunSite.getVocabularyId(), aliyunSite.getCustomizationId(),
-                    aliyunSite.isEnablePunctuationPrediction(), aliyunSite.isEnableInverseTextNormalization(),
-                    aliyunSite.isEnableVoiceDetection(), aliyunSite.isDisfluency());
-        }
-        return Objects.requireNonNull(site);
     }
 
     @Override
