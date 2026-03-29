@@ -8,6 +8,7 @@ import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.STTSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.aliyun.STTAliyunSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.player2.STTPlayer2Site;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.siliconflow.STTSiliconflowSite;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.tencent.STTTencentSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.fishaudio.TTSFishAudioSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.gptsovits.TTSGptSovitsSite;
@@ -34,6 +35,7 @@ public final class SerializerRegister {
         register.register(ServiceType.STT, STTPlayer2Site.API_TYPE, new STTPlayer2Site.Serializer());
         register.register(ServiceType.STT, STTAliyunSite.API_TYPE, new STTAliyunSite.Serializer());
         register.register(ServiceType.STT, STTSiliconflowSite.API_TYPE, new STTSiliconflowSite.Serializer());
+        register.register(ServiceType.STT, STTTencentSite.API_TYPE, new STTTencentSite.Serializer());
 
         register.register(ServiceType.TTS, TTSSystemSite.API_TYPE, new TTSSystemSite.Serializer());
         register.register(ServiceType.TTS, TTSFishAudioSite.API_TYPE, new TTSFishAudioSite.Serializer());
