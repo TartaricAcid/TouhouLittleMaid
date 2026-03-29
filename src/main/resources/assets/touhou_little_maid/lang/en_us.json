@@ -93,6 +93,7 @@
   "ai.touhou_little_maid.chat.site.fish-audio.name": "Fish Audio",
   "ai.touhou_little_maid.chat.site.gpt-sovits.name": "GPT-SoVITS",
   "ai.touhou_little_maid.chat.site.system.name": "System",
+  "ai.touhou_little_maid.chat.site.none.name": "None",
   "ai.touhou_little_maid.chat.site.tencent.name": "Tencent Cloud",
   "ai.touhou_little_maid.chat.site.gemini.name": "Gemini",
   "ai.touhou_little_maid.chat.site.grok.name": "Grok",

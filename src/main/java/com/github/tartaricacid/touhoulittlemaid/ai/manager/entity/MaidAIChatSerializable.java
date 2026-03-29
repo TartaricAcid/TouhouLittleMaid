@@ -4,6 +4,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 
 public class MaidAIChatSerializable {
+    public static final String NO_TTS_SITE = "__none__";
+
     public String llmSite = "";
     public String llmModel = "";
 
@@ -14,6 +16,13 @@ public class MaidAIChatSerializable {
 
     public String ownerName = "";
     public String customSetting = "";
+
+    /**
+     * 哨兵值，如果为此值，说明此时对当前女仆禁用 TTS 功能
+     */
+    public static boolean isNoTTSSite(String siteId) {
+        return NO_TTS_SITE.equals(siteId);
+    }
 
     public void decode(FriendlyByteBuf buf) {
         llmSite = buf.readUtf();

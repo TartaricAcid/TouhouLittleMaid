@@ -2,10 +2,12 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai;
 
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.ChatClientInfo;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.MaidAIChatManager;
+import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.MaidAIChatSerializable;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.site.ClientAvailableSitesSync;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMMessage;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.Role;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.SupportLanguage;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.system.TTSSystemSite;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.FlatColorButton;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
@@ -28,6 +30,8 @@ import org.lwjgl.glfw.GLFW;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import static com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.MaidAIChatSerializable.NO_TTS_SITE;
 
 public class AIChatScreen extends Screen {
     private static final int POPUP_ROW_HEIGHT = 16;
@@ -155,7 +159,7 @@ public class AIChatScreen extends Screen {
         this.langButton.setSelect(this.openPopup == PopupType.LANGUAGE);
 
         this.llmButton.active = !ClientAvailableSitesSync.getClientLLMSites().isEmpty();
-        this.ttsButton.active = !ClientAvailableSitesSync.getClientTTSSites().isEmpty();
+        this.ttsButton.active = !this.getPopupEntries(PopupType.TTS).isEmpty();
         this.langButton.active = !SupportLanguage.SUPPORTED_LANGUAGES.isEmpty();
 
         if (this.openPopup == null) {
@@ -202,8 +206,13 @@ public class AIChatScreen extends Screen {
         }
 
         if (type == PopupType.TTS) {
+            boolean selected = MaidAIChatSerializable.isNoTTSSite(this.manager.ttsSite);
+            MutableComponent noneName = Component.translatable("ai.touhou_little_maid.chat.site.none.name");
+            entries.add(new PopupEntry(noneName, false, selected, NO_TTS_SITE, StringUtils.EMPTY, null));
+
             var ttsSites = ClientAvailableSitesSync.getClientTTSSites();
-            this.addSiteModelEntries(entries, ttsSites, this.manager.ttsSite, this.manager.ttsModel);
+            String selectedSite = StringUtils.isBlank(this.manager.ttsSite) ? TTSSystemSite.API_TYPE : this.manager.ttsSite;
+            this.addSiteModelEntries(entries, ttsSites, selectedSite, this.manager.ttsModel);
             return entries;
         }
 
@@ -300,15 +309,22 @@ public class AIChatScreen extends Screen {
         if (StringUtils.isBlank(this.manager.llmSite) || !llmSites.containsKey(this.manager.llmSite)) {
             this.manager.llmSite = llmSites.keySet().stream().findFirst().orElse(StringUtils.EMPTY);
         }
-        if (StringUtils.isBlank(this.manager.ttsSite) || !ttsSites.containsKey(this.manager.ttsSite)) {
+        if (MaidAIChatSerializable.isNoTTSSite(this.manager.ttsSite)) {
+            this.manager.ttsModel = StringUtils.EMPTY;
+        } else if (StringUtils.isNotBlank(this.manager.ttsSite) && !ttsSites.containsKey(this.manager.ttsSite)) {
             this.manager.ttsSite = ttsSites.keySet().stream().findFirst().orElse(StringUtils.EMPTY);
         }
 
         // 模型存在判定
         var llmModels = llmSites.get(this.manager.llmSite);
         this.manager.llmModel = this.ensureExistingModel(llmModels, this.manager.llmModel);
-        var ttsModels = ttsSites.get(this.manager.ttsSite);
-        this.manager.ttsModel = this.ensureExistingModel(ttsModels, this.manager.ttsModel);
+        if (MaidAIChatSerializable.isNoTTSSite(this.manager.ttsSite)) {
+            this.manager.ttsModel = StringUtils.EMPTY;
+        } else {
+            String effectiveTtsSite = StringUtils.isBlank(this.manager.ttsSite) ? TTSSystemSite.API_TYPE : this.manager.ttsSite;
+            var ttsModels = ttsSites.get(effectiveTtsSite);
+            this.manager.ttsModel = this.ensureExistingModel(ttsModels, this.manager.ttsModel);
+        }
 
         // 语言存在判定
         if (SupportLanguage.SUPPORTED_LANGUAGES.isEmpty() || StringUtils.isBlank(this.manager.ttsLanguage)) {
@@ -395,10 +411,16 @@ public class AIChatScreen extends Screen {
         String trimmedLeft = this.trimToWidth(llmSummary.getString(), scaledHalfWidth);
         graphics.drawString(this.font, trimmedLeft, scaledLeft, scaledY, 0xFFADADAD);
 
-        String ttsModelSummary = "%s / %s".formatted(
-                StringUtils.defaultIfEmpty(this.manager.ttsSite, "*"),
-                ClientAvailableSitesSync.getTTSModelName(this.manager.ttsSite, this.manager.ttsModel)
-        );
+        String ttsModelSummary;
+        if (MaidAIChatSerializable.isNoTTSSite(this.manager.ttsSite)) {
+            ttsModelSummary = Component.translatable("ai.touhou_little_maid.chat.site.none.name").getString();
+        } else {
+            String effectiveTtsSite = StringUtils.isBlank(this.manager.ttsSite) ? TTSSystemSite.API_TYPE : this.manager.ttsSite;
+            ttsModelSummary = "%s / %s".formatted(
+                    effectiveTtsSite,
+                    ClientAvailableSitesSync.getTTSModelName(effectiveTtsSite, this.manager.ttsModel)
+            );
+        }
         MutableComponent ttsSummary = Component.translatable("ai.touhou_little_maid.chat.summary.tts",
                 ttsModelSummary, SupportLanguage.getLanguageName(this.manager.ttsLanguage));
         String trimmedRight = this.trimToWidth(ttsSummary.getString(), scaledHalfWidth);

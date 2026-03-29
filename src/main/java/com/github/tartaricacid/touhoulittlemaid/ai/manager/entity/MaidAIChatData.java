@@ -96,6 +96,10 @@ public abstract class MaidAIChatData extends MaidAIChatSerializable {
 
     @Nullable
     public TTSSite getTTSSite() {
+        if (isNoTTSSite(ttsSite)) {
+            return null;
+        }
+
         TTSSite site;
         if (StringUtils.isBlank(ttsSite)) {
             site = AvailableSites.getTTSSite(TTSSystemSite.API_TYPE);
