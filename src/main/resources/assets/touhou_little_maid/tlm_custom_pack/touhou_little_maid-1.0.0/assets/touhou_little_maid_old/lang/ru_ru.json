@@ -58,5 +58,15 @@
     "model.touhou_little_maid_old.mai.name": "Май",
     "model.touhou_little_maid_old.mai.desc": "§7Ведьма",
     "model.touhou_little_maid_old.sara.name": "Сара",
-    "model.touhou_little_maid_old.sara.desc": "§7Страж Макаи"
+    "model.touhou_little_maid_old.sara.desc": "§7Страж Макаи",
+    "model.touhou_little_maid_old.gengetsu.name": "Генгетсу",
+    "model.touhou_little_maid_old.gengetsu.desc": "§7Демон",
+    "model.touhou_little_maid_old.rika.name": "Рика",
+    "model.touhou_little_maid_old.rika.desc": "§7Инженер",
+    "model.touhou_little_maid_old.orange.name": "Оранж",
+    "model.touhou_little_maid_old.orange.desc": "§7Ёкай",
+    "model.touhou_little_maid_old.yuugen_magan.name": "Юген Маган",
+    "model.touhou_little_maid_old.yuugen_magan.desc": "§7Злые глаза",
+    "model.touhou_little_maid_old.yuuka_old.name": "Юука (PC-98)",
+    "model.touhou_little_maid_old.yuuka_old.desc": "§7Ёкай"
 }
