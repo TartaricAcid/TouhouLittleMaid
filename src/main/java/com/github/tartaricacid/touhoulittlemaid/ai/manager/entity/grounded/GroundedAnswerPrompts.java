@@ -41,11 +41,11 @@ public final class GroundedAnswerPrompts {
 
     public static String buildUserPrompt(String question, String knowledgeText) {
         return """
-                Player question or normalization context:
-                %s
-                
                 Grounded knowledge:
                 %s
-                """.formatted(question, knowledgeText);
+                
+                Player question or normalization context:
+                %s
+                """.formatted(knowledgeText, question);
     }
 }

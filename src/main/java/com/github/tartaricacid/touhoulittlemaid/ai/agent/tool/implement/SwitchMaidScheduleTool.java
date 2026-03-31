@@ -1,8 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.implement;
 
-import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.implement.MaidWorkSkill;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.ITool;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.function.response.ToolResponse;
+import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.LLMCallback;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.ObjectParameter;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.Parameter;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.StringParameter;
@@ -49,22 +48,23 @@ public class SwitchMaidScheduleTool implements ITool<String> {
     }
 
     @Override
-    public ToolResponse onCall(String result, EntityMaid maid) {
+    public LLMCallback onCall(String toolId, String result, LLMCallback callback) {
         MaidSchedule target;
         try {
             target = MaidSchedule.valueOf(result.toUpperCase());
         } catch (IllegalArgumentException e) {
             List<String> values = Arrays.stream(MaidSchedule.values()).map(Enum::name).toList();
             String text = "unknown schedule '%s'".formatted(result);
-            return ToolResponse.invalidParam(SCHEDULE_PARAM_ID, values, text, MaidWorkSkill.ID);
+            return callback.addToolResult(ITool.invalidParam(SCHEDULE_PARAM_ID, values, text), toolId);
         }
 
+        EntityMaid maid = callback.getMaid();
         MaidSchedule current = maid.getSchedule();
         if (current == target) {
-            return new ToolResponse("Already on %s schedule".formatted(target.name()));
+            return callback.addToolResult("Already on %s schedule".formatted(target.name()), toolId);
         }
 
         maid.setSchedule(target);
-        return new ToolResponse("Schedule switched to %s".formatted(target.name()));
+        return callback.addToolResult("Schedule switched to %s".formatted(target.name()), toolId);
     }
 }

@@ -1,8 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.implement;
 
-import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.implement.MaidWorkSkill;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.ITool;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.function.response.ToolResponse;
+import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.LLMCallback;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.ObjectParameter;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.Parameter;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.StringParameter;
@@ -64,7 +63,7 @@ public class SwitchMaidWorkTaskTool implements ITool<SwitchMaidWorkTaskTool.Resu
     }
 
     @Override
-    public ToolResponse onCall(Result result, EntityMaid maid) {
+    public LLMCallback onCall(String toolId, SwitchMaidWorkTaskTool.Result result, LLMCallback callback) {
         ResourceLocation taskId = result.id;
         List<IMaidTask> tasks = getAvailableTasks();
         Optional<IMaidTask> optional = TaskManager.findTask(taskId);
@@ -75,28 +74,29 @@ public class SwitchMaidWorkTaskTool implements ITool<SwitchMaidWorkTaskTool.Resu
                     .map(ResourceLocation::toString)
                     .toList();
             String text = "unknown task_id '%s'".formatted(taskId);
-            return ToolResponse.invalidParam(TASK_ID_PARAMETER_ID, values, text, MaidWorkSkill.ID);
+            return callback.addToolResult(ITool.invalidParam(TASK_ID_PARAMETER_ID, values, text), toolId);
         }
 
+        EntityMaid maid = callback.getMaid();
         IMaidTask task = optional.get();
         IMaidTask currentTask = maid.getTask();
 
         if (task == currentTask) {
             FunctionCallSwitchResult switchResult = task.onFunctionCallSwitch(maid);
             return switch (switchResult) {
-                case NO_CHANGE -> new ToolResponse(NO_CHANGE.formatted(taskId));
-                case MISSING_REQUIRED_ITEM -> new ToolResponse(MISSING_REQUIRED.formatted(taskId));
-                case PARTIAL_OK -> new ToolResponse(PARTIAL.formatted(taskId));
-                case OK -> new ToolResponse(SUCCESS.formatted(taskId));
+                case NO_CHANGE -> callback.addToolResult(NO_CHANGE.formatted(taskId), toolId);
+                case MISSING_REQUIRED_ITEM -> callback.addToolResult(MISSING_REQUIRED.formatted(taskId), toolId);
+                case PARTIAL_OK -> callback.addToolResult(PARTIAL.formatted(taskId), toolId);
+                case OK -> callback.addToolResult(SUCCESS.formatted(taskId), toolId);
             };
         }
 
         maid.setTask(task);
         FunctionCallSwitchResult switchResult = task.onFunctionCallSwitch(maid);
         return switch (switchResult) {
-            case NO_CHANGE, OK -> new ToolResponse(SUCCESS.formatted(taskId));
-            case MISSING_REQUIRED_ITEM -> new ToolResponse(MISSING_REQUIRED.formatted(taskId));
-            case PARTIAL_OK -> new ToolResponse(PARTIAL.formatted(taskId));
+            case NO_CHANGE, OK -> callback.addToolResult(SUCCESS.formatted(taskId), toolId);
+            case MISSING_REQUIRED_ITEM -> callback.addToolResult(MISSING_REQUIRED.formatted(taskId), toolId);
+            case PARTIAL_OK -> callback.addToolResult(PARTIAL.formatted(taskId), toolId);
         };
     }
 

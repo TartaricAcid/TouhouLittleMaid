@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.implement;
 
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.ITool;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.function.response.ToolResponse;
+import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.LLMCallback;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.BoolParameter;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.ObjectParameter;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.Parameter;
@@ -45,23 +45,24 @@ public class SwitchMaidSitTool implements ITool<SwitchMaidSitTool.Result> {
     }
 
     @Override
-    public ToolResponse onCall(Result result, EntityMaid maid) {
+    public LLMCallback onCall(String toolId, SwitchMaidSitTool.Result result, LLMCallback callback) {
+        EntityMaid maid = callback.getMaid();
         boolean toSit = result.sit;
         boolean isSitting = maid.isMaidInSittingPose();
 
         if (toSit) {
             if (isSitting) {
-                return new ToolResponse("Already sitting");
+                return callback.addToolResult("Already sitting", toolId);
             }
             maid.setInSittingPose(true);
-            return new ToolResponse("Maid is now sitting");
+            return callback.addToolResult("Maid is now sitting", toolId);
         }
 
         if (!isSitting) {
-            return new ToolResponse("Already standing");
+            return callback.addToolResult("Already standing", toolId);
         }
         maid.setInSittingPose(false);
-        return new ToolResponse("Maid is now standing");
+        return callback.addToolResult("Maid is now standing", toolId);
     }
 
     public record Result(boolean sit) {

@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.api;
 
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.MaidContextRegister;
-import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.SkillRegister;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.ToolRegister;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.SerializerRegister;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.FunctionCallRegister;
@@ -117,20 +116,9 @@ public interface ILittleMaid {
     }
 
     /**
-     * 注册女仆 AI 可用的 Skill。
-     * <p>
-     * 这些 Skill 会参与大模型的按需能力路由，用于为女仆补充上下文或暴露新的 Tool 集合。
-     *
-     * @param register 注册器
-     */
-    @ApiStatus.AvailableSince("1.5.1")
-    default void registerAISkill(SkillRegister register) {
-    }
-
-    /**
      * 注册女仆 AI 可用的 Tool。
      * <p>
-     * Tool 通常由 Skill 间接暴露给大模型，用于执行具体且原子的游戏内操作。
+     * Tool 会全部塞入对话的工具部分，用于执行具体且原子的游戏内操作。
      *
      * @param register 注册器
      */
@@ -163,7 +151,7 @@ public interface ILittleMaid {
      *
      * @deprecated 自 1.5.1 起，更换为 skill 机制，此方法已经无效
      */
-    @Deprecated(since = "1.5.1")
+    @Deprecated(since = "1.5.1", forRemoval = true)
     default void registerAIFunctionCall(FunctionCallRegister register) {
     }
 

@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.implement;
 
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.ITool;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.function.response.ToolResponse;
+import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.LLMCallback;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.BoolParameter;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.ObjectParameter;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.Parameter;
@@ -47,24 +47,25 @@ public class SwitchMaidFollowStateTool implements ITool<SwitchMaidFollowStateToo
     }
 
     @Override
-    public ToolResponse onCall(Result result, EntityMaid maid) {
+    public LLMCallback onCall(String toolId, SwitchMaidFollowStateTool.Result result, LLMCallback callback) {
+        EntityMaid maid = callback.getMaid();
         boolean toFollow = result.follow;
         boolean isHome = maid.isHomeModeEnable();
         if (toFollow) {
             if (!isHome) {
-                return new ToolResponse("Already following the owner");
+                return callback.addToolResult("Already following the owner", toolId);
             }
             maid.restrictTo(BlockPos.ZERO, MaidConfig.MAID_NON_HOME_RANGE.get());
             maid.setHomeModeEnable(false);
-            return new ToolResponse("Follow mode enabled");
+            return callback.addToolResult("Follow mode enabled", toolId);
         }
 
         if (isHome) {
-            return new ToolResponse("Already in home mode");
+            return callback.addToolResult("Already in home mode", toolId);
         }
         maid.getSchedulePos().setHomeModeEnable(maid, maid.blockPosition());
         maid.setHomeModeEnable(true);
-        return new ToolResponse("Home mode enabled (stop following)");
+        return callback.addToolResult("Home mode enabled (stop following)", toolId);
     }
 
     public record Result(boolean follow) {

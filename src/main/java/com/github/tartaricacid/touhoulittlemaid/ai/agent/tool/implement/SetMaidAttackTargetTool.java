@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.implement;
 
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.ITool;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.function.response.ToolResponse;
+import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.LLMCallback;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.IntegerParameter;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.ObjectParameter;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.Parameter;
@@ -48,16 +48,18 @@ public class SetMaidAttackTargetTool implements ITool<SetMaidAttackTargetTool.Re
     }
 
     @Override
-    public ToolResponse onCall(Result result, EntityMaid maid) {
+    public LLMCallback onCall(String toolId, SetMaidAttackTargetTool.Result result, LLMCallback callback) {
+        EntityMaid maid = callback.getMaid();
+
         // 检查女仆是否处于攻击模式
         if (!(maid.getTask() instanceof IAttackTask attackTask)) {
-            return new ToolResponse("The maid is not in an attack task. Switch to an attack task first before setting a target.");
+            return callback.addToolResult("The maid is not in an attack task. Switch to an attack task first before setting a target.", toolId);
         }
 
         // 通过数字 ID 查找实体
         Entity entity = maid.level.getEntity(result.entityId);
         if (!(entity instanceof LivingEntity target) || !target.isAlive()) {
-            return new ToolResponse("No living entity found with id %d in the maid's surroundings.".formatted(result.entityId));
+            return callback.addToolResult("No living entity found with id %d in the maid's surroundings.".formatted(result.entityId), toolId);
         }
 
         // 获取实体名称用于返回消息
@@ -71,12 +73,12 @@ public class SetMaidAttackTargetTool implements ITool<SetMaidAttackTargetTool.Re
         if (!attackTask.canAttack(maid, target)) {
             // 恢复原来的 lastHurtByMob，避免对后续行为造成影响
             maid.setLastHurtByMob(tmp);
-            return new ToolResponse("Cannot attack %s — it is excluded by the maid's attack rules.".formatted(targetName));
+            return callback.addToolResult("Cannot attack %s — it is excluded by the maid's attack rules.".formatted(targetName), toolId);
         } else {
             maid.getBrain().setMemory(MemoryModuleType.ATTACK_TARGET, target);
         }
 
-        return new ToolResponse("Attack target success set to %s".formatted(targetName));
+        return callback.addToolResult("Attack target success set to %s".formatted(targetName), toolId);
     }
 
     public record Result(int entityId) {

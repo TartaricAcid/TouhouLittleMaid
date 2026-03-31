@@ -1,5 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.service;
 
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+
 import javax.annotation.Nullable;
 import java.net.http.HttpRequest;
 

@@ -2,9 +2,6 @@ package com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai;
 
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.ISkill;
-import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.SkillRegister;
-import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.implement.UseSkillSkill;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.ITool;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.ToolRegister;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.LLMCallback;
@@ -14,13 +11,17 @@ import com.github.tartaricacid.touhoulittlemaid.ai.service.ResponseCallback;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.FunctionTool;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.ObjectParameter;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.Parameter;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.*;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.DefaultLLMSite;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMClient;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMMessage;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.Role;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai.request.ChatCompletion;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai.request.ResponseFormat;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai.response.ChatCompletionResponse;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai.response.Message;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai.response.Usage;
 import com.github.tartaricacid.touhoulittlemaid.capability.ChatTokensCapabilityProvider;
+import com.github.tartaricacid.touhoulittlemaid.config.subconfig.AIConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.net.HttpHeaders;
 import com.google.common.net.MediaType;
@@ -32,7 +33,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
-import java.util.List;
 
 public class LLMOpenAIClient implements LLMClient {
     protected static final Duration MAX_TIMEOUT = Duration.ofSeconds(60);
@@ -46,31 +46,28 @@ public class LLMOpenAIClient implements LLMClient {
     }
 
     @Override
-    public void chat(List<LLMMessage> messages, LLMConfig config, ResponseCallback<ResponseChat> callback) {
+    public void chat(LLMCallback callback) {
+        // 检查女仆是否存活，否则不进行通信
+        EntityMaid maid = callback.getMaid();
+        if (maid == null || !maid.isAlive()) {
+            return;
+        }
+
+        // 模型站点信息获取
         URI url = URI.create(this.site.url());
         String apiKey = this.site.secretKey();
-        String model = config.model();
+        String model = maid.getAiChatManager().getLLMModel();
         boolean isReasoningModel = this.site.isReasoningModel(model);
-        EntityMaid maid = config.maid();
 
         // 构建对话
-        ChatCompletion chatCompletion;
-
-        // 如果是新版 open ai reasoning 模型
-        // 没有 temperature 和 maxTokens 参数
-        if (isReasoningModel) {
-            chatCompletion = ChatCompletion.create().model(model)
-                    .setResponseFormat(ResponseFormat.text());
-        } else {
-            chatCompletion = ChatCompletion.create().model(model)
-                    .setResponseFormat(ResponseFormat.text());
-        }
+        ChatCompletion chatCompletion = ChatCompletion.create().model(model)
+                .setResponseFormat(ResponseFormat.text());
 
         // 添加额外参数
         chatCompletion = this.extraArgs(chatCompletion);
 
         // 添加消息
-        for (LLMMessage message : messages) {
+        for (LLMMessage message : callback.getMessages()) {
             if (message.role() == Role.USER) {
                 chatCompletion.userChat(message.message());
             } else if (message.role() == Role.ASSISTANT) {
@@ -80,7 +77,8 @@ public class LLMOpenAIClient implements LLMClient {
                     chatCompletion.assistantChat(message.message(), message.toolCalls());
                 }
             } else if (message.role() == Role.SYSTEM) {
-                // reasoning 使用 developer 模式，系统消息需要特殊处理
+                // 如果是新版 open ai reasoning 使用 developer 模式
+                // 系统消息需要特殊处理
                 if (isReasoningModel) {
                     chatCompletion.developerChat(message.message());
                 } else {
@@ -91,8 +89,27 @@ public class LLMOpenAIClient implements LLMClient {
             }
         }
 
-        // 添加 skill
-        this.addRootSkills(maid, config, chatCompletion);
+        // 添加所有 tools
+        if (callback.needAddTools) {
+            for (var entry : ToolRegister.getAllTools().entrySet()) {
+                String toolId = entry.getKey();
+                ITool<?> tool = entry.getValue();
+
+                if (tool == null || !tool.trigger(maid, chatCompletion)) {
+                    continue;
+                }
+
+                String summary = tool.summary(maid);
+                ObjectParameter root = ObjectParameter.create();
+                Parameter parameter = tool.parameters(root, maid);
+                chatCompletion.addTool(FunctionTool.create()
+                        .setName(toolId)
+                        .setDescription(summary)
+                        .setParameters(parameter)
+                        .build()
+                );
+            }
+        }
 
         // 如果是 minimax 站点，它不支持输入多个 system 消息，所以需要将 system 消息合并到一起
         // https://github.com/MiniMax-AI/MiniMax-M2/issues/51#issuecomment-3570551456
@@ -114,7 +131,7 @@ public class LLMOpenAIClient implements LLMClient {
         HttpRequest httpRequest = builder.build();
         httpClient.sendAsync(httpRequest, HttpResponse.BodyHandlers.ofString())
                 .whenComplete((response, throwable) ->
-                        handle(messages, config, callback, response, throwable, httpRequest));
+                        handle(callback, response, throwable, httpRequest));
     }
 
     /**
@@ -129,54 +146,7 @@ public class LLMOpenAIClient implements LLMClient {
         return chatCompletion;
     }
 
-    protected void addRootSkills(EntityMaid maid, LLMConfig config, ChatCompletion chatCompletion) {
-        ChatType chatType = config.chatType();
-
-        // 部分类型不需要添加
-        if (ChatType.notNeedSkill(chatType)) {
-            return;
-        }
-
-        // 首次对话只需要添加基本上 use_skill 的 skill
-        if (chatType == ChatType.NORMAL_CHAT) {
-            LLMConfig.SkillContext context = new LLMConfig.SkillContext(UseSkillSkill.ID);
-            this.addSkillFromContext(maid, chatCompletion, context);
-            return;
-        }
-
-        // 多轮 Function call 需要按需加载
-        if (chatType == ChatType.MULTI_FUNCTION_CALL && config.skillContext() != null) {
-            LLMConfig.SkillContext context = config.skillContext();
-            this.addSkillFromContext(maid, chatCompletion, context);
-        }
-    }
-
-    protected void addSkillFromContext(EntityMaid maid, ChatCompletion chatCompletion, LLMConfig.SkillContext context) {
-        ISkill skill = SkillRegister.getSkill(context.skillId());
-        if (skill == null || !skill.trigger(maid)) {
-            return;
-        }
-
-        // 依据 skill 的 tool 按需加载
-        skill.tools(maid).forEach(toolId -> {
-            ITool<?> tool = ToolRegister.getTool(toolId);
-            if (tool == null || !tool.trigger(maid, chatCompletion)) {
-                return;
-            }
-            String summary = tool.summary(maid);
-            ObjectParameter root = ObjectParameter.create();
-            Parameter parameter = tool.parameters(root, maid);
-            chatCompletion.addTool(FunctionTool.create()
-                    .setName(toolId)
-                    .setDescription(summary)
-                    .setParameters(parameter)
-                    .build()
-            );
-        });
-    }
-
-    protected void handle(List<LLMMessage> messages, LLMConfig config, ResponseCallback<ResponseChat> callback,
-                          HttpResponse<String> response, Throwable throwable, HttpRequest request) {
+    protected void handle(LLMCallback callback, HttpResponse<String> response, Throwable throwable, HttpRequest request) {
         this.<ChatCompletionResponse>handleResponse(callback, response, throwable, request, chat -> {
             if (TouhouLittleMaid.DEBUG) {
                 TouhouLittleMaid.LOGGER.info(GSON.toJson(chat));
@@ -186,9 +156,19 @@ public class LLMOpenAIClient implements LLMClient {
             if (usage != null) {
                 // TOKEN 计数
                 int totalTokens = usage.getTotalTokens();
-                if (totalTokens > 0 && config.maid().getOwner() instanceof ServerPlayer serverPlayer) {
-                    serverPlayer.getCapability(ChatTokensCapabilityProvider.CHAT_TOKENS_CAP)
-                            .ifPresent(tokens -> tokens.addCount(totalTokens));
+                if (totalTokens > 0 && callback.getMaid().getOwner() instanceof ServerPlayer serverPlayer) {
+                    int tokenCount = serverPlayer.getCapability(ChatTokensCapabilityProvider.CHAT_TOKENS_CAP).map(tokens -> {
+                        tokens.addCount(totalTokens);
+                        return tokens.getCount();
+                    }).orElse(0);
+
+                    // 如果此时 token 超过配置，那么就触发回调失败
+                    int tokenLimit = AIConfig.MAX_TOKENS_PER_PLAYER.get();
+                    if (tokenCount > tokenLimit) {
+                        String message = "Token Limit Exceeded: %d tokens used, limit is %d".formatted(tokenCount, tokenLimit);
+                        callback.onFailure(request, new Throwable(message), ErrorCode.CHAT_TOKEN_LIMIT_EXCEEDED);
+                        return;
+                    }
                 }
             }
 
@@ -199,7 +179,7 @@ public class LLMOpenAIClient implements LLMClient {
                 return;
             }
             if (firstChoice.hasToolCall()) {
-                ((LLMCallback) callback).onFunctionCall(firstChoice, messages, config, this);
+                callback.onFunctionCall(firstChoice, this);
             } else {
                 this.onTextCall(callback, firstChoice);
             }

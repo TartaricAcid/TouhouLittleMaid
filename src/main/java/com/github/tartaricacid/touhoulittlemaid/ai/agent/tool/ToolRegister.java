@@ -17,7 +17,6 @@ public class ToolRegister {
 
         register.register(new UseSkillTool());
         register.register(new QueryMaidContextTool());
-        register.register(new QueryMaidKnowledgeTool());
         register.register(new SwitchMaidFollowStateTool());
         register.register(new SwitchMaidWorkTaskTool());
         register.register(new SwitchMaidScheduleTool());

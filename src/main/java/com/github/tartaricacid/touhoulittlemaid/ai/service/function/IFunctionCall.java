@@ -13,7 +13,7 @@ import com.mojang.serialization.Codec;
  * @param <T>
  * @deprecated 自 1.5.1 起，更换为 skill 机制
  */
-@Deprecated(since = "1.5.1")
+@Deprecated(since = "1.5.1", forRemoval = true)
 public interface IFunctionCall<T> {
     /**
      * function 名称，建议小写英文、下划线
