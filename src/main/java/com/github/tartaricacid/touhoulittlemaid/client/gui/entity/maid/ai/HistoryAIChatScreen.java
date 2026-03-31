@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai;
 
+import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.LLMCallback;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.response.ResponseChat;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMMessage;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.Role;
@@ -29,7 +30,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Deque;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class HistoryAIChatScreen extends Screen {
     private static final MutableComponent HISTORY_TITLE = Component.translatable("gui.touhou_little_maid.button.maid_ai_chat_config.history_chat.title");
@@ -38,7 +38,7 @@ public class HistoryAIChatScreen extends Screen {
     private static final MutableComponent SUMMARY_EMPTY = Component.translatable("gui.touhou_little_maid.button.maid_ai_chat_config.history_chat.summary_empty");
 
     private static final int CHAT_TEXT_WIDTH = 140;
-    private static final int EVENT_TEXT_WIDTH = 180;
+    private static final int TOOL_TEXT_WIDTH = 180;
 
     private static final int SUMMARY_WIDTH = 120;
     private static final float SUMMARY_TEXT_SCALE = 0.5f;
@@ -145,16 +145,16 @@ public class HistoryAIChatScreen extends Screen {
     }
 
     private int addHistoryWidget(LLMMessage message, int posX) {
-        boolean isEvent = message.role() == Role.SYSTEM;
+        boolean isTool = message.role() == Role.TOOL;
         boolean isLeft = message.role() != Role.USER;
 
         Component msg = this.getDisplayMessage(message);
-        int lineHeight = this.getHistoryLineHeight(msg, isEvent);
+        int lineHeight = this.getHistoryLineHeight(msg, isTool);
 
-        // 系统消息
-        if (isEvent) {
-            historyWidgets.add(new HistoryChatWidget(posX - EVENT_TEXT_WIDTH / 2, maxHeight,
-                    EVENT_TEXT_WIDTH, lineHeight, msg, playerSkin, message.gameTime(), true, true));
+        // 工具消息
+        if (isTool) {
+            historyWidgets.add(new HistoryChatWidget(posX - TOOL_TEXT_WIDTH / 2, maxHeight,
+                    TOOL_TEXT_WIDTH, lineHeight, msg, playerSkin, message.gameTime(), true, true));
             return lineHeight;
         }
 
@@ -234,11 +234,9 @@ public class HistoryAIChatScreen extends Screen {
             }
 
             if (message.role() == Role.ASSISTANT) {
-                // 工具历史信息
+                // LLM 发起的工具调用信息，不加入显示里
                 List<ToolCall> toolCalls = message.toolCalls();
                 if (toolCalls != null && !toolCalls.isEmpty()) {
-                    LLMMessage msg = new LLMMessage(Role.SYSTEM, this.getToolCallNames(toolCalls), message.gameTime());
-                    this.history.add(msg);
                     return;
                 }
 
@@ -252,11 +250,21 @@ public class HistoryAIChatScreen extends Screen {
                     }
                 }
             }
+
+            // 自身发送给 LLM 的历史记录，去掉头部信息加入历史对话
+            if (message.role() == Role.TOOL) {
+                String text = message.message();
+                if (StringUtils.isNotBlank(text) && text.startsWith(LLMCallback.CALLING_PREFIX)) {
+                    String substring = text.substring(LLMCallback.CALLING_PREFIX.length());
+                    LLMMessage msg = new LLMMessage(Role.TOOL, substring, message.gameTime());
+                    this.history.add(msg);
+                }
+            }
         });
     }
 
     private Component getDisplayMessage(LLMMessage message) {
-        if (message.role() == Role.SYSTEM) {
+        if (message.role() == Role.TOOL) {
             if (StringUtils.isBlank(message.message())) {
                 return Component.translatable("gui.touhou_little_maid.button.maid_ai_chat_config.history_chat.tool_call.generic");
             }
@@ -265,22 +273,14 @@ public class HistoryAIChatScreen extends Screen {
         return Component.literal(message.message());
     }
 
-    private int getHistoryLineHeight(Component message, boolean isEvent) {
-        if (isEvent) {
-            int lineCount = font.split(message, EVENT_TEXT_WIDTH).size();
+    private int getHistoryLineHeight(Component message, boolean isTool) {
+        if (isTool) {
+            int lineCount = font.split(message, TOOL_TEXT_WIDTH).size();
             return lineCount * font.lineHeight / 5;
         } else {
             int lineCount = font.split(message, CHAT_TEXT_WIDTH).size();
             return 10 + lineCount * font.lineHeight;
         }
-    }
-
-    private String getToolCallNames(List<ToolCall> toolCalls) {
-        return toolCalls.stream()
-                .map(tool -> tool.getFunction().getName())
-                .filter(StringUtils::isNotBlank)
-                .distinct()
-                .collect(Collectors.joining(", "));
     }
 
     private void renderSummaryPanel(GuiGraphics graphics) {

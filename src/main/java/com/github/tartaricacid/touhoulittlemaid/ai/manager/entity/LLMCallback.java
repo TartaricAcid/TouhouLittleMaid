@@ -35,6 +35,8 @@ import java.util.Optional;
 import java.util.Set;
 
 public class LLMCallback implements ResponseCallback<ResponseChat> {
+    public static final String CALLING_PREFIX = "Calling: ";
+
     private static final int MAX_CALL_COUNT = 16;
     private static final String WAITING_KEY = "ai.touhou_little_maid.chat.chat_bubble_waiting";
 
@@ -226,11 +228,13 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
         Object finalResult = result;
         // 工具调用必须在主线程，否则可能会出奇怪的问题
         serverLevel.getServer().submit(() -> {
+            // 工具调用的信息摘要
+            String summary = tool.invocationSummary(finalResult);
             // 向玩家更新气泡，并提示当前正在调用工具
-            this.refreshWaitingChatBubble(name);
+            this.refreshWaitingChatBubble(summary);
             // 历史记录缓存，注意这里并不原样记录工具调用的参数
             // 而是记录一个简单的字符串，避免历史记录过于冗长，同时污染上下文窗口
-            chatManager.addToolHistory("Use Tool: %s".formatted(name), toolCall.getId());
+            chatManager.addToolHistory(CALLING_PREFIX + summary, toolCall.getId());
             // 执行 tool，获得返回结果
             LLMCallback callback = tool.onCall(toolCall.getId(), finalResult, this);
             // 再次和 LLM 通信，注意此时用的是 Function Call 传递回的回调，可能已经被修改了
@@ -239,13 +243,11 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
     }
 
     private void refreshWaitingChatBubble(String tool) {
-        Component secondaryText = Component
-                .translatable("ai.touhou_little_maid.chat.chat_bubble_waiting_calling", tool)
-                .withStyle(ChatFormatting.GRAY);
+        String key = "ai.touhou_little_maid.chat.chat_bubble_waiting_calling";
+        Component secondaryText = Component.translatable(key, tool).withStyle(ChatFormatting.GRAY);
         this.waitingChatBubbleId = maid.getChatBubbleManager().refreshThinkingText(
                 "ai.touhou_little_maid.chat.chat_bubble_waiting",
-                waitingChatBubbleId,
-                secondaryText
+                waitingChatBubbleId, secondaryText
         );
     }
 

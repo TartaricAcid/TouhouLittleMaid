@@ -68,6 +68,11 @@ public class QueryGameContextTool implements ITool<String> {
         return callback.addToolResult(body, toolId);
     }
 
+    @Override
+    public String invocationSummary(String result) {
+        return "%s { %s }".formatted(TOOL_ID, result);
+    }
+
     private static String buildDescription(List<ContextCategory> categories) {
         String categoryList = categories.stream()
                 .map(category -> "- %s: %s".formatted(category.id(), category.summary()))

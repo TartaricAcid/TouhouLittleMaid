@@ -81,6 +81,11 @@ public class UseSkillTool implements ITool<String> {
         return callback.addToolResult(body, toolId);
     }
 
+    @Override
+    public String invocationSummary(String result) {
+        return "%s { %s }".formatted(TOOL_ID, result);
+    }
+
     private String getKnowledge(SkillInstance selected, MaidAIChatManager chatManager) {
         String knowledge = selected.body();
 

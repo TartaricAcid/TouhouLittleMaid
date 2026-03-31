@@ -68,6 +68,14 @@ public interface ITool<T> {
     LLMCallback onCall(String toolCallId, T result, LLMCallback callback);
 
     /**
+     * 生成此次工具调用的摘要信息，用于 UI 展示及历史记录显示
+     *
+     * @param result 解码后的参数对象
+     * @return 摘要信息
+     */
+    String invocationSummary(T result);
+
+    /**
      * 程序侧再次判断当前 Tool 是否允许在当前上下文下暴露给模型。
      * 一般不需要重写此方法。
      *

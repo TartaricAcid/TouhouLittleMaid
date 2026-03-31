@@ -118,6 +118,11 @@ public class SwitchWorkTaskTool implements ITool<SwitchWorkTaskTool.Result> {
         }
     }
 
+    @Override
+    public String invocationSummary(Result result) {
+        return "%s { %s }".formatted(TOOL_ID, result.id.getPath());
+    }
+
     private String switchResult(ResourceLocation taskId, boolean sameTask, FunctionCallSwitchResult switchResult) {
         if (sameTask) {
             return switch (switchResult) {

@@ -75,4 +75,9 @@ public class SwitchScheduleTool implements ITool<String> {
         maid.setSchedule(target);
         return callback.addToolResult("Schedule switched to %s.".formatted(target.name()), toolId);
     }
+
+    @Override
+    public String invocationSummary(String result) {
+        return "%s { %s }".formatted(TOOL_ID, result);
+    }
 }

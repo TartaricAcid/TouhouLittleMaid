@@ -66,6 +66,11 @@ public class SwitchSitTool implements ITool<SwitchSitTool.Result> {
         return callback.addToolResult("Success standing", toolId);
     }
 
+    @Override
+    public String invocationSummary(Result result) {
+        return TOOL_ID;
+    }
+
     public record Result(boolean sit) {
     }
 }

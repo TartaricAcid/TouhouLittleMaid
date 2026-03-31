@@ -70,6 +70,11 @@ public class SwitchFollowStateTool implements ITool<SwitchFollowStateTool.Result
         return callback.addToolResult("Flow mode disabled", toolId);
     }
 
+    @Override
+    public String invocationSummary(Result result) {
+        return TOOL_ID;
+    }
+
     public record Result(boolean follow) {
     }
 }
