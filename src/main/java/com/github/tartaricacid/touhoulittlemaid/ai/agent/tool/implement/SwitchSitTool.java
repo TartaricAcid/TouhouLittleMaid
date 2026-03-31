@@ -9,14 +9,16 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-public class SwitchMaidSitTool implements ITool<SwitchMaidSitTool.Result> {
-    public static final String TOOL_ID = "switch_maid_sit";
+public class SwitchSitTool implements ITool<SwitchSitTool.Result> {
+    public static final String TOOL_ID = "switch_sit";
 
-    private static final String TOOL_DESC = "Toggle the maid's sitting posture.";
+    private static final String TOOL_DESC = """
+            Use this when the user wants the maid to sit or stand.
+            Set sit=true to sit. Set sit=false to stand.
+            Do not use this to control follow mode.
+            """.trim();
 
     private static final String SIT_PARAM_ID = "sit";
-    private static final String SIT_PARAM_DESC = "true = sit down; false = stand up.";
-
     private static final Codec<Result> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(Codec.BOOL.fieldOf(SIT_PARAM_ID).forGetter(Result::sit))
                     .apply(instance, Result::new));
@@ -34,7 +36,6 @@ public class SwitchMaidSitTool implements ITool<SwitchMaidSitTool.Result> {
     @Override
     public Parameter parameters(ObjectParameter root, EntityMaid maid) {
         BoolParameter sit = BoolParameter.create();
-        sit.setDescription(SIT_PARAM_DESC);
         root.addProperties(SIT_PARAM_ID, sit);
         return root;
     }
@@ -45,7 +46,7 @@ public class SwitchMaidSitTool implements ITool<SwitchMaidSitTool.Result> {
     }
 
     @Override
-    public LLMCallback onCall(String toolId, SwitchMaidSitTool.Result result, LLMCallback callback) {
+    public LLMCallback onCall(String toolId, SwitchSitTool.Result result, LLMCallback callback) {
         EntityMaid maid = callback.getMaid();
         boolean toSit = result.sit;
         boolean isSitting = maid.isMaidInSittingPose();
@@ -55,14 +56,14 @@ public class SwitchMaidSitTool implements ITool<SwitchMaidSitTool.Result> {
                 return callback.addToolResult("Already sitting", toolId);
             }
             maid.setInSittingPose(true);
-            return callback.addToolResult("Maid is now sitting", toolId);
+            return callback.addToolResult("Success sitting", toolId);
         }
 
         if (!isSitting) {
             return callback.addToolResult("Already standing", toolId);
         }
         maid.setInSittingPose(false);
-        return callback.addToolResult("Maid is now standing", toolId);
+        return callback.addToolResult("Success standing", toolId);
     }
 
     public record Result(boolean sit) {

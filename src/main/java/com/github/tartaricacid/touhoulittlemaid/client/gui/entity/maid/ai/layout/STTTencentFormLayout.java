@@ -56,7 +56,7 @@ public class STTTencentFormLayout extends STTSiteFormLayout {
                 String word = parts[0].trim();
                 String weightStr = parts[1].trim();
                 if (!word.isEmpty() && weightStr.matches("\\d+")) {
-                    hotWordFixed.append(word).append("|").append(weightStr).append("\n");
+                    hotWordFixed.append(word).append("|").append(weightStr).append(",");
                 }
             }
         }

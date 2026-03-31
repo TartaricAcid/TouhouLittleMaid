@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.agent.context.builtin;
 
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.AbstractMaidContext;
-import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.MaidContextRegister;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.GameContextRegister;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
@@ -10,22 +10,22 @@ import static com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.papi.S
 
 public final class PositionMaidContexts {
     public static final String CATEGORY = "position";
-    private static final String SUMMARY = "Maid and owner positions, distance between them, and light level.";
+    private static final String SUMMARY = "Self and user positions, distance between them, and light level.";
 
     private PositionMaidContexts() {
     }
 
-    public static void registerAll(MaidContextRegister register) {
+    public static void registerAll(GameContextRegister register) {
         register.registerCategory(CATEGORY, SUMMARY);
         register.registerContext(CATEGORY, new MaidPositionContext());
-        register.registerContext(CATEGORY, new OwnerPositionContext());
-        register.registerContext(CATEGORY, new DistanceToOwnerContext());
+        register.registerContext(CATEGORY, new UserPositionContext());
+        register.registerContext(CATEGORY, new DistanceToUserContext());
         register.registerContext(CATEGORY, new LightLevelContext());
     }
 
     private static final class MaidPositionContext extends AbstractMaidContext {
         private MaidPositionContext() {
-            super("maid_position", "Maid position (x, y, z)");
+            super("self_position", "Self position (x, y, z)");
         }
 
         @Override
@@ -35,9 +35,9 @@ public final class PositionMaidContexts {
         }
     }
 
-    private static final class OwnerPositionContext extends AbstractMaidContext {
-        private OwnerPositionContext() {
-            super("owner_position", "Owner position (x, y, z)");
+    private static final class UserPositionContext extends AbstractMaidContext {
+        private UserPositionContext() {
+            super("user_position", "User position (x, y, z)");
         }
 
         @Override
@@ -51,9 +51,9 @@ public final class PositionMaidContexts {
         }
     }
 
-    private static final class DistanceToOwnerContext extends AbstractMaidContext {
-        private DistanceToOwnerContext() {
-            super("distance_to_owner", "Distance to owner (blocks)");
+    private static final class DistanceToUserContext extends AbstractMaidContext {
+        private DistanceToUserContext() {
+            super("distance_to_user", "Distance to user (blocks)");
         }
 
         @Override
@@ -69,7 +69,7 @@ public final class PositionMaidContexts {
 
     private static final class LightLevelContext extends AbstractMaidContext {
         private LightLevelContext() {
-            super("light_level", "Light level at maid position");
+            super("light_level", "Light level at self position");
         }
 
         @Override

@@ -12,13 +12,21 @@ import com.mojang.serialization.Codec;
 import java.util.Arrays;
 import java.util.List;
 
-public class SwitchMaidScheduleTool implements ITool<String> {
-    public static final String TOOL_ID = "switch_maid_schedule";
+public class SwitchScheduleTool implements ITool<String> {
+    public static final String TOOL_ID = "switch_schedule";
 
-    private static final String TOOL_DESC = "Switch the maid's work schedule.";
+    private static final String TOOL_DESC = """
+            Use this when user wants to change the schedule.
+            Before using this tool, Should first obtain the context of game time and self schedule.
+            """.trim();
 
     private static final String SCHEDULE_PARAM_ID = "schedule";
-    private static final String SCHEDULE_PARAM_DESC = "The schedule mode: DAY, NIGHT, ALL.";
+    private static final String SCHEDULE_PARAM_DESC = """
+            - DAY: 06:00 ~ 18:00 Work, 18:00 ~ 22:00 Leisure, 22:00 ~ 06:00 Rest
+            - NIGHT: 18:00 ~ 06:00 Work, 06:00 ~ 14:00 Rest, 14:00 ~ 18:00 Leisure
+            - ALL: 00:00 ~ 24:00 Work
+            Choose one of the enum values exposed in this schema.
+            """.trim();
 
 
     private static final Codec<String> CODEC = Codec.STRING.fieldOf(SCHEDULE_PARAM_ID).codec();
@@ -54,17 +62,17 @@ public class SwitchMaidScheduleTool implements ITool<String> {
             target = MaidSchedule.valueOf(result.toUpperCase());
         } catch (IllegalArgumentException e) {
             List<String> values = Arrays.stream(MaidSchedule.values()).map(Enum::name).toList();
-            String text = "unknown schedule '%s'".formatted(result);
+            String text = "Unknown schedule '%s'".formatted(result);
             return callback.addToolResult(ITool.invalidParam(SCHEDULE_PARAM_ID, values, text), toolId);
         }
 
         EntityMaid maid = callback.getMaid();
         MaidSchedule current = maid.getSchedule();
         if (current == target) {
-            return callback.addToolResult("Already on %s schedule".formatted(target.name()), toolId);
+            return callback.addToolResult("Already on %s schedule.".formatted(target.name()), toolId);
         }
 
         maid.setSchedule(target);
-        return callback.addToolResult("Schedule switched to %s".formatted(target.name()), toolId);
+        return callback.addToolResult("Schedule switched to %s.".formatted(target.name()), toolId);
     }
 }

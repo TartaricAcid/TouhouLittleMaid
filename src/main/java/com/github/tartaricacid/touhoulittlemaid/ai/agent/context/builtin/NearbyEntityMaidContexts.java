@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.agent.context.builtin;
 
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.AbstractMaidContext;
-import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.MaidContextRegister;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.GameContextRegister;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.Lists;
 import net.minecraft.resources.ResourceLocation;
@@ -19,13 +19,13 @@ import static com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.papi.S
 
 public final class NearbyEntityMaidContexts {
     public static final String CATEGORY = "nearby_entities";
-    private static final String SUMMARY = "Nearby living entities around the maid, including type, entity id, distance to maid, and distance to owner.";
+    private static final String SUMMARY = "Nearby living entities, including type, entity id, distance to self, and distance to user.";
     private static final int MAX_ENTITIES = 20;
 
     private NearbyEntityMaidContexts() {
     }
 
-    public static void registerAll(MaidContextRegister register) {
+    public static void registerAll(GameContextRegister register) {
         register.registerCategory(CATEGORY, SUMMARY);
         register.registerContext(CATEGORY, new NearbyEntitiesContext());
     }
@@ -61,9 +61,9 @@ public final class NearbyEntityMaidContexts {
 
                         String entry;
                         if (owner != null) {
-                            entry = "%s (id=%d, dist_maid=%.1f, dist_owner=%.1f)".formatted(type, id, distToMaid, owner.distanceTo(entity));
+                            entry = "%s (id=%d, dist_self=%.1f, dist_user=%.1f)".formatted(type, id, distToMaid, owner.distanceTo(entity));
                         } else {
-                            entry = "%s (id=%d, dist_maid=%.1f)".formatted(type, id, distToMaid);
+                            entry = "%s (id=%d, dist_self=%.1f)".formatted(type, id, distToMaid);
                         }
 
                         if (entity instanceof Player player) {

@@ -11,13 +11,16 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 
-public class SwitchMaidFollowStateTool implements ITool<SwitchMaidFollowStateTool.Result> {
-    public static final String TOOL_ID = "switch_maid_follow_state";
+public class SwitchFollowStateTool implements ITool<SwitchFollowStateTool.Result> {
+    public static final String TOOL_ID = "switch_follow_state";
 
-    private static final String TOOL_DESC = "Toggle the maid's follow/home mode.";
+    private static final String TOOL_DESC = """
+            Use this when the user wants to start you following or stop here.
+            Set follow=true to following the user, set follow=false to stop following.
+            Do not use this to make the maid sit down.
+            """.trim();
 
     private static final String FOLLOW_PARAM_ID = "follow";
-    private static final String FOLLOW_PARAM_DESC = "true = follow the owner; false = stay at current position (home mode).";
 
     private static final Codec<Result> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(Codec.BOOL.fieldOf(FOLLOW_PARAM_ID).forGetter(Result::follow))
@@ -36,7 +39,6 @@ public class SwitchMaidFollowStateTool implements ITool<SwitchMaidFollowStateToo
     @Override
     public Parameter parameters(ObjectParameter root, EntityMaid maid) {
         BoolParameter follow = BoolParameter.create();
-        follow.setDescription(FOLLOW_PARAM_DESC);
         root.addProperties(FOLLOW_PARAM_ID, follow);
         return root;
     }
@@ -47,7 +49,7 @@ public class SwitchMaidFollowStateTool implements ITool<SwitchMaidFollowStateToo
     }
 
     @Override
-    public LLMCallback onCall(String toolId, SwitchMaidFollowStateTool.Result result, LLMCallback callback) {
+    public LLMCallback onCall(String toolId, SwitchFollowStateTool.Result result, LLMCallback callback) {
         EntityMaid maid = callback.getMaid();
         boolean toFollow = result.follow;
         boolean isHome = maid.isHomeModeEnable();
@@ -61,11 +63,11 @@ public class SwitchMaidFollowStateTool implements ITool<SwitchMaidFollowStateToo
         }
 
         if (isHome) {
-            return callback.addToolResult("Already in home mode", toolId);
+            return callback.addToolResult("Already stop following", toolId);
         }
         maid.getSchedulePos().setHomeModeEnable(maid, maid.blockPosition());
         maid.setHomeModeEnable(true);
-        return callback.addToolResult("Home mode enabled (stop following)", toolId);
+        return callback.addToolResult("Flow mode disabled", toolId);
     }
 
     public record Result(boolean follow) {

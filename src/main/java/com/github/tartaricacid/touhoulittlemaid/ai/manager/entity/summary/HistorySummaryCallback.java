@@ -13,10 +13,12 @@ import java.util.List;
 
 public class HistorySummaryCallback extends LLMCallback {
     private final HistorySummaryManager summaryManager;
+    private final List<LLMMessage> snapshot;
 
-    public HistorySummaryCallback(MaidAIChatManager manager, List<LLMMessage> messages) {
+    public HistorySummaryCallback(MaidAIChatManager manager, List<LLMMessage> messages, List<LLMMessage> snapshot) {
         super(manager, messages, true);
         this.summaryManager = manager.getHistorySummaryManager();
+        this.snapshot = snapshot;
         this.needAddTools = false;
     }
 
@@ -33,6 +35,6 @@ public class HistorySummaryCallback extends LLMCallback {
             this.summaryManager.stopHistorySummary();
             return;
         }
-        this.summaryManager.completeHistorySummary(summary, this.messages);
+        this.summaryManager.completeHistorySummary(summary, this.snapshot);
     }
 }

@@ -1,17 +1,17 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.agent.context.builtin;
 
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.AbstractMaidContext;
-import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.MaidContextRegister;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.GameContextRegister;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 
 public final class BehaviorMaidContexts {
     public static final String CATEGORY = "behavior";
-    private static final String SUMMARY = "Maid behavior modes: follow/home state, sitting, schedule, and current work task.";
+    private static final String SUMMARY = "Follow state, sitting, schedule, and current work task.";
 
     private BehaviorMaidContexts() {
     }
 
-    public static void registerAll(MaidContextRegister register) {
+    public static void registerAll(GameContextRegister register) {
         register.registerCategory(CATEGORY, SUMMARY);
         register.registerContext(CATEGORY, new FollowStateContext());
         register.registerContext(CATEGORY, new SittingContext());
@@ -22,12 +22,12 @@ public final class BehaviorMaidContexts {
 
     private static final class FollowStateContext extends AbstractMaidContext {
         private FollowStateContext() {
-            super("follow_state", "Follow/home mode");
+            super("follow_state", "Follow mode");
         }
 
         @Override
         public String getValue(EntityMaid maid) {
-            return maid.isHomeModeEnable() ? "home (staying at position)" : "follow (following owner)";
+            return maid.isHomeModeEnable() ? "not following (staying at position)" : "follow (following user)";
         }
     }
 
@@ -50,9 +50,9 @@ public final class BehaviorMaidContexts {
         @Override
         public String getValue(EntityMaid maid) {
             return switch (maid.getSchedule()) {
-                case DAY -> "DAY (work during daytime, rest at night)";
-                case NIGHT -> "NIGHT (work during nighttime, rest during day)";
-                case ALL -> "ALL (work around the clock)";
+                case DAY -> "DAY";
+                case NIGHT -> "NIGHT";
+                case ALL -> "ALL";
             };
         }
     }

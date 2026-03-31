@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.agent.context.builtin;
 
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.AbstractMaidContext;
-import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.MaidContextRegister;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.GameContextRegister;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -10,24 +10,24 @@ import org.apache.commons.lang3.StringUtils;
 
 import static com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.papi.StringConstant.*;
 
-public final class OwnerMaidContexts {
-    public static final String CATEGORY = "owner";
-    private static final String SUMMARY = "Owner identity, health, and equipment information.";
+public final class UserContexts {
+    public static final String CATEGORY = "user";
+    private static final String SUMMARY = "User identity, health, and equipment information.";
 
-    private OwnerMaidContexts() {
+    private UserContexts() {
     }
 
-    public static void registerAll(MaidContextRegister register) {
+    public static void registerAll(GameContextRegister register) {
         register.registerCategory(CATEGORY, SUMMARY);
-        register.registerContext(CATEGORY, new OwnerNameContext());
-        register.registerContext(CATEGORY, new OwnerHealthContext());
-        register.registerContext(CATEGORY, new OwnerMainHandContext());
-        register.registerContext(CATEGORY, new OwnerArmorContext());
+        register.registerContext(CATEGORY, new UserNameContext());
+        register.registerContext(CATEGORY, new UserHealthContext());
+        register.registerContext(CATEGORY, new UserMainHandContext());
+        register.registerContext(CATEGORY, new UserArmorContext());
     }
 
-    private static final class OwnerNameContext extends AbstractMaidContext {
-        private OwnerNameContext() {
-            super("owner_name", "Owner name");
+    private static final class UserNameContext extends AbstractMaidContext {
+        private UserNameContext() {
+            super("user_name", "User name");
         }
 
         @Override
@@ -40,9 +40,9 @@ public final class OwnerMaidContexts {
         }
     }
 
-    private static final class OwnerHealthContext extends AbstractMaidContext {
-        private OwnerHealthContext() {
-            super("owner_healthy", "Owner health");
+    private static final class UserHealthContext extends AbstractMaidContext {
+        private UserHealthContext() {
+            super("user_healthy", "User health");
         }
 
         @Override
@@ -57,9 +57,9 @@ public final class OwnerMaidContexts {
         }
     }
 
-    private static final class OwnerMainHandContext extends AbstractMaidContext {
-        private OwnerMainHandContext() {
-            super("owner_mainhand", "Owner main-hand item");
+    private static final class UserMainHandContext extends AbstractMaidContext {
+        private UserMainHandContext() {
+            super("user_mainhand", "User main-hand item");
         }
 
         @Override
@@ -76,9 +76,9 @@ public final class OwnerMaidContexts {
         }
     }
 
-    private static final class OwnerArmorContext extends AbstractMaidContext {
-        private OwnerArmorContext() {
-            super("owner_armor", "Owner equipped armor");
+    private static final class UserArmorContext extends AbstractMaidContext {
+        private UserArmorContext() {
+            super("user_armor", "User equipped armor");
         }
 
         @Override

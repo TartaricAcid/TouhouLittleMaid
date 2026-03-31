@@ -12,7 +12,8 @@ import java.util.Map;
 public final class GroundedAnswerPrompts {
     private static final String GROUNDED_INSTRUCTIONS = """
             ## Grounded Answer Instructions
-            Answer the player's question using only the provided grounded knowledge.
+            Answer the user's question using only the provided grounded knowledge.
+            The grounded knowledge was already assembled before this pass, including any localized skill reference selected for the current chat language.
             If the knowledge is insufficient, say so honestly instead of inventing details.
             Keep the answer concise and directly useful.
             If nearby conversation context is included, first resolve any references (like "it", "that", "this") into a clear standalone question, then answer it.
@@ -41,10 +42,10 @@ public final class GroundedAnswerPrompts {
 
     public static String buildUserPrompt(String question, String knowledgeText) {
         return """
-                Grounded knowledge:
+                ## Prepared Knowledge Package
                 %s
                 
-                Player question or normalization context:
+                ## User Question Or Normalization Context
                 %s
                 """.formatted(knowledgeText, question);
     }

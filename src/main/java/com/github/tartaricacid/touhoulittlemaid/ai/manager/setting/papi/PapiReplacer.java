@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.papi;
 
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.SkillLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.Maps;
 import net.minecraft.Util;
@@ -31,6 +32,7 @@ public class PapiReplacer {
             map.put("owner_name", getOwnerName(maid));
             map.put("chat_language", getChatLanguage(language));
             map.put("tts_language", getTtsLanguage(maid));
+            map.put("available_skills", SkillLoader.getSkillSummary());
         });
 
         String base = new StrSubstitutor(valueMap).replace(FULL_SETTING);

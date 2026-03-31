@@ -16,12 +16,11 @@ public class ToolRegister {
         ToolRegister register = new ToolRegister();
 
         register.register(new UseSkillTool());
-        register.register(new QueryMaidContextTool());
-        register.register(new SwitchMaidFollowStateTool());
-        register.register(new SwitchMaidWorkTaskTool());
-        register.register(new SwitchMaidScheduleTool());
-        register.register(new SwitchMaidSitTool());
-        register.register(new SetMaidAttackTargetTool());
+        register.register(new QueryGameContextTool());
+        register.register(new SwitchFollowStateTool());
+        register.register(new SwitchWorkTaskTool());
+        register.register(new SwitchScheduleTool());
+        register.register(new SwitchSitTool());
 
         for (ILittleMaid littleMaid : TouhouLittleMaid.EXTENSIONS) {
             littleMaid.registerAITool(register);

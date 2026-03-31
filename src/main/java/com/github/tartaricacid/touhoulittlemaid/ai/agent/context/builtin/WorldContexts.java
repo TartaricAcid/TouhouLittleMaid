@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.agent.context.builtin;
 
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.AbstractMaidContext;
-import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.MaidContextRegister;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.GameContextRegister;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -11,14 +11,14 @@ import net.minecraft.world.level.biome.Biome;
 
 import static com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.papi.StringConstant.*;
 
-public final class WorldMaidContexts {
+public final class WorldContexts {
     public static final String CATEGORY = "world";
-    private static final String SUMMARY = "Time, weather, dimension, and biome around the maid.";
+    private static final String SUMMARY = "Time, weather, dimension, and biome around";
 
-    private WorldMaidContexts() {
+    private WorldContexts() {
     }
 
-    public static void registerAll(MaidContextRegister register) {
+    public static void registerAll(GameContextRegister register) {
         register.registerCategory(CATEGORY, SUMMARY);
         register.registerContext(CATEGORY, new GameTimeContext());
         register.registerContext(CATEGORY, new WeatherContext());

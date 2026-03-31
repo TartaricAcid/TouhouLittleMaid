@@ -143,7 +143,7 @@ public class HistorySummaryManager {
         });
 
         // 进行通信压缩上下文
-        HistorySummaryCallback callback = new HistorySummaryCallback(this.chatManager, messages);
+        HistorySummaryCallback callback = new HistorySummaryCallback(this.chatManager, messages, snapshot);
         site.client().chat(callback);
     }
 

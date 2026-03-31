@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.init.registry;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.MaidContextRegister;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.GameContextRegister;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.SkillLoader;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.ToolRegister;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.SerializerRegister;
@@ -70,7 +70,7 @@ public final class CommonRegistry {
         SerializerRegister.init();
         // FunctionCallRegister.init();
         SkillLoader.init();
-        MaidContextRegister.init();
+        GameContextRegister.init();
         ToolRegister.init();
         ChatBubbleRegister.init();
         DebugMaidManager.init();

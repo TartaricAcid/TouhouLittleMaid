@@ -1,7 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.agent.context.builtin;
 
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.AbstractMaidContext;
-import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.MaidContextRegister;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.GameContextRegister;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
@@ -12,12 +12,12 @@ import static com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.papi.S
 
 public final class StatusMaidContexts {
     public static final String CATEGORY = "status";
-    private static final String SUMMARY = "Maid health and current status effects.";
+    private static final String SUMMARY = "Self health and current status effects.";
 
     private StatusMaidContexts() {
     }
 
-    public static void registerAll(MaidContextRegister register) {
+    public static void registerAll(GameContextRegister register) {
         register.registerCategory(CATEGORY, SUMMARY);
         register.registerContext(CATEGORY, new MaidHealthContext());
         register.registerContext(CATEGORY, new MaidEffectsContext());
@@ -25,7 +25,7 @@ public final class StatusMaidContexts {
 
     private static final class MaidHealthContext extends AbstractMaidContext {
         private MaidHealthContext() {
-            super("healthy", "Maid health");
+            super("healthy", "Self health");
         }
 
         @Override
@@ -38,7 +38,7 @@ public final class StatusMaidContexts {
 
     private static final class MaidEffectsContext extends AbstractMaidContext {
         private MaidEffectsContext() {
-            super("effects", "Maid effects");
+            super("effects", "Self effects");
         }
 
         @Override

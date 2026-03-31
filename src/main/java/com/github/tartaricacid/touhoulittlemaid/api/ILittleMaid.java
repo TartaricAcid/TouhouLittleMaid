@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.api;
 
-import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.MaidContextRegister;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.GameContextRegister;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.ToolRegister;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.SerializerRegister;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.FunctionCallRegister;
@@ -143,7 +143,7 @@ public interface ILittleMaid {
      * @param register 注册器
      */
     @ApiStatus.AvailableSince("1.5.1")
-    default void registerAIMaidContext(MaidContextRegister register) {
+    default void registerAIMaidContext(GameContextRegister register) {
     }
 
     /**
