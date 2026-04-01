@@ -27,16 +27,16 @@ public class HistoryChatWidget extends AbstractWidget {
     /**
      * 工具调用等类似于系统消息的内容
      */
-    private final boolean isEvent;
+    private final boolean isTool;
 
     private final ResourceLocation playerSkin;
     private final Component time;
 
     public HistoryChatWidget(int pX, int pY, int width, int height, Component message, ResourceLocation playerSkin,
-                             long gameTime, boolean isLeft, boolean isEvent) {
+                             long gameTime, boolean isLeft, boolean isTool) {
         super(pX, pY, width, height, message);
         this.isLeft = isLeft;
-        this.isEvent = isEvent;
+        this.isTool = isTool;
         this.playerSkin = playerSkin;
         this.time = convertGameTime(gameTime);
     }
@@ -69,9 +69,9 @@ public class HistoryChatWidget extends AbstractWidget {
         graphics.setColor(1, 1, 1, this.alpha);
         RenderSystem.enableBlend();
         RenderSystem.enableDepthTest();
-        if (this.isEvent) {
-            // 系统消息只渲染文本
-            this.renderEventText(graphics, Minecraft.getInstance().font);
+        if (this.isTool) {
+            // 工具消息只渲染文本
+            this.renderToolText(graphics, Minecraft.getInstance().font);
         } else {
             // 普通消息渲染头像、背景和文本
             this.drawBackground(graphics);
@@ -80,7 +80,7 @@ public class HistoryChatWidget extends AbstractWidget {
         }
     }
 
-    private void renderEventText(GuiGraphics graphics, Font font) {
+    private void renderToolText(GuiGraphics graphics, Font font) {
         float scale = 0.5f;
         int width = (int) (this.getWidth() / scale);
         float posX = this.getX() / scale + width / 2f;

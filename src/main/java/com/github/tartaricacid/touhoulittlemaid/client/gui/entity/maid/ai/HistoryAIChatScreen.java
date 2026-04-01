@@ -1,6 +1,5 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai;
 
-import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.LLMCallback;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.response.ResponseChat;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMMessage;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.Role;
@@ -30,6 +29,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Deque;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class HistoryAIChatScreen extends Screen {
     private static final MutableComponent HISTORY_TITLE = Component.translatable("gui.touhou_little_maid.button.maid_ai_chat_config.history_chat.title");
@@ -234,9 +234,11 @@ public class HistoryAIChatScreen extends Screen {
             }
 
             if (message.role() == Role.ASSISTANT) {
-                // LLM 发起的工具调用信息，不加入显示里
+                // LLM 发起的工具调用信息，只显示工具名
                 List<ToolCall> toolCalls = message.toolCalls();
                 if (toolCalls != null && !toolCalls.isEmpty()) {
+                    LLMMessage msg = new LLMMessage(Role.TOOL, this.getToolCallNames(toolCalls), message.gameTime());
+                    this.history.add(msg);
                     return;
                 }
 
@@ -251,16 +253,17 @@ public class HistoryAIChatScreen extends Screen {
                 }
             }
 
-            // 自身发送给 LLM 的历史记录，去掉头部信息加入历史对话
-            if (message.role() == Role.TOOL) {
-                String text = message.message();
-                if (StringUtils.isNotBlank(text) && text.startsWith(LLMCallback.CALLING_PREFIX)) {
-                    String substring = text.substring(LLMCallback.CALLING_PREFIX.length());
-                    LLMMessage msg = new LLMMessage(Role.TOOL, substring, message.gameTime());
-                    this.history.add(msg);
-                }
-            }
+            // 自身发送给 LLM 的历史记录，不显示在聊天记录中
+            // if (message.role() == Role.TOOL) {}
         });
+    }
+
+    private String getToolCallNames(List<ToolCall> toolCalls) {
+        return toolCalls.stream()
+                .map(tool -> tool.getFunction().getName())
+                .filter(StringUtils::isNotBlank)
+                .distinct()
+                .collect(Collectors.joining(", "));
     }
 
     private Component getDisplayMessage(LLMMessage message) {

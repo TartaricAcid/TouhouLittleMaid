@@ -64,6 +64,14 @@ public final class DefaultLLMSite {
             "grok-4.20-0309-non-reasoning", "grok-4-1-fast-non-reasoning"
     );
 
+    public static LLMOpenAISite OPEN_ROUTER = createSite("openrouter",
+            "https://openrouter.ai/api/v1/chat/completions", false,
+            Map.of("HTTP-Referer", "https://github.com/TartaricAcid/TouhouLittleMaid",
+                    "X-OpenRouter-Title", "Touhou Little Maid Mod (Minecraft)"
+            ), "stepfun/step-3.5-flash:free", "google/gemini-3-1-flash-lite-preview",
+            "openai/gpt-4o-mini", "xiaomi/mimo-v2-flash", "qwen/qwen3.6-plus-preview:free"
+    );
+
     public static LLMOpenAISite createSite(String name, String url, String... models) {
         return createSite(name, url, false, Map.of(), models);
     }
@@ -95,5 +103,6 @@ public final class DefaultLLMSite {
         AvailableSites.LLM_SITES.put(KIMI.id(), KIMI);
         AvailableSites.LLM_SITES.put(GEMINI.id(), GEMINI);
         AvailableSites.LLM_SITES.put(GROK.id(), GROK);
+        AvailableSites.LLM_SITES.put(OPEN_ROUTER.id(), OPEN_ROUTER);
     }
 }
