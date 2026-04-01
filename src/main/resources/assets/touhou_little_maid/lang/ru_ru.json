@@ -97,6 +97,7 @@
   "ai.touhou_little_maid.chat.site.tencent.name": "Tencent Cloud",
   "ai.touhou_little_maid.chat.site.gemini.name": "Gemini",
   "ai.touhou_little_maid.chat.site.grok.name": "Grok",
+  "ai.touhou_little_maid.chat.site.openrouter.name": "Открыть маршрутизатор",
   "advancements.touhou_little_maid.base.craft_gohei.description": "Создайте Гохей",
   "advancements.touhou_little_maid.base.craft_gohei.title": "Ключ к Генсокё?",
   "advancements.touhou_little_maid.base.build_altar.description": "Создайте алтарь, и пусть начнётся веселье",
