@@ -68,8 +68,7 @@ public final class DefaultLLMSite {
             "https://openrouter.ai/api/v1/chat/completions", false,
             Map.of("HTTP-Referer", "https://github.com/TartaricAcid/TouhouLittleMaid",
                     "X-OpenRouter-Title", "Touhou Little Maid Mod (Minecraft)"
-            ), "stepfun/step-3.5-flash:free", "google/gemini-3-1-flash-lite-preview",
-            "openai/gpt-4o-mini", "xiaomi/mimo-v2-flash", "qwen/qwen3.6-plus-preview:free"
+            ), "xiaomi/mimo-v2-flash", "google/gemini-3-flash-preview", "x-ai/grok-4.1-fast"
     );
 
     public static LLMOpenAISite createSite(String name, String url, String... models) {

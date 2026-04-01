@@ -351,14 +351,20 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
         for (ToolCall toolCall : toolCalls) {
             try {
                 LLMCallback returned = this.onSingleCall(toolCall, nextCallback);
-                if (hasMultipleToolCalls && returned != nextCallback) {
-                    // 工具产生了独立的子流程回调（如知识库查询），将其收集为旁路回调独立发送，
-                    sideCallbacks.add(returned);
-                    // 同时向主回调补充一条占位 tool result，以免 LLM 缺少响应
+                // 如果是子 agent
+                if (returned != nextCallback) {
                     String placeholder = "Tool has been dispatched to a dedicated sub-agent; answer will follow separately.";
-                    nextCallback.addToolResult(placeholder, toolCall.getId());
-                } else {
-                    nextCallback = returned;
+                    if (hasMultipleToolCalls) {
+                        // 多个 tool 调用，那么把子 agent 单独剥离
+                        sideCallbacks.add(returned);
+                        // 同时向主回调补充一条占位 tool result，以免 LLM 缺少响应触发 400 error
+                        nextCallback.addToolResult(placeholder, toolCall.getId());
+                    } else {
+                        // 单个子 agent，那么只需要替换返回值即可
+                        nextCallback = returned;
+                        // 此时不需要在回调里塞入 tool result，只需要在历史对话里塞入即可
+                        this.chatManager.addToolHistory(placeholder, toolCall.getId());
+                    }
                 }
             } catch (JsonSyntaxException exception) {
                 String message = "Exception %s, JSON is: %s".formatted(exception.getLocalizedMessage(), toolCall.getFunction().getArguments());
