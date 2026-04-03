@@ -44,7 +44,11 @@ public class EntityFairy extends Monster implements RangedAttackMob, FlyingAnima
     public static final String RICK = "rick";
 
     private static final String FAIRY_TYPE_TAG_NAME = "FairyType";
-    private static final EntityDataAccessor<Integer> FAIRY_TYPE = SynchedEntityData.defineId(EntityFairy.class, EntityDataSerializers.INT);
+    private static final String BABY_TAG_NAME = "IsBaby";
+
+    private static final EntityDataAccessor<Integer> DATA_FAIRY_TYPE = SynchedEntityData.defineId(EntityFairy.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> DATA_BABY_ID = SynchedEntityData.defineId(EntityFairy.class, EntityDataSerializers.BOOLEAN);
+
     private static final double AIMED_SHOT_PROBABILITY = 0.9;
 
     protected EntityFairy(EntityType<? extends Monster> type, Level worldIn) {
@@ -90,12 +94,25 @@ public class EntityFairy extends Monster implements RangedAttackMob, FlyingAnima
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(FAIRY_TYPE, FairyType.BLACK.ordinal());
+        this.getEntityData().define(DATA_FAIRY_TYPE, FairyType.BLACK.ordinal());
+        this.getEntityData().define(DATA_BABY_ID, false);
+    }
+
+    @Override
+    public void onSyncedDataUpdated(EntityDataAccessor<?> pKey) {
+        if (DATA_BABY_ID.equals(pKey)) {
+            this.refreshDimensions();
+        }
+        super.onSyncedDataUpdated(pKey);
     }
 
     @Override
     public int getPowerPoint() {
-        return (int) (MiscConfig.MAID_FAIRY_POWER_POINT.get() * 100);
+        double reward = MiscConfig.MAID_FAIRY_POWER_POINT.get() * 100;
+        if (this.isBaby()) {
+            return (int) (reward * 2);
+        }
+        return (int) reward;
     }
 
     @Override
@@ -144,12 +161,17 @@ public class EntityFairy extends Monster implements RangedAttackMob, FlyingAnima
 
     @Nullable
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason,
+                                        @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
         this.setFairyTypeOrdinal(random.nextInt(FairyType.values().length));
         // 有 5% 概率生成 Rick-rolling 彩蛋
         if (random.nextInt(20) == 0) {
             this.setCustomName(Component.literal(RICK));
             this.setCustomNameVisible(true);
+        }
+        // 有 10% 概率生成小女仆妖精
+        if (random.nextInt(10) == 0) {
+            this.setBaby(true);
         }
         return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
     }
@@ -158,6 +180,7 @@ public class EntityFairy extends Monster implements RangedAttackMob, FlyingAnima
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt(FAIRY_TYPE_TAG_NAME, getFairyTypeOrdinal());
+        compound.putBoolean(BABY_TAG_NAME, this.isBaby());
     }
 
     @Override
@@ -166,19 +189,43 @@ public class EntityFairy extends Monster implements RangedAttackMob, FlyingAnima
         if (compound.contains(FAIRY_TYPE_TAG_NAME, Tag.TAG_INT)) {
             setFairyTypeOrdinal(compound.getInt(FAIRY_TYPE_TAG_NAME));
         }
+        if (compound.contains(BABY_TAG_NAME, Tag.TAG_BYTE)) {
+            this.setBaby(compound.getBoolean(BABY_TAG_NAME));
+        }
     }
 
     public int getFairyTypeOrdinal() {
-        return this.entityData.get(FAIRY_TYPE);
+        return this.entityData.get(DATA_FAIRY_TYPE);
     }
 
     public void setFairyTypeOrdinal(int ordinal) {
-        this.entityData.set(FAIRY_TYPE, ordinal);
+        this.entityData.set(DATA_FAIRY_TYPE, ordinal);
     }
 
     @Override
     public boolean isFlying() {
         return !this.onGround();
+    }
+
+    @Override
+    public boolean isBaby() {
+        return this.getEntityData().get(DATA_BABY_ID);
+    }
+
+    @Override
+    public void setBaby(boolean isBaby) {
+        this.getEntityData().set(DATA_BABY_ID, isBaby);
+    }
+
+    @Override
+    public float getScale() {
+        return this.isBaby() ? 0.75F : 1.0F;
+    }
+
+    @Override
+    protected float getStandingEyeHeight(Pose pose, EntityDimensions size) {
+        float height = super.getStandingEyeHeight(pose, size);
+        return this.isBaby() ? height - 0.1F : height;
     }
 
     @Nullable

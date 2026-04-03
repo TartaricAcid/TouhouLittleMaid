@@ -50,6 +50,7 @@ public class BedrockModelLoader {
     public static final ResourceLocation CAKE_BOX = registerEntityModel("cake_box", EntityBoxModel::new);
     public static final ResourceLocation MAID_FAIRY = registerEntityModel("maid_fairy", EntityFairyModel::new);
     public static final ResourceLocation NEW_MAID_FAIRY = registerEntityModel("new_maid_fairy", NewEntityFairyModel::new);
+    public static final ResourceLocation BABY_MAID_FAIRY = registerEntityModel("baby_maid_fairy", NewEntityFairyModel::new);
     public static final ResourceLocation BROOM = registerEntityModel("broom", BroomModel::new);
 
     public static final ResourceLocation REIMU_YUKKURI = registerSimpleEntityModel("reimu_yukkuri");

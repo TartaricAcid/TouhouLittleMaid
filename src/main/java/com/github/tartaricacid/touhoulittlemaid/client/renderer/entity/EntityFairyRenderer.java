@@ -35,17 +35,22 @@ public class EntityFairyRenderer extends MobRenderer<EntityFairy, SimpleBedrockM
     private static final ResourceLocation TEXTURE_17 = new ResourceLocation(TouhouLittleMaid.MOD_ID, "textures/bedrock/entity/maid_fairy/maid_fairy_17.png");
 
     private final NewEntityFairyRenderer newEntityFairyRenderer;
+    private final EntityBabyFairyRenderer babyFairyRenderer;
 
     public EntityFairyRenderer(EntityRendererProvider.Context context) {
         super(context, Objects.requireNonNull(BedrockModelLoader.getModel(BedrockModelLoader.MAID_FAIRY)), 0.5f);
         this.newEntityFairyRenderer = new NewEntityFairyRenderer(context);
+        this.babyFairyRenderer = new EntityBabyFairyRenderer(context);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void render(EntityFairy fairy, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
         if (MiscConfig.USE_NEW_MAID_FAIRY_MODEL.get()) {
-            newEntityFairyRenderer.render(fairy, entityYaw, partialTicks, poseStack, buffer, packedLight);
+            if (fairy.isBaby()) {
+                babyFairyRenderer.render(fairy, entityYaw, partialTicks, poseStack, buffer, packedLight);
+            } else {
+                newEntityFairyRenderer.render(fairy, entityYaw, partialTicks, poseStack, buffer, packedLight);
+            }
         } else {
             super.render(fairy, entityYaw, partialTicks, poseStack, buffer, packedLight);
         }
