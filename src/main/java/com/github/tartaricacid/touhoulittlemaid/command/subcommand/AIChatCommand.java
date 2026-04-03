@@ -1,5 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.command.subcommand;
 
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.ContextCategory;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.GameContextRegister;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.SkillInstance;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.SkillLoader;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.ToolRegister;
@@ -11,7 +13,10 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static net.minecraft.ChatFormatting.*;
 
@@ -20,17 +25,20 @@ public class AIChatCommand {
     private static final String RELOAD_NAME = "reload";
     private static final String SKILL_NAME = "skill";
     private static final String TOOL_NAME = "tool";
+    private static final String CONTEXT_NAME = "context";
 
     public static LiteralArgumentBuilder<CommandSourceStack> get() {
         LiteralArgumentBuilder<CommandSourceStack> root = LiteralArgumentBuilder.literal(ROOT_NAME);
         LiteralArgumentBuilder<CommandSourceStack> reload = LiteralArgumentBuilder.literal(RELOAD_NAME);
         LiteralArgumentBuilder<CommandSourceStack> skill = LiteralArgumentBuilder.literal(SKILL_NAME);
         LiteralArgumentBuilder<CommandSourceStack> tool = LiteralArgumentBuilder.literal(TOOL_NAME);
+        LiteralArgumentBuilder<CommandSourceStack> context = LiteralArgumentBuilder.literal(CONTEXT_NAME);
         LiteralArgumentBuilder<CommandSourceStack> tokens = ChatTokensCommand.get();
 
         root.then(reload.executes(AIChatCommand::reload));
         root.then(skill.executes(AIChatCommand::showSkills));
         root.then(tool.executes(AIChatCommand::showTools));
+        root.then(context.executes(AIChatCommand::showContexts));
         root.then(tokens);
 
         return root;
@@ -77,6 +85,42 @@ public class AIChatCommand {
             return component("tool.entry", nameComp);
         }, false));
         return Command.SINGLE_SUCCESS;
+    }
+
+    private static int showContexts(CommandContext<CommandSourceStack> context) {
+        List<ContextCategory> toolCategories = GameContextRegister.allToolCategories().stream()
+                .sorted(Comparator.comparing(ContextCategory::id))
+                .toList();
+        List<ContextCategory> promptCategories = GameContextRegister.allPromptCategories().stream()
+                .sorted(Comparator.comparing(ContextCategory::id))
+                .toList();
+        if (toolCategories.isEmpty() && promptCategories.isEmpty()) {
+            sendSuccess(context, "context.empty");
+            return Command.SINGLE_SUCCESS;
+        }
+
+        sendSuccess(context, "context.tool.header");
+        showContextCategoryList(context, toolCategories);
+
+        sendSuccess(context, "context.prompt.header");
+        showContextCategoryList(context, promptCategories);
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static void showContextCategoryList(CommandContext<CommandSourceStack> context, List<ContextCategory> categories) {
+        if (categories.isEmpty()) {
+            sendSuccess(context, "context.group.empty");
+            return;
+        }
+
+        categories.forEach(category -> context.getSource().sendSuccess(() -> {
+            String contextIds = GameContextRegister.getContextKeys(category.id()).stream()
+                    .sorted()
+                    .collect(Collectors.joining(", "));
+            MutableComponent categoryComp = Component.literal(category.id()).withStyle(AQUA);
+            MutableComponent idsComp = Component.literal(contextIds).withStyle(YELLOW);
+            return component("context.entry", categoryComp, idsComp);
+        }, false));
     }
 
     private static void sendSuccess(CommandContext<CommandSourceStack> context, String key) {

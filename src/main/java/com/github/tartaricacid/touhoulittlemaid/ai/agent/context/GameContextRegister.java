@@ -1,8 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.agent.context;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.prompts.WorldContexts;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.prompts.MaidContexts;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.prompts.WorldContexts;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.tools.*;
 import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -86,12 +86,14 @@ public final class GameContextRegister {
     public static List<ContextCategory> allToolCategories() {
         return CATEGORIES.values().stream()
                 .filter(c -> !c.isPromptContext())
+                .filter(c -> !c.contextKeys().isEmpty())
                 .toList();
     }
 
     public static List<ContextCategory> allPromptCategories() {
         return CATEGORIES.values().stream()
                 .filter(ContextCategory::isPromptContext)
+                .filter(c -> !c.contextKeys().isEmpty())
                 .toList();
     }
 
@@ -107,5 +109,13 @@ public final class GameContextRegister {
             }
             return "- %s: %s".formatted(context.label(), context.getValue(maid));
         }).filter(StringUtils::isNotBlank).toList();
+    }
+
+    public static List<String> getContextKeys(String categoryId) {
+        if (!CATEGORIES.containsKey(categoryId)) {
+            return Collections.emptyList();
+        }
+        ContextCategory category = CATEGORIES.get(categoryId);
+        return category.contextKeys().stream().toList();
     }
 }

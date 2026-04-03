@@ -50,7 +50,7 @@ public class QueryGameContextTool implements ITool<String> {
     public LLMCallback onCall(String toolId, String result, LLMCallback callback) {
         List<String> values = GameContextRegister.allToolCategories().stream().map(ContextCategory::id).toList();
 
-        if (!GameContextRegister.hasCategory(result)) {
+        if (!values.contains(result)) {
             String text = "Unknown game context category '%s'".formatted(result);
             String invalided = ITool.invalidParam(CATEGORY_ID, values, text);
             return callback.addToolResult(invalided, toolId);
