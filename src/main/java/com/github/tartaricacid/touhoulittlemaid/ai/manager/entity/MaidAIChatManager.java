@@ -90,10 +90,11 @@ public final class MaidAIChatManager extends MaidAIChatData {
 
     private void normalChat(String message, List<LLMMessage> messages, LLMClient chatClient) {
         // 先插入临时的 context
-        message = UserPromptContexts.addContext(this.maid, message);
+        String messageWithContext = UserPromptContexts.addContext(this.maid, message);
 
-        // 存储
-        messages.add(LLMMessage.userChat(this.maid, message));
+        // http 通信添加 context
+        messages.add(LLMMessage.userChat(this.maid, messageWithContext));
+        // 历史记录不添加
         this.maid.getAiChatManager().addUserHistory(message);
 
         // 通信
