@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.summary;
 
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.MaidAIChatManager;
+import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.UserPromptContexts;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.response.ResponseChat;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMMessage;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.Role;
@@ -46,6 +47,8 @@ public final class HistorySummaryPrompts {
         String text = message.message();
 
         if (role == Role.USER) {
+            // 剔除 context 部分
+            text = UserPromptContexts.removeContext(text);
             return "[USER] %s".formatted(text);
         }
 

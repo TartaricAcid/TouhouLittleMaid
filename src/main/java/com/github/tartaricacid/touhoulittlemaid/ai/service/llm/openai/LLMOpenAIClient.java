@@ -47,11 +47,7 @@ public class LLMOpenAIClient implements LLMClient {
 
     @Override
     public void chat(LLMCallback callback) {
-        // 检查女仆是否存活，否则不进行通信
         EntityMaid maid = callback.getMaid();
-        if (maid == null || !maid.isAlive()) {
-            return;
-        }
 
         // 模型站点信息获取
         URI url = URI.create(this.site.url());
@@ -147,6 +143,12 @@ public class LLMOpenAIClient implements LLMClient {
     }
 
     protected void handle(LLMCallback callback, HttpResponse<String> response, Throwable throwable, HttpRequest request) {
+        // 优先检查女仆是否存在
+        EntityMaid maid = callback.getMaid();
+        if (this.shouldStopChat(maid)) {
+            return;
+        }
+
         this.<ChatCompletionResponse>handleResponse(callback, response, throwable, request, chat -> {
             if (TouhouLittleMaid.DEBUG) {
                 TouhouLittleMaid.LOGGER.info(GSON.toJson(chat));

@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.service.tts.gptsovits;
 
-import com.github.tartaricacid.touhoulittlemaid.ai.service.ResponseCallback;
+import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.TTSCallback;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSClient;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSConfig;
 import com.google.common.net.HttpHeaders;
@@ -24,7 +24,7 @@ public class TTSGptSovitsClient implements TTSClient {
     }
 
     @Override
-    public void play(String message, TTSConfig config, ResponseCallback<byte[]> callback) {
+    public void play(String message, TTSConfig config, TTSCallback callback) {
         URI uri = URI.create(this.site.url());
         TTSGptSovitsRequest request = TTSGptSovitsRequest.create()
                 .setText(message)

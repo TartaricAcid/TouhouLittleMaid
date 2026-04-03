@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.ai.agent.context.builtin;
+package com.github.tartaricacid.touhoulittlemaid.ai.agent.context.prompts;
 
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.AbstractMaidContext;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.GameContextRegister;
@@ -19,7 +19,7 @@ public final class WorldContexts {
     }
 
     public static void registerAll(GameContextRegister register) {
-        register.registerCategory(CATEGORY, SUMMARY);
+        register.registerCategory(CATEGORY, SUMMARY, true);
         register.registerContext(CATEGORY, new GameTimeContext());
         register.registerContext(CATEGORY, new WeatherContext());
         register.registerContext(CATEGORY, new DimensionContext());
@@ -28,7 +28,7 @@ public final class WorldContexts {
 
     private static final class GameTimeContext extends AbstractMaidContext {
         private GameTimeContext() {
-            super("game_time", "Current time");
+            super("game_time", "Time");
         }
 
         @Override
@@ -42,7 +42,7 @@ public final class WorldContexts {
 
     private static final class WeatherContext extends AbstractMaidContext {
         private WeatherContext() {
-            super("weather", "Current weather");
+            super("weather", "Weather");
         }
 
         @Override
@@ -60,7 +60,7 @@ public final class WorldContexts {
 
     private static final class DimensionContext extends AbstractMaidContext {
         private DimensionContext() {
-            super("dimension", "Current dimension");
+            super("dimension", "Dimension");
         }
 
         @Override
@@ -81,7 +81,7 @@ public final class WorldContexts {
 
     private static final class BiomeContext extends AbstractMaidContext {
         private BiomeContext() {
-            super("biome", "Current biome");
+            super("biome", "Biome");
         }
 
         @Override

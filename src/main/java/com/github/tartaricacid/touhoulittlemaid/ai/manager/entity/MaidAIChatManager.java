@@ -3,7 +3,10 @@ package com.github.tartaricacid.touhoulittlemaid.ai.manager.entity;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.summary.HistorySummaryManager;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.papi.PapiReplacer;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.papi.StringConstant;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.*;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.DefaultLLMSite;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMClient;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMMessage;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSClient;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSConfig;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSSite;
@@ -80,49 +83,20 @@ public final class MaidAIChatManager extends MaidAIChatData {
         if (messages.isEmpty()) {
             this.onSettingIsEmpty(clientInfo, chatClient);
         } else {
-            this.checkMessages(messages);
+            HistoryMessagesCheck.checkMessages(messages);
             this.normalChat(message, messages, chatClient);
         }
     }
 
-    /**
-     * 跳过开头的 SYSTEM 消息后，丢弃对话区开头连续的 TOOL 消息。
-     * <p>
-     * 历史压缩可能删掉带 tool_calls 的 ASSISTANT 消息，导致其后的 TOOL 消息
-     * 变成对话区的第一条。大多数 LLM API 要求 TOOL 消息前必须有对应的
-     * ASSISTANT tool_call，否则会报错，所以需要将这些孤儿 TOOL 消息剔除。
-     */
-    private void checkMessages(List<LLMMessage> messages) {
-        if (messages.size() <= 1) {
-            return;
-        }
-
-        // 先跳过开头连续的 SYSTEM 消息，定位到"对话区"的起始位置
-        int systemCount = 0;
-        while (systemCount < messages.size() && messages.get(systemCount).role() == Role.SYSTEM) {
-            systemCount++;
-        }
-        // 全都是 SYSTEM 消息，没有需要过滤的对话内容
-        if (systemCount >= messages.size()) {
-            return;
-        }
-
-        // 保留 SYSTEM 前缀，对话区部分丢弃开头连续的孤儿 TOOL 消息后重新拼接
-        List<LLMMessage> systemMessages = Lists.newArrayList(messages.subList(0, systemCount));
-        List<LLMMessage> filteredMessages = messages.stream()
-                .skip(systemCount)
-                // 丢弃开头连续的 tool 消息
-                .dropWhile(msg -> Role.TOOL.equals(msg.role()))
-                .toList();
-
-        messages.clear();
-        messages.addAll(systemMessages);
-        messages.addAll(filteredMessages);
-    }
-
     private void normalChat(String message, List<LLMMessage> messages, LLMClient chatClient) {
+        // 先插入临时的 context
+        message = UserPromptContexts.addContext(this.maid, message);
+
+        // 存储
         messages.add(LLMMessage.userChat(this.maid, message));
         this.maid.getAiChatManager().addUserHistory(message);
+
+        // 通信
         LLMCallback callback = new LLMCallback(this, messages);
         chatClient.chat(callback);
     }

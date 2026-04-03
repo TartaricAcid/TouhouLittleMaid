@@ -1,8 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.service.tts.player2;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.TTSCallback;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.ErrorCode;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.ResponseCallback;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.ServiceType;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSClient;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSConfig;
@@ -36,7 +36,7 @@ public class TTSPlayer2Client implements TTSClient, TTSSystemServices {
     }
 
     @Override
-    public void play(String message, TTSConfig config, @Nullable ResponseCallback<byte[]> callback) {
+    public void play(String message, TTSConfig config, @Nullable TTSCallback callback) {
         if (isClient()) {
             handle(message, config);
         }

@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.service.tts.system;
 
-import com.github.tartaricacid.touhoulittlemaid.ai.service.ResponseCallback;
+import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.TTSCallback;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSClient;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSConfig;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSSystemServices;
@@ -10,7 +10,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class TTSSystemClient implements TTSClient, TTSSystemServices {
     @Override
-    public void play(String message, TTSConfig config, ResponseCallback<byte[]> callback) {
+    public void play(String message, TTSConfig config, TTSCallback callback) {
         if (isClient()) {
             onHandle(message);
         }

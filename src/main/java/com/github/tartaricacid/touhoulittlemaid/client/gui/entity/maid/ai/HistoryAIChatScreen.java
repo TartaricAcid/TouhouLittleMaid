@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai;
 
+import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.UserPromptContexts;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.response.ResponseChat;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMMessage;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.Role;
@@ -272,6 +273,12 @@ public class HistoryAIChatScreen extends Screen {
                 return Component.translatable("gui.touhou_little_maid.button.maid_ai_chat_config.history_chat.tool_call.generic");
             }
             return Component.translatable("gui.touhou_little_maid.button.maid_ai_chat_config.history_chat.tool_call.named", message.message());
+        }
+
+        // 需要剔除 user 的 context 部分
+        if (message.role() == Role.USER) {
+            String content = UserPromptContexts.removeContext(message.message());
+            return Component.literal(content);
         }
         return Component.literal(message.message());
     }

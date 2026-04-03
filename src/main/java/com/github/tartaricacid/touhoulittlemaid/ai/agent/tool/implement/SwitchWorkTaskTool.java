@@ -17,9 +17,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.schedule.Activity;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.StringJoiner;
 
 public class SwitchWorkTaskTool implements ITool<SwitchWorkTaskTool.Result> {
     public static final String TOOL_ID = "switch_work_task";
@@ -38,10 +40,13 @@ public class SwitchWorkTaskTool implements ITool<SwitchWorkTaskTool.Result> {
     private static final String TASK_ID_PARAMETER_ID = "task_id";
     private static final String ENTITY_ID_PARAMETER_ID = "entity_id";
 
+    private static final String ENTITY_ID_PARAMETER_DESC = "Entity id of the attack target";
+
     private static final String SUCCESS = "Switched to task %s";
     private static final String NO_CHANGE = "Already on task %s";
     private static final String MISSING_REQUIRED = "Switched to task %s, but a required item is missing";
     private static final String PARTIAL = "Switched to task %s, but some requirements are missing";
+    private static final String SCHEDULED = "Switched to task %s, but current scheduled is %s, not in work time";
 
     private static final String TARGET_NOT_PROVIDED = "The task switch succeeded, but no target entity id provided";
     private static final String TARGET_NOT_FOUND = "The task switch succeeded, but no living entity with id %d was found";
@@ -65,8 +70,10 @@ public class SwitchWorkTaskTool implements ITool<SwitchWorkTaskTool.Result> {
 
     @Override
     public Parameter parameters(ObjectParameter root, EntityMaid maid) {
-        StringParameter taskId = StringParameter.create();
-        IntegerParameter entityId = IntegerParameter.create();
+        StringParameter taskId = StringParameter.create()
+                .setDescription(this.getTaskIdParameterDesc());
+        IntegerParameter entityId = IntegerParameter.create()
+                .setDescription(ENTITY_ID_PARAMETER_DESC);
 
         List<IMaidTask> tasks = TaskManager.getTaskIndex();
         tasks.stream().map(IMaidTask::getUid)
@@ -109,11 +116,18 @@ public class SwitchWorkTaskTool implements ITool<SwitchWorkTaskTool.Result> {
         }
         switchResult = task.onFunctionCallSwitch(maid);
 
+        // 日程表检查
+        Activity activity = maid.getScheduleDetail();
+        if (activity != Activity.WORK) {
+            String msg = SCHEDULED.formatted(taskId, maid.getSchedule().name());
+            return callback.addToolResult(msg, toolId);
+        }
+
         if (task instanceof IAttackTask attackTask) {
             String msg = this.attackResult(maid, attackTask, entityId);
             return callback.addToolResult(msg, toolId);
         } else {
-            String msg = this.switchResult(taskId, task == currentTask, switchResult);
+            String msg = this.switchResult(maid, taskId, task == currentTask, switchResult);
             return callback.addToolResult(msg, toolId);
         }
     }
@@ -123,7 +137,7 @@ public class SwitchWorkTaskTool implements ITool<SwitchWorkTaskTool.Result> {
         return "%s { %s }".formatted(TOOL_ID, result.id.getPath());
     }
 
-    private String switchResult(ResourceLocation taskId, boolean sameTask, FunctionCallSwitchResult switchResult) {
+    private String switchResult(EntityMaid maid, ResourceLocation taskId, boolean sameTask, FunctionCallSwitchResult switchResult) {
         if (sameTask) {
             return switch (switchResult) {
                 case NO_CHANGE -> NO_CHANGE.formatted(taskId);
@@ -160,6 +174,16 @@ public class SwitchWorkTaskTool implements ITool<SwitchWorkTaskTool.Result> {
 
         maid.getBrain().setMemory(MemoryModuleType.ATTACK_TARGET, target);
         return TARGET_SUCCESS.formatted(targetName);
+    }
+
+    private String getTaskIdParameterDesc() {
+        StringJoiner joiner = new StringJoiner("\n");
+        TaskManager.getTaskIndex().forEach(task -> {
+            String id = task.getUid().toString();
+            String summary = task.getMaidActionSummary();
+            joiner.add("- %s: %s".formatted(id, summary));
+        });
+        return joiner.toString();
     }
 
     public record Result(ResourceLocation id, int entityId) {

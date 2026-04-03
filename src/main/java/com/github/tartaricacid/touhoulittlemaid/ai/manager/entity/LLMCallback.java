@@ -140,10 +140,11 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
 
         // 记录 LLM 的回答到历史中，供后续对话使用
         chatManager.addAssistantHistory(responseChat.toString());
-        messages.add(LLMMessage.assistantChat(maid, chatText));
 
         TTSSite site = chatManager.getTTSSite();
         if (AIConfig.TTS_ENABLED.get() && site != null && site.enabled()) {
+            // TODO 部分多模态模型，是直接在 LLM 回应的 JSON 里添加 TTS 信息
+            // TODO 故需要考虑这种情况
             chatManager.tts(site, chatText, ttsText, waitingChatBubbleId);
         } else {
             if (StringUtils.isNotBlank(chatText) && maid.level instanceof ServerLevel serverLevel) {

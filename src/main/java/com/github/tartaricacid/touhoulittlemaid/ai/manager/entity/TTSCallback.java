@@ -58,4 +58,8 @@ public class TTSCallback implements ResponseCallback<byte[]> {
             maid.getChatBubbleManager().addLLMChatText(chatText, waitingChatBubbleId);
         });
     }
+
+    public EntityMaid getMaid() {
+        return maid;
+    }
 }

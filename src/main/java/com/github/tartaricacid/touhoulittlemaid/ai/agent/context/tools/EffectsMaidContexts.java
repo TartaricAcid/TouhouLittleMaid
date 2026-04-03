@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.ai.agent.context.builtin;
+package com.github.tartaricacid.touhoulittlemaid.ai.agent.context.tools;
 
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.AbstractMaidContext;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.GameContextRegister;
@@ -8,32 +8,19 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
-import static com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.papi.StringConstant.*;
+import static com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.papi.StringConstant.LIST_SEPARATORS;
+import static com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.papi.StringConstant.NONE;
 
-public final class StatusMaidContexts {
-    public static final String CATEGORY = "status";
-    private static final String SUMMARY = "Self health and current status effects.";
+public final class EffectsMaidContexts {
+    public static final String CATEGORY = "effects";
+    private static final String SUMMARY = "Self active effects.";
 
-    private StatusMaidContexts() {
+    private EffectsMaidContexts() {
     }
 
     public static void registerAll(GameContextRegister register) {
-        register.registerCategory(CATEGORY, SUMMARY);
-        register.registerContext(CATEGORY, new MaidHealthContext());
+        register.registerCategory(CATEGORY, SUMMARY, false);
         register.registerContext(CATEGORY, new MaidEffectsContext());
-    }
-
-    private static final class MaidHealthContext extends AbstractMaidContext {
-        private MaidHealthContext() {
-            super("healthy", "Self health");
-        }
-
-        @Override
-        public String getValue(EntityMaid maid) {
-            float maxHealth = maid.getMaxHealth();
-            float health = maid.getHealth();
-            return HEALTHY_FORMAT.formatted(health, maxHealth);
-        }
     }
 
     private static final class MaidEffectsContext extends AbstractMaidContext {

@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.ai.agent.context.builtin;
+package com.github.tartaricacid.touhoulittlemaid.ai.agent.context.tools;
 
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.AbstractMaidContext;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.GameContextRegister;
@@ -16,7 +16,7 @@ public final class PositionMaidContexts {
     }
 
     public static void registerAll(GameContextRegister register) {
-        register.registerCategory(CATEGORY, SUMMARY);
+        register.registerCategory(CATEGORY, SUMMARY, false);
         register.registerContext(CATEGORY, new MaidPositionContext());
         register.registerContext(CATEGORY, new UserPositionContext());
         register.registerContext(CATEGORY, new DistanceToUserContext());

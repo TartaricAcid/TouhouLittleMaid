@@ -27,14 +27,14 @@ public class QueryGameContextTool implements ITool<String> {
     public String summary(EntityMaid maid) {
         return """
                 Use this when you need authoritative live game context before another tool call or before answering a state-dependent question.
-                Load exactly one context category by category_id, such as nearby entities, behavior state, owner info, equipment, or world state.
+                Load exactly one context category by category_id, such as nearby entities, equipment, etc.
                 """.trim();
     }
 
     @Override
     public Parameter parameters(ObjectParameter root, EntityMaid maid) {
         StringParameter categoryId = StringParameter.create();
-        var categories = GameContextRegister.allCategories();
+        var categories = GameContextRegister.allToolCategories();
         categoryId.setDescription(buildDescription(categories));
         categories.stream().map(ContextCategory::id).forEach(categoryId::addEnumValues);
         root.addProperties(CATEGORY_ID, categoryId);
@@ -48,7 +48,7 @@ public class QueryGameContextTool implements ITool<String> {
 
     @Override
     public LLMCallback onCall(String toolId, String result, LLMCallback callback) {
-        List<String> values = GameContextRegister.allCategories().stream().map(ContextCategory::id).toList();
+        List<String> values = GameContextRegister.allToolCategories().stream().map(ContextCategory::id).toList();
 
         if (!GameContextRegister.hasCategory(result)) {
             String text = "Unknown game context category '%s'".formatted(result);

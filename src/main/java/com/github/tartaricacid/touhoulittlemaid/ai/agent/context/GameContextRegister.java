@@ -1,7 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.agent.context;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.builtin.*;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.prompts.WorldContexts;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.prompts.MaidContexts;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.tools.*;
 import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.ImmutableMap;
@@ -25,8 +27,8 @@ public final class GameContextRegister {
         WorldContexts.registerAll(register);
         EquipmentMaidContexts.registerAll(register);
         UserContexts.registerAll(register);
-        StatusMaidContexts.registerAll(register);
-        BehaviorMaidContexts.registerAll(register);
+        MaidContexts.registerAll(register);
+        EffectsMaidContexts.registerAll(register);
         PositionMaidContexts.registerAll(register);
         NearbyEntityMaidContexts.registerAll(register);
 
@@ -46,15 +48,18 @@ public final class GameContextRegister {
      *
      * @param categoryId      分类唯一标识，如 {@code world}、{@code equipment}、{@code owner}
      * @param categorySummary 分类摘要，会展示给模型用于选择分类
+     * @param promptContext   如果此属性为 true，则此上下文会在 user 每次对话时，注入 user 消息的开头，作为对话上下文的一部分提供给模型。
+     *                        适用于对话中经常需要但又不太占 token 的上下文。<br>
+     *                        注意：如果一个分类被标记为 prompt context，那么它将不存在于 query_game_context 工具中
      */
-    public void registerCategory(String categoryId, String categorySummary) {
-        CATEGORIES.put(categoryId, new ContextCategory(categoryId, categorySummary));
+    public void registerCategory(String categoryId, String categorySummary, boolean promptContext) {
+        CATEGORIES.put(categoryId, new ContextCategory(categoryId, categorySummary, promptContext));
     }
 
     /**
      * 将一个上下文项注册到已存在的分类中。
      * <p>
-     * 调用前必须先通过 {@link #registerCategory(String, String)} 注册分类，或者使用已经注册过的分类
+     * 调用前必须先通过 {@link #registerCategory(String, String, boolean)} 注册分类，或者使用已经注册过的分类
      * 否则会抛出异常。没有上下文项的分类不会出现在 maid_context skill 提供给模型的可选分类列表中。
      *
      * @param categoryId 分类唯一标识
@@ -78,8 +83,16 @@ public final class GameContextRegister {
         return CATEGORIES.containsKey(categoryId);
     }
 
-    public static List<ContextCategory> allCategories() {
-        return List.copyOf(CATEGORIES.values());
+    public static List<ContextCategory> allToolCategories() {
+        return CATEGORIES.values().stream()
+                .filter(c -> !c.isPromptContext())
+                .toList();
+    }
+
+    public static List<ContextCategory> allPromptCategories() {
+        return CATEGORIES.values().stream()
+                .filter(ContextCategory::isPromptContext)
+                .toList();
     }
 
     public static List<String> getContext(String categoryId, EntityMaid maid) {
