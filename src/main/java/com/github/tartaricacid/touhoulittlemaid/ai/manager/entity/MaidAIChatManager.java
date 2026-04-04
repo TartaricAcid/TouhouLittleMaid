@@ -16,7 +16,7 @@ import com.github.tartaricacid.touhoulittlemaid.config.subconfig.AIConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.TTSSystemAudioToClientMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.ai.TTSSystemAudioToClientMessage;
 import com.github.tartaricacid.touhoulittlemaid.util.CappedQueue;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;

@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.compat.curios;
 
 import com.github.tartaricacid.touhoulittlemaid.api.event.MaidTombstoneEvent;
 import com.github.tartaricacid.touhoulittlemaid.compat.curios.menu.CuriosContainer;
+import com.github.tartaricacid.touhoulittlemaid.compat.sbackpack.curios.MaidBackpackCache;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityTombstone;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.world.entity.LivingEntity;
@@ -25,6 +26,7 @@ public class CuriosEvent {
     public void onSlotUpdate(SlotModifiersUpdatedEvent event) {
         LivingEntity entity = event.getEntity();
         if (entity instanceof EntityMaid maid && maid.getOwner() instanceof Player player) {
+            MaidBackpackCache.invalidate(maid);
             if (player.containerMenu instanceof CuriosContainer container) {
                 container.resetPage(player);
 

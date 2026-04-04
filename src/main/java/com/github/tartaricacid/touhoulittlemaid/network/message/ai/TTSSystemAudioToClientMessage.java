@@ -1,4 +1,4 @@
-package com.github.tartaricacid.touhoulittlemaid.network.message;
+package com.github.tartaricacid.touhoulittlemaid.network.message.ai;
 
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.site.AvailableSites;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSConfig;

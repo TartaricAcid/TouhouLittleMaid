@@ -9,7 +9,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.FlatCol
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.HistoryChatWidget;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
-import com.github.tartaricacid.touhoulittlemaid.network.message.ClearMaidAIDataMessage;
+import com.github.tartaricacid.touhoulittlemaid.network.message.ai.ClearMaidAIDataMessage;
 import com.google.common.collect.Lists;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
