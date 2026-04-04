@@ -20,8 +20,6 @@
   "ai.touhou_little_maid.chat.stt.no_microphone": "マイクデバイスが見つかりません！",
   "ai.touhou_little_maid.chat.disable": "AIチャット機能は無効になっています",
   "ai.touhou_little_maid.chat.input.tip": "テキストを入力し、Enter キーを押して送信します",
-  "ai.touhou_little_maid.chat.config.tip": "クリックして AI サイトの設定を開く",
-  "ai.touhou_little_maid.chat.config.tip.under_construction": "ゲーム内サイトの設定がまだ完了していませんので、後で再度更新してください",
   "ai.touhou_little_maid.chat.chat_bubble_waiting": "**考え中...**",
   "ai.touhou_little_maid.chat.need_player2_install": "[TLM] AI チャットを使用するには、Player2 ソフトウェアをインストールしてから実行する必要があります。",
   "ai.touhou_little_maid.chat.player2_error": "Player2 の実行中に次のHTTP エラーコードが発生しました: %d",

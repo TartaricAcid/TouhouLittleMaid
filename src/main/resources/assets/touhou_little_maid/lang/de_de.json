@@ -8,8 +8,6 @@
   "ai.touhou_little_maid.chat.stt.no_microphone": "Kein Mikrofon gefunden.",
   "ai.touhou_little_maid.chat.disable": "Die KI-Chat-Funktion wurde deaktiviert.",
   "ai.touhou_little_maid.chat.input.tip": "Geben Sie den Text ein und drücken Sie die Eingabetaste zum Senden.",
-  "ai.touhou_little_maid.chat.config.tip": "Klicken, um die KI-Sites-Konfiguration zu öffnen.",
-  "ai.touhou_little_maid.chat.config.tip.under_construction": "Die Konfiguration der In-Game-Seite ist noch nicht abgeschlossen, bitte warte auf ein späteres Update",
   "ai.touhou_little_maid.chat.chat_bubble_waiting": "**Die Maid denkt nach...**",
   "ai.touhou_little_maid.chat.need_player2_install": "[TLM] Du musst die Player2-Software installieren und ausführen, um den KI-Chat zu nutzen",
   "ai.touhou_little_maid.chat.player2_error": "Player2 Software läuft fehlerhaft, HTTP-Code: %d",

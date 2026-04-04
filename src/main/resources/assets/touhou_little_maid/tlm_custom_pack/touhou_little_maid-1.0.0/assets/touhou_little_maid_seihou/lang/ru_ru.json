@@ -1,1 +1,11 @@
-{}
+{
+  "maid_pack.touhou_little_maid_seihou.name": "Модель Seihou Project",
+  "maid_pack.touhou_little_maid_seihou.desc": "Персонажи из Seihou ",
+  "model.touhou_little_maid_seihou.vivit.name": "ВИВИТ",
+  "model.touhou_little_maid_seihou.vivit.desc": "§7Всецелевой Android",
+  "model.touhou_little_maid_seihou.milia.name": "Миллия",
+  "model.touhou_little_maid_seihou.milia.desc": "§7Молниеносно-быстрый Наёмник",
+  "model.touhou_little_maid_seihou.mei.name": "Мэй",
+  "model.touhou_little_maid_seihou.mei.desc": "§7Близнецы смерти",
+  "model.touhou_little_maid_seihou.mai.name": "Май"
+}
