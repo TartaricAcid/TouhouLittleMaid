@@ -1,8 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.client.event;
 
-import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.AIChatScreen;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.AIConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
+import com.github.tartaricacid.touhoulittlemaid.network.message.ai.OpenMaidAIChatMessage;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -28,7 +29,8 @@ public class PressAIChatKeyEvent {
                 return;
             }
             Minecraft.getInstance().options.keyChat.consumeClick();
-            Minecraft.getInstance().setScreen(new AIChatScreen(maid));
+            // 先通过服务端鉴权，然后发送同步信息后再打开客户端界面
+            NetworkHandler.CHANNEL.sendToServer(new OpenMaidAIChatMessage(maid));
         }
     }
 

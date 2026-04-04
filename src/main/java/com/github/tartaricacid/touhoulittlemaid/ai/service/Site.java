@@ -1,9 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.service;
 
-import com.google.common.annotations.Beta;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.Util;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.Comparator;
@@ -20,9 +18,17 @@ public interface Site {
     String ENABLED = "enabled";
     String ICON = "icon";
     String URL = "url";
+    String SECRET_ID = "secret_id";
     String SECRET_KEY = "secret_key";
     String HEADERS = "headers";
     String MODELS = "models";
+    String HAS_THINKING_FIELD = "has_thinking_field";
+    // 仅用于 MiniMax TTS，表示语音合成的模型，和 MODELS 里列出的模型不同，MODELS 里列出的是 voice_id，而 siteModel 是一个独立的参数
+    String SITE_MODEL = "site_model";
+    // 腾讯云 asr 语言类型
+    String ENG_SER_VICE_TYPE = "eng_ser_vice_type";
+    // 腾讯云 asr 热词
+    String HOT_WORD = "hot_word";
 
     /**
      * 用于控制 JSON 序列化的字段顺序
@@ -55,6 +61,11 @@ public interface Site {
      * 启用后才会在选择界面显示
      */
     boolean enabled();
+
+    /**
+     * 设置站点是否启用
+     */
+    void setEnabled(boolean enabled);
 
     /**
      * 该站点的图标
@@ -98,18 +109,9 @@ public interface Site {
     }
 
     /**
-     * 站点名称，不一定会被使用
+     * 站点名称语言文件 key
      */
-    @Beta
-    default Component getName() {
-        return Component.translatable("ai.touhou_little_maid.chat.site.%s.name".formatted(id()));
-    }
-
-    /**
-     * 站点描述，不一定会被使用
-     */
-    @Beta
-    default Component getDesc() {
-        return Component.translatable("ai.touhou_little_maid.chat.site.%s.desc".formatted(id()));
+    default String getNameKey() {
+        return "ai.touhou_little_maid.chat.site.%s.name".formatted(id());
     }
 }

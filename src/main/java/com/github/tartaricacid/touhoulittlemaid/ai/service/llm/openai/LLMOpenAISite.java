@@ -29,23 +29,30 @@ public class LLMOpenAISite implements LLMSite, SupportModelSelect {
     protected String url;
     protected boolean enabled;
     protected String secretKey;
+    protected boolean hasThinkingField;
 
-    public LLMOpenAISite(String id, ResourceLocation icon, String url, boolean enabled,
-                         String secretKey, Map<String, String> headers, Map<String, ModelEntry> modelEntries) {
+    public LLMOpenAISite(String id, ResourceLocation icon, String url, boolean enabled, String secretKey, boolean hasThinkingField,
+                         Map<String, String> headers, Map<String, ModelEntry> modelEntries) {
         this.id = id;
         this.icon = icon;
         this.url = url;
         this.enabled = enabled;
         this.secretKey = secretKey;
+        this.hasThinkingField = hasThinkingField;
         this.headers = headers;
         this.models = modelEntries.keySet().stream().collect(Collectors.toMap(Function.identity(), k -> modelEntries.get(k).name()));
         this.modelEntries = modelEntries;
     }
 
+    public LLMOpenAISite(String id, ResourceLocation icon, String url, boolean enabled, String secretKey, boolean hasThinkingField,
+                         Map<String, String> headers, List<ModelEntry> modelEntries) {
+        this(id, icon, url, enabled, secretKey, hasThinkingField, headers,
+                modelEntries.stream().collect(Collectors.toMap(ModelEntry::name, Function.identity())));
+    }
+
     public LLMOpenAISite(String id, ResourceLocation icon, String url, boolean enabled,
                          String secretKey, Map<String, String> headers, List<ModelEntry> modelEntries) {
-        this(id, icon, url, enabled, secretKey, headers,
-                modelEntries.stream().collect(Collectors.toMap(ModelEntry::name, Function.identity())));
+        this(id, icon, url, enabled, secretKey, false, headers, modelEntries);
     }
 
     @Override
@@ -75,6 +82,10 @@ public class LLMOpenAISite implements LLMSite, SupportModelSelect {
 
     public String secretKey() {
         return secretKey;
+    }
+
+    public boolean hasThinkingField() {
+        return hasThinkingField;
     }
 
     @Override
@@ -112,6 +123,7 @@ public class LLMOpenAISite implements LLMSite, SupportModelSelect {
         this.url = url;
     }
 
+    @Override
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
@@ -168,6 +180,7 @@ public class LLMOpenAISite implements LLMSite, SupportModelSelect {
                 Codec.STRING.fieldOf(URL).forGetter(LLMOpenAISite::url),
                 Codec.BOOL.fieldOf(ENABLED).forGetter(LLMOpenAISite::enabled),
                 Codec.STRING.fieldOf(SECRET_KEY).forGetter(LLMOpenAISite::secretKey),
+                Codec.BOOL.optionalFieldOf(HAS_THINKING_FIELD, false).forGetter(LLMOpenAISite::hasThinkingField),
                 Codec.unboundedMap(Codec.STRING, Codec.STRING).fieldOf(HEADERS).forGetter(LLMOpenAISite::headers),
                 MODELS_CODEC.fieldOf(MODELS).forGetter(LLMOpenAISite::modelEntries)
         ).apply(instance, LLMOpenAISite::new));

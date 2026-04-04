@@ -4,6 +4,8 @@ import com.github.tartaricacid.touhoulittlemaid.ai.service.SerializableSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.STTApiType;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.STTClient;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.STTSite;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.layout.STTAliyunFormLayout;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.layout.STTSiteFormLayout;
 import com.github.tartaricacid.touhoulittlemaid.util.http.UrlTool;
 import com.google.common.collect.Maps;
 import com.mojang.serialization.Codec;
@@ -72,6 +74,12 @@ public class STTAliyunSite implements STTSite {
         return new STTAliyunClient(STT_HTTP_CLIENT, this);
     }
 
+    @Override
+    public STTSiteFormLayout formLayout() {
+        return new STTAliyunFormLayout(this);
+    }
+
+    @Override
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
@@ -133,7 +141,7 @@ public class STTAliyunSite implements STTSite {
         return UrlTool.buildQueryString(this.getBaseUrl(), params);
     }
 
-    private String getBaseUrl() {
+    public String getBaseUrl() {
         return url;
     }
 
@@ -146,31 +154,31 @@ public class STTAliyunSite implements STTSite {
         return secretKey;
     }
 
-    private String getAppKey() {
+    public String getAppKey() {
         return appKey;
     }
 
-    private String getVocabularyId() {
+    public String getVocabularyId() {
         return vocabularyId;
     }
 
-    private String getCustomizationId() {
+    public String getCustomizationId() {
         return customizationId;
     }
 
-    private boolean isEnablePunctuationPrediction() {
+    public boolean isEnablePunctuationPrediction() {
         return enablePunctuationPrediction;
     }
 
-    private boolean isEnableInverseTextNormalization() {
+    public boolean isEnableInverseTextNormalization() {
         return enableInverseTextNormalization;
     }
 
-    private boolean isEnableVoiceDetection() {
+    public boolean isEnableVoiceDetection() {
         return enableVoiceDetection;
     }
 
-    private boolean isDisfluency() {
+    public boolean isDisfluency() {
         return disfluency;
     }
 

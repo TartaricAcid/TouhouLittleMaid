@@ -3,7 +3,8 @@ package com.github.tartaricacid.touhoulittlemaid.ai.service.stt;
 public enum STTApiType {
     PLAYER2("player2"),
     ALIYUN("aliyun"),
-    SILICONFLOW("siliconflow");
+    SILICONFLOW("siliconflow"),
+    TENCENT("tencent");
 
     private final String name;
 

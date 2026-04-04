@@ -80,7 +80,7 @@ public final class InitItems {
     public static RegistryObject<Item> MONSTER_LIST = ITEMS.register("monster_list", ItemMonsterList::new);
 
     public static RegistryObject<Item> MAID_SPAWN_EGG = ITEMS.register("maid_spawn_egg", () -> new ForgeSpawnEggItem(() -> EntityMaid.TYPE, 0xffffff, 0xffffff, new Item.Properties()));
-    public static RegistryObject<Item> FAIRY_SPAWN_EGG = ITEMS.register("fairy_spawn_egg", () -> new ForgeSpawnEggItem(() -> EntityFairy.TYPE, 0xffffff, 0xffffff, new Item.Properties()));
+    public static RegistryObject<Item> FAIRY_SPAWN_EGG = ITEMS.register("fairy_spawn_egg", ItemFairySpawnEgg::new);
 
     // 成就图标
     public static RegistryObject<Item> CHANGE_CHAIR_MODEL = ITEMS.register("change_chair_model", ItemAdvancementIcon::new);

@@ -1,19 +1,19 @@
 package com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai;
 
+import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.UserPromptContexts;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.response.ResponseChat;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMMessage;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.Role;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai.response.ToolCall;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.FlatColorButton;
 import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.HistoryChatWidget;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.entity.passive.TabIndex;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.ClearMaidAIDataMessage;
-import com.github.tartaricacid.touhoulittlemaid.network.message.OpenMaidGuiMessage;
 import com.google.common.collect.Lists;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
@@ -29,12 +29,17 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Deque;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class HistoryAIChatScreen extends Screen {
     private static final MutableComponent HISTORY_TITLE = Component.translatable("gui.touhou_little_maid.button.maid_ai_chat_config.history_chat.title");
     private static final MutableComponent HISTORY_EMPTY = Component.translatable("gui.touhou_little_maid.button.maid_ai_chat_config.history_chat_is_empty");
     private static final MutableComponent SUMMARY_TITLE = Component.translatable("gui.touhou_little_maid.button.maid_ai_chat_config.history_chat.summary_title");
     private static final MutableComponent SUMMARY_EMPTY = Component.translatable("gui.touhou_little_maid.button.maid_ai_chat_config.history_chat.summary_empty");
+
+    private static final int CHAT_TEXT_WIDTH = 140;
+    private static final int TOOL_TEXT_WIDTH = 180;
 
     private static final int SUMMARY_WIDTH = 120;
     private static final float SUMMARY_TEXT_SCALE = 0.5f;
@@ -46,6 +51,7 @@ public class HistoryAIChatScreen extends Screen {
     private static final int SUMMARY_MIN_HEIGHT = 48;
 
     private final EntityMaid maid;
+    private final @Nullable Screen parent;
     private final ResourceLocation playerSkin;
     private final List<LLMMessage> history = Lists.newArrayList();
     private final List<Renderable> historyWidgets = Lists.newArrayList();
@@ -67,7 +73,12 @@ public class HistoryAIChatScreen extends Screen {
     private @Nullable List<String> linesCache = null;
 
     public HistoryAIChatScreen(EntityMaid maid) {
+        this(null, maid);
+    }
+
+    public HistoryAIChatScreen(@Nullable Screen parent, EntityMaid maid) {
         super(Component.literal("Maid History AI Chat Screen"));
+        this.parent = parent;
         this.maid = maid;
         this.playerSkin = this.getPlayerSkin();
         this.summaryText = maid.getAiChatManager().getCompressedSummary();
@@ -117,7 +128,7 @@ public class HistoryAIChatScreen extends Screen {
     private void addButtons() {
         MutableComponent clearName = Component.translatable("gui.touhou_little_maid.button.maid_ai_chat_config.clear_history_chat");
         MutableComponent clearMsg = Component.translatable("gui.touhou_little_maid.button.maid_ai_chat_config.clear_history_chat.confirm");
-        this.addRenderableWidget(Button.builder(clearName, button -> {
+        this.addRenderableWidget(new FlatColorButton(this.getRightColumnLeft(), this.getClearButtonY(), SUMMARY_WIDTH, BUTTON_HEIGHT, clearName, button -> {
             this.getMinecraft().setScreen(new ConfirmScreen(yes -> {
                 if (yes) {
                     this.history.clear();
@@ -129,24 +140,33 @@ public class HistoryAIChatScreen extends Screen {
                 }
                 this.getMinecraft().setScreen(this);
             }, clearName, clearMsg));
-        }).bounds(this.getRightColumnLeft(), this.getClearButtonY(), SUMMARY_WIDTH, BUTTON_HEIGHT).build());
-        this.addRenderableWidget(Button.builder(CommonComponents.GUI_BACK, button -> {
-            OpenMaidGuiMessage message = new OpenMaidGuiMessage(this.maid.getId(), TabIndex.MAID_AI_CHAT_CONFIG);
-            NetworkHandler.CHANNEL.sendToServer(message);
-        }).bounds(this.getRightColumnLeft(), this.getBackButtonY(), SUMMARY_WIDTH, BUTTON_HEIGHT).build());
+        }));
+        this.addRenderableWidget(new FlatColorButton(this.getRightColumnLeft(), this.getBackButtonY(), SUMMARY_WIDTH, BUTTON_HEIGHT,
+                CommonComponents.GUI_BACK, button -> this.onClose()));
     }
 
     private int addHistoryWidget(LLMMessage message, int posX) {
+        boolean isTool = message.role() == Role.TOOL;
         boolean isLeft = message.role() != Role.USER;
-        Component msg = Component.literal(message.message());
-        int width = Math.min(font.width(msg), 140) + 10;
-        int lineHeight = 10 + font.split(msg, 140).size() * font.lineHeight;
+
+        Component msg = this.getDisplayMessage(message);
+        int lineHeight = this.getHistoryLineHeight(msg, isTool);
+
+        // 工具消息
+        if (isTool) {
+            historyWidgets.add(new HistoryChatWidget(posX - TOOL_TEXT_WIDTH / 2, maxHeight,
+                    TOOL_TEXT_WIDTH, lineHeight, msg, playerSkin, message.gameTime(), true, true));
+            return lineHeight;
+        }
+
+        // 普通聊天消息
+        int width = Math.min(font.width(msg), CHAT_TEXT_WIDTH) + 10;
         if (isLeft) {
             historyWidgets.add(new HistoryChatWidget(posX - 100, maxHeight,
-                    width, lineHeight, msg, playerSkin, message.gameTime(), true));
+                    width, lineHeight, msg, playerSkin, message.gameTime(), true, false));
         } else {
             historyWidgets.add(new HistoryChatWidget(posX + 100 - width, maxHeight,
-                    width, lineHeight, msg, playerSkin, message.gameTime(), false));
+                    width, lineHeight, msg, playerSkin, message.gameTime(), false, false));
         }
         return lineHeight;
     }
@@ -198,16 +218,79 @@ public class HistoryAIChatScreen extends Screen {
         return false;
     }
 
+    @Override
+    public void onClose() {
+        if (this.minecraft != null) {
+            Screen screen = Objects.requireNonNullElse(this.parent, new AIChatScreen(this.maid));
+            this.minecraft.setScreen(screen);
+        }
+    }
+
     private void transformMessage() {
         Deque<LLMMessage> deque = this.maid.getAiChatManager().getHistory().getDeque();
         deque.descendingIterator().forEachRemaining(message -> {
             if (message.role() == Role.USER) {
                 this.history.add(message);
-            } else if (message.role() == Role.ASSISTANT && StringUtils.isNotBlank(message.message())) {
-                ResponseChat responseChat = new ResponseChat(message.message());
-                this.history.add(new LLMMessage(Role.ASSISTANT, responseChat.getChatText(), message.gameTime(), null, null));
+                return;
             }
+
+            if (message.role() == Role.ASSISTANT) {
+                // LLM 发起的工具调用信息，只显示工具名
+                List<ToolCall> toolCalls = message.toolCalls();
+                if (toolCalls != null && !toolCalls.isEmpty()) {
+                    LLMMessage msg = new LLMMessage(Role.TOOL, this.getToolCallNames(toolCalls), message.gameTime());
+                    this.history.add(msg);
+                    return;
+                }
+
+                // 普通的 LLM 返回信息
+                String text = message.message();
+                if (StringUtils.isNotBlank(text)) {
+                    String chatText = new ResponseChat(text).getChatText();
+                    if (StringUtils.isNotBlank(chatText)) {
+                        LLMMessage msg = new LLMMessage(Role.ASSISTANT, chatText, message.gameTime());
+                        this.history.add(msg);
+                    }
+                }
+            }
+
+            // 自身发送给 LLM 的历史记录，不显示在聊天记录中
+            // if (message.role() == Role.TOOL) {}
         });
+    }
+
+    private String getToolCallNames(List<ToolCall> toolCalls) {
+        return toolCalls.stream()
+                .map(tool -> tool.getFunction().getName())
+                .filter(StringUtils::isNotBlank)
+                .distinct()
+                .collect(Collectors.joining(", "));
+    }
+
+    private Component getDisplayMessage(LLMMessage message) {
+        if (message.role() == Role.TOOL) {
+            if (StringUtils.isBlank(message.message())) {
+                return Component.translatable("gui.touhou_little_maid.button.maid_ai_chat_config.history_chat.tool_call.generic");
+            }
+            return Component.translatable("gui.touhou_little_maid.button.maid_ai_chat_config.history_chat.tool_call.named", message.message());
+        }
+
+        // 需要剔除 user 的 context 部分
+        if (message.role() == Role.USER) {
+            String content = UserPromptContexts.removeContext(message.message());
+            return Component.literal(content);
+        }
+        return Component.literal(message.message());
+    }
+
+    private int getHistoryLineHeight(Component message, boolean isTool) {
+        if (isTool) {
+            int lineCount = font.split(message, TOOL_TEXT_WIDTH).size();
+            return lineCount * font.lineHeight / 5;
+        } else {
+            int lineCount = font.split(message, CHAT_TEXT_WIDTH).size();
+            return 10 + lineCount * font.lineHeight;
+        }
     }
 
     private void renderSummaryPanel(GuiGraphics graphics) {

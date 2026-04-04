@@ -20,8 +20,29 @@
 			"model_id": "touhou_little_maid:hakurei_reimu_type_b",
 			"model": "touhou_little_maid:models/entity/hakurei_reimu_type_b.json",
 			"name": "{model.touhou_little_maid.hakurei_reimu.name}",
-			"extra_textures": ["touhou_little_maid:textures/entity/hakurei_reimu_type_b_2.png", "touhou_little_maid:textures/entity/hakurei_reimu_vengeful.png"],
-			"description": ["{model.touhou_little_maid.hakurei_reimu.desc}"]
+			"extra_textures": [
+				"touhou_little_maid:textures/entity/hakurei_reimu_type_b_2.png",
+				"touhou_little_maid:textures/entity/hakurei_reimu_vengeful.png",
+				"touhou_little_maid:textures/entity/hakurei_reimu_vengeful_2.png"
+			],
+			"description": ["{model.touhou_little_maid.hakurei_reimu.desc}"],
+			"animation": [
+				"touhou_little_maid:animation/maid/default/head/default.js",
+				"touhou_little_maid:animation/maid/default/head/beg.js",
+				"touhou_little_maid:animation/maid/default/head/music_shake.js",
+				"touhou_little_maid:animation/maid/default/head/blink.js",
+				"touhou_little_maid:animation/maid/default/head/hurt.js",
+				"touhou_little_maid:animation/maid/default/tail/default.js",
+				"touhou_little_maid:animation/maid/default/arm/default.js",
+				"touhou_little_maid:animation/maid/default/arm/swing.js",
+				"touhou_little_maid:animation/maid/default/leg/default.js",
+				"touhou_little_maid:animation/maid/default/sit/default.js",
+				"touhou_little_maid:animation/maid/default/sit/skirt_rotation.js",
+				"touhou_little_maid:animation/maid/default/task/danmaku_attack.js",
+				"touhou_little_maid:animation/base/rotation/y_high_speed.js",
+				"touhou_little_maid:animation/base/float/default.js",
+				"touhou_little_maid:animation/base/rotation/z_normal_speed.js"
+			]
 		},
 		{
 			"model_id": "touhou_little_maid:kirisame_marisa",
@@ -37,6 +58,7 @@
 				"touhou_little_maid:animation/maid/default/head/music_shake.js",
 				"touhou_little_maid:animation/maid/default/sleep/default.js",
 				"touhou_little_maid:animation/maid/default/head/blink.js",
+				"touhou_little_maid:animation/maid/default/head/hurt.js",
 				"touhou_little_maid:animation/maid/default/leg/default.js",
 				"touhou_little_maid:animation/maid/default/arm/default.js",
 				"touhou_little_maid:animation/maid/default/sit/skirt_rotation.js",
@@ -851,8 +873,16 @@
 			"description": ["{model.touhou_little_maid.nareko_michigami.desc}"]
 		},
 		{
+			"model_id": "touhou_little_maid:yuiman_asama",
+			"description": ["{model.touhou_little_maid.yuiman_asama.desc}"]
+		},
+		{
 			"model_id": "touhou_little_maid:ariya_iwanaga",
 			"description": ["{model.touhou_little_maid.ariya_iwanaga.desc}"]
+		},
+		{
+			"model_id": "touhou_little_maid:watari_nina",
+			"description": ["{model.touhou_little_maid.watari_nina.desc}"]
 		},
 		{
 			"model_id": "touhou_little_maid:morichika_rinnosuke",

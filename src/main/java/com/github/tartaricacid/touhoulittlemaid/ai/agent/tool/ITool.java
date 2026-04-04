@@ -1,22 +1,35 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.agent.tool;
 
-import com.github.tartaricacid.touhoulittlemaid.ai.service.function.response.ToolResponse;
+import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.LLMCallback;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.ObjectParameter;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.Parameter;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai.request.ChatCompletion;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.serialization.Codec;
 
+import java.util.Collection;
+
 /**
  * 女仆 AI 的 Tool 抽象。
  * <p>
  * Tool 用于向模型暴露一个可执行的原子操作，包含：
  * 工具标识、用途摘要、参数定义、参数编解码器，以及调用后的实际执行逻辑。
- * Tool 一般由某个 Skill 暴露给模型，而不是直接长期挂在根上下文中。
+ * Tool 一般直接长期挂在根上下文中，由具体的 Skill 里写提示词让 LLM 主动触发调用。
  *
  * @param <T> Tool 调用参数的解码结果类型
  */
 public interface ITool<T> {
+    /**
+     * 工具方法，告诉 LLM 本次 Function Call 的参数无效，并给出正确的参数选项，要求 LLM 重新生成调用
+     *
+     * @param reason 无效的原因描述
+     */
+    static String invalidParam(String parameterName, Collection<String> values, String reason) {
+        String joined = String.join(", ", values);
+        String correctUsage = "%s: choose one of [%s]".formatted(parameterName, joined);
+        return "Invalid parameter: %s. Correct usage: %s".formatted(reason, correctUsage);
+    }
+
     /**
      * Tool 的唯一标识符，不能和其他 Tool 重复。
      * <p>
@@ -45,12 +58,22 @@ public interface ITool<T> {
     Codec<T> codec();
 
     /**
-     * 执行 Tool 调用。
+     * 执行 Tool 调用。请记得在传入的 callback 里添加工具的返回消息，从而继续让对话进行下去
+     *
+     * @param toolCallId LLM 发回的参数，需要带上这个 ID 以让 LLM 知道这是哪个 Tool 的返回结果
+     * @param result     解码后的参数对象
+     * @param callback   当前执行逻辑的回调
+     * @return 返回回调，这个回调会进行下一轮 LLM 通信。这个回调可以是原样传入的，也可以是新建的
+     */
+    LLMCallback onCall(String toolCallId, T result, LLMCallback callback);
+
+    /**
+     * 生成此次工具调用的摘要信息，用于 UI 展示及历史记录显示
      *
      * @param result 解码后的参数对象
-     * @param maid   当前女仆实例
+     * @return 摘要信息
      */
-    ToolResponse onCall(T result, EntityMaid maid);
+    String invocationSummary(T result);
 
     /**
      * 程序侧再次判断当前 Tool 是否允许在当前上下文下暴露给模型。

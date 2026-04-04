@@ -57,6 +57,6 @@ public class TaskShears implements IMaidTask {
 
     @Override
     public String getMaidActionSummary() {
-        return "Shear nearby shearable creatures with shears.";
+        return "Shear wool and other drops from nearby animals using shears.";
     }
 }

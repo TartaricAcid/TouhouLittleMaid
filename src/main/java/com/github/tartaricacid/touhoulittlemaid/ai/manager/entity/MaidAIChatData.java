@@ -96,6 +96,10 @@ public abstract class MaidAIChatData extends MaidAIChatSerializable {
 
     @Nullable
     public TTSSite getTTSSite() {
+        if (isNoTTSSite(ttsSite)) {
+            return null;
+        }
+
         TTSSite site;
         if (StringUtils.isBlank(ttsSite)) {
             site = AvailableSites.getTTSSite(TTSSystemSite.API_TYPE);
@@ -139,6 +143,13 @@ public abstract class MaidAIChatData extends MaidAIChatSerializable {
             return ttsLanguage;
         }
         return AIConfig.TTS_LANGUAGE.get();
+    }
+
+    public String getChatLanguage() {
+        if (StringUtils.isNotBlank(chatLanguage)) {
+            return chatLanguage;
+        }
+        return "en_us";
     }
 
     public CappedQueue<LLMMessage> getHistory() {

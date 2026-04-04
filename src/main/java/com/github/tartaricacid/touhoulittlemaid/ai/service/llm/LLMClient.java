@@ -1,28 +1,24 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.service.llm;
 
 
-import com.github.tartaricacid.touhoulittlemaid.ai.manager.response.ResponseChat;
+import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.LLMCallback;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.Client;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.ErrorCode;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.ResponseCallback;
 import com.google.gson.JsonSyntaxException;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Type;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.List;
 import java.util.function.Consumer;
 
 public interface LLMClient extends Client {
     /**
      * 大语言模型聊天接口
      *
-     * @param messages 聊天的上下文，包括提示词，历史记录，用户输入内容
-     * @param config   聊天配置
-     * @param callback 回调，返回聊天结果字符串
+     * @param callback 聊天回调，执行具体的二次对话逻辑或者后续游戏逻辑
      */
-    void chat(List<LLMMessage> messages, LLMConfig config, ResponseCallback<ResponseChat> callback);
+    void chat(LLMCallback callback);
 
     /**
      * 提供的工具方法，用来处理 HTTP 响应信息
@@ -32,7 +28,7 @@ public interface LLMClient extends Client {
      * @param throwable 响应的错误，没有错误时为 null
      * @param request   之前 HTTP 发送的的请求
      */
-    default <T> void handleResponse(ResponseCallback<ResponseChat> callback, HttpResponse<String> response,
+    default <T> void handleResponse(LLMCallback callback, HttpResponse<String> response,
                                     @Nullable Throwable throwable, HttpRequest request,
                                     Consumer<T> onSuccess, Type type) {
         if (throwable != null) {
@@ -46,7 +42,7 @@ public interface LLMClient extends Client {
                 T message = GSON.fromJson(string, type);
                 onSuccess.accept(message);
             } else {
-                String message = "HTTP Error Code: %d, Response %s".formatted(statusCode, response);
+                String message = "HTTP Error Code: %d, Response: %s".formatted(statusCode, response.body());
                 callback.onFailure(request, new Throwable(message), ErrorCode.REQUEST_RECEIVED_ERROR);
             }
         } catch (JsonSyntaxException e) {

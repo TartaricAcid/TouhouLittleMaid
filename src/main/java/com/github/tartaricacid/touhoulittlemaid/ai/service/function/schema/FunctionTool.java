@@ -5,9 +5,6 @@ import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai.request.To
 import com.google.gson.annotations.SerializedName;
 
 public class FunctionTool {
-    @SerializedName("type")
-    private String type = "function";
-
     @SerializedName("name")
     private String name;
 

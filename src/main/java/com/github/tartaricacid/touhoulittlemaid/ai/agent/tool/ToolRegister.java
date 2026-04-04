@@ -1,10 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.agent.tool;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.implement.QueryMaidContextTool;
-import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.implement.SwitchFollowStateTool;
-import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.implement.SwitchWorkTaskTool;
-import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.implement.UseSkillTool;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.implement.*;
 import com.github.tartaricacid.touhoulittlemaid.api.ILittleMaid;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
@@ -19,9 +16,11 @@ public class ToolRegister {
         ToolRegister register = new ToolRegister();
 
         register.register(new UseSkillTool());
-        register.register(new QueryMaidContextTool());
+        register.register(new QueryGameContextTool());
         register.register(new SwitchFollowStateTool());
         register.register(new SwitchWorkTaskTool());
+        register.register(new SwitchScheduleTool());
+        register.register(new SwitchSitTool());
 
         for (ILittleMaid littleMaid : TouhouLittleMaid.EXTENSIONS) {
             littleMaid.registerAITool(register);

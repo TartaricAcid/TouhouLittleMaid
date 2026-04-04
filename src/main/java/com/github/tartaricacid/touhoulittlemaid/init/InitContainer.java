@@ -2,9 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.init;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.backpack.*;
-import com.github.tartaricacid.touhoulittlemaid.inventory.container.config.MaidAIChatConfigContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.config.MaidConfigContainer;
-import com.github.tartaricacid.touhoulittlemaid.inventory.container.backpack.BaubleContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.other.PicnicBasketContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.other.WirelessIOContainer;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.task.AttackTaskConfigContainer;
@@ -28,7 +26,6 @@ public final class InitContainer {
     public static final RegistryObject<MenuType<BaubleContainer>> MAID_BAUBLE_CONTAINER = CONTAINER_TYPE.register("maid_bauble_container", () -> BaubleContainer.TYPE);
 
     public static final RegistryObject<MenuType<MaidConfigContainer>> MAID_CONFIG_CONTAINER = CONTAINER_TYPE.register("maid_config_container", () -> MaidConfigContainer.TYPE);
-    public static final RegistryObject<MenuType<MaidAIChatConfigContainer>> MAID_AI_CHAT_CONFIG_CONTAINER = CONTAINER_TYPE.register("maid_ai_chat_config_container", () -> MaidAIChatConfigContainer.TYPE);
     public static final RegistryObject<MenuType<WirelessIOContainer>> WIRELESS_IO_CONTAINER = CONTAINER_TYPE.register("wireless_io_container", () -> WirelessIOContainer.TYPE);
     public static final RegistryObject<MenuType<PicnicBasketContainer>> PICNIC_BASKET_CONTAINER = CONTAINER_TYPE.register("picnic_basket_container", () -> PicnicBasketContainer.TYPE);
     public static final RegistryObject<MenuType<DefaultMaidTaskConfigContainer>> DEFAULT_MAIK_TASK_CONFIG = CONTAINER_TYPE.register("default_maid_task_config_container", () -> DefaultMaidTaskConfigContainer.TYPE);

@@ -19,4 +19,16 @@ public final class Rectangle {
         this.w = rectangle.w;
         this.h = rectangle.h;
     }
+
+    public double right() {
+        return this.x + this.w;
+    }
+
+    public double bottom() {
+        return this.y + this.h;
+    }
+
+    public boolean contains(double x, double y) {
+        return this.x <= x && x <= this.right() && this.y <= y && y <= this.bottom();
+    }
 }

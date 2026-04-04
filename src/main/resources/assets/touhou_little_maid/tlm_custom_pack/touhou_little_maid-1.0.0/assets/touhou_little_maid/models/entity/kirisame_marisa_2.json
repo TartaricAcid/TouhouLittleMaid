@@ -65,9 +65,28 @@
 				{
 					"name": "blink",
 					"parent": "head",
-					"pivot": [0, 18, -0.0625],
+					"pivot": [0, 21, -4.01562],
 					"cubes": [
-						{"origin": [-4, 18, -4.01562], "size": [8, 6, 0], "uv": [24, 2]}
+						{"origin": [-4, 18, -4.003], "size": [8, 6, 0], "uv": [24, 2]}
+					]
+				},
+				{
+					"name": "hurtBlink",
+					"parent": "head",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{
+							"origin": [-3, 18.5, -4.01],
+							"size": [6, 4, 0],
+							"uv": {
+								"north": {"uv": [0, 95], "uv_size": [12, 8]},
+								"east": {"uv": [0, 95], "uv_size": [0, 8]},
+								"south": {"uv": [12, 95], "uv_size": [12, 8]},
+								"west": {"uv": [12, 95], "uv_size": [0, 8]},
+								"up": {"uv": [0, 95], "uv_size": [12, 0]},
+								"down": {"uv": [12, 95], "uv_size": [12, 0]}
+							}
+						}
 					]
 				},
 				{

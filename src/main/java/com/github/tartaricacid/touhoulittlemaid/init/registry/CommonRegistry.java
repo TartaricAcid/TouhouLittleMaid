@@ -1,9 +1,9 @@
 package com.github.tartaricacid.touhoulittlemaid.init.registry;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.SkillRegister;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.GameContextRegister;
+import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.SkillLoader;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.tool.ToolRegister;
-import com.github.tartaricacid.touhoulittlemaid.ai.agent.context.MaidContextRegister;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.SerializerRegister;
 import com.github.tartaricacid.touhoulittlemaid.block.multiblock.MultiBlockManager;
 import com.github.tartaricacid.touhoulittlemaid.compat.curios.menu.CuriosContainer;
@@ -69,8 +69,8 @@ public final class CommonRegistry {
         FishingTypeManager.init();
         SerializerRegister.init();
         // FunctionCallRegister.init();
-        MaidContextRegister.init();
-        SkillRegister.init();
+        SkillLoader.init();
+        GameContextRegister.init();
         ToolRegister.init();
         ChatBubbleRegister.init();
         DebugMaidManager.init();

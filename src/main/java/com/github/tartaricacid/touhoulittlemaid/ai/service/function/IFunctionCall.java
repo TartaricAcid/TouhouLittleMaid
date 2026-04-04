@@ -1,6 +1,5 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.service.function;
 
-import com.github.tartaricacid.touhoulittlemaid.ai.service.function.response.ToolResponse;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.ObjectParameter;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.Parameter;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai.request.ChatCompletion;
@@ -13,7 +12,8 @@ import com.mojang.serialization.Codec;
  * @param <T>
  * @deprecated 自 1.5.1 起，更换为 skill 机制
  */
-@Deprecated(since = "1.5.1")
+@Deprecated(since = "1.5.1", forRemoval = true)
+@SuppressWarnings("removal")
 public interface IFunctionCall<T> {
     /**
      * function 名称，建议小写英文、下划线
@@ -61,5 +61,5 @@ public interface IFunctionCall<T> {
      * @param maid   正在对话的女仆
      * @return 该函数执行完毕后，返回的工具结果
      */
-    ToolResponse onToolCall(T result, EntityMaid maid);
+    com.github.tartaricacid.touhoulittlemaid.ai.service.function.response.ToolResponse onToolCall(T result, EntityMaid maid);
 }

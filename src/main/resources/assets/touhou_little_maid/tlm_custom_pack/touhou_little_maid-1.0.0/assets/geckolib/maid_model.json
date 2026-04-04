@@ -104,6 +104,14 @@
 			"description": ["{model.geckolib.winefox_magical.desc}"]
 		},
 		{
+			"model_id": "geckolib:winefox_saint",
+			"is_gecko": true,
+			"description": ["{model.geckolib.winefox_saint.desc.1}", "{model.geckolib.winefox_saint.desc.2}"],
+			"extra_textures": ["geckolib:textures/entity/winefox_saint_1.png"],
+			"render_entity_scale": 0.7,
+			"animation": ["geckolib:animation/winefox_saint.main.animation.json", "geckolib:animation/winefox_saint.condition.animation.json"]
+		},
+		{
 			"model_id": "geckolib:winefox_salesperson",
 			"is_gecko": true,
 			"extra_textures": ["geckolib:textures/entity/winefox_salesperson_1.png"],
@@ -147,6 +155,24 @@
 				"geckolib:animation/winefox_wedding.tac.animation.json"
 			],
 			"render_entity_scale": 0.65
+		},
+		{
+			"model_id": "geckolib:winefox_tactics",
+			"is_gecko": true,
+			"description": ["{model.geckolib.winefox_tactics.desc}"],
+			"animation": [
+				"geckolib:animation/winefox_tactics.main.animation.json",
+				"geckolib:animation/winefox_tactics.condition.animation.json",
+				"geckolib:animation/winefox_tactics.tac.animation.json"
+			],
+			"render_entity_scale": 0.7
+		},
+		{
+			"model_id": "geckolib:winefox_mini",
+			"is_gecko": true,
+			"description": ["{model.geckolib.winefox_mini.desc}"],
+			"render_entity_scale": 0.9,
+			"animation": ["geckolib:animation/winefox_mini.main.animation.json"]
 		},
 		{
 			"model_id": "geckolib:sta",
@@ -207,6 +233,17 @@
 			"animation": ["geckolib:animation/foxmaid.animation.json"],
 			"render_entity_scale": 0.7,
 			"description": ["{model.geckolib.foxmaid.desc}"]
+		},
+		{
+			"model_id": "geckolib:rice_cake_fox",
+			"is_gecko": true,
+			"description": ["{model.geckolib.rice_cake_fox.desc}"],
+			"render_entity_scale": 0.7,
+			"animation": [
+				"geckolib:animation/rice_cake_fox.main.animation.json",
+				"geckolib:animation/rice_cake_fox.condition.animation.json",
+				"geckolib:animation/rice_cake_fox.tac.animation.json"
+			]
 		}
 	]
 }

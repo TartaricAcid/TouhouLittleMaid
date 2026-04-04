@@ -21,6 +21,10 @@ public class Message {
 
     @Nullable
     public String getContent() {
+        // 部分模型因为会带思维链，需要剔除 <think> 标签内的内容
+        if (content != null && content.startsWith("<think>")) {
+            return content.replaceAll("<think>[\\s\\S]*?</think>", "").trim();
+        }
         return content;
     }
 

@@ -4,6 +4,9 @@ import com.github.tartaricacid.touhoulittlemaid.ai.service.SerializableSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSApiType;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSClient;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSSite;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.layout.TTSFishAudioFormLayout;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.layout.TTSGptSovitsFormLayout;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.layout.TTSSiteFormLayout;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.ResourceLocation;
@@ -54,6 +57,11 @@ public final class TTSGptSovitsSite implements TTSSite {
     @Override
     public TTSClient client() {
         return new TTSGptSovitsClient(TTS_HTTP_CLIENT, this);
+    }
+
+    @Override
+    public TTSSiteFormLayout formLayout() {
+        return new TTSGptSovitsFormLayout(this);
     }
 
     @Override
@@ -109,6 +117,7 @@ public final class TTSGptSovitsSite implements TTSSite {
         this.url = url;
     }
 
+    @Override
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }

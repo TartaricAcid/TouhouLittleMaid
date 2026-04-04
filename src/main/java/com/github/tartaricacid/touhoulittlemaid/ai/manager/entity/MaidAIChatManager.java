@@ -3,7 +3,10 @@ package com.github.tartaricacid.touhoulittlemaid.ai.manager.entity;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.summary.HistorySummaryManager;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.papi.PapiReplacer;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.papi.StringConstant;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.*;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.DefaultLLMSite;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMClient;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMMessage;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSClient;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSConfig;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSSite;
@@ -11,8 +14,6 @@ import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSSystemServices
 import com.github.tartaricacid.touhoulittlemaid.capability.ChatTokensCapabilityProvider;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.AIConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManager;
-import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.IChatBubbleData;
-import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.implement.TextChatBubbleData;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.TTSSystemAudioToClientMessage;
@@ -22,7 +23,6 @@ import com.google.common.collect.Maps;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -77,71 +77,37 @@ public final class MaidAIChatManager extends MaidAIChatData {
     }
 
     private void tryToChat(String message, ChatClientInfo clientInfo, @NotNull LLMSite site) {
+        this.chatLanguage = clientInfo.language();
         LLMClient chatClient = site.client();
-        List<LLMMessage> chatCompletion = getChatCompletion(this, clientInfo.language());
-        if (chatCompletion.isEmpty()) {
-            this.onSettingIsEmpty(message, clientInfo, chatCompletion, chatClient);
+        List<LLMMessage> messages = this.getMessages(this, clientInfo.language());
+        if (messages.isEmpty()) {
+            this.onSettingIsEmpty(clientInfo, chatClient);
         } else {
-            this.filterConsecutiveToolMessages(chatCompletion);
-            this.normalChat(message, chatCompletion, chatClient);
+            HistoryMessagesCheck.checkMessages(messages);
+            this.normalChat(message, messages, chatClient);
         }
     }
 
-    /**
-     * 跳过开头的 SYSTEM 消息后，丢弃对话区开头连续的 TOOL 消息。
-     * <p>
-     * 历史压缩可能删掉带 tool_calls 的 ASSISTANT 消消息，导致其后的 TOOL 消息
-     * 变成对话区的第一条。大多数 LLM API 要求 TOOL 消息前必须有对应的
-     * ASSISTANT tool_call，否则会报错，所以需要将这些孤儿 TOOL 消息剔除。
-     */
-    private void filterConsecutiveToolMessages(List<LLMMessage> chatCompletion) {
-        if (chatCompletion.size() <= 1) {
-            return;
-        }
+    private void normalChat(String message, List<LLMMessage> messages, LLMClient chatClient) {
+        // 先插入临时的 context
+        String messageWithContext = UserPromptContexts.addContext(this.maid, message);
 
-        // 先跳过开头连续的 SYSTEM 消息，定位到"对话区"的起始位置
-        int systemCount = 0;
-        while (systemCount < chatCompletion.size() && chatCompletion.get(systemCount).role() == Role.SYSTEM) {
-            systemCount++;
-        }
-        // 全都是 SYSTEM 消息，没有需要过滤的对话内容
-        if (systemCount >= chatCompletion.size()) {
-            return;
-        }
+        // http 通信添加 context
+        messages.add(LLMMessage.userChat(this.maid, messageWithContext));
+        // 历史记录不添加
+        this.maid.getAiChatManager().addUserHistory(message);
 
-        // 保留 SYSTEM 前缀，对话区部分丢弃开头连续的孤儿 TOOL 消息后重新拼接
-        List<LLMMessage> systemMessages = Lists.newArrayList(chatCompletion.subList(0, systemCount));
-        List<LLMMessage> filteredMessages = chatCompletion.stream()
-                .skip(systemCount)
-                // 丢弃开头连续的 tool 消息
-                .dropWhile(msg -> Role.TOOL.equals(msg.role()))
-                .toList();
-
-        chatCompletion.clear();
-        chatCompletion.addAll(systemMessages);
-        chatCompletion.addAll(filteredMessages);
+        // 通信
+        LLMCallback callback = new LLMCallback(this, messages);
+        chatClient.chat(callback);
     }
 
-    private void normalChat(String message, List<LLMMessage> chatCompletion, LLMClient chatClient) {
-        ChatBubbleManager bubbleManager = this.maid.getChatBubbleManager();
-        chatCompletion.add(LLMMessage.userChat(maid, message));
-        LLMConfig config = LLMConfig.normalChat(this.getLLMModel(), this.maid);
-        long key = bubbleManager.addThinkingText("ai.touhou_little_maid.chat.chat_bubble_waiting");
-        LLMCallback callback = new LLMCallback(this, message, key);
-        chatClient.chat(chatCompletion, config, callback);
-    }
-
-    private void onSettingIsEmpty(String message, ChatClientInfo clientInfo, List<LLMMessage> chatCompletion, LLMClient chatClient) {
+    private void onSettingIsEmpty(ChatClientInfo clientInfo, LLMClient chatClient) {
         ChatBubbleManager bubbleManager = this.maid.getChatBubbleManager();
         if (AIConfig.AUTO_GEN_SETTING_ENABLED.get()) {
-            LLMMessage llmMessage = autoGenSetting(maid, clientInfo);
-            chatCompletion.add(llmMessage);
-            LLMConfig config = new LLMConfig(this.getLLMModel(), this.maid, ChatType.AUTO_GEN_SETTING);
-            MutableComponent component = Component.translatable("ai.touhou_little_maid.chat.llm.role_no_setting_and_gen_setting");
-            TextChatBubbleData bubbleData = TextChatBubbleData.create(30 * 20, component, IChatBubbleData.TYPE_2, IChatBubbleData.DEFAULT_PRIORITY);
-            long key = bubbleManager.addChatBubble(bubbleData);
-            AutoGenSettingCallback callback = new AutoGenSettingCallback(this, message, key);
-            chatClient.chat(chatCompletion, config, callback);
+            List<LLMMessage> messages = this.autoGenSetting(maid, clientInfo);
+            AutoGenSettingCallback callback = new AutoGenSettingCallback(this, messages);
+            chatClient.chat(callback);
         } else {
             bubbleManager.addTextChatBubble("ai.touhou_little_maid.chat.llm.role_no_setting");
         }
@@ -168,19 +134,19 @@ public final class MaidAIChatManager extends MaidAIChatData {
         }
     }
 
-    private List<LLMMessage> getChatCompletion(MaidAIChatManager chatManager, String language) {
+    private List<LLMMessage> getMessages(MaidAIChatManager chatManager, String language) {
         // 如果含有自定义设定，则直接使用自定义设定
         if (StringUtils.isNotBlank(chatManager.customSetting)) {
             EntityMaid maid = chatManager.getMaid();
             String setting = PapiReplacer.replaceSetting(chatManager.customSetting, maid, language);
-            return this.buildChatCompletion(setting, maid, chatManager.getHistory());
+            return this.buildMessage(setting, maid, chatManager.getHistory());
         }
 
         // 其他情况下，获取默认设定文件
         return chatManager.getSetting().map(s -> {
             EntityMaid maid = chatManager.getMaid();
             String setting = s.getSetting(maid, language);
-            return this.buildChatCompletion(setting, maid, chatManager.getHistory());
+            return this.buildMessage(setting, maid, chatManager.getHistory());
         }).orElse(Lists.newArrayList());
     }
 
@@ -189,7 +155,7 @@ public final class MaidAIChatManager extends MaidAIChatData {
      * <p>
      * 最终结构为：{@code [SYSTEM 设定, SYSTEM 摘要(可选), ...历史记录(从旧到新)]}
      */
-    private List<LLMMessage> buildChatCompletion(String setting, EntityMaid maid, CappedQueue<LLMMessage> history) {
+    private List<LLMMessage> buildMessage(String setting, EntityMaid maid, CappedQueue<LLMMessage> history) {
         List<LLMMessage> chatList = Lists.newArrayList();
         chatList.add(LLMMessage.systemChat(maid, setting));
         this.historySummaryManager.appendSummaryMessage(chatList);
@@ -197,7 +163,7 @@ public final class MaidAIChatManager extends MaidAIChatData {
         return chatList;
     }
 
-    private LLMMessage autoGenSetting(EntityMaid maid, ChatClientInfo clientInfo) {
+    private List<LLMMessage> autoGenSetting(EntityMaid maid, ChatClientInfo clientInfo) {
         Map<String, String> valueMap = Util.make(Maps.newHashMap(), map -> {
             map.put("model_name", clientInfo.name());
             map.put("chat_language", clientInfo.language());
@@ -212,7 +178,7 @@ public final class MaidAIChatManager extends MaidAIChatData {
             setting = setting + desc;
         }
 
-        return LLMMessage.userChat(maid, setting);
+        return Lists.newArrayList(LLMMessage.userChat(maid, setting));
     }
 
     private void onPlaySoundLocal(String name, String chatText, String ttsText, TTSConfig config, TTSSystemServices services, long waitingChatBubbleId) {
@@ -227,5 +193,9 @@ public final class MaidAIChatManager extends MaidAIChatData {
             }
             maid.getChatBubbleManager().addLLMChatText(chatText, waitingChatBubbleId);
         });
+    }
+
+    public HistorySummaryManager getHistorySummaryManager() {
+        return historySummaryManager;
     }
 }

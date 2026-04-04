@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.summary;
 
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.MaidAIChatManager;
+import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.UserPromptContexts;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.response.ResponseChat;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMMessage;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.Role;
@@ -8,17 +9,17 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.stream.Collectors;
 
-final class HistorySummaryPrompts {
+public final class HistorySummaryPrompts {
     static final int MAX_SUMMARY_LENGTH = 1600;
     static final int MAX_SINGLE_LENGTH = 300;
     static final int MIN_MESSAGES_TO_COMPRESS = 4;
 
     static final String SUMMARY_SYSTEM_PROMPT = """
-            You compress old in-game maid chat history for future continuity.
-            Merge the existing summary and the older messages into one concise summary.
-            Keep the result in plain text, under 12 short bullet lines.
-            Focus on long-term facts, player preferences, important outcomes, and unresolved topics.
-            Do not add markdown code fences.
+            You compress old in-game maid chat history into a continuity summary.
+            Merge the existing summary with the older messages into one concise result.
+            Output plain text only, at most 12 short bullet lines.
+            Focus on: long-term facts, player preferences, important outcomes, and unresolved topics.
+            Omit greetings, small talk, and redundant details. Do not use markdown code fences.
             """;
 
     private HistorySummaryPrompts() {
@@ -41,11 +42,13 @@ final class HistorySummaryPrompts {
                 """.formatted(previousSummary, historyBlock);
     }
 
-    static String buildSummaryEntry(LLMMessage message) {
+    public static String buildSummaryEntry(LLMMessage message) {
         Role role = message.role();
         String text = message.message();
 
         if (role == Role.USER) {
+            // 剔除 context 部分
+            text = UserPromptContexts.removeContext(text);
             return "[USER] %s".formatted(text);
         }
 

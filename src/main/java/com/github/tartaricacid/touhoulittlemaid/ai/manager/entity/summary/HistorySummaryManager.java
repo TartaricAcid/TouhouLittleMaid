@@ -1,8 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.summary;
 
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.MaidAIChatManager;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.ChatType;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMConfig;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMMessage;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMSite;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.AIConfig;
@@ -143,10 +141,10 @@ public class HistorySummaryManager {
             msg.add(LLMMessage.systemChat(maid, SUMMARY_SYSTEM_PROMPT));
             msg.add(LLMMessage.userChat(maid, this.buildSummaryRequest(snapshot)));
         });
-        LLMConfig config = new LLMConfig(model, maid, ChatType.HISTORY_SUMMARY);
-        HistorySummaryCallback callback = new HistorySummaryCallback(this, snapshot);
 
-        site.client().chat(messages, config, callback);
+        // 进行通信压缩上下文
+        HistorySummaryCallback callback = new HistorySummaryCallback(this.chatManager, messages, snapshot);
+        site.client().chat(callback);
     }
 
     /**

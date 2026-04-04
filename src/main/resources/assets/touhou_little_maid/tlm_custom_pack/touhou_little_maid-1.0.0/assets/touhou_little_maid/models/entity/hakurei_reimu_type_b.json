@@ -6,7 +6,7 @@
 				"identifier": "geometry.model",
 				"texture_width": 128,
 				"texture_height": 128,
-				"visible_bounds_width": 3,
+				"visible_bounds_width": 4,
 				"visible_bounds_height": 4,
 				"visible_bounds_offset": [0, 1, 0]
 			},
@@ -24,7 +24,45 @@
 					"parent": "head",
 					"pivot": [0, 0, 0],
 					"cubes": [
-						{"origin": [-4, 18, -4.001], "size": [8, 8, 0], "uv": [24, 0]}
+						{"origin": [-4, 18, -4.005], "size": [8, 8, 0], "uv": [24, 0]}
+					]
+				},
+				{
+					"name": "begShow",
+					"parent": "head",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{
+							"origin": [-3, 18.5, -4.001],
+							"size": [6, 3.5, 0],
+							"uv": {
+								"north": {"uv": [0, 80], "uv_size": [12, 7]},
+								"east": {"uv": [0, 80], "uv_size": [0, 6]},
+								"south": {"uv": [12, 80], "uv_size": [12, 7]},
+								"west": {"uv": [12, 80], "uv_size": [0, 6]},
+								"up": {"uv": [0, 79], "uv_size": [12, 1]},
+								"down": {"uv": [12, 79], "uv_size": [12, 1]}
+							}
+						}
+					]
+				},
+				{
+					"name": "hurtBlink",
+					"parent": "head",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{
+							"origin": [-3, 18.5, -4.01],
+							"size": [6, 4, 0],
+							"uv": {
+								"north": {"uv": [0, 71], "uv_size": [12, 8]},
+								"east": {"uv": [0, 71], "uv_size": [0, 8]},
+								"south": {"uv": [12, 71], "uv_size": [12, 8]},
+								"west": {"uv": [12, 71], "uv_size": [0, 8]},
+								"up": {"uv": [0, 71], "uv_size": [12, 0]},
+								"down": {"uv": [12, 71], "uv_size": [12, 0]}
+							}
+						}
 					]
 				},
 				{
@@ -538,6 +576,41 @@
 					"rotation": [-10, 0, 0],
 					"cubes": [
 						{"origin": [2.97705, 2.44707, -2.47205], "size": [0, 9, 3], "uv": [20, 53]}
+					]
+				},
+				{
+					"name": "danmakuAttackShow",
+					"pivot": [0, 15, 0]
+				},
+				{
+					"name": "yRotationHighA",
+					"parent": "danmakuAttackShow",
+					"pivot": [0, 15, 0]
+				},
+				{
+					"name": "sinFloat",
+					"parent": "yRotationHighA",
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "zRotationNormalA",
+					"parent": "sinFloat",
+					"pivot": [-14, 16, 0],
+					"cubes": [
+						{"origin": [-18, 12, -4], "size": [8, 8, 8], "inflate": -1.5, "uv": [25, 65]}
+					]
+				},
+				{
+					"name": "cosFloat",
+					"parent": "yRotationHighA",
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "zRotationNormalB",
+					"parent": "cosFloat",
+					"pivot": [14, 16, 0],
+					"cubes": [
+						{"origin": [10, 12, -4], "size": [8, 8, 8], "inflate": -1.5, "uv": [25, 65]}
 					]
 				}
 			]

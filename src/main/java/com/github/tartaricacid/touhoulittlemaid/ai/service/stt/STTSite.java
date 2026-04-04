@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.ai.service.ConfigProxySelector;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.SerializerRegister;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.ServiceType;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.Site;
+import com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.layout.STTSiteFormLayout;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.AIConfig;
 import com.google.common.collect.Maps;
 import com.google.gson.JsonElement;
@@ -81,4 +82,6 @@ public interface STTSite extends Site {
     default ServiceType getServiceType() {
         return ServiceType.STT;
     }
+
+    STTSiteFormLayout formLayout();
 }

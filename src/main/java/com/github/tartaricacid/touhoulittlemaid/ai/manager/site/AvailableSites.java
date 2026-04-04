@@ -29,8 +29,6 @@ public class AvailableSites {
         addDefaultSites();
         readSites();
         saveSites();
-        ClientAvailableSitesSync.init(LLM_SITES, TTS_SITES);
-        SettingReader.reloadSettings();
     }
 
     private static void clearSites() {
@@ -81,21 +79,39 @@ public class AvailableSites {
 
     public static void saveSites() {
         Path root = createFolder();
+        saveLLMSites(root);
+        saveTTSSites(root);
+        saveSTTSites(root);
+        SettingReader.reloadSettings();
+    }
+
+    public static void saveSTTSitesOnly() {
+        Path root = createFolder();
+        saveSTTSites(root);
+    }
+
+    private static void saveLLMSites(Path root) {
         Path llmConfig = root.resolve("llm.json");
-        Path ttsConfig = root.resolve("tts.json");
-        Path sttConfig = root.resolve("stt.json");
 
         try {
             LLMSite.writeSites(llmConfig, LLM_SITES);
         } catch (Exception e) {
             TouhouLittleMaid.LOGGER.error("Failed to save LLM sites", e);
         }
+    }
+
+    private static void saveTTSSites(Path root) {
+        Path ttsConfig = root.resolve("tts.json");
 
         try {
             TTSSite.writeSites(ttsConfig, TTS_SITES);
         } catch (Exception e) {
             TouhouLittleMaid.LOGGER.error("Failed to save TTS sites", e);
         }
+    }
+
+    private static void saveSTTSites(Path root) {
+        Path sttConfig = root.resolve("stt.json");
 
         try {
             STTSite.writeSites(sttConfig, STT_SITES);

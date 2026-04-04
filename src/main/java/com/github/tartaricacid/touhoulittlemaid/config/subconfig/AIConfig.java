@@ -7,8 +7,6 @@ import org.apache.commons.lang3.StringUtils;
 
 public class AIConfig {
     public static ForgeConfigSpec.BooleanValue LLM_ENABLED;
-    public static ForgeConfigSpec.DoubleValue LLM_TEMPERATURE;
-    public static ForgeConfigSpec.BooleanValue FUNCTION_CALL_ENABLED;
     public static ForgeConfigSpec.BooleanValue AUTO_GEN_SETTING_ENABLED;
     public static ForgeConfigSpec.ConfigValue<String> LLM_PROXY_ADDRESS;
     public static ForgeConfigSpec.IntValue MAID_MAX_HISTORY_LLM_SIZE;
@@ -29,13 +27,6 @@ public class AIConfig {
 
         builder.comment("Whether or not to enable the AI LLM feature");
         LLM_ENABLED = builder.define("LLMEnabled", true);
-
-        builder.comment("LLM temperature, the higher this value, the more random the output will be");
-        LLM_TEMPERATURE = builder.defineInRange("LLMTemperature", 0.7, 0, 2);
-
-        builder.comment("Whether to enable the function call function?");
-        builder.comment("The maid will be able to interact with the game after it is enabled, but it will increase the amount of token used");
-        FUNCTION_CALL_ENABLED = builder.define("FunctionCallEnable", false);
 
         builder.comment("Whether to automatically generate the maid's settings");
         AUTO_GEN_SETTING_ENABLED = builder.define("AutoGenSettingEnabled", true);

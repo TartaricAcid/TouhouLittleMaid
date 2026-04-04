@@ -10,6 +10,7 @@ public final class ErrorCode {
     public static final int CHAT_CHOICE_IS_EMPTY = 3;
     public static final int CHAT_TEXT_IS_EMPTY = 4;
     public static final int MICROPHONE_NOT_FOUND = 5;
+    public static final int CHAT_TOKEN_LIMIT_EXCEEDED = 6;
 
     public static MutableComponent getErrorMessage(ServiceType serviceType, int errorCode, String message) {
         if (serviceType == ServiceType.LLM) {
@@ -28,6 +29,9 @@ public final class ErrorCode {
                 }
                 case ErrorCode.CHAT_TEXT_IS_EMPTY -> {
                     return Component.translatable("ai.touhou_little_maid.chat.llm.chat_text_is_empty", message);
+                }
+                case ErrorCode.CHAT_TOKEN_LIMIT_EXCEEDED -> {
+                    return Component.translatable("message.touhou_little_maid.ai_chat.max_tokens_limit");
                 }
             }
         }

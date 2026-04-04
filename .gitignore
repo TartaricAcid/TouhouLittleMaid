@@ -5,6 +5,7 @@ bin
 .metadata
 .classpath
 .project
+.factorypath
 
 # idea
 out
