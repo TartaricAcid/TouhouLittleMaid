@@ -21,6 +21,8 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
@@ -37,12 +39,17 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 
 import javax.annotation.Nullable;
+import java.util.UUID;
 
 public class EntityFairy extends Monster implements RangedAttackMob, FlyingAnimal, IHasPowerPoint {
     public static final EntityType<EntityFairy> TYPE = EntityType.Builder.<EntityFairy>of(EntityFairy::new, MobCategory.MONSTER)
             .sized(0.6f, 1.5f).clientTrackingRange(10).build("fairy");
-    public static final String RICK = "rick";
 
+    private static final UUID SPEED_MODIFIER_BABY_UUID = UUID.fromString("ec4149f2-179d-48b8-ac8e-444e983651e0");
+    private static final AttributeModifier SPEED_MODIFIER_BABY = new AttributeModifier(SPEED_MODIFIER_BABY_UUID, "Baby speed boost", 0.2,
+            AttributeModifier.Operation.MULTIPLY_BASE);
+
+    public static final String RICK = "rick";
     private static final String FAIRY_TYPE_TAG_NAME = "FairyType";
     private static final String BABY_TAG_NAME = "IsBaby";
 
@@ -215,6 +222,16 @@ public class EntityFairy extends Monster implements RangedAttackMob, FlyingAnima
     @Override
     public void setBaby(boolean isBaby) {
         this.getEntityData().set(DATA_BABY_ID, isBaby);
+        if (!this.level.isClientSide) {
+            AttributeInstance attribute = this.getAttribute(Attributes.FLYING_SPEED);
+            if (attribute == null) {
+                return;
+            }
+            attribute.removeModifier(SPEED_MODIFIER_BABY);
+            if (isBaby) {
+                attribute.addTransientModifier(SPEED_MODIFIER_BABY);
+            }
+        }
     }
 
     @Override
