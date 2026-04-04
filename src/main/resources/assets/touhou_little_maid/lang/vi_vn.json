@@ -468,7 +468,7 @@
   "gui.touhou_little_maid.button.maid_ai_chat_config.history_chat_is_empty": "Không có lịch sử ghi trò chuyện AI nào",
   "gui.touhou_little_maid.button.maid_ai_chat_config.history_chat.title": "Lịch Sử Ghi Trò Chuyện AI Của Maid",
   "gui.touhou_little_maid.button.maid_ai_chat_config.history_chat.summary_title": "Tóm Tắt Rút Gọn",
-  "gui.touhou_little_maid.button.maid_ai_chat_config.history_chat.summary_empty": "Chưa có bản tóm tắt rút gọn",
+  "gui.touhou_little_maid.button.maid_ai_chat_config.history_chat.summary_empty": "Hiện tại chưa có bản tóm tắt rút gọn",
   "gui.touhou_little_maid.button.maid_ai_chat_config.history_chat.tool_call.generic": "Đã gọi công cụ",
   "gui.touhou_little_maid.button.maid_ai_chat_config.history_chat.tool_call.named": "Đã gọi công cụ: %s",
   "gui.touhou_little_maid.button.maid_ai_chat_config.history_chat.days": "%d ngày trước",
