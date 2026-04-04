@@ -618,11 +618,47 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
 
     @SuppressWarnings("all")
     private void drawNumberScale(GuiGraphics graphics, double value, int posX, int posY) {
-        String text = DECIMAL_FORMAT.format(value);
+        String text = formatScale((long) value);
         graphics.pose().pushPose();
         graphics.pose().scale(0.5f, 0.5f, 1);
         graphics.drawString(font, text, posX * 2, posY * 2 + font.lineHeight / 2, ChatFormatting.DARK_GRAY.getColor(), false);
         graphics.pose().popPose();
+    }
+
+
+    /**
+     * 将数值格式化为紧凑的缩写字符串，最长 4 字符（含单位字母）。
+     * <pre>
+     * 数值范围              显示示例      最大长度
+     * 0       ~ 999        00 ~ 999      3 字符
+     * 1000    ~ 9999       1.0K ~ 9.9K   4 字符
+     * 10000   ~ 999999     10K ~ 999K    4 字符
+     * 1M      ~ 9.9M       1.0M ~ 9.9M   4 字符
+     * 10M     ~ 999M       10M ~ 999M    4 字符
+     * 1G      ~ 9.9G       1.0G ~ 9.9G   4 字符
+     * 10G+    ~            10G ~ 999G    4 字符
+     * </pre>
+     * 使用整数截断而非浮点四舍五入，避免跨级问题（如 9999 → 10.0K）。
+     */
+    private static String formatScale(long v) {
+        if (v >= 1_000_000_000L) {
+            long unit = v / 1_000_000_000L;
+            return unit < 10
+                    ? unit + "." + (v % 1_000_000_000L / 100_000_000L) + "G"
+                    : unit + "G";
+        } else if (v >= 1_000_000L) {
+            long unit = v / 1_000_000L;
+            return unit < 10
+                    ? unit + "." + (v % 1_000_000L / 100_000L) + "M"
+                    : unit + "M";
+        } else if (v >= 1000L) {
+            long unit = v / 1000L;
+            return unit < 10
+                    ? unit + "." + (v % 1000L / 100L) + "K"
+                    : unit + "K";
+        } else {
+            return DECIMAL_FORMAT.format(v);
+        }
     }
 
     @Override
