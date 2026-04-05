@@ -55,8 +55,8 @@ jobs:
           generate_release_notes: true
           body: |
             > ### 📢 Notice / 提示
-            > - **EN:** Files ending in `-sources` are source code. Please download the version ending in `-hotfix`.
-            > - **CN:** 结尾为 `-sources` 的是源码文件；**请下载结尾为 `-hotfix` 的版本**。
+            > - **EN:** Files ending in `-sources` are source code. Please download the version ending in `-snapshot`.
+            > - **CN:** 结尾为 `-sources` 的是源码文件；**请下载结尾为 `-snapshot` 的版本**。
             
             ${{ github.event.head_commit.message }}
 
