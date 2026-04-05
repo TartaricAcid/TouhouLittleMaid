@@ -68,6 +68,12 @@ minecraft {
             property 'forge.enabledGameTestNamespaces', 'touhou_little_maid'
         }
 
+        gameTestServer {
+            workingDirectory project.file('run/gametest')
+            property 'forge.enabledGameTestNamespaces', 'touhou_little_maid'
+            property 'forge.gameTestServer', 'true'
+        }
+
         data {
             workingDirectory project.file('run/data')
             args '--mod', 'touhou_little_maid', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
