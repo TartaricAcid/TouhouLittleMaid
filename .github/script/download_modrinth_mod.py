@@ -8,7 +8,6 @@ Modrinth API 文档:
 import hashlib
 import json
 import logging
-import sys
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -222,8 +221,7 @@ def main() -> None:
 
     # ---- 汇总 ----
     if fail_list:
-        logger.error(f"完成: {success_count}/{len(MOD_IDS)} 成功，失败: {', '.join(fail_list)}")
-        sys.exit(1)
+        logger.warning(f"完成: {success_count}/{len(MOD_IDS)} 成功，失败: {', '.join(fail_list)}")
     else:
         logger.info(f"完成: {success_count}/{len(MOD_IDS)} 全部成功")
 
