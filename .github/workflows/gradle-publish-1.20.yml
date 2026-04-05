@@ -100,10 +100,9 @@ jobs:
         run: python3 .github/script/download_modrinth_mod.py
 
       - name: Server smoke test
-        uses: mcenv/mc-server-test@v1
+        uses: headlesshq/mc-server-test@1.1.1
         with:
-          type: forge
-          version: '1.20.1'
-          loader-version: '47.4.10'
-          mods: run/mods
+          mc: '1.20.1'
+          modloader: forge
+          java: 17
 
