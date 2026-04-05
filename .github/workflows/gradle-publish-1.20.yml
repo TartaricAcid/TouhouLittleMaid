@@ -8,37 +8,39 @@ on:
     paths:
       - 'src/main/**'
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: "1.20"
+        uses: actions/checkout@v6
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: '17'
           distribution: 'microsoft'
-          server-id: github
-          settings-path: ${{ github.workspace }}
-
-      - name: Cache Gradle packages
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: ${{ runner.os }}-gradle-
+          cache: 'gradle'
 
       - name: Build with Gradle
         run: |
           chmod +x ./gradlew
-          ./gradlew build
+          # 同时运行 build 和 runGameTestServer 任务，检查服务端运行情况并打包
+          ./gradlew build runGameTestServer -x test --build-cache --parallel
+
+      - name: Rename Build Artifacts
+        run: |
+          cd ./build/libs/
+          # 找到以 -all.jar 结尾的文件，将其更名为包含 snapshot 的名称
+          for f in *-all.jar; do
+            mv "$f" "${f%-all.jar}-snapshot.jar"
+          done
+          # 查看一下结果，方便在日志里调试
+          ls -R
 
       - name: Create timestamp
         id: create_timestamp
@@ -47,14 +49,16 @@ jobs:
 
       - name: Send file to Release
         uses: softprops/action-gh-release@v2
+        if: success()
         with:
           tag_name: snapshot-${{ steps.create_timestamp.outputs.timestamp }}
-          body: ${{ github.event.head_commit.message }}
+          generate_release_notes: true
+          body: |
+            > ### 📢 Notice / 提示
+            > - **EN:** Files ending in `-sources` are source code. Please download the version ending in `-hotfix`.
+            > - **CN:** 结尾为 `-sources` 的是源码文件；**请下载结尾为 `-hotfix` 的版本**。
           draft: false
           prerelease: true
-          files: ./build/libs/*.jar
-
-      - name: Cleanup Gradle Cache
-        run: |
-          rm -f ~/.gradle/caches/modules-2/modules-2.lock
-          rm -f ~/.gradle/caches/modules-2/gc.properties
+          files: |
+            build/libs/*-snapshot.jar
+            build/libs/*-sources.jar
