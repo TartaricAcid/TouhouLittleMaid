@@ -93,7 +93,11 @@ const zhDoc = defineCollection({
             icon: "ri:javascript-line",
             prefix: "modpack",
             items: [
-                "如何开始"
+                "如何开始",
+                "KubeJS 祭坛合成",
+                "KubeJS 事件系统",
+                "KubeJS 注册饰品与提示",
+                "KubeJS 自定义工作模式",
             ],
         },
         {

@@ -7,3 +7,4 @@ docs/.vuepress/dist
 .DS_Store
 *.log
 .idea
+.ref
