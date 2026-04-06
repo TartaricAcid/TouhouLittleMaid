@@ -2296,7 +2296,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     /**
      * 返回 MaidInvWrapper，方便触发 MaidRequestItemEvent 事件时使用
      */
-    public MaidInvWrapper getAvailableInv(boolean handsFirst) {
+    public CombinedInvWrapper getAvailableInv(boolean handsFirst) {
         int maxContainerIndex = getMaidBackpackType().getAvailableMaxContainerIndex();
         RangedWrapper combinedInvWrapper = new RangedWrapper(maidInv, 0, maxContainerIndex);
         return handsFirst ? new MaidInvWrapper(this, handsInvWrapper, combinedInvWrapper)
@@ -2306,7 +2306,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     /**
      * 返回 MaidInvWrapper，方便触发 MaidRequestItemEvent 事件时使用
      */
-    public MaidInvWrapper getAvailableBackpackInv() {
+    public CombinedInvWrapper getAvailableBackpackInv() {
         int maxContainerIndex = getMaidBackpackType().getAvailableMaxContainerIndex();
         RangedWrapper rangedWrapper = new RangedWrapper(maidInv, 0, maxContainerIndex);
         return new MaidInvWrapper(this, rangedWrapper);

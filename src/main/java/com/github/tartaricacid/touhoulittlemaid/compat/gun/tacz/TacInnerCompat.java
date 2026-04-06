@@ -129,7 +129,7 @@ public class TacInnerCompat {
 
         if (result == ShootResult.NO_AMMO) {
             // reload 不会触发 MaidRequestItemEvent，此处手动请求弹药
-            MaidInvWrapper availableInv = shooter.getAvailableInv(true);
+            var availableInv = shooter.getAvailableInv(true);
             ItemsUtil.findStackSlot(availableInv, stack -> {
                 IAmmo ammo = IAmmo.getIAmmoOrNull(stack);
                 return ammo != null && ammo.isAmmoOfGun(gunItem, stack);
