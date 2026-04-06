@@ -112,6 +112,13 @@
 			"animation": ["geckolib:animation/winefox_saint.main.animation.json", "geckolib:animation/winefox_saint.condition.animation.json"]
 		},
 		{
+			"model_id": "geckolib:winefox_elf",
+			"is_gecko": true,
+			"render_entity_scale": 0.7,
+			"description": ["{model.geckolib.winefox_elf.desc.1}", "{model.geckolib.winefox_elf.desc.2}"],
+			"animation": ["geckolib:animation/winefox_elf.main.animation.json", "geckolib:animation/winefox_elf.condition.animation.json"]
+		},
+		{
 			"model_id": "geckolib:winefox_salesperson",
 			"is_gecko": true,
 			"extra_textures": ["geckolib:textures/entity/winefox_salesperson_1.png"],
@@ -173,6 +180,17 @@
 			"description": ["{model.geckolib.winefox_mini.desc}"],
 			"render_entity_scale": 0.9,
 			"animation": ["geckolib:animation/winefox_mini.main.animation.json"]
+		},
+		{
+			"model_id": "geckolib:winefox_survivor",
+			"is_gecko": true,
+			"description": ["{model.geckolib.winefox_survivor.desc.1}", "{model.geckolib.winefox_survivor.desc.2}"],
+			"render_entity_scale": 0.7,
+			"animation": [
+				"geckolib:animation/winefox_survivor.main.animation.json",
+				"geckolib:animation/winefox_survivor.condition.animation.json",
+				"geckolib:animation/winefox_survivor.tac.animation.json"
+			]
 		},
 		{
 			"model_id": "geckolib:sta",
