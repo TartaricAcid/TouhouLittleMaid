@@ -71,6 +71,19 @@ const zhDoc = defineCollection({
                 "添加施法动画",
                 "添加新的工作模式（上）",
                 "添加新的工作模式（中）",
+                {
+                    text: "AI 聊天功能",
+                    collapsed: false,
+                    icon: "ri:robot-2-line",
+                    prefix: "ai",
+                    items: [
+                        "overview",
+                        "skill",
+                        "tool",
+                        "context",
+                        "task",
+                    ],
+                },
             ],
         },
         {
