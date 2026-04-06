@@ -14,7 +14,7 @@ import {defineUserConfig} from "vuepress";
 import {plumeTheme} from "vuepress-theme-plume";
 
 export default defineUserConfig({
-    base: "/TouhouLittleMaid/",
+    base: "/",
     lang: "zh-CN",
     locales: {
         "/": {
