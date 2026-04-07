@@ -6,8 +6,10 @@ import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.param
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai.request.ChatCompletion;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.serialization.Codec;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Collection;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * 女仆 AI 的 Tool 抽象。
@@ -59,6 +61,10 @@ public interface ITool<T> {
 
     /**
      * 执行 Tool 调用。请记得在传入的 callback 里添加工具的返回消息，从而继续让对话进行下去
+     * <p>
+     * 此方法依赖于 onCallAsync 的默认实现，因此默认情况下会被 onCallAsync 调用。
+     * <p>
+     * 需要同步执行的 Tool 可以直接重写此方法，而需要异步执行的 Tool 则需要重写 onCallAsync 方法。
      *
      * @param toolCallId LLM 发回的参数，需要带上这个 ID 以让 LLM 知道这是哪个 Tool 的返回结果
      * @param result     解码后的参数对象
@@ -66,6 +72,23 @@ public interface ITool<T> {
      * @return 返回回调，这个回调会进行下一轮 LLM 通信。这个回调可以是原样传入的，也可以是新建的
      */
     LLMCallback onCall(String toolCallId, T result, LLMCallback callback);
+
+    /**
+     * 异步执行 Tool 调用。
+     * <p>
+     * 默认直接复用同步 {@link #onCall(String, Object, LLMCallback)}，以保证已有 Tool 无需修改。
+     * 需要执行耗时异步任务的 Tool 可以重写此方法，并在完成后返回用于下一轮通信的回调。
+     *
+     * @param toolCallId LLM 发回的参数，需要带上这个 ID 以让 LLM 知道这是哪个 Tool 的返回结果
+     * @param result     解码后的参数对象
+     * @param callback   当前执行逻辑的回调
+     * @return 异步回调结果
+     */
+    @ApiStatus.AvailableSince("1.5.2")
+    default CompletableFuture<LLMCallback> onCallAsync(String toolCallId, T result, LLMCallback callback) {
+        LLMCallback onCall = onCall(toolCallId, result, callback);
+        return CompletableFuture.completedFuture(onCall);
+    }
 
     /**
      * 生成此次工具调用的摘要信息，用于 UI 展示及历史记录显示

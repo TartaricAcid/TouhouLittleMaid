@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.StringJoiner;
+import java.util.concurrent.CompletableFuture;
 
 public class LLMCallback implements ResponseCallback<ResponseChat> {
     /**
@@ -94,10 +95,38 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
     }
 
     public LLMCallback addToolResult(String result, String toolId) {
+        // 防止部分作者忘记在主线程执行这个
+        if (!this.isOnServerThread()) {
+            throw new IllegalStateException("addToolResult must be called on the server thread");
+        }
+
         this.messages.add(LLMMessage.toolChat(maid, result, toolId));
         // 工具调用结果也如实记录进历史里，优化后续缓存命中
         this.chatManager.addToolHistory(result, toolId);
         return this;
+    }
+
+    /**
+     * 当前是否运行在服务端主线程。
+     * <p>
+     * 若当前上下文不在 {@link ServerLevel}，则返回 {@code false}。
+     */
+    public boolean isOnServerThread() {
+        if (!(maid.level instanceof ServerLevel serverLevel)) {
+            return false;
+        }
+        return serverLevel.getServer().isSameThread();
+    }
+
+    /**
+     * 在服务端主线程上运行指定的 {@link Runnable}
+     */
+    public void runOnServerThread(Runnable runnable) {
+        if (!(maid.level instanceof ServerLevel serverLevel)) {
+            return;
+        }
+        MinecraftServer server = serverLevel.getServer();
+        server.submit(runnable);
     }
 
     @Override
@@ -179,24 +208,27 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
         }
 
         boolean hasMultipleToolCalls = deduped.size() > 1;
-        serverLevel.getServer().submit(() -> {
-            // 旁路回调，记录并单独触发
-            List<LLMCallback> sideCallbacks = Lists.newArrayList();
-            // 主路回调，在本流程内依次执行工具调用，同时提取出所有的旁路回调
-            LLMCallback nextCallback = this.executeToolBatch(deduped, hasMultipleToolCalls, sideCallbacks);
-            // 先发送旁路子流程（如知识库查询），它们独立运行不影响主对话流
-            for (LLMCallback side : sideCallbacks) {
-                client.chat(side);
-            }
-            // 然后执行主路回调
-            if (nextCallback != null) {
-                client.chat(nextCallback);
-            }
-        });
+        serverLevel.getServer().submit(() -> this.executeToolBatch(deduped, hasMultipleToolCalls)
+                .whenComplete((result, throwable) -> {
+                    if (throwable != null) {
+                        String message = "Async tool execution failed: %s".formatted(throwable.getLocalizedMessage());
+                        TouhouLittleMaid.LOGGER.error(message, throwable);
+                        this.onFailure(null, throwable, ErrorCode.REQUEST_RECEIVED_ERROR);
+                        return;
+                    }
+
+                    for (LLMCallback side : result.sideCallbacks()) {
+                        client.chat(side);
+                    }
+                    if (result.nextCallback() != null) {
+                        client.chat(result.nextCallback());
+                    }
+                })
+        );
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private LLMCallback onSingleCall(ToolCall toolCall, LLMCallback callback) throws JsonSyntaxException {
+    private CompletableFuture<LLMCallback> onSingleCall(ToolCall toolCall, LLMCallback callback) throws JsonSyntaxException {
         // 检查 LLM 调用的工具和参数是否正确
         FunctionToolCall function = toolCall.getFunction();
         String name = function.getName();
@@ -209,7 +241,8 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
                     Unknown tool '%s'. It is not registered.
                     Use only tool ids from the provided schema and retry.
                     """.formatted(name);
-            return this.onToolErrorCall(toolCall, invalidMsg, callback);
+            LLMCallback errorCall = this.onToolErrorCall(toolCall, invalidMsg, callback);
+            return CompletableFuture.completedFuture(errorCall);
         }
 
         // JSON 语法和参数是否正确
@@ -222,7 +255,8 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
                         Failed to parse arguments for tool '%s': '%s'.
                         Check the parameter schema and retry with valid JSON.
                         """.formatted(name, arguments);
-                return this.onToolErrorCall(toolCall, invalidMsg, callback);
+                LLMCallback errorCall = this.onToolErrorCall(toolCall, invalidMsg, callback);
+                return CompletableFuture.completedFuture(errorCall);
             }
             result = optional.get();
         } catch (Exception exception) {
@@ -230,7 +264,8 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
                     Invalid arguments for tool '%s': %s (raw JSON: %s).
                     Fix the arguments according to the schema and retry.
                     """.formatted(name, exception.getLocalizedMessage(), arguments);
-            return this.onToolErrorCall(toolCall, invalidMsg, callback);
+            LLMCallback errorCall = this.onToolErrorCall(toolCall, invalidMsg, callback);
+            return CompletableFuture.completedFuture(errorCall);
         }
 
         // 需要记录下工具调用，方便 debug
@@ -242,7 +277,7 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
         // 向玩家更新气泡，并提示当前正在调用工具
         callback.refreshWaitingChatBubble(summary);
         // 执行 tool，获得返回结果
-        return tool.onCall(toolCall.getId(), finalResult, callback);
+        return tool.onCallAsync(toolCall.getId(), finalResult, callback);
     }
 
     /**
@@ -344,35 +379,53 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
      *
      * @param toolCalls            去重后的工具调用列表
      * @param hasMultipleToolCalls 本批是否包含多个工具调用，用于决定子流程回调的处理策略
-     * @param sideCallbacks        输出参数，收集需要独立发送的旁路子流程回调
      * @return 主流程的 {@link LLMCallback}，始终为当前会话的主回调
      */
-    private LLMCallback executeToolBatch(List<ToolCall> toolCalls, boolean hasMultipleToolCalls, List<LLMCallback> sideCallbacks) {
-        LLMCallback nextCallback = this;
+    private CompletableFuture<ToolBatchResult> executeToolBatch(List<ToolCall> toolCalls, boolean hasMultipleToolCalls) {
+        ToolBatchResult initial = new ToolBatchResult(this, Lists.newArrayList());
+        CompletableFuture<ToolBatchResult> future = CompletableFuture.completedFuture(initial);
         for (ToolCall toolCall : toolCalls) {
-            try {
-                LLMCallback returned = this.onSingleCall(toolCall, nextCallback);
+            future = future.thenCompose(result ->
+                    this.executeSingleToolCall(toolCall, result, hasMultipleToolCalls)
+            );
+        }
+        return future;
+    }
+
+    private CompletableFuture<ToolBatchResult> executeSingleToolCall(
+            ToolCall toolCall, ToolBatchResult batchResult, boolean hasMultipleToolCalls
+    ) {
+        LLMCallback nextCallback = batchResult.nextCallback();
+        try {
+            return this.onSingleCall(toolCall, nextCallback).handle((returned, throwable) -> {
+                if (throwable != null) {
+                    String message = "Exception %s, JSON is: %s"
+                            .formatted(throwable.getLocalizedMessage(), toolCall.getFunction().getArguments());
+                    this.onToolErrorCall(toolCall, message, nextCallback);
+                    return batchResult;
+                }
+
                 // 如果是子 agent
                 if (returned != nextCallback) {
                     String placeholder = "Tool has been dispatched to a dedicated sub-agent; answer will follow separately.";
                     if (hasMultipleToolCalls) {
-                        // 多个 tool 调用，那么把子 agent 单独剥离
-                        sideCallbacks.add(returned);
-                        // 同时向主回调补充一条占位 tool result，以免 LLM 缺少响应触发 400 error
+                        batchResult.sideCallbacks().add(returned);
                         nextCallback.addToolResult(placeholder, toolCall.getId());
                     } else {
-                        // 单个子 agent，那么只需要替换返回值即可
-                        nextCallback = returned;
-                        // 此时不需要在回调里塞入 tool result，只需要在历史对话里塞入即可
                         this.chatManager.addToolHistory(placeholder, toolCall.getId());
+                        return new ToolBatchResult(returned, batchResult.sideCallbacks());
                     }
                 }
-            } catch (JsonSyntaxException exception) {
-                String message = "Exception %s, JSON is: %s".formatted(exception.getLocalizedMessage(), toolCall.getFunction().getArguments());
-                this.onToolErrorCall(toolCall, message, nextCallback);
-            }
+                return batchResult;
+            });
+        } catch (JsonSyntaxException exception) {
+            String message = "Exception %s, JSON is: %s".formatted(exception.getLocalizedMessage(), toolCall.getFunction().getArguments());
+            this.onToolErrorCall(toolCall, message, nextCallback);
+            return CompletableFuture.completedFuture(batchResult);
         }
-        return nextCallback;
+    }
+
+    private record ToolBatchResult(LLMCallback nextCallback, List<LLMCallback> sideCallbacks) {
     }
 
     /**
@@ -403,7 +456,6 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
         String arguments = function != null ? function.getArguments() : StringUtils.EMPTY;
         return name + "|" + StringUtils.deleteWhitespace(arguments);
     }
-
 
     public EntityMaid getMaid() {
         return this.maid;
