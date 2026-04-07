@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.ai.agent.tool;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.LLMCallback;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.ObjectParameter;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.Parameter;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMClient;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai.request.ChatCompletion;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.serialization.Codec;
@@ -82,10 +83,13 @@ public interface ITool<T> {
      * @param toolCallId LLM 发回的参数，需要带上这个 ID 以让 LLM 知道这是哪个 Tool 的返回结果
      * @param result     解码后的参数对象
      * @param callback   当前执行逻辑的回调
+     * @param client     当前调用的 LLM 客户端实例，必要时可以通过它发起新的对话请求
      * @return 异步回调结果
      */
     @ApiStatus.AvailableSince("1.5.2")
-    default CompletableFuture<LLMCallback> onCallAsync(String toolCallId, T result, LLMCallback callback) {
+    default CompletableFuture<LLMCallback> onCallAsync(
+            String toolCallId, T result, LLMCallback callback, LLMClient client
+    ) {
         LLMCallback onCall = onCall(toolCallId, result, callback);
         return CompletableFuture.completedFuture(onCall);
     }

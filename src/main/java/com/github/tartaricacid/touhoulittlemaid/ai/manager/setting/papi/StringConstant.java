@@ -131,15 +131,4 @@ public class StringConstant {
     public static final String AUTO_GEN_SETTING_DESC = """
             Character Description Section: ${model_desc}
             """;
-
-    public static final String GROUNDED_ANSWER_BASE = """
-            ## Owner Setting
-            - Address the owner as "${owner_name}" when chatting.
-            
-            ## Background Setting
-            - You exist in the world of Minecraft. Use Minecraft terminology when applicable.
-            
-            ## Conversation Text Requirements
-            - Keep replies under 120 characters.
-            """;
 }

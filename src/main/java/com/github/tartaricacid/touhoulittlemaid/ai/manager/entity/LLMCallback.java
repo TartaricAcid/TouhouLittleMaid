@@ -208,7 +208,7 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
         }
 
         boolean hasMultipleToolCalls = deduped.size() > 1;
-        serverLevel.getServer().submit(() -> this.executeToolBatch(deduped, hasMultipleToolCalls)
+        serverLevel.getServer().submit(() -> this.executeToolBatch(deduped, hasMultipleToolCalls, client)
                 .whenComplete((result, throwable) -> {
                     if (throwable != null) {
                         String message = "Async tool execution failed: %s".formatted(throwable.getLocalizedMessage());
@@ -228,7 +228,7 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private CompletableFuture<LLMCallback> onSingleCall(ToolCall toolCall, LLMCallback callback) throws JsonSyntaxException {
+    private CompletableFuture<LLMCallback> onSingleCall(ToolCall toolCall, LLMCallback callback, LLMClient client) throws JsonSyntaxException {
         // 检查 LLM 调用的工具和参数是否正确
         FunctionToolCall function = toolCall.getFunction();
         String name = function.getName();
@@ -277,7 +277,7 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
         // 向玩家更新气泡，并提示当前正在调用工具
         callback.refreshWaitingChatBubble(summary);
         // 执行 tool，获得返回结果
-        return tool.onCallAsync(toolCall.getId(), finalResult, callback);
+        return tool.onCallAsync(toolCall.getId(), finalResult, callback, client);
     }
 
     /**
@@ -381,23 +381,24 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
      * @param hasMultipleToolCalls 本批是否包含多个工具调用，用于决定子流程回调的处理策略
      * @return 主流程的 {@link LLMCallback}，始终为当前会话的主回调
      */
-    private CompletableFuture<ToolBatchResult> executeToolBatch(List<ToolCall> toolCalls, boolean hasMultipleToolCalls) {
+    private CompletableFuture<ToolBatchResult> executeToolBatch(List<ToolCall> toolCalls, boolean hasMultipleToolCalls, LLMClient client) {
         ToolBatchResult initial = new ToolBatchResult(this, Lists.newArrayList());
         CompletableFuture<ToolBatchResult> future = CompletableFuture.completedFuture(initial);
         for (ToolCall toolCall : toolCalls) {
             future = future.thenCompose(result ->
-                    this.executeSingleToolCall(toolCall, result, hasMultipleToolCalls)
+                    this.executeSingleToolCall(toolCall, result, hasMultipleToolCalls, client)
             );
         }
         return future;
     }
 
     private CompletableFuture<ToolBatchResult> executeSingleToolCall(
-            ToolCall toolCall, ToolBatchResult batchResult, boolean hasMultipleToolCalls
+            ToolCall toolCall, ToolBatchResult batchResult,
+            boolean hasMultipleToolCalls, LLMClient client
     ) {
         LLMCallback nextCallback = batchResult.nextCallback();
         try {
-            return this.onSingleCall(toolCall, nextCallback).handle((returned, throwable) -> {
+            return this.onSingleCall(toolCall, nextCallback, client).handle((returned, throwable) -> {
                 if (throwable != null) {
                     String message = "Exception %s, JSON is: %s"
                             .formatted(throwable.getLocalizedMessage(), toolCall.getFunction().getArguments());
