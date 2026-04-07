@@ -109,14 +109,22 @@
 			"description": ["{model.geckolib.winefox_saint.desc.1}", "{model.geckolib.winefox_saint.desc.2}"],
 			"extra_textures": ["geckolib:textures/entity/winefox_saint_1.png"],
 			"render_entity_scale": 0.7,
-			"animation": ["geckolib:animation/winefox_saint.main.animation.json", "geckolib:animation/winefox_saint.condition.animation.json"]
+			"animation": [
+				"geckolib:animation/winefox_saint.main.animation.json",
+				"geckolib:animation/winefox_saint.condition.animation.json",
+				"geckolib:animation/winefox_saint.iss.animation.json"
+			]
 		},
 		{
 			"model_id": "geckolib:winefox_elf",
 			"is_gecko": true,
 			"render_entity_scale": 0.7,
 			"description": ["{model.geckolib.winefox_elf.desc.1}", "{model.geckolib.winefox_elf.desc.2}"],
-			"animation": ["geckolib:animation/winefox_elf.main.animation.json", "geckolib:animation/winefox_elf.condition.animation.json"]
+			"animation": [
+				"geckolib:animation/winefox_elf.main.animation.json",
+				"geckolib:animation/winefox_elf.condition.animation.json",
+				"geckolib:animation/winefox_elf.iss.animation.json"
+			]
 		},
 		{
 			"model_id": "geckolib:winefox_salesperson",
