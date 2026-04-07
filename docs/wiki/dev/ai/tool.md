@@ -103,14 +103,15 @@ Tool 的唯一标识符。
 ::: field name="parameters(ObjectParameter root, EntityMaid maid)" type="Parameter" required
 构建该 Tool 的参数定义（JSON Schema 风格）。
 
-向 `root` 对象添加各字段即可。`addProperties(name, parameter)` 默认将参数设为**必填**；如需设为可选，传入第三个参数
-`false`：
+向 `root` 对象添加各字段即可。
 
+`addProperties(name, parameter)` 默认将参数设为**必填**；如需设为可选，传入第三个参数
+`false`：
 ```java
 root.addProperties("optional_field", someParameter, false);
 ```
 
-可用的参数类型见下方"参数类型一览"。
+可用的参数类型见下方“参数类型一览”。
 :::
 
 ::: field name="codec()" type="Codec<T>" required
@@ -135,12 +136,6 @@ Tool 被调用时的实际执行逻辑。
 生成本次调用的简短摘要，用于 UI 界面和历史记录展示。不会传给模型。
 :::
 
-::: field name="trigger(EntityMaid maid, ChatCompletion chatCompletion)" type="boolean" optional
-动态控制该 Tool 是否在当前上下文下暴露给模型。默认返回 `true`（始终暴露）。
-
-如果你的 Tool 只在特定条件下才有意义（例如只有装备了某件物品时才可用），可以在这里判断并返回 `false` 以避免模型错误触发。
-:::
-
 ::::
 
 ---
@@ -160,7 +155,7 @@ Tool 被调用时的实际执行逻辑。
 
 ---
 
-## 四、静态工具方法 `invalidParam`
+## 四、错误处理
 
 当模型传入了无效参数时，可以用 `ITool.invalidParam()` 生成一条规范的错误提示，要求模型重新生成调用：
 
@@ -206,7 +201,7 @@ Tool 的 `id()` 必须全局唯一。
 
 ---
 
-## 六、关于已废弃的 IFunctionCall
+## 六、旧版 IFunctionCall
 
 在 1.5.1 之前，附属开发者使用 `IFunctionCall` 接口来扩展女仆的 Function Call 能力，并通过 `registerAIFunctionCall()` 进行注册。
 
