@@ -9,7 +9,6 @@ icon: ri:list-settings-line
 
 如果你的附属提供了自定义工作模式，建议根据实际情况实现这两个方法。
 
----
 
 ## 一、getMaidActionSummary()
 
@@ -54,7 +53,6 @@ public String getMaidActionSummary() {
 摘要应该面向模型而不是面向玩家，不需要翻译成中文，也不需要华丽的描述——清晰、准确即可。
 :::
 
----
 
 ## 二、onFunctionCallSwitch()
 
@@ -104,7 +102,6 @@ public FunctionCallSwitchResult onFunctionCallSwitch(EntityMaid maid) {
 `onFunctionCallSwitch()` 在**服务端**被调用，执行逻辑时请不要修改客户端状态，也不要做耗时操作。这个钩子是同步的，会直接影响对话回复的延迟。
 :::
 
----
 
 ## 三、完整示例
 

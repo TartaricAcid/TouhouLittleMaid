@@ -119,6 +119,7 @@ const zhDoc = defineCollection({
             icon: "ix:log",
             prefix: "log",
             items: [
+                "1.5.2 更新日志",
                 "1.5.1 更新日志",
                 "1.5.0 更新日志",
                 "1.4.6 更新日志",
@@ -170,4 +171,3 @@ const enDemoDoc = defineCollection({
 export const enCollections = defineCollections([
     enDemoDoc,
 ]);
-

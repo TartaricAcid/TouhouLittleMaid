@@ -11,7 +11,6 @@ Context（上下文）是女仆当前状态和游戏世界信息的结构化描�
 
 通过注册自定义 Context，你可以让模型在需要时查询到你的模组所提供的游戏信息。
 
----
 
 ## 一、Context 的两种注入方式
 
@@ -49,7 +48,6 @@ Context 分为两种注入方式，由所属分类（Category）的 `promptConte
 该分类的 Context 项不会自动添加，只有当模型主动调用 `query_game_context` Tool 并指定分类 ID 时，才会返回该分类下的所有
 Context 项。
 
----
 
 ## 二、Category 的设计意图
 
@@ -70,7 +68,6 @@ Context 必须先归属于一个**分类（Category）**，才能被注册和使
 顺序颠倒会抛出异常。
 :::
 
----
 
 ## 三、实现 IMaidContext
 
@@ -118,7 +115,6 @@ Context 项的展示标签，会以 `"- <label>: <value>"` 的格式传给模型
 
 ::::
 
----
 
 ## 四、注册 Context
 
@@ -162,7 +158,6 @@ public class MyModCompat implements ILittleMaid {
 
 ::::
 
----
 
 ## 五、完整示例
 
