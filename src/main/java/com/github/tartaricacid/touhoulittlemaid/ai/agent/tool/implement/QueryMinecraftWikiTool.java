@@ -49,7 +49,10 @@ public class QueryMinecraftWikiTool implements ITool<String> {
 
     @Override
     public String summary(EntityMaid maid) {
-        return "Use this when need authoritative vanilla Minecraft information from Minecraft Wiki";
+        return """
+                Use this when need authoritative vanilla Minecraft information from Minecraft Wiki."
+                MAX 2 attempts, stop immediately if no results found.
+                """.trim();
     }
 
     @Override

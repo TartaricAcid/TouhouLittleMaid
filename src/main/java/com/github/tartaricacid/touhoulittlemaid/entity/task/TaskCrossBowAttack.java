@@ -143,6 +143,6 @@ public class TaskCrossBowAttack implements IRangedAttackTask {
 
     @Override
     public String getMaidActionSummary() {
-        return "Use a crossbow with arrows or fireworks to attack nearby hostile mobs.";
+        return "Use crossbow attack entities";
     }
 }

@@ -11,14 +11,15 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.EmptyBlockGetter;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.PlantType;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 
 public class TaskNormalFarm implements IFarmTask {
     private static final ResourceLocation NAME = new ResourceLocation(TouhouLittleMaid.MOD_ID, "farm");
@@ -46,7 +47,7 @@ public class TaskNormalFarm implements IFarmTask {
             Block block = blockNamedItem.getBlock();
             if (block instanceof IPlantable plant) {
                 return plant.getPlantType(EmptyBlockGetter.INSTANCE, BlockPos.ZERO) == PlantType.CROP
-                        && plant.getPlant(EmptyBlockGetter.INSTANCE, BlockPos.ZERO).getBlock() != Blocks.AIR;
+                       && plant.getPlant(EmptyBlockGetter.INSTANCE, BlockPos.ZERO).getBlock() != Blocks.AIR;
             }
         }
         return false;
@@ -137,6 +138,6 @@ public class TaskNormalFarm implements IFarmTask {
 
     @Override
     public String getMaidActionSummary() {
-        return "Plant and harvest crops on nearby farmland.";
+        return "Plant and harvest crops";
     }
 }

@@ -50,6 +50,6 @@ public class TaskBoardGames implements IMaidTask {
 
     @Override
     public String getMaidActionSummary() {
-        return "Look for nearby board game blocks and play them.";
+        return "Play gomuku/Chess/Xiangqi with user";
     }
 }

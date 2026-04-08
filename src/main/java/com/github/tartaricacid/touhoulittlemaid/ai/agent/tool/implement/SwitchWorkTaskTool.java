@@ -29,11 +29,9 @@ public class SwitchWorkTaskTool implements ITool<SwitchWorkTaskTool.Result> {
     private static final String TOOL_DESC = """
             Use this when the user wants to change the current work task.
             
-            For attack tasks (such as attack, bow, crossbow, trident, danmaku, gun, etc.), should first obtain the context of nearby entities.
-            Then provide the target entity id as parameter to switch immediately after switching task.
-            
+            For attack tasks, should first obtain the context of nearby entities, then provide the target entity id as parameter to switch immediately after switching task.
             Non attack tasks not need to provide entity id.
-            Do not invent task ids or entity ids.
+            
             Reply with the entity name ONLY, omit internal data (e.g., ID, distance).
             """.trim();
 
@@ -177,11 +175,11 @@ public class SwitchWorkTaskTool implements ITool<SwitchWorkTaskTool.Result> {
     }
 
     private String getTaskIdParameterDesc() {
-        StringJoiner joiner = new StringJoiner("\n");
+        StringJoiner joiner = new StringJoiner("\n", "Brief explanation of parameters: \n", "");
         TaskManager.getTaskIndex().forEach(task -> {
-            String id = task.getUid().toString();
+            String path = task.getUid().getPath();
             String summary = task.getMaidActionSummary();
-            joiner.add("- %s: %s".formatted(id, summary));
+            joiner.add("- %s: %s".formatted(path, summary));
         });
         return joiner.toString();
     }

@@ -142,6 +142,6 @@ public class TaskGunAttack implements IRangedAttackTask {
 
     @Override
     public String getMaidActionSummary() {
-        return "Use compatible guns from TacZ or SBW, and operate SBW vehicles in combat.";
+        return "Use gun attack entities";
     }
 }

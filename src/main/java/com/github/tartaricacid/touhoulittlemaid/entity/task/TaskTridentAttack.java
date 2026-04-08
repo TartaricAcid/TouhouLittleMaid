@@ -160,6 +160,6 @@ public class TaskTridentAttack implements IRangedAttackTask {
 
     @Override
     public String getMaidActionSummary() {
-        return "Throw a trident to attack nearby hostile mobs.";
+        return "Throw trident to attack entities";
     }
 }

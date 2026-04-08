@@ -124,6 +124,6 @@ public class TaskFeedOwner implements IFeedTask {
 
     @Override
     public String getMaidActionSummary() {
-        return "Feed the owner when they are hungry or need curative food.";
+        return "Feed the user when they are hungry";
     }
 }

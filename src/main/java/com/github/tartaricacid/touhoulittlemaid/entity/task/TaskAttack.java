@@ -131,6 +131,6 @@ public class TaskAttack implements IAttackTask {
 
     @Override
     public String getMaidActionSummary() {
-        return "Melee attack nearby hostile mobs with the main-hand weapon.";
+        return "Melee attack entities";
     }
 }

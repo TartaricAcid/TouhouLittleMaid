@@ -99,6 +99,6 @@ public class TaskMelon implements IFarmTask {
 
     @Override
     public String getMaidActionSummary() {
-        return "Harvest nearby melons or pumpkins, and use Silk Touch to collect whole melons.";
+        return "Harvest melons or pumpkins";
     }
 }
