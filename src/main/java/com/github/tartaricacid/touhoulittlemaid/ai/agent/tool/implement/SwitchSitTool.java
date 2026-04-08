@@ -8,6 +8,8 @@ import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.param
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 
 public class SwitchSitTool implements ITool<SwitchSitTool.Result> {
     public static final String TOOL_ID = "switch_sit";
@@ -67,8 +69,14 @@ public class SwitchSitTool implements ITool<SwitchSitTool.Result> {
     }
 
     @Override
-    public String invocationSummary(Result result) {
-        return TOOL_ID;
+    public Component invocationSummaryComponent(SwitchSitTool.Result result) {
+        if (result.sit()) {
+            return Component.translatable("ai.touhou_little_maid.chat.tool_call.switch_sit.yes")
+                    .withStyle(ChatFormatting.GRAY);
+        } else {
+            return Component.translatable("ai.touhou_little_maid.chat.tool_call.switch_sit.no")
+                    .withStyle(ChatFormatting.GRAY);
+        }
     }
 
     public record Result(boolean sit) {

@@ -9,6 +9,7 @@ import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.grounded.Groun
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.ObjectParameter;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.Parameter;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.StringParameter;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMClient;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
@@ -16,6 +17,8 @@ import com.mojang.serialization.Codec;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 public class UseSkillTool implements ITool<String> {
     public static final String TOOL_ID = "use_skill";
@@ -60,25 +63,56 @@ public class UseSkillTool implements ITool<String> {
 
     @Override
     public LLMCallback onCall(String toolId, String result, LLMCallback callback) {
+        // 不会触发这个同步回调，因为 onCallAsync 已经覆盖了它
+        return callback;
+    }
+
+    @Override
+    public CompletableFuture<LLMCallback> onCallAsync(String toolCallId, String result, LLMCallback callback, LLMClient client) {
         SkillInstance selected = SkillLoader.getSkill(result);
 
         if (selected == null) {
             List<String> values = Lists.newArrayList(SkillLoader.getAllSkills().keySet());
             String text = "Unknown skill name '%s'".formatted(result);
             String invalidMsg = ITool.invalidParam(NAME_PARAMETER_ID, values, text);
-            return callback.addToolResult(invalidMsg, toolId);
+            LLMCallback toolResult = callback.addToolResult(invalidMsg, toolCallId);
+            return CompletableFuture.completedFuture(toolResult);
         }
 
-        // 如果是知识库查询，那么需要新建空白回调
+        // 如果是知识库查询，那么需要新建空白回调，并异步阻塞等待
         if (selected.isKnowledgeType()) {
+            long bubbleId = callback.getWaitingChatBubbleId();
             MaidAIChatManager chatManager = callback.getChatManager();
             String knowledge = this.getKnowledge(selected, chatManager);
-            return new GroundedAnswerCallback(chatManager, knowledge, callback.getWaitingChatBubbleId());
+
+            CompletableFuture<String> summaryFuture = new CompletableFuture<>();
+            GroundedAnswerCallback groundedAnswerCallback = new GroundedAnswerCallback(chatManager, knowledge, bubbleId, summaryFuture);
+            client.chat(groundedAnswerCallback);
+
+            return summaryFuture.orTimeout(10, TimeUnit.SECONDS)
+                    // 使用 handleAsync 确保无论成功还是失败
+                    // 最终都能在主线程上回调结果给主 Agent
+                    .handleAsync((summary, throwable) -> {
+                        CompletableFuture<LLMCallback> finalResult = new CompletableFuture<>();
+                        // 最终返回工具结果，必须在主线程上
+                        callback.runOnServerThread(() -> {
+                            if (throwable != null) {
+                                String error = "Error: " + throwable.getMessage();
+                                finalResult.complete(callback.addToolResult(error, toolCallId));
+                            } else {
+                                // 将子 Agent 提取的知识回填给主 Agent
+                                String handleSummary = "Source: Minecraft Wiki\nSummary: " + summary;
+                                finalResult.complete(callback.addToolResult(handleSummary, toolCallId));
+                            }
+                        });
+                        return finalResult;
+                    }, Runnable::run).thenCompose(f -> f);
         }
 
         // 普通 skill 回调
         String body = selected.body().trim();
-        return callback.addToolResult(body, toolId);
+        LLMCallback toolResult = callback.addToolResult(body, toolCallId);
+        return CompletableFuture.completedFuture(toolResult);
     }
 
     @Override

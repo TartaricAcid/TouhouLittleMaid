@@ -13,6 +13,9 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -29,11 +32,9 @@ public class SwitchWorkTaskTool implements ITool<SwitchWorkTaskTool.Result> {
     private static final String TOOL_DESC = """
             Use this when the user wants to change the current work task.
             
-            For attack tasks (such as attack, bow, crossbow, trident, danmaku, gun, etc.), should first obtain the context of nearby entities.
-            Then provide the target entity id as parameter to switch immediately after switching task.
-            
+            For attack tasks, should first obtain the context of nearby entities, then provide the target entity id as parameter to switch immediately after switching task.
             Non attack tasks not need to provide entity id.
-            Do not invent task ids or entity ids.
+            
             Reply with the entity name ONLY, omit internal data (e.g., ID, distance).
             """.trim();
 
@@ -127,17 +128,22 @@ public class SwitchWorkTaskTool implements ITool<SwitchWorkTaskTool.Result> {
             String msg = this.attackResult(maid, attackTask, entityId);
             return callback.addToolResult(msg, toolId);
         } else {
-            String msg = this.switchResult(maid, taskId, task == currentTask, switchResult);
+            String msg = this.switchResult(taskId, task == currentTask, switchResult);
             return callback.addToolResult(msg, toolId);
         }
     }
 
     @Override
-    public String invocationSummary(Result result) {
-        return "%s { %s }".formatted(TOOL_ID, result.id.getPath());
+    public Component invocationSummaryComponent(Result result) {
+        ResourceLocation id = result.id();
+        return TaskManager.findTask(id).map(task -> {
+            MutableComponent name = task.getName();
+            return Component.translatable("ai.touhou_little_maid.chat.tool_call.switch_work_task", name)
+                    .withStyle(ChatFormatting.GRAY);
+        }).orElse(Component.empty());
     }
 
-    private String switchResult(EntityMaid maid, ResourceLocation taskId, boolean sameTask, FunctionCallSwitchResult switchResult) {
+    private String switchResult(ResourceLocation taskId, boolean sameTask, FunctionCallSwitchResult switchResult) {
         if (sameTask) {
             return switch (switchResult) {
                 case NO_CHANGE -> NO_CHANGE.formatted(taskId);
@@ -177,11 +183,11 @@ public class SwitchWorkTaskTool implements ITool<SwitchWorkTaskTool.Result> {
     }
 
     private String getTaskIdParameterDesc() {
-        StringJoiner joiner = new StringJoiner("\n");
+        StringJoiner joiner = new StringJoiner("\n", "Brief explanation of parameters: \n", "");
         TaskManager.getTaskIndex().forEach(task -> {
-            String id = task.getUid().toString();
+            String path = task.getUid().getPath();
             String summary = task.getMaidActionSummary();
-            joiner.add("- %s: %s".formatted(id, summary));
+            joiner.add("- %s: %s".formatted(path, summary));
         });
         return joiner.toString();
     }

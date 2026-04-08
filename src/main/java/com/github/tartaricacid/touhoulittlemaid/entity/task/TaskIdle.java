@@ -21,7 +21,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import org.jetbrains.annotations.ApiStatus;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -85,6 +84,6 @@ public class TaskIdle implements IMaidTask {
 
     @Override
     public String getMaidActionSummary() {
-        return "Stay idle and do not perform any work task.";
+        return "Stay idle and do not perform any work";
     }
 }

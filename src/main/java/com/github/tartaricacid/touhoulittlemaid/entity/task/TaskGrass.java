@@ -54,6 +54,6 @@ public class TaskGrass implements IFarmTask {
 
     @Override
     public String getMaidActionSummary() {
-        return "Clear nearby grass, flowers, and other tall plants.";
+        return "Clear grass and flowers";
     }
 }

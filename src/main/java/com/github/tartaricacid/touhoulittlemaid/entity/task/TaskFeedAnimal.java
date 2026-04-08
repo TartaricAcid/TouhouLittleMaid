@@ -143,6 +143,6 @@ public class TaskFeedAnimal implements IAttackTask {
 
     @Override
     public String getMaidActionSummary() {
-        return "Breed nearby animals and optionally cull excess animals with a melee weapon.";
+        return "Feed and breed animals";
     }
 }

@@ -64,6 +64,6 @@ public class TaskMilk implements IMaidTask {
 
     @Override
     public String getMaidActionSummary() {
-        return "Milk nearby cows using a bucket.";
+        return "Get milk from cow";
     }
 }

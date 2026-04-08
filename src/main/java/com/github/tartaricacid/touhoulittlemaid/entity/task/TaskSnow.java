@@ -67,6 +67,6 @@ public class TaskSnow implements IFarmTask {
 
     @Override
     public String getMaidActionSummary() {
-        return "Clear nearby snow, or collect snowballs when holding a shovel.";
+        return "Snow shoveling";
     }
 }

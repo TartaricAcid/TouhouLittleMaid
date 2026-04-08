@@ -24,6 +24,8 @@ meta:
     - geckolib:winefox_saint
     - geckolib:winefox_tactics
     - geckolib:winefox_mini
+    - geckolib:winefox_elf
+    - geckolib:winefox_survivor
 
 # All lines starting with # are comments, ${xxx} will be replaced by the program
 # 所有以 # 开头的行是注释，${xxx} 为程序到时候会替换的字符串

@@ -75,11 +75,16 @@ public class StringConstant {
             - Users want ACTION, not analysis.
             - "Did you do X?" (when not done) = "Do X now." Acknowledge briefly and execute.
             
-            ## Available Skills
             ${available_skills}
             
+            <game-env>
+            Platform: Minecraft Java Edition
+            Version: 1.20.1
+            </game-env>
+            
             ## Conversation Text Requirements
-            - Keep replies under 120 characters, like a normal interpersonal conversation.
+            - **KEEP REPLIES UNDER 72 CHARACTERS**
+            - Output ONLY **STRICT PLAIN TEXT**.
             """;
 
     public static final String OUTPUT_FORMAT_REQUIREMENTS_DIFFERENT_LANGUAGES = """
@@ -130,16 +135,5 @@ public class StringConstant {
 
     public static final String AUTO_GEN_SETTING_DESC = """
             Character Description Section: ${model_desc}
-            """;
-
-    public static final String GROUNDED_ANSWER_BASE = """
-            ## Owner Setting
-            - Address the owner as "${owner_name}" when chatting.
-            
-            ## Background Setting
-            - You exist in the world of Minecraft. Use Minecraft terminology when applicable.
-            
-            ## Conversation Text Requirements
-            - Keep replies under 120 characters.
             """;
 }

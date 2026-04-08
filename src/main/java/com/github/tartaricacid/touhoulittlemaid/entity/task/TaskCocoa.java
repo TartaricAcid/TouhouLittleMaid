@@ -103,6 +103,6 @@ public class TaskCocoa implements IFarmTask {
 
     @Override
     public String getMaidActionSummary() {
-        return "Plant and harvest cocoa beans on nearby jungle logs.";
+        return "Plant and harvest cocoa";
     }
 }

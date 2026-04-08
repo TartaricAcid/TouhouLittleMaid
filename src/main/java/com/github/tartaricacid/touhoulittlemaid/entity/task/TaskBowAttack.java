@@ -201,6 +201,6 @@ public class TaskBowAttack implements IRangedAttackTask {
 
     @Override
     public String getMaidActionSummary() {
-        return "Use a bow and arrows to attack nearby hostile mobs.";
+        return "Use bow attack entities";
     }
 }

@@ -8,6 +8,8 @@ import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.param
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.MaidSchedule;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.serialization.Codec;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 
 import java.util.Arrays;
 import java.util.List;
@@ -77,7 +79,21 @@ public class SwitchScheduleTool implements ITool<String> {
     }
 
     @Override
-    public String invocationSummary(String result) {
-        return "%s { %s }".formatted(TOOL_ID, result);
+    public Component invocationSummaryComponent(String result) {
+        MaidSchedule target = MaidSchedule.valueOf(result.toUpperCase());
+        switch (target) {
+            case DAY -> {
+                return Component.translatable("ai.touhou_little_maid.chat.tool_call.switch_schedule.day")
+                        .withStyle(ChatFormatting.GRAY);
+            }
+            case NIGHT -> {
+                return Component.translatable("ai.touhou_little_maid.chat.tool_call.switch_schedule.night")
+                        .withStyle(ChatFormatting.GRAY);
+            }
+            default -> {
+                return Component.translatable("ai.touhou_little_maid.chat.tool_call.switch_schedule.all")
+                        .withStyle(ChatFormatting.GRAY);
+            }
+        }
     }
 }

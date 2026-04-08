@@ -67,6 +67,6 @@ public class TaskTorch implements IMaidTask {
 
     @Override
     public String getMaidActionSummary() {
-        return "Place torches in nearby dark areas.";
+        return "Place torches in dark areas";
     }
 }

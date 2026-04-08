@@ -78,6 +78,6 @@ public class TaskHoney implements IMaidTask {
 
     @Override
     public String getMaidActionSummary() {
-        return "Collect honey bottles or honeycombs from nearby beehives.";
+        return "Collect honey from beehives";
     }
 }

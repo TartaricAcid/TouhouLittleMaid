@@ -3,11 +3,15 @@ package com.github.tartaricacid.touhoulittlemaid.ai.agent.tool;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.LLMCallback;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.ObjectParameter;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.Parameter;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMClient;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai.request.ChatCompletion;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.serialization.Codec;
+import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Collection;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * 女仆 AI 的 Tool 抽象。
@@ -59,6 +63,10 @@ public interface ITool<T> {
 
     /**
      * 执行 Tool 调用。请记得在传入的 callback 里添加工具的返回消息，从而继续让对话进行下去
+     * <p>
+     * 此方法依赖于 onCallAsync 的默认实现，因此默认情况下会被 onCallAsync 调用。
+     * <p>
+     * 需要同步执行的 Tool 可以直接重写此方法，而需要异步执行的 Tool 则需要重写 onCallAsync 方法。
      *
      * @param toolCallId LLM 发回的参数，需要带上这个 ID 以让 LLM 知道这是哪个 Tool 的返回结果
      * @param result     解码后的参数对象
@@ -68,12 +76,50 @@ public interface ITool<T> {
     LLMCallback onCall(String toolCallId, T result, LLMCallback callback);
 
     /**
-     * 生成此次工具调用的摘要信息，用于 UI 展示及历史记录显示
+     * 异步执行 Tool 调用。
+     * <p>
+     * 默认直接复用同步 {@link #onCall(String, Object, LLMCallback)}，以保证已有 Tool 无需修改。
+     * 需要执行耗时异步任务的 Tool 可以重写此方法，并在完成后返回用于下一轮通信的回调。
+     *
+     * @param toolCallId LLM 发回的参数，需要带上这个 ID 以让 LLM 知道这是哪个 Tool 的返回结果
+     * @param result     解码后的参数对象
+     * @param callback   当前执行逻辑的回调
+     * @param client     当前调用的 LLM 客户端实例，必要时可以通过它发起新的对话请求
+     * @return 异步回调结果
+     */
+    @ApiStatus.AvailableSince("1.5.2")
+    default CompletableFuture<LLMCallback> onCallAsync(
+            String toolCallId, T result, LLMCallback callback, LLMClient client
+    ) {
+        LLMCallback onCall = onCall(toolCallId, result, callback);
+        return CompletableFuture.completedFuture(onCall);
+    }
+
+    /**
+     * 生成此次工具调用的摘要信息，用于女仆聊天气泡提示
      *
      * @param result 解码后的参数对象
      * @return 摘要信息
      */
-    String invocationSummary(T result);
+    default String invocationSummary(T result) {
+        return this.id();
+    }
+
+    /**
+     * 可翻译的工具调用的摘要信息，用于女仆聊天气泡提示
+     * <p>
+     * 此方法和上面的 {@link #invocationSummary(Object)} 功能存在重复，
+     * 返回值是一个 Component，可以包含翻译文本和样式信息，而不仅仅是纯字符串
+     * <p>
+     * 如果此方法返回非 EMPTY，将覆盖 {@link #invocationSummary(Object)}
+     *
+     * @param result 解码后的参数对象
+     * @return Component 形式的摘要信息
+     */
+    @ApiStatus.AvailableSince("1.5.2")
+    default Component invocationSummaryComponent(T result) {
+        return Component.empty();
+    }
 
     /**
      * 程序侧再次判断当前 Tool 是否允许在当前上下文下暴露给模型。

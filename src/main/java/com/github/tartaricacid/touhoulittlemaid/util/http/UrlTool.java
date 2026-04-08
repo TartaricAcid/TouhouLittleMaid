@@ -1,12 +1,16 @@
 package com.github.tartaricacid.touhoulittlemaid.util.http;
 
 import com.google.common.base.Joiner;
+import com.google.common.collect.Maps;
 import com.google.common.escape.Escaper;
 import com.google.common.net.UrlEscapers;
+import net.minecraft.Util;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -32,6 +36,10 @@ public final class UrlTool {
                 .join(params.entrySet().stream().collect(escape()));
         query.append(paramsText);
         return query.toString();
+    }
+
+    public static String buildQueryString(String baseUrl, Consumer<LinkedHashMap<String, String>> consumer) {
+        return buildQueryString(baseUrl, Util.make(Maps.newLinkedHashMap(), consumer));
     }
 
     @NotNull

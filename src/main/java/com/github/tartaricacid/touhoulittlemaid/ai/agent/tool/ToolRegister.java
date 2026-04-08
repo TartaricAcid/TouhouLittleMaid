@@ -16,6 +16,7 @@ public class ToolRegister {
         ToolRegister register = new ToolRegister();
 
         register.register(new UseSkillTool());
+        register.register(new QueryMinecraftWikiTool());
         register.register(new QueryGameContextTool());
         register.register(new SwitchFollowStateTool());
         register.register(new SwitchWorkTaskTool());
