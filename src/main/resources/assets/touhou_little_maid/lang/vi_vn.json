@@ -44,7 +44,7 @@
   "ai.touhou_little_maid.chat.settings.hub.disabled": "Tắt",
   "ai.touhou_little_maid.chat.settings.hub.type": "Loại: %s",
   "ai.touhou_little_maid.chat.settings.hub.delete_confirm": "Bạn có chắc muốn xoá trang web \"%s\" không?",
-  "ai.touhou_little_maid.chat.settings.hub.create": "Xây dựng trang web %s mới",
+  "ai.touhou_little_maid.chat.settings.hub.create": "Tạo trang web %s mới",
   "ai.touhou_little_maid.chat.settings.hub.add_model": "Thêm vào",
   "ai.touhou_little_maid.chat.settings.hub.site_id": "ID Trang Web",
   "ai.touhou_little_maid.chat.settings.hub.url": "URL",
