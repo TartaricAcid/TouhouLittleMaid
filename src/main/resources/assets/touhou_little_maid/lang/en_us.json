@@ -100,6 +100,8 @@
   "ai.touhou_little_maid.chat.site.openrouter.name": "Open Router",
   "ai.touhou_little_maid.chat.tool_call.query_game_context": "Query Game Context for \"%s\"",
   "ai.touhou_little_maid.chat.tool_call.query_minecraft_wiki": "Query Minecraft Wiki for \"%s\"",
+  "ai.touhou_little_maid.chat.tool_call.query_minecraft_wiki.formulating.1": "Flipping through the grimoire... wait, I mean the Wiki...",
+  "ai.touhou_little_maid.chat.tool_call.query_minecraft_wiki.formulating.2": "Notes organized! Thinking of how to explain it to you...",
   "ai.touhou_little_maid.chat.tool_call.switch_follow_state.yes": "Switch to Follow",
   "ai.touhou_little_maid.chat.tool_call.switch_follow_state.no": "Switch to Stay",
   "ai.touhou_little_maid.chat.tool_call.switch_schedule.day": "Switch Schedule to Day",

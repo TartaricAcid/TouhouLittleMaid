@@ -104,6 +104,12 @@ public class QueryMinecraftWikiTool implements ITool<String> {
                     if (StringUtils.isBlank(content)) {
                         return CompletableFuture.completedFuture("Cannot find relevant information");
                     }
+                    // 手动刷新下气泡状态
+                    callback.runOnServerThread(() -> {
+                        Component tip = Component.translatable("ai.touhou_little_maid.chat.tool_call.query_minecraft_wiki.formulating.1")
+                                .withStyle(ChatFormatting.GRAY);
+                        callback.refreshWaitingChatBubble(tip);
+                    });
                     return summarizeWithChildCallback(content, callback, client);
                 })
                 // 前三步总耗时不得超过 TOTAL_TIMEOUT_SECONDS 秒
@@ -114,6 +120,11 @@ public class QueryMinecraftWikiTool implements ITool<String> {
                     CompletableFuture<LLMCallback> finalResult = new CompletableFuture<>();
                     // 最终返回工具结果，必须在主线程上
                     callback.runOnServerThread(() -> {
+                        // 再刷新下气泡状态
+                        Component tip = Component.translatable("ai.touhou_little_maid.chat.tool_call.query_minecraft_wiki.formulating.2")
+                                .withStyle(ChatFormatting.GRAY);
+                        callback.refreshWaitingChatBubble(tip);
+
                         if (throwable != null) {
                             String error = "Error: " + throwable.getMessage();
                             finalResult.complete(callback.addToolResult(error, toolCallId));

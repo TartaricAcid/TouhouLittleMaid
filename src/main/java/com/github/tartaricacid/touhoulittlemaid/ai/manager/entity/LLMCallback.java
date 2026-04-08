@@ -288,17 +288,26 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
     }
 
     /**
-     * 刷新等待气泡，在主思考文本下方追加一行灰色副文本，提示当前正在调用的工具名称。
+     * 刷新等待气泡，在主思考文本下方追加一行副文本，提示当前正在调用的工具信息。
      *
      * @param summary 当前正在执行的工具调用信息摘要
      */
-    private void refreshWaitingChatBubble(String summary) {
+    public void refreshWaitingChatBubble(String summary) {
         String key = "ai.touhou_little_maid.chat.chat_bubble_waiting_calling";
         Component secondaryText = Component.translatable(key, summary).withStyle(ChatFormatting.GRAY);
         refreshWaitingChatBubble(secondaryText);
     }
 
-    private void refreshWaitingChatBubble(Component summaryComponent) {
+    /**
+     * 刷新等待气泡，在主思考文本下方追加一行副文本，提示当前正在调用的工具信息。
+     *
+     * @param summaryComponent 你想添加的提示文本
+     */
+    public void refreshWaitingChatBubble(Component summaryComponent) {
+        // 防止部分作者忘记在主线程执行这个
+        if (!this.isOnServerThread()) {
+            throw new IllegalStateException("refreshWaitingChatBubble must be called on the server thread");
+        }
         this.waitingChatBubbleId = maid.getChatBubbleManager().refreshThinkingText(
                 "ai.touhou_little_maid.chat.chat_bubble_waiting",
                 waitingChatBubbleId, summaryComponent

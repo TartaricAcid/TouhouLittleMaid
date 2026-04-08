@@ -100,6 +100,8 @@
   "ai.touhou_little_maid.chat.site.openrouter.name": "Open Router",
   "ai.touhou_little_maid.chat.tool_call.query_game_context": "正在查询游戏上下文：“%s”",
   "ai.touhou_little_maid.chat.tool_call.query_minecraft_wiki": "正在 Minecraft Wiki 搜索：“%s”",
+  "ai.touhou_little_maid.chat.tool_call.query_minecraft_wiki.formulating.1": "正在翻查魔导书……哦不，是 Wiki 才对……",
+  "ai.touhou_little_maid.chat.tool_call.query_minecraft_wiki.formulating.2": "资料整理好啦！正在琢磨该怎么给主人讲明白……",
   "ai.touhou_little_maid.chat.tool_call.switch_follow_state.yes": "切换为：跟随",
   "ai.touhou_little_maid.chat.tool_call.switch_follow_state.no": "切换为：停止跟随",
   "ai.touhou_little_maid.chat.tool_call.switch_schedule.day": "切换工作日程为：白班",
