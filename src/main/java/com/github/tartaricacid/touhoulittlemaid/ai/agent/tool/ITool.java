@@ -7,6 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMClient;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai.request.ChatCompletion;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.serialization.Codec;
+import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Collection;
@@ -95,12 +96,30 @@ public interface ITool<T> {
     }
 
     /**
-     * 生成此次工具调用的摘要信息，用于 UI 展示及历史记录显示
+     * 生成此次工具调用的摘要信息，用于女仆聊天气泡提示
      *
      * @param result 解码后的参数对象
      * @return 摘要信息
      */
-    String invocationSummary(T result);
+    default String invocationSummary(T result) {
+        return this.id();
+    }
+
+    /**
+     * 可翻译的工具调用的摘要信息，用于女仆聊天气泡提示
+     * <p>
+     * 此方法和上面的 {@link #invocationSummary(Object)} 功能存在重复，
+     * 返回值是一个 Component，可以包含翻译文本和样式信息，而不仅仅是纯字符串
+     * <p>
+     * 如果此方法返回非 EMPTY，将覆盖 {@link #invocationSummary(Object)}
+     *
+     * @param result 解码后的参数对象
+     * @return Component 形式的摘要信息
+     */
+    @ApiStatus.AvailableSince("1.5.2")
+    default Component invocationSummaryComponent(T result) {
+        return Component.empty();
+    }
 
     /**
      * 程序侧再次判断当前 Tool 是否允许在当前上下文下暴露给模型。

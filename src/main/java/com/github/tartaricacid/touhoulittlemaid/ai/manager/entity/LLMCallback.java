@@ -22,6 +22,7 @@ import com.google.gson.JsonSyntaxException;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -273,9 +274,15 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
 
         Object finalResult = result;
         // 工具调用的信息摘要
-        String summary = tool.invocationSummary(finalResult);
+        Component summaryComponent = tool.invocationSummaryComponent(finalResult);
         // 向玩家更新气泡，并提示当前正在调用工具
-        callback.refreshWaitingChatBubble(summary);
+        if (summaryComponent.getContents().equals(ComponentContents.EMPTY)) {
+            String summary = tool.invocationSummary(finalResult);
+            callback.refreshWaitingChatBubble(summary);
+        } else {
+            callback.refreshWaitingChatBubble(summaryComponent);
+        }
+
         // 执行 tool，获得返回结果
         return tool.onCallAsync(toolCall.getId(), finalResult, callback, client);
     }
@@ -283,14 +290,18 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
     /**
      * 刷新等待气泡，在主思考文本下方追加一行灰色副文本，提示当前正在调用的工具名称。
      *
-     * @param tool 当前正在执行的工具调用信息摘要
+     * @param summary 当前正在执行的工具调用信息摘要
      */
-    private void refreshWaitingChatBubble(String tool) {
+    private void refreshWaitingChatBubble(String summary) {
         String key = "ai.touhou_little_maid.chat.chat_bubble_waiting_calling";
-        Component secondaryText = Component.translatable(key, tool).withStyle(ChatFormatting.GRAY);
+        Component secondaryText = Component.translatable(key, summary).withStyle(ChatFormatting.GRAY);
+        refreshWaitingChatBubble(secondaryText);
+    }
+
+    private void refreshWaitingChatBubble(Component summaryComponent) {
         this.waitingChatBubbleId = maid.getChatBubbleManager().refreshThinkingText(
                 "ai.touhou_little_maid.chat.chat_bubble_waiting",
-                waitingChatBubbleId, secondaryText
+                waitingChatBubbleId, summaryComponent
         );
     }
 

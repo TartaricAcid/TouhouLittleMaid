@@ -9,6 +9,8 @@ import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.param
 import com.github.tartaricacid.touhoulittlemaid.ai.service.function.schema.parameter.StringParameter;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.serialization.Codec;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -69,8 +71,9 @@ public class QueryGameContextTool implements ITool<String> {
     }
 
     @Override
-    public String invocationSummary(String result) {
-        return "%s { %s }".formatted(TOOL_ID, result);
+    public Component invocationSummaryComponent(String result) {
+        return Component.translatable("ai.touhou_little_maid.chat.tool_call.query_game_context", result)
+                .withStyle(ChatFormatting.GRAY);
     }
 
     private static String buildDescription(List<ContextCategory> categories) {

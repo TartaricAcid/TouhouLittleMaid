@@ -14,6 +14,8 @@ import com.github.tartaricacid.touhoulittlemaid.util.http.UrlTool;
 import com.google.common.net.HttpHeaders;
 import com.google.common.net.MediaType;
 import com.mojang.serialization.Codec;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -73,6 +75,12 @@ public class QueryMinecraftWikiTool implements ITool<String> {
     @Override
     public String invocationSummary(String result) {
         return "%s { %s }".formatted(TOOL_ID, StringUtils.abbreviate(result, 40));
+    }
+
+    @Override
+    public Component invocationSummaryComponent(String result) {
+        return Component.translatable("ai.touhou_little_maid.chat.tool_call.query_minecraft_wiki", result)
+                .withStyle(ChatFormatting.GRAY);
     }
 
     @Override

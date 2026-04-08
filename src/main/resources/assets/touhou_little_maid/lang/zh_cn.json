@@ -98,6 +98,16 @@
   "ai.touhou_little_maid.chat.site.gemini.name": "Gemini",
   "ai.touhou_little_maid.chat.site.grok.name": "Grok",
   "ai.touhou_little_maid.chat.site.openrouter.name": "Open Router",
+  "ai.touhou_little_maid.chat.tool_call.query_game_context": "正在查询游戏上下文：“%s”",
+  "ai.touhou_little_maid.chat.tool_call.query_minecraft_wiki": "正在 Minecraft Wiki 搜索：“%s”",
+  "ai.touhou_little_maid.chat.tool_call.switch_follow_state.yes": "切换为：跟随",
+  "ai.touhou_little_maid.chat.tool_call.switch_follow_state.no": "切换为：停止跟随",
+  "ai.touhou_little_maid.chat.tool_call.switch_schedule.day": "切换工作日程为：白班",
+  "ai.touhou_little_maid.chat.tool_call.switch_schedule.night": "切换工作日程为：夜班",
+  "ai.touhou_little_maid.chat.tool_call.switch_schedule.all": "切换工作日程为：全天",
+  "ai.touhou_little_maid.chat.tool_call.switch_sit.yes": "切换为：坐下",
+  "ai.touhou_little_maid.chat.tool_call.switch_sit.no": "切换为：站立",
+  "ai.touhou_little_maid.chat.tool_call.switch_work_task": "切换工作模式为：%s",
   "advancements.touhou_little_maid.base.craft_gohei.description": "合成御币",
   "advancements.touhou_little_maid.base.craft_gohei.title": "赤色幻想",
   "advancements.touhou_little_maid.base.build_altar.description": "修建女仆模组的祭坛",
@@ -1159,3 +1169,4 @@
   "patchouli.touhou_little_maid.book.entries.overview.favorability.name": "好感度",
   "patchouli.touhou_little_maid.book.entries.overview.favorability.pages.0.text": "好感度能够增加女仆的生命值和攻击力。$(br2)提升女仆好感度：$(li)女仆在空闲日程，玩耍电子琴、电脑、书架和五子棋。$(li)女仆睡觉。$(br2)减少女仆好感度：$(li)女仆死亡。"
 }
+
