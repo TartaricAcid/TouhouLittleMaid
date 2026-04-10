@@ -101,7 +101,7 @@
   "ai.touhou_little_maid.chat.tool_call.query_game_context": "Đang truy vấn ngữ cảnh trò chơi: “%s”",
   "ai.touhou_little_maid.chat.tool_call.query_minecraft_wiki": "Đang tìm kiếm trên Minecraft Wiki: “%s”",
   "ai.touhou_little_maid.chat.tool_call.query_minecraft_wiki.formulating.1": "Đang tra cứu ma đạo thư… à không, là Wiki mới đúng...",
-  "ai.touhou_little_maid.chat.tool_call.query_minecraft_wiki.formulating.2": "Đã sắp xếp tư liệu xong rồi! Đang nghĩ cách làm sao để giải thích rõ ràng cho chủ nhân đây...",
+  "ai.touhou_little_maid.chat.tool_call.query_minecraft_wiki.formulating.2": "Đã sắp xếp tư liệu xong rồi! Đang nghĩ làm sao để giải thích rõ ràng cho chủ nhân đây...",
   "ai.touhou_little_maid.chat.tool_call.switch_follow_state.yes": "Đổi thành: Đi Theo",
   "ai.touhou_little_maid.chat.tool_call.switch_follow_state.no": "Đổi thành: Không Đi Theo",
   "ai.touhou_little_maid.chat.tool_call.switch_schedule.day": "Đổi Lịch Trình Làm Việc thành: Ca Ngày",
