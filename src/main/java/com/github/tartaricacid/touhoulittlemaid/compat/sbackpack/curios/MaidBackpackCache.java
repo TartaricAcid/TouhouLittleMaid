@@ -34,7 +34,7 @@ public class MaidBackpackCache {
 
     public static void onEquipped(EntityMaid maid, String slotType, int slotIndex) {
         List<ContainerRef> containers = getContainers(maid);
-        BackpackSlotRef newRef = new BackpackSlotRef(maid, slotType, slotIndex);
+        BackpackSlotRef newRef = new BackpackSlotRef(slotType, slotIndex);
 
         for (int i = 1; i < containers.size(); i++) {
             ContainerRef ref = containers.get(i);
@@ -80,10 +80,14 @@ public class MaidBackpackCache {
         CACHE.remove(maid);
     }
 
+    public static int getCacheSize() {
+        return CACHE.size();
+    }
+
     private static List<ContainerRef> buildContainerRefs(EntityMaid maid) {
         List<ContainerRef> containers = Lists.newArrayList();
 
-        containers.add(new MaidInventoryRef(maid));
+        containers.add(new MaidInventoryRef());
         if (!CuriosCompat.isLoadedOrEnable()) {
             return containers;
         }
@@ -100,7 +104,7 @@ public class MaidBackpackCache {
                     if (!SBackpackCompat.isBackpack(stack)) {
                         continue;
                     }
-                    backpackRefs.add(new BackpackSlotRef(maid, slotType, i));
+                    backpackRefs.add(new BackpackSlotRef(slotType, i));
                 }
             }
         });

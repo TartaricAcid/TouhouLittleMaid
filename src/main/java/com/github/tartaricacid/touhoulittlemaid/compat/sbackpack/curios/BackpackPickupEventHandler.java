@@ -44,10 +44,10 @@ public class BackpackPickupEventHandler {
 
         // 先尝试放入已有相同物品的容器
         for (var container : containers) {
-            if (!container.containing(itemStack)) {
+            if (!container.containing(maid, itemStack)) {
                 continue;
             }
-            itemStack = container.insert(itemStack, simulate);
+            itemStack = container.insert(maid, itemStack, simulate);
             if (itemStack.isEmpty()) {
                 break;
             }
@@ -56,7 +56,7 @@ public class BackpackPickupEventHandler {
         // 如果还有剩余，再按默认顺序尝试放入
         if (!itemStack.isEmpty()) {
             for (var container : containers) {
-                itemStack = container.insert(itemStack, simulate);
+                itemStack = container.insert(maid, itemStack, simulate);
                 if (itemStack.isEmpty()) {
                     break;
                 }

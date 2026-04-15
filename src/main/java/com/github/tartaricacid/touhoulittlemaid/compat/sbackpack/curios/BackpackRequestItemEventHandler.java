@@ -35,7 +35,7 @@ public class BackpackRequestItemEventHandler {
                 continue;
             }
 
-            ItemStack extracted = extractItemsFromBackpack(backpackRef, filter, maxCount);
+            ItemStack extracted = extractItemsFromBackpack(maid, backpackRef, filter, maxCount);
             if (extracted.isEmpty()) {
                 continue;
             }
@@ -52,14 +52,14 @@ public class BackpackRequestItemEventHandler {
                 ItemStack result = extracted.copyWithCount(insertedCount);
 
                 if (!remaining.isEmpty()) {
-                    backpackRef.insert(remaining, false);
+                    backpackRef.insert(maid, remaining, false);
                 }
 
                 event.setRequestedItem(result);
                 event.setCanceled(true);
                 return;
             } else {
-                backpackRef.insert(extracted, false);
+                backpackRef.insert(maid, extracted, false);
             }
         }
     }
@@ -72,9 +72,9 @@ public class BackpackRequestItemEventHandler {
      * @param maxCount    最大提取数量，-1 表示自动根据物品堆叠上限确定
      * @return 提取的物品，如果没找到则返回 {@link ItemStack#EMPTY}
      */
-    private ItemStack extractItemsFromBackpack(BackpackSlotRef backpackRef,
+    private ItemStack extractItemsFromBackpack(EntityMaid maid, BackpackSlotRef backpackRef,
                                                Predicate<ItemStack> filter, int maxCount) {
-        ItemStack backpackStack = backpackRef.getBackpackStack();
+        ItemStack backpackStack = backpackRef.getBackpackStack(maid);
         if (backpackStack.isEmpty()) {
             return ItemStack.EMPTY;
         }
@@ -146,10 +146,10 @@ public class BackpackRequestItemEventHandler {
                 continue;
             }
 
-            if (!backpackRef.containing(remaining)) {
+            if (!backpackRef.containing(maid, remaining)) {
                 continue;
             }
-            remaining = backpackRef.insert(remaining, false);
+            remaining = backpackRef.insert(maid, remaining, false);
             if (remaining.isEmpty()) {
                 break;
             }
@@ -162,7 +162,7 @@ public class BackpackRequestItemEventHandler {
                     continue;
                 }
 
-                remaining = backpackRef.insert(remaining, false);
+                remaining = backpackRef.insert(maid, remaining, false);
                 if (remaining.isEmpty()) {
                     break;
                 }

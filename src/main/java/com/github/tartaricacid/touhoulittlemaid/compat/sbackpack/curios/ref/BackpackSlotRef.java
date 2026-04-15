@@ -17,16 +17,14 @@ public class BackpackSlotRef implements ContainerRef {
     public final String slotType;
     public final int slotIndex;
     public final int priority;
-    private final EntityMaid maid;
 
-    public BackpackSlotRef(EntityMaid maid, String slotType, int slotIndex) {
-        this.maid = maid;
+    public BackpackSlotRef(String slotType, int slotIndex) {
         this.slotType = slotType;
         this.slotIndex = slotIndex;
         this.priority = SBackpackCuriosCompat.getSlotPriority(slotType);
     }
 
-    public ItemStack getBackpackStack() {
+    public ItemStack getBackpackStack(EntityMaid maid) {
         var inventory = CuriosApi.getCuriosInventory(maid);
         return inventory.map(handler -> handler.getStacksHandler(slotType)
                 .map(stacksHandler -> {
@@ -46,8 +44,8 @@ public class BackpackSlotRef implements ContainerRef {
     }
 
     @Override
-    public boolean containing(ItemStack itemToCheck) {
-        ItemStack backpackStack = getBackpackStack();
+    public boolean containing(EntityMaid maid, ItemStack itemToCheck) {
+        ItemStack backpackStack = getBackpackStack(maid);
         if (backpackStack.isEmpty()) {
             return false;
         }
@@ -61,8 +59,8 @@ public class BackpackSlotRef implements ContainerRef {
     }
 
     @Override
-    public ItemStack insert(ItemStack itemstack, boolean simulate) {
-        ItemStack backpackStack = getBackpackStack();
+    public ItemStack insert(EntityMaid maid, ItemStack itemstack, boolean simulate) {
+        ItemStack backpackStack = getBackpackStack(maid);
         if (backpackStack.isEmpty()) {
             return itemstack;
         }
