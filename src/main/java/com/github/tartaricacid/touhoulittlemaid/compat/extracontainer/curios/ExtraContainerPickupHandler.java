@@ -1,6 +1,7 @@
-package com.github.tartaricacid.touhoulittlemaid.compat.sbackpack.curios;
+package com.github.tartaricacid.touhoulittlemaid.compat.extracontainer.curios;
 
 import com.github.tartaricacid.touhoulittlemaid.api.event.MaidPickupEvent;
+import com.github.tartaricacid.touhoulittlemaid.compat.extracontainer.MaidContainerCache;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -15,7 +16,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
  * 1. 优先放入已有相同物品的容器（物品栏 > back背包 > 其他背包，按优先级排序）
  * 2. 如果没有已有该物品的容器能放下，则按默认顺序依次尝试
  */
-public class BackpackPickupEventHandler {
+public class ExtraContainerPickupHandler {
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void onMaidPickupPre(MaidPickupEvent.ItemResultPre event) {
         EntityMaid maid = event.getMaid();
@@ -40,9 +41,8 @@ public class BackpackPickupEventHandler {
         }
 
         int originCount = itemStack.getCount();
-        var containers = MaidBackpackCache.getContainers(maid);
+        var containers = MaidContainerCache.getContainers(maid);
 
-        // 先尝试放入已有相同物品的容器
         for (var container : containers) {
             if (!container.containing(maid, itemStack)) {
                 continue;
@@ -53,7 +53,6 @@ public class BackpackPickupEventHandler {
             }
         }
 
-        // 如果还有剩余，再按默认顺序尝试放入
         if (!itemStack.isEmpty()) {
             for (var container : containers) {
                 itemStack = container.insert(maid, itemStack, simulate);
@@ -67,8 +66,6 @@ public class BackpackPickupEventHandler {
             return false;
         }
         if (!simulate) {
-            // 最后触发拾取动画和音效，更新实体物品数量
-            // 以及触发 MaidPickupEvent.ItemResultPost 事件
             handlePickupEffects(maid, itemEntity, itemStack, originCount);
         }
         return true;

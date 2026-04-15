@@ -1,19 +1,17 @@
-package com.github.tartaricacid.touhoulittlemaid.compat.sbackpack;
+package com.github.tartaricacid.touhoulittlemaid.compat.tbackpack;
 
 import com.github.tartaricacid.touhoulittlemaid.compat.extracontainer.BackpackProvider;
 import com.github.tartaricacid.touhoulittlemaid.compat.extracontainer.ContainerRef;
 import com.github.tartaricacid.touhoulittlemaid.compat.extracontainer.ExtraContainerManager;
-import com.github.tartaricacid.touhoulittlemaid.compat.sbackpack.curios.SBackpackSlotRef;
+import com.github.tartaricacid.touhoulittlemaid.compat.tbackpack.curios.TBackpackSlotRef;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
 
-public class SBackpackCompat {
+public class TBackpackCompat {
     private static boolean IS_LOADED = false;
 
     public static void init() {
         IS_LOADED = true;
-        MinecraftForge.EVENT_BUS.register(new BackpackRightClickMaidEvent());
-        ExtraContainerManager.register(new SBackpackProvider());
+        ExtraContainerManager.register(new TBackpackProvider());
     }
 
     public static boolean isLoaded() {
@@ -22,20 +20,20 @@ public class SBackpackCompat {
 
     public static boolean isBackpack(ItemStack stack) {
         if (isLoaded()) {
-            return SBackpackCompatInner.isBackpack(stack);
+            return TBackpackCompatInner.isBackpack(stack);
         }
         return false;
     }
 
-    private static class SBackpackProvider implements BackpackProvider {
+    private static class TBackpackProvider implements BackpackProvider {
         @Override
         public boolean isBackpack(ItemStack stack) {
-            return SBackpackCompatInner.isBackpack(stack);
+            return TBackpackCompatInner.isBackpack(stack);
         }
 
         @Override
         public ContainerRef createSlotRef(String slotType, int slotIndex) {
-            return new SBackpackSlotRef(slotType, slotIndex);
+            return new TBackpackSlotRef(slotType, slotIndex);
         }
     }
 }
