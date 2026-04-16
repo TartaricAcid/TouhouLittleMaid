@@ -287,4 +287,8 @@ public interface IMaidTask {
         return 2;
     }
 
+    default boolean mayInterrupt(EntityMaid maid){
+        return true;
+    }
+
 }

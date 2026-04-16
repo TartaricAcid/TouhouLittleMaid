@@ -19,8 +19,9 @@ public class TaskSwitchBehavior extends Behavior<EntityMaid> {
     @Override
     protected void tick(ServerLevel level, EntityMaid owner, long gameTime) {
         if (gameTime % 10 != 3) return;
-        List<IMultiSelectTask> groups = new ArrayList<>();
         var current = owner.getTask();
+        if (!current.mayInterrupt(owner)) return;
+        List<IMultiSelectTask> groups = new ArrayList<>();
         boolean idle = current instanceof IMultiSelectTask task && task.isIdling(owner);
         int max = 0;
         for (var e : TaskManager.getTaskIndex()) {
