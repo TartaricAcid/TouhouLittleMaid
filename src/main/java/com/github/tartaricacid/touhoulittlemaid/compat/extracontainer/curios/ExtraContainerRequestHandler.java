@@ -89,6 +89,8 @@ public class ExtraContainerRequestHandler {
             return false;
         }
 
+        // 尝试将该物品放入背包
+        // 优先放到已有该物品的背包中，但排除物品栏自身（从索引1开始）
         ItemStack remaining = targetStack.copy();
         final int slotToEmpty = targetSlot;
         final ItemStack originStack = targetStack;

@@ -43,6 +43,7 @@ public class ExtraContainerPickupHandler {
         int originCount = itemStack.getCount();
         var containers = MaidContainerCache.getContainers(maid);
 
+        // 先尝试放入已有相同物品的容器
         for (var container : containers) {
             if (!container.containing(maid, itemStack)) {
                 continue;
@@ -53,6 +54,7 @@ public class ExtraContainerPickupHandler {
             }
         }
 
+        // 如果还有剩余，再按默认顺序尝试放入
         if (!itemStack.isEmpty()) {
             for (var container : containers) {
                 itemStack = container.insert(maid, itemStack, simulate);
@@ -66,6 +68,8 @@ public class ExtraContainerPickupHandler {
             return false;
         }
         if (!simulate) {
+            // 最后触发拾取动画和音效，更新实体物品数量
+            // 以及触发 MaidPickupEvent.ItemResultPost 事件
             handlePickupEffects(maid, itemEntity, itemStack, originCount);
         }
         return true;

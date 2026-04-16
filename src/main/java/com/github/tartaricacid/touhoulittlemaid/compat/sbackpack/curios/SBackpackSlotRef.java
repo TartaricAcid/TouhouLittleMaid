@@ -1,6 +1,5 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.sbackpack.curios;
 
-import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.compat.extracontainer.curios.CuriosSlotRef;
 import com.github.tartaricacid.touhoulittlemaid.compat.sbackpack.SBackpackCompat;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -16,7 +15,6 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 public class SBackpackSlotRef extends CuriosSlotRef {
-
     public SBackpackSlotRef(String slotType, int slotIndex) {
         super(slotType, slotIndex);
     }
@@ -39,8 +37,8 @@ public class SBackpackSlotRef extends CuriosSlotRef {
         return capability.map(wrapper -> {
             ITrackedContentsItemHandler inv = wrapper.getInventoryForUpgradeProcessing();
             Set<ItemStackKey> trackedStacks = inv.getTrackedStacks();
-            return trackedStacks.stream()
-                    .anyMatch(key -> ItemStack.isSameItemSameTags(key.getStack(), itemToCheck));
+            return trackedStacks.stream().anyMatch(key ->
+                    ItemStack.isSameItemSameTags(key.getStack(), itemToCheck));
         }).orElse(false);
     }
 
@@ -53,8 +51,7 @@ public class SBackpackSlotRef extends CuriosSlotRef {
         var capability = backpackStack.getCapability(CapabilityBackpackWrapper.getCapabilityInstance());
         return capability.map(wrapper -> {
             ITrackedContentsItemHandler inv = wrapper.getInventoryForUpgradeProcessing();
-            ItemStack remain = ItemHandlerHelper.insertItemStacked(inv, itemStack, simulate);
-            return remain;
+            return ItemHandlerHelper.insertItemStacked(inv, itemStack, simulate);
         }).orElse(itemStack);
     }
 
@@ -81,8 +78,7 @@ public class SBackpackSlotRef extends CuriosSlotRef {
                         ? itemMaxStack
                         : Math.min(maxCount, itemMaxStack);
                 int extractCount = Math.min(effectiveMaxCount, stackInSlot.getCount());
-                ItemStack extracted = inv.extractItem(slot, extractCount, false);
-                return extracted;
+                return inv.extractItem(slot, extractCount, false);
             }
             return ItemStack.EMPTY;
         }).orElse(ItemStack.EMPTY);

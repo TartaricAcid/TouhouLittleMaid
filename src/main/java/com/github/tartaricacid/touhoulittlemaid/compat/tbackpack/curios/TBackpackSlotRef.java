@@ -10,7 +10,6 @@ import net.minecraftforge.items.IItemHandler;
 import java.util.function.Predicate;
 
 public class TBackpackSlotRef extends CuriosSlotRef {
-
     public TBackpackSlotRef(String slotType, int slotIndex) {
         super(slotType, slotIndex);
     }
@@ -37,9 +36,7 @@ public class TBackpackSlotRef extends CuriosSlotRef {
                 }
             }
             return false;
-        }).orElseGet(() -> {
-            return false;
-        });
+        }).orElse(false);
     }
 
     @Override
@@ -57,9 +54,7 @@ public class TBackpackSlotRef extends CuriosSlotRef {
                 }
             }
             return remaining;
-        }).orElseGet(() -> {
-            return itemStack;
-        });
+        }).orElse(itemStack);
     }
 
     @Override
@@ -70,9 +65,7 @@ public class TBackpackSlotRef extends CuriosSlotRef {
         }
         return backpackStack.getCapability(ForgeCapabilities.ITEM_HANDLER).map(handler ->
                 extractFromHandler(handler, filter, maxCount)
-        ).orElseGet(() -> {
-            return ItemStack.EMPTY;
-        });
+        ).orElse(ItemStack.EMPTY);
     }
 
     private static ItemStack extractFromHandler(IItemHandler handler, Predicate<ItemStack> filter, int maxCount) {
@@ -86,8 +79,7 @@ public class TBackpackSlotRef extends CuriosSlotRef {
                     ? itemMaxStack
                     : Math.min(maxCount, itemMaxStack);
             int extractCount = Math.min(effectiveMaxCount, stackInSlot.getCount());
-            ItemStack extracted = handler.extractItem(slot, extractCount, false);
-            return extracted;
+            return handler.extractItem(slot, extractCount, false);
         }
         return ItemStack.EMPTY;
     }
