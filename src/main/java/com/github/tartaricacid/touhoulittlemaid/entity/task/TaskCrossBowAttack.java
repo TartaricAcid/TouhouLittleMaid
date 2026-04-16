@@ -145,4 +145,10 @@ public class TaskCrossBowAttack implements IRangedAttackTask {
     public String getMaidActionSummary() {
         return "Use crossbow attack entities";
     }
+
+    @Override
+    public boolean mayActivate(EntityMaid maid) {
+        return IRangedAttackTask.super.mayActivate(maid) && hasAmmunition(maid);
+    }
+
 }

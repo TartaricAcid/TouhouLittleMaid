@@ -85,4 +85,10 @@ public class TaskIdle implements IMaidTask {
     public String getMaidActionSummary() {
         return "Stay idle and do not perform any work";
     }
+
+    @Override
+    public int getTaskPriority() {
+        return 1;
+    }
+
 }
