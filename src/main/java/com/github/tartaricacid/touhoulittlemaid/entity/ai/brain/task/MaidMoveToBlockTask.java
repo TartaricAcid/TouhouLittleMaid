@@ -11,8 +11,10 @@ import net.minecraft.world.entity.ai.behavior.BlockPosTracker;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
+import java.util.function.Consumer;
 
 public abstract class MaidMoveToBlockTask extends MaidCheckRateTask {
     private static final int MAX_DELAY_TIME = 120;
@@ -45,7 +47,17 @@ public abstract class MaidMoveToBlockTask extends MaidCheckRateTask {
         this.setMaxCheckRate(MAX_DELAY_TIME);
     }
 
-    protected final void searchForDestination(ServerLevel worldIn, EntityMaid maid) {
+    protected final void searchForDestination(ServerLevel worldIn, EntityMaid maid){
+        var ans = findTargetLocation(worldIn, maid);
+        if (ans==null) return;
+        BehaviorUtils.setWalkAndLookTargetMemories(maid, ans, this.movementSpeed, 0);
+        maid.getBrain().setMemory(InitEntities.TARGET_POS.get(), new BlockPosTracker(ans));
+        this.currentWorkPos = ans;
+        this.setNextCheckTickCount(5);
+    }
+
+    @Nullable
+    public final BlockPos findTargetLocation(ServerLevel worldIn, EntityMaid maid) {
         MaidPathFindingBFS pathFinding = getOrCreateArrivalMap(worldIn, maid);
         BlockPos centrePos = this.getWorkSearchPos(maid);
         int searchRange = this.getHorizontalSearchRange(maid);
@@ -57,12 +69,8 @@ public abstract class MaidMoveToBlockTask extends MaidCheckRateTask {
                         mutableBlockPos.setWithOffset(centrePos, x, y - 1, z);
                         if (maid.isWithinRestriction(mutableBlockPos) && shouldMoveTo(worldIn, maid, mutableBlockPos) && checkPathReach(maid, pathFinding, mutableBlockPos)
                             && checkOwnerPos(maid, mutableBlockPos)) {
-                            BehaviorUtils.setWalkAndLookTargetMemories(maid, mutableBlockPos, this.movementSpeed, 0);
-                            maid.getBrain().setMemory(InitEntities.TARGET_POS.get(), new BlockPosTracker(mutableBlockPos));
-                            this.currentWorkPos = mutableBlockPos;
-                            this.setNextCheckTickCount(5);
                             this.clearCurrentArrivalMap(pathFinding);
-                            return;
+                            return mutableBlockPos.immutable();
                         }
                     }
                 }
@@ -70,6 +78,7 @@ public abstract class MaidMoveToBlockTask extends MaidCheckRateTask {
         }
         this.currentWorkPos = null;
         this.clearCurrentArrivalMap(pathFinding);
+        return null;
     }
 
     /**

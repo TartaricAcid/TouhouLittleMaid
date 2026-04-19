@@ -167,26 +167,12 @@ public interface IAttackTask extends IMultiSelectTask {
                 mobs -> mobs.findClosest((e) -> canAttack(maid, e) &&
                         maid.isWithinRestriction(e.blockPosition())));
         if (opt.isEmpty()) return false;
-        var inv = maid.getAvailableInv(true);
-        for (var i = 0; i < inv.getSlots(); i++) {
-            if (isWeapon(maid, inv.getStackInSlot(i))) {
-                return true;
-            }
-        }
-        return false;
+        return IMultiSelectTask.hasItem(maid, stack -> isWeapon(maid, stack));
     }
 
     @Override
     default void activate(EntityMaid maid) {
-        var inv = maid.getAvailableInv(true);
-        for (var i = 0; i < inv.getSlots(); i++) {
-            var stack = inv.getStackInSlot(i);
-            if (isWeapon(maid, stack)) {
-                ItemStack hand = maid.getMainHandItem();
-                maid.setItemInHand(InteractionHand.MAIN_HAND, stack);
-                inv.setStackInSlot(i, hand);
-            }
-        }
+        IMultiSelectTask.switchItem(maid, stack -> isWeapon(maid, stack));
     }
 
 }

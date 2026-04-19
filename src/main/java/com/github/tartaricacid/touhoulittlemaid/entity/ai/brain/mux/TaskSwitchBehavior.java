@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.mux;
 
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMultiSelectTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskIdle;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.server.level.ServerLevel;
@@ -18,11 +19,11 @@ public class TaskSwitchBehavior extends Behavior<EntityMaid> {
 
     @Override
     protected void tick(ServerLevel level, EntityMaid owner, long gameTime) {
-        if (gameTime % 10 != 3) return;
         var current = owner.getTask();
         if (!current.mayInterrupt(owner)) return;
         List<IMultiSelectTask> groups = new ArrayList<>();
-        boolean idle = current instanceof IMultiSelectTask task && task.isIdling(owner);
+        boolean idle = current instanceof TaskIdle || current instanceof IMultiSelectTask task && task.isIdling(owner);
+        if (!idle && gameTime % 10 != 3) return;
         int max = 0;
         for (var e : TaskManager.getTaskIndex()) {
             if (current == e) continue;
