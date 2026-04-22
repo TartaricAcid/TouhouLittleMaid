@@ -2,11 +2,10 @@ package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.mux;
 
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMultiSelectTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
-import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskIdle;
-import com.github.tartaricacid.touhoulittlemaid.entity.task.TaskManager;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ai.behavior.Behavior;
+import net.minecraft.world.entity.schedule.Activity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,14 +17,21 @@ public class TaskSwitchBehavior extends Behavior<EntityMaid> {
     }
 
     @Override
-    protected void tick(ServerLevel level, EntityMaid owner, long gameTime) {
+    protected boolean checkExtraStartConditions(ServerLevel level, EntityMaid owner) {
+        if (!owner.isMultiTasking()) return false;
+        var opt = owner.getBrain().getActiveNonCoreActivity();
+        return opt.map(activity -> activity == Activity.WORK).orElse(false);
+    }
+
+    @Override
+    protected void start(ServerLevel level, EntityMaid owner, long gameTime) {
         var current = owner.getTask();
         if (!current.mayInterrupt(owner)) return;
         List<IMultiSelectTask> groups = new ArrayList<>();
-        boolean idle = current instanceof TaskIdle || current instanceof IMultiSelectTask task && task.isIdling(owner);
+        boolean idle = current instanceof IMultiSelectTask task && task.isIdling(owner);
         if (!idle && gameTime % 10 != 3) return;
         int max = 0;
-        for (var e : TaskManager.getTaskIndex()) {
+        for (var e : owner.getSelectedTasks()) {
             if (current == e) continue;
             if (!(e instanceof IMultiSelectTask sel)) continue;
             int priority = e.getTaskPriority();

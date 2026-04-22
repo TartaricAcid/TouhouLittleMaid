@@ -360,10 +360,10 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
             }
         }
 
-        TaskButton button = new TaskButton(maidTask, enable[0], leftPos - 89, topPos + 23 + 19 * count,
+        TaskButton button = new TaskButton(maid, maidTask, enable[0], leftPos - 89, topPos + 23 + 19 * count,
                 83, 19, 93, 28, 20, TASK, 256, 256,
                 b -> taskButtonPressed(maidTask, enable[0]),
-                getTaskTooltips(maidTask, enable[0], enableConditionDesc), Component.empty());
+                getTaskTooltips(maidTask, enable[0], enableConditionDesc),Component.empty());
         this.addRenderableWidget(button);
         button.visible = TASK_LIST_OPEN;
     }
@@ -371,7 +371,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     // 用于开放切换任务时对当前 GUI 的操作
     protected void taskButtonPressed(IMaidTask maidTask, boolean enable) {
         if (enable && maid != null) {
-            maid.setTask(maidTask);
+            //maid.setTask(maidTask);
             PacketDistributor.sendToServer(new MaidTaskPackage(maid.getId(), maidTask.getUid()));
         }
     }

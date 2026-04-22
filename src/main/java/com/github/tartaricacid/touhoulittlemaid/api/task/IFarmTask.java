@@ -117,7 +117,7 @@ public interface IFarmTask extends IMultiSelectTask {
     @Override
     default boolean mayActivate(EntityMaid maid) {
         if (!(maid.level instanceof ServerLevel level)) return false;
-		if(!IMultiSelectTask.hasItem(maid, this::isSeed)) return false;
+		//if(!IMultiSelectTask.hasItem(maid, this::isSeed)) return false;
         var tasks = createBrainTasks(maid);
         for (var e : tasks){
             if (e.getSecond() instanceof MaidMoveToBlockTask task){

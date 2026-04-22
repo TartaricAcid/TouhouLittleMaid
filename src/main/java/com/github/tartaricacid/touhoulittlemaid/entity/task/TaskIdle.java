@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.task;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.task.FunctionCallSwitchResult;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
+import com.github.tartaricacid.touhoulittlemaid.api.task.IMultiSelectTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidSnowballTargetTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidStartSnowballAttacking;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -26,7 +27,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-public class TaskIdle implements IMaidTask {
+public class TaskIdle implements IMultiSelectTask {
     public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "idle");
 
     @Override
@@ -89,6 +90,20 @@ public class TaskIdle implements IMaidTask {
     @Override
     public int getTaskPriority() {
         return 1;
+    }
+
+    public boolean mayActivate(EntityMaid maid) {
+        return true;
+    }
+
+    @Override
+    public void activate(EntityMaid maid) {
+
+    }
+
+    @Override
+    public boolean isIdling(EntityMaid maid) {
+        return true;
     }
 
 }

@@ -244,6 +244,10 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     static final EntityDataAccessor<Boolean> OPEN_FENCE_GATE = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.BOOLEAN);
     static final EntityDataAccessor<Boolean> ACTIVE_CLIMBING = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.BOOLEAN);
 
+    // 多任务选择
+    private static final EntityDataAccessor<Boolean> MULTITASKING = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<String> MULTITASK = SynchedEntityData.defineId(EntityMaid.class, EntityDataSerializers.STRING);
+
     /**
      * 开辟空间给任务存储使用,也便于附属模组存储数据
      */
@@ -257,6 +261,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     private static final String BACKPACK_DATA_TAG = "MaidBackpackData";
     private static final String STRUCTURE_SPAWN_TAG = "StructureSpawn";
     private static final String DEFAULT_MODEL_ID = "touhou_little_maid:hakurei_reimu";
+    private static final String MULTITASKING_TAG = "MultiTasking";
+    private static final String MULTITASKLIST_TAG = "MultiTaskList";
 
     // 弃用数据，仅用于旧版存档的迁移
     private static final @Deprecated String BACKPACK_LEVEL_TAG = "MaidBackpackLevel";
@@ -426,6 +432,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         builder.define(TASK_DATA_SYNC, new CompoundTag());
 
         builder.define(DATA_IS_AIMING, false);
+        builder.define(MULTITASKING, true);
+        builder.define(MULTITASK, "");
 
         // 父类构造方法调用此类，就会出现这种初始化混乱的问题
         if (this.configManager == null) {
@@ -1374,6 +1382,9 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         compound.putString(SCHEDULE_MODE_TAG, getSchedule().name());
         compound.putString(MAID_BACKPACK_TYPE, getMaidBackpackType().getId().toString());
         compound.putBoolean(STRUCTURE_SPAWN_TAG, this.structureSpawn);
+        compound.putBoolean(MULTITASKING_TAG, entityData.get(MULTITASKING));
+        compound.putString(MULTITASKLIST_TAG, entityData.get(MULTITASK));
+
         this.configManager.addAdditionalSaveData(compound);
         this.gameRecordManager.addAdditionalSaveData(compound);
         this.favorabilityManager.addAdditionalSaveData(compound);
@@ -1496,6 +1507,12 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             if (this.backpackData != null && compound.contains(BACKPACK_DATA_TAG, Tag.TAG_COMPOUND)) {
                 this.backpackData.load(compound.getCompound(BACKPACK_DATA_TAG), this);
             }
+        }
+        if (compound.contains(MULTITASKING_TAG, Tag.TAG_BYTE)) {
+             entityData.set(MULTITASKING, compound.getBoolean(MULTITASKING_TAG));
+        }
+        if (compound.contains(MULTITASKLIST_TAG, Tag.TAG_STRING)) {
+            entityData.set(MULTITASK, compound.getString(MULTITASKLIST_TAG));
         }
         this.configManager.readAdditionalSaveData(compound);
         this.gameRecordManager.readAdditionalSaveData(compound);
@@ -2332,6 +2349,40 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     public IMaidTask getTask() {
         ResourceLocation uid = ResourceLocation.parse(entityData.get(DATA_TASK));
         return TaskManager.findTask(uid).orElse(TaskManager.getIdleTask());
+    }
+
+    public boolean isMultiTasking() {
+        return entityData.get(MULTITASKING);
+    }
+
+    public Set<IMaidTask> getSelectedTasks() {
+        var tasks = entityData.get(MULTITASK);
+        Set<IMaidTask> ans = new LinkedHashSet<>();
+        ans.add(TaskManager.getIdleTask());
+        if (tasks == null || tasks.isEmpty()) return ans;
+        var taskArr = tasks.split(",");
+        for (var e : taskArr) {
+            if (e.isEmpty()) continue;
+            var id = ResourceLocation.tryParse(e);
+            if (id == null) continue;
+            var task = TaskManager.getTaskMap().get(id);
+            if (task == null) continue;
+            ans.add(task);
+        }
+        return ans;
+    }
+
+    public void setMultiTasking(boolean multiTask){
+        entityData.set(MULTITASKING, multiTask);
+    }
+
+    public void setSelectedTask(Set<IMaidTask> sel) {
+        StringBuilder sb = new StringBuilder();
+        for (var e : sel) {
+            if (!sb.isEmpty()) sb.append(',');
+            sb.append(e.getUid());
+        }
+        entityData.set(MULTITASK, sb.toString());
     }
 
     public void setTask(IMaidTask task) {
