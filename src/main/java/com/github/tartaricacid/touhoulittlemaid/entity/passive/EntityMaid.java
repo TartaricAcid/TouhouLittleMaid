@@ -12,6 +12,7 @@ import com.github.tartaricacid.touhoulittlemaid.api.entity.data.TaskDataKey;
 import com.github.tartaricacid.touhoulittlemaid.api.event.*;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IAttackTask;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
+import com.github.tartaricacid.touhoulittlemaid.api.task.IMultiSelectTask;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IRangedAttackTask;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
@@ -432,7 +433,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         builder.define(TASK_DATA_SYNC, new CompoundTag());
 
         builder.define(DATA_IS_AIMING, false);
-        builder.define(MULTITASKING, true);
+        builder.define(MULTITASKING, false);
         builder.define(MULTITASK, "");
 
         // 父类构造方法调用此类，就会出现这种初始化混乱的问题
@@ -672,8 +673,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             InteractMaidEvent event = new InteractMaidEvent(playerIn, this, stack);
             // 利用短路原理，逐个触发对应的交互事件
             if (NeoForge.EVENT_BUS.post(event).isCanceled()
-                || stack.interactLivingEntity(playerIn, this, hand).consumesAction()
-                || openMaidGui(playerIn)) {
+                    || stack.interactLivingEntity(playerIn, this, hand).consumesAction()
+                    || openMaidGui(playerIn)) {
                 return InteractionResult.SUCCESS;
             }
         } else {
@@ -851,7 +852,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         for (int i = 0; i < handler.getSlots(); i++) {
             ItemStack stackInSlot = handler.getStackInSlot(i);
             if (!stackInSlot.isEmpty() && getEnchantmentLevel(access, Enchantments.MENDING, stackInSlot) > 0
-                && stackInSlot.isDamaged() && !stackInSlot.is(TagItem.MAID_MENDING_BLOCKLIST_ITEM)) {
+                    && stackInSlot.isDamaged() && !stackInSlot.is(TagItem.MAID_MENDING_BLOCKLIST_ITEM)) {
                 stacks.add(stackInSlot);
             }
         }
@@ -1112,8 +1113,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     private void sendMaidPos() {
         if (this.dead && !this.level.isClientSide
-            && this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES)
-            && this.getOwner() instanceof ServerPlayer serverPlayer) {
+                && this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES)
+                && this.getOwner() instanceof ServerPlayer serverPlayer) {
             // 支持旅行地图格式
             // [name:"name", x:-136, y:36, z:48, dim:minecraft:the_nether]
             BlockPos blockPos = this.blockPosition();
@@ -1509,7 +1510,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             }
         }
         if (compound.contains(MULTITASKING_TAG, Tag.TAG_BYTE)) {
-             entityData.set(MULTITASKING, compound.getBoolean(MULTITASKING_TAG));
+            entityData.set(MULTITASKING, compound.getBoolean(MULTITASKING_TAG));
         }
         if (compound.contains(MULTITASKLIST_TAG, Tag.TAG_STRING)) {
             entityData.set(MULTITASK, compound.getString(MULTITASKLIST_TAG));
@@ -2359,6 +2360,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         var tasks = entityData.get(MULTITASK);
         Set<IMaidTask> ans = new LinkedHashSet<>();
         ans.add(TaskManager.getIdleTask());
+        if (getTask() instanceof IMultiSelectTask t)
+            ans.add(t);
         if (tasks == null || tasks.isEmpty()) return ans;
         var taskArr = tasks.split(",");
         for (var e : taskArr) {
@@ -2372,7 +2375,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         return ans;
     }
 
-    public void setMultiTasking(boolean multiTask){
+    public void setMultiTasking(boolean multiTask) {
         entityData.set(MULTITASKING, multiTask);
     }
 

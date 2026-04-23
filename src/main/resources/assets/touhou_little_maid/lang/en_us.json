@@ -433,6 +433,7 @@
   "gui.touhou_little_maid.button.sound": "Set Sound Pack",
   "gui.touhou_little_maid.task.next_page": "Next Page",
   "gui.touhou_little_maid.task.previous_page": "Previous Page",
+  "gui.touhou_little_maid.task.multitask": "Multi-Task Mode",
   "gui.touhou_little_maid.task.close": "Close",
   "gui.touhou_little_maid.task.switch": "Switch Task",
   "gui.touhou_little_maid.skin.text.version": "Version: %s",
