@@ -9,6 +9,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import javax.annotation.Nullable;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 
 public interface TTSClient extends Client {
     /**
@@ -42,7 +43,8 @@ public interface TTSClient extends Client {
         if (isSuccessful(response)) {
             callback.onSuccess(response.body());
         } else {
-            String message = "HTTP Error Code: %d, Response %s".formatted(response.statusCode(), response);
+            String errorMsg = new String(response.body(), StandardCharsets.UTF_8);
+            String message = "HTTP Error Code: %d, Response %s".formatted(response.statusCode(), errorMsg);
             callback.onFailure(request, new Throwable(message), ErrorCode.REQUEST_RECEIVED_ERROR);
         }
     }

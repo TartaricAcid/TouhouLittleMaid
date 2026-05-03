@@ -2,10 +2,10 @@ package com.github.tartaricacid.touhoulittlemaid.ai.service.tts.fishaudio.reques
 
 public enum OpusBitRate {
     AUTO(-1000),
-    LOWEST(24),
-    LOW(32),
-    MEDIUM(48),
-    HIGH(64);
+    LOWEST(24000),
+    LOW(32000),
+    MEDIUM(48000),
+    HIGH(64000);
 
     private final int bitRate;
 
