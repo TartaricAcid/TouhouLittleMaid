@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public final class DefaultLLMSite {
     public static LLMOpenAISite PLAYER2 = createSite("player2",
@@ -71,6 +72,28 @@ public final class DefaultLLMSite {
             ), "xiaomi/mimo-v2-flash", "google/gemini-3-flash-preview", "x-ai/grok-4.1-fast"
     );
 
+    public static Consumer<LLMSite> FIXED_DEEPSEEK = site -> {
+        if (site instanceof LLMOpenAISite openAISite) {
+            Map<String, String> models = openAISite.models();
+            // DeepSeek 将于 2026/07/24 弃用这些模型名，需要修正
+            openAISite.removeModel("deepseek-chat");
+            openAISite.removeModel("deepseek-reasoner");
+            if (!models.containsKey("deepseek-v4-flash")) {
+                openAISite.addModel("deepseek-v4-flash");
+            }
+            if (!models.containsKey("deepseek-v4-pro")) {
+                openAISite.addModel("deepseek-v4-pro");
+            }
+            openAISite.setHasThinkingField(true);
+        }
+    };
+
+    public static Consumer<LLMSite> FIXED_THINKING = site -> {
+        if (site instanceof LLMOpenAISite openAISite) {
+            openAISite.setHasThinkingField(true);
+        }
+    };
+
     public static LLMOpenAISite createSite(String name, String url, String... models) {
         return createSite(name, url, false, Map.of(), models);
     }
@@ -103,5 +126,10 @@ public final class DefaultLLMSite {
         AvailableSites.LLM_SITES.put(GEMINI.id(), GEMINI);
         AvailableSites.LLM_SITES.put(GROK.id(), GROK);
         AvailableSites.LLM_SITES.put(OPEN_ROUTER.id(), OPEN_ROUTER);
+
+        AvailableSites.FIXED_LLM_SITES.put(DEEPSEEK.id(), FIXED_DEEPSEEK);
+        AvailableSites.FIXED_LLM_SITES.put(DOUBAO.id(), FIXED_THINKING);
+        AvailableSites.FIXED_LLM_SITES.put(ZHIPU.id(), FIXED_THINKING);
+        AvailableSites.FIXED_LLM_SITES.put(KIMI.id(), FIXED_THINKING);
     }
 }

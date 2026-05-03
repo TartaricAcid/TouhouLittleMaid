@@ -88,6 +88,10 @@ public class LLMOpenAISite implements LLMSite, SupportModelSelect {
         return hasThinkingField;
     }
 
+    public void setHasThinkingField(boolean hasThinkingField) {
+        this.hasThinkingField = hasThinkingField;
+    }
+
     @Override
     public Map<String, String> headers() {
         return headers;

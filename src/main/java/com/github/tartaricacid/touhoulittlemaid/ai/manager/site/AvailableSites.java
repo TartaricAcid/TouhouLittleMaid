@@ -12,6 +12,7 @@ import net.minecraftforge.fml.loading.FMLPaths;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import static com.github.tartaricacid.touhoulittlemaid.ai.service.SerializerRegister.*;
 
@@ -23,6 +24,9 @@ public class AvailableSites {
     public static final Map<String, LLMSite> LLM_SITES = Maps.newLinkedHashMap();
     public static final Map<String, TTSSite> TTS_SITES = Maps.newLinkedHashMap();
     public static final Map<String, STTSite> STT_SITES = Maps.newLinkedHashMap();
+
+    // 部分默认站点需要进行修正，此处为修正列表
+    public static final Map<String, Consumer<LLMSite>> FIXED_LLM_SITES = Maps.newHashMap();
 
     public static void init() {
         clearSites();
@@ -54,7 +58,14 @@ public class AvailableSites {
 
         if (Files.exists(llmConfig)) {
             try {
-                LLM_SITES.putAll(LLMSite.readSites(llmConfig));
+                Map<String, LLMSite> allLLMSiteMap = LLMSite.readSites(llmConfig);
+                for (String siteId : allLLMSiteMap.keySet()) {
+                    if (FIXED_LLM_SITES.containsKey(siteId)) {
+                        LLMSite llmSite = allLLMSiteMap.get(siteId);
+                        FIXED_LLM_SITES.get(siteId).accept(llmSite);
+                    }
+                }
+                LLM_SITES.putAll(allLLMSiteMap);
             } catch (Exception e) {
                 TouhouLittleMaid.LOGGER.error("Failed to read LLM sites", e);
             }
