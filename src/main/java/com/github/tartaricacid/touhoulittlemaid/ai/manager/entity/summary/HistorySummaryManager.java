@@ -7,7 +7,6 @@ import com.github.tartaricacid.touhoulittlemaid.config.subconfig.AIConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.Lists;
 import net.minecraft.Util;
-import net.minecraft.util.Mth;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,14 +17,12 @@ import java.util.StringJoiner;
 import static com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.summary.HistorySummaryPrompts.*;
 
 public class HistorySummaryManager {
+    private static final int SUMMARY_KEEP_RECENT_COUNT = 32;
+
     private final MaidAIChatManager chatManager;
 
     public HistorySummaryManager(MaidAIChatManager chatManager) {
         this.chatManager = chatManager;
-    }
-
-    public void onHistoryUpdated() {
-        this.tryScheduleHistorySummary();
     }
 
     public void appendSummaryMessage(List<LLMMessage> chatList) {
@@ -44,15 +41,14 @@ public class HistorySummaryManager {
      *   <li>校验摘要内容是否有效（非空白）</li>
      *   <li>校验历史尾部是否仍与发起请求时的快照一致（防止异步期间历史被修改）</li>
      *   <li>存储摘要，并从历史中删除已被压缩的旧消息</li>
-     *   <li>尝试发起下一轮压缩（因为异步等待期间可能又积累了新消息）</li>
      * </ol>
      *
      * @param summary  LLM 返回的摘要文本
      * @param snapshot 发起请求时通过 {@link #snapshotOldestMessages} 取得的快照
      */
-    public void completeHistorySummary(String summary, List<LLMMessage> snapshot) {
+    public boolean completeHistorySummary(String summary, List<LLMMessage> snapshot) {
         if (!chatManager.historySummaryRunning) {
-            return;
+            return false;
         }
 
         // 清理格式：防 null、去首尾空白、将 3 个以上连续换行压缩为 2 个
@@ -62,16 +58,15 @@ public class HistorySummaryManager {
         // LLM 返回了空白内容，放弃本轮压缩
         if (StringUtils.isBlank(normalized)) {
             this.stopHistorySummary();
-            return;
+            return false;
         }
 
         // 异步期间历史可能已变化（玩家继续聊天、其他逻辑删除了消息等）
         // 如果尾部不再匹配，说明这份摘要对应的原始消息已经不在预期位置
-        // 丢弃本次结果，用当前最新的历史重新尝试压缩
+        // 丢弃本次结果，避免用过期快照删除了错误的记录
         if (!this.matchesTailSnapshot(snapshot)) {
             this.stopHistorySummary();
-            this.tryScheduleHistorySummary();
-            return;
+            return false;
         }
 
         // 截断过长的摘要，然后保存
@@ -83,9 +78,9 @@ public class HistorySummaryManager {
             chatManager.getHistory().getDeque().pollLast();
         }
 
-        // 本轮完成，检查删除后的历史是否仍然超过阈值，如果是则继续下一轮压缩
         this.stopHistorySummary();
-        this.tryScheduleHistorySummary();
+        chatManager.setLastChatTokenUsage(0);
+        return true;
     }
 
     public void stopHistorySummary() {
@@ -93,43 +88,49 @@ public class HistorySummaryManager {
     }
 
     /**
-     * 尝试发起一轮历史摘要压缩。
+     * 在玩家发起新聊天前，按上一次聊天请求返回的 token 用量判断是否需要压缩历史。
      * <p>
      * 仅在以下条件全部满足时才会实际发起请求：
      * <ul>
      *   <li>当前没有正在进行的摘要任务</li>
      *   <li>可压缩的消息数 ≥ {@link HistorySummaryPrompts#MIN_MESSAGES_TO_COMPRESS}</li>
-     *   <li>历史总量 ≥ {@link #getSummaryTriggerSize()}</li>
+     *   <li>上一次普通聊天请求返回的 token 用量达到配置上限</li>
      *   <li>LLM 站点和模型配置有效</li>
      * </ul>
-     * 该方法会在历史更新、以及每轮压缩完成后被调用，形成滚动压缩机制。
      */
-    private void tryScheduleHistorySummary() {
-        // 已有摘要任务在跑，避免重复发起
+    public boolean tryCompressBeforeChat(Runnable afterSummary) {
+        if (chatManager.getLastChatTokenUsage() < AIConfig.getMaidHistoryCompressTokenLimit()) {
+            return false;
+        }
+        return this.tryScheduleHistorySummary(afterSummary);
+    }
+
+    private boolean tryScheduleHistorySummary(Runnable afterSummary) {
+        // 已有摘要任务在跑时，不要吞掉当前玩家消息；直接按未压缩上下文继续本次聊天。
         if (chatManager.historySummaryRunning) {
-            return;
+            return false;
         }
 
-        // 可压缩消息数不够，或者总历史量还没到触发阈值，暂不压缩
+        // 可压缩消息数不够，暂不压缩
         int compressCount = this.getCompressibleMessageCount();
-        if (compressCount < MIN_MESSAGES_TO_COMPRESS || chatManager.getHistory().size() < this.getSummaryTriggerSize()) {
-            return;
+        if (compressCount < MIN_MESSAGES_TO_COMPRESS) {
+            return false;
         }
 
         // LLM 配置无效则跳过
         @Nullable LLMSite site = chatManager.getLLMSite();
         if (site == null || !site.enabled()) {
-            return;
+            return false;
         }
         String model = chatManager.getLLMModel();
         if (StringUtils.isBlank(model)) {
-            return;
+            return false;
         }
 
         // 从队列尾部（最旧端）取出需要压缩的消息快照
         List<LLMMessage> snapshot = this.snapshotOldestMessages(compressCount);
         if (snapshot.isEmpty()) {
-            return;
+            return false;
         }
 
         // 标记正在进行摘要，后续调用会被上面的守卫拦住
@@ -143,8 +144,9 @@ public class HistorySummaryManager {
         });
 
         // 进行通信压缩上下文
-        HistorySummaryCallback callback = new HistorySummaryCallback(this.chatManager, messages, snapshot);
+        HistorySummaryCallback callback = new HistorySummaryCallback(this.chatManager, messages, snapshot, afterSummary);
         site.client().chat(callback);
+        return true;
     }
 
     /**
@@ -182,30 +184,11 @@ public class HistorySummaryManager {
 
     /**
      * 摘要压缩时需要保留的最近消息数量（不会被压缩掉的部分）。
-     * <p>
-     * 取 {@code max / 2}，但限制在 {@code [6, 8]} 范围内。
-     * 例如 max=16 时返回 8，max=10 时返回 6。
      *
      * @return 保留的最近消息条数
      */
     private int getSummaryKeepRecentCount() {
-        int middleCount = AIConfig.MAID_MAX_HISTORY_LLM_SIZE.get() / 2;
-        return Mth.clamp(middleCount, 6, 8);
-    }
-
-    /**
-     * 触发摘要压缩所需的最低历史记录总数。
-     * <p>
-     * 取 {@code max - 4} 与 {@code keepRecent + 2} 的较大值，
-     * 确保历史记录接近上限时才触发压缩，同时至少需要比保留数多 2 条。
-     * 例如 max=16、keepRecent=8 时返回 12。
-     *
-     * @return 触发摘要的最低历史记录数
-     */
-    private int getSummaryTriggerSize() {
-        int max = AIConfig.MAID_MAX_HISTORY_LLM_SIZE.get();
-        int keepRecent = this.getSummaryKeepRecentCount();
-        return Math.max(keepRecent + 2, max - 4);
+        return SUMMARY_KEEP_RECENT_COUNT;
     }
 
     /**

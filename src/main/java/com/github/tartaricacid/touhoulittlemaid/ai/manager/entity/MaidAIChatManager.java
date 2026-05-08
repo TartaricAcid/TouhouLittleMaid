@@ -50,11 +50,6 @@ public final class MaidAIChatManager extends MaidAIChatData {
         this.historySummaryManager = new HistorySummaryManager(this);
     }
 
-    @Override
-    protected void onHistoryUpdated() {
-        this.historySummaryManager.onHistoryUpdated();
-    }
-
     public void chat(String message, ChatClientInfo clientInfo, ServerPlayer sender) {
         if (!AIConfig.LLM_ENABLED.get()) {
             sender.sendSystemMessage(Component.translatable("ai.touhou_little_maid.chat.disable")
@@ -80,6 +75,9 @@ public final class MaidAIChatManager extends MaidAIChatData {
                 return;
             }
 
+            if (this.historySummaryManager.tryCompressBeforeChat(() -> this.tryToChat(message, clientInfo, site))) {
+                return;
+            }
             this.tryToChat(message, clientInfo, site);
         });
     }

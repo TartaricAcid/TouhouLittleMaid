@@ -109,6 +109,13 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
     }
 
     /**
+     * 是否记录当前的 token，一般情况下只有主对话才需要记录这个，用于后续上下文压缩
+     */
+    public boolean shouldCacheTokenUsage() {
+        return true;
+    }
+
+    /**
      * 当前是否运行在服务端主线程。
      * <p>
      * 若当前上下文不在 {@link ServerLevel}，则返回 {@code false}。

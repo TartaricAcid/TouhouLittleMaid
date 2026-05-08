@@ -706,6 +706,8 @@
   "debug.touhou_little_maid.debug_stick.show_path_finder.enable": "显示当前女仆的寻路",
   "debug.touhou_little_maid.debug_stick.show_path_finder.disable": "隐藏当前女仆的寻路",
   "death.attack.touhou_little_maid.danmaku": "%1$s被%2$s的弹幕打得满身疮痍",
+  "config.touhou_little_maid.global_ai.maid_history_compress_token_limit": "女仆聊天历史压缩 token 阈值（K）",
+  "config.touhou_little_maid.global_ai.maid_history_compress_token_limit.tooltip": "当上一次女仆 AI 聊天请求返回的 token 用量达到该值时，将在下一次玩家发送聊天前先压缩上下文。单位：K token，1K = 1024 token",
   "config.touhou_little_maid.maid": "女仆",
   "config.touhou_little_maid.maid.global_maid_sound_frequency": "全局女仆声音频率",
   "config.touhou_little_maid.maid.global_maid_sound_frequency.tooltip": "这是一个全局配置，作用于所有的女仆：女仆讲话的频率",
