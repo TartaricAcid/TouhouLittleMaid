@@ -84,11 +84,11 @@ public abstract class MaidAIChatData extends MaidAIChatSerializable {
     public LLMSite getLLMSite() {
         LLMSite site;
         if (StringUtils.isBlank(llmSite)) {
-            site = DefaultLLMSite.PLAYER2;
+            site = DefaultLLMSite.DEEPSEEK;
         } else {
             site = AvailableSites.getLLMSite(llmSite);
             if (site == null || !site.enabled()) {
-                site = DefaultLLMSite.PLAYER2;
+                site = DefaultLLMSite.DEEPSEEK;
             }
         }
         return site;

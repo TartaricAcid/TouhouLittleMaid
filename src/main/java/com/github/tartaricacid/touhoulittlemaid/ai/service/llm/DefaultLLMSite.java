@@ -11,18 +11,19 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public final class DefaultLLMSite {
+    public static LLMOpenAISite DEEPSEEK = createSite("deepseek",
+            "https://api.deepseek.com/chat/completions",
+            true, true, Map.of(),
+            "deepseek-v4-flash", "deepseek-v4-pro");
+
     public static LLMOpenAISite PLAYER2 = createSite("player2",
-            "http://127.0.0.1:4315/v1/chat/completions", true,
+            "http://127.0.0.1:4315/v1/chat/completions", false,
             Map.of("player2-game-key", "TouhouLittleMaid"),
             "default");
 
     public static LLMOpenAISite ALIYUN = createSite("aliyun",
             "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
             "qwen3-max", "qwen3.5-plus", "qwen3.5-flash");
-
-    public static LLMOpenAISite DEEPSEEK = createSite("deepseek",
-            "https://api.deepseek.com/chat/completions",
-            "deepseek-chat");
 
     public static LLMOpenAISite SILICONFLOW = createSite("siliconflow",
             "https://api.siliconflow.cn/v1/chat/completions",
@@ -115,9 +116,9 @@ public final class DefaultLLMSite {
     }
 
     public static void addDefaultSites() {
+        AvailableSites.LLM_SITES.put(DEEPSEEK.id(), DEEPSEEK);
         AvailableSites.LLM_SITES.put(PLAYER2.id(), PLAYER2);
         AvailableSites.LLM_SITES.put(ALIYUN.id(), ALIYUN);
-        AvailableSites.LLM_SITES.put(DEEPSEEK.id(), DEEPSEEK);
         AvailableSites.LLM_SITES.put(SILICONFLOW.id(), SILICONFLOW);
         AvailableSites.LLM_SITES.put(DOUBAO.id(), DOUBAO);
         AvailableSites.LLM_SITES.put(ZHIPU.id(), ZHIPU);
