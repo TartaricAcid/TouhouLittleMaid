@@ -1,9 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.client.input;
 
-import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.Player2AppCheck;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.STTCallback;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.site.AvailableSites;
-import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.DefaultLLMSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.STTConfig;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.STTSite;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.AIConfig;
@@ -117,11 +115,7 @@ public class STTChatKey {
             player.sendSystemMessage(Component.translatable("ai.touhou_little_maid.chat.stt.empty"));
             return;
         }
-        if (sttSite.id().equals(DefaultLLMSite.PLAYER2.id())) {
-            Player2AppCheck.checkPlayer2AppInStt(player, () -> tryToStart(maid, player, sttSite));
-        } else {
-            tryToStart(maid, player, sttSite);
-        }
+        tryToStart(maid, player, sttSite);
     }
 
     private static void tryToStart(EntityMaid maid, LocalPlayer player, STTSite sttSite) {

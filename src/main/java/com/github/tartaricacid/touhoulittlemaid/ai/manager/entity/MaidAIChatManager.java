@@ -7,6 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.DefaultLLMSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMClient;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMMessage;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMSite;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai.LLMOpenAISite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSClient;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSConfig;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSSite;
@@ -22,10 +23,14 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
+import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.core.lookup.StrSubstitutor;
 import org.jetbrains.annotations.NotNull;
@@ -37,16 +42,12 @@ import java.util.Map;
 import static com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.papi.StringConstant.AUTO_GEN_SETTING;
 
 public final class MaidAIChatManager extends MaidAIChatData {
+    private static final String DEEPSEEK_PLATFORM_URL = "https://platform.deepseek.com/";
     private final HistorySummaryManager historySummaryManager;
 
     public MaidAIChatManager(EntityMaid maid) {
         super(maid);
         this.historySummaryManager = new HistorySummaryManager(this);
-    }
-
-    @Override
-    protected void onHistoryUpdated() {
-        this.historySummaryManager.onHistoryUpdated();
     }
 
     public void chat(String message, ChatClientInfo clientInfo, ServerPlayer sender) {
@@ -67,13 +68,36 @@ public final class MaidAIChatManager extends MaidAIChatData {
                         .withStyle(ChatFormatting.RED));
                 return;
             }
-            // 如果检测到是 player2，那么大概率是新手玩家，给他提示下载 player2
-            if (site.id().equals(DefaultLLMSite.PLAYER2.id())) {
-                Player2AppCheck.checkPlayer2App(sender, () -> this.tryToChat(message, clientInfo, site));
-            } else {
-                this.tryToChat(message, clientInfo, site);
+
+            // 如果检测到是默认站点，那么大概率是新手玩家，给他提示去 DeepSeek 平台
+            if (this.isDeepSeekSecretKeyMissing(site)) {
+                this.sendDeepSeekTip(sender);
+                return;
             }
+
+            if (this.historySummaryManager.tryCompressBeforeChat(() -> this.tryToChat(message, clientInfo, site))) {
+                return;
+            }
+            this.tryToChat(message, clientInfo, site);
         });
+    }
+
+    private void sendDeepSeekTip(Player player) {
+        MutableComponent tip = Component.translatable("ai.touhou_little_maid.chat.llm.deepseek_secret_key_missing")
+                .withStyle(ChatFormatting.RED);
+        MutableComponent url = Component.literal(DEEPSEEK_PLATFORM_URL);
+        ClickEvent clickEvent = new ClickEvent(ClickEvent.Action.OPEN_URL, DEEPSEEK_PLATFORM_URL);
+        HoverEvent hoverEvent = new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("chat.link.open"));
+        url.withStyle(style -> style.withHoverEvent(hoverEvent).withClickEvent(clickEvent)
+                .withUnderlined(true).withColor(ChatFormatting.BLUE));
+        player.sendSystemMessage(tip);
+        player.sendSystemMessage(Component.translatable("ai.touhou_little_maid.chat.download_url").append(url));
+    }
+
+    private boolean isDeepSeekSecretKeyMissing(LLMSite site) {
+        return site.id().equals(DefaultLLMSite.DEEPSEEK.id())
+               && site instanceof LLMOpenAISite openAISite
+               && StringUtils.isBlank(openAISite.secretKey());
     }
 
     private void tryToChat(String message, ChatClientInfo clientInfo, @NotNull LLMSite site) {

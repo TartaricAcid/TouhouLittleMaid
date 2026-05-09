@@ -52,8 +52,10 @@ public class QueryMinecraftWikiTool implements ITool<String> {
     @Override
     public String summary(EntityMaid maid) {
         return """
-                Use this when need authoritative vanilla Minecraft information from Minecraft Wiki."
-                MAX 2 attempts, stop immediately if no results found.
+                LOW PRIORITY knowledge lookup for authoritative vanilla Minecraft Wiki information.
+                Use only when the user explicitly asks to look up/wiki/search Minecraft knowledge, or when no more specific game, crafting, item, action, or mod-provided tool can answer or execute the request.
+                Do NOT use this for crafting/recipe/item operations when a dedicated crafting or item tool is available.
+                MAX 2 attempts; stop immediately if no results found.
                 """.trim();
     }
 

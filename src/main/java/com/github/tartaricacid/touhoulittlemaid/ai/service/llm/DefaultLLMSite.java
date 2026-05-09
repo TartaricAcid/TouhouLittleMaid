@@ -8,20 +8,22 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public final class DefaultLLMSite {
+    public static LLMOpenAISite DEEPSEEK = createSite("deepseek",
+            "https://api.deepseek.com/chat/completions",
+            true, true, Map.of(),
+            "deepseek-v4-flash", "deepseek-v4-pro");
+
     public static LLMOpenAISite PLAYER2 = createSite("player2",
-            "http://127.0.0.1:4315/v1/chat/completions", true,
+            "http://127.0.0.1:4315/v1/chat/completions", false,
             Map.of("player2-game-key", "TouhouLittleMaid"),
             "default");
 
     public static LLMOpenAISite ALIYUN = createSite("aliyun",
             "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
             "qwen3-max", "qwen3.5-plus", "qwen3.5-flash");
-
-    public static LLMOpenAISite DEEPSEEK = createSite("deepseek",
-            "https://api.deepseek.com/chat/completions",
-            "deepseek-chat");
 
     public static LLMOpenAISite SILICONFLOW = createSite("siliconflow",
             "https://api.siliconflow.cn/v1/chat/completions",
@@ -71,6 +73,28 @@ public final class DefaultLLMSite {
             ), "xiaomi/mimo-v2-flash", "google/gemini-3-flash-preview", "x-ai/grok-4.1-fast"
     );
 
+    public static Consumer<LLMSite> FIXED_DEEPSEEK = site -> {
+        if (site instanceof LLMOpenAISite openAISite) {
+            Map<String, String> models = openAISite.models();
+            // DeepSeek 将于 2026/07/24 弃用这些模型名，需要修正
+            openAISite.removeModel("deepseek-chat");
+            openAISite.removeModel("deepseek-reasoner");
+            if (!models.containsKey("deepseek-v4-flash")) {
+                openAISite.addModel("deepseek-v4-flash");
+            }
+            if (!models.containsKey("deepseek-v4-pro")) {
+                openAISite.addModel("deepseek-v4-pro");
+            }
+            openAISite.setHasThinkingField(true);
+        }
+    };
+
+    public static Consumer<LLMSite> FIXED_THINKING = site -> {
+        if (site instanceof LLMOpenAISite openAISite) {
+            openAISite.setHasThinkingField(true);
+        }
+    };
+
     public static LLMOpenAISite createSite(String name, String url, String... models) {
         return createSite(name, url, false, Map.of(), models);
     }
@@ -92,9 +116,9 @@ public final class DefaultLLMSite {
     }
 
     public static void addDefaultSites() {
+        AvailableSites.LLM_SITES.put(DEEPSEEK.id(), DEEPSEEK);
         AvailableSites.LLM_SITES.put(PLAYER2.id(), PLAYER2);
         AvailableSites.LLM_SITES.put(ALIYUN.id(), ALIYUN);
-        AvailableSites.LLM_SITES.put(DEEPSEEK.id(), DEEPSEEK);
         AvailableSites.LLM_SITES.put(SILICONFLOW.id(), SILICONFLOW);
         AvailableSites.LLM_SITES.put(DOUBAO.id(), DOUBAO);
         AvailableSites.LLM_SITES.put(ZHIPU.id(), ZHIPU);
@@ -103,5 +127,10 @@ public final class DefaultLLMSite {
         AvailableSites.LLM_SITES.put(GEMINI.id(), GEMINI);
         AvailableSites.LLM_SITES.put(GROK.id(), GROK);
         AvailableSites.LLM_SITES.put(OPEN_ROUTER.id(), OPEN_ROUTER);
+
+        AvailableSites.FIXED_LLM_SITES.put(DEEPSEEK.id(), FIXED_DEEPSEEK);
+        AvailableSites.FIXED_LLM_SITES.put(DOUBAO.id(), FIXED_THINKING);
+        AvailableSites.FIXED_LLM_SITES.put(ZHIPU.id(), FIXED_THINKING);
+        AvailableSites.FIXED_LLM_SITES.put(KIMI.id(), FIXED_THINKING);
     }
 }

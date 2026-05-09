@@ -29,16 +29,18 @@ import java.util.Optional;
 public abstract class MaidAIChatData extends MaidAIChatSerializable {
     protected static final String MAID_HISTORY_CHAT_TAG = "MaidHistoryChat";
     protected static final String MAID_HISTORY_SUMMARY_TAG = "MaidHistorySummary";
+    protected static final String MAID_LAST_CHAT_TOKEN_USAGE_TAG = "MaidLastChatTokenUsage";
 
     protected final EntityMaid maid;
     protected final CappedQueue<LLMMessage> history;
 
     protected String compressedSummary = StringUtils.EMPTY;
+    protected volatile int lastChatTokenUsage = 0;
     public volatile boolean historySummaryRunning = false;
 
     public MaidAIChatData(EntityMaid maid) {
         this.maid = maid;
-        this.history = new CappedQueue<>(AIConfig.MAID_MAX_HISTORY_LLM_SIZE.get());
+        this.history = new CappedQueue<>(512);
     }
 
     @Override
@@ -59,6 +61,7 @@ public abstract class MaidAIChatData extends MaidAIChatSerializable {
             }
         }
         this.compressedSummary = tag.getString(MAID_HISTORY_SUMMARY_TAG);
+        this.lastChatTokenUsage = tag.getInt(MAID_LAST_CHAT_TOKEN_USAGE_TAG);
         return super.readFromTag(tag);
     }
 
@@ -77,6 +80,9 @@ public abstract class MaidAIChatData extends MaidAIChatSerializable {
         if (StringUtils.isNotBlank(this.compressedSummary)) {
             tag.putString(MAID_HISTORY_SUMMARY_TAG, this.compressedSummary);
         }
+        if (this.lastChatTokenUsage > 0) {
+            tag.putInt(MAID_LAST_CHAT_TOKEN_USAGE_TAG, this.lastChatTokenUsage);
+        }
         return super.writeToTag(tag);
     }
 
@@ -84,14 +90,19 @@ public abstract class MaidAIChatData extends MaidAIChatSerializable {
     public LLMSite getLLMSite() {
         LLMSite site;
         if (StringUtils.isBlank(llmSite)) {
-            site = DefaultLLMSite.PLAYER2;
+            site = getDefaultLLMSite();
         } else {
             site = AvailableSites.getLLMSite(llmSite);
             if (site == null || !site.enabled()) {
-                site = DefaultLLMSite.PLAYER2;
+                site = getDefaultLLMSite();
             }
         }
         return site;
+    }
+
+    private LLMSite getDefaultLLMSite() {
+        LLMSite site = AvailableSites.getLLMSite(DefaultLLMSite.DEEPSEEK.id());
+        return site == null ? DefaultLLMSite.DEEPSEEK : site;
     }
 
     @Nullable
@@ -168,9 +179,18 @@ public abstract class MaidAIChatData extends MaidAIChatSerializable {
         return StringUtils.isNotBlank(compressedSummary);
     }
 
+    public int getLastChatTokenUsage() {
+        return lastChatTokenUsage;
+    }
+
+    public void setLastChatTokenUsage(int lastChatTokenUsage) {
+        this.lastChatTokenUsage = Math.max(0, lastChatTokenUsage);
+    }
+
     public void clearAllChatMemory() {
         this.history.getDeque().clear();
         this.compressedSummary = StringUtils.EMPTY;
+        this.lastChatTokenUsage = 0;
         this.historySummaryRunning = false;
     }
 

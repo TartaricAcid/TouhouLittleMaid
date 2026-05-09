@@ -36,6 +36,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 public class LLMCallback implements ResponseCallback<ResponseChat> {
     /**
@@ -105,6 +106,13 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
         // 工具调用结果也如实记录进历史里，优化后续缓存命中
         this.chatManager.addToolHistory(result, toolId);
         return this;
+    }
+
+    /**
+     * 是否记录当前的 token，一般情况下只有主对话才需要记录这个，用于后续上下文压缩
+     */
+    public boolean shouldCacheTokenUsage() {
+        return true;
     }
 
     /**
@@ -418,7 +426,10 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
     ) {
         LLMCallback nextCallback = batchResult.nextCallback();
         try {
-            return this.onSingleCall(toolCall, nextCallback, client).handle((returned, throwable) -> {
+            // 使用 handleAsync 保证回调一定在服务端主线程上执行，
+            // 避免第三方工具的 onCallAsync 在非主线程上完成 future 时，
+            // 导致 addToolResult / onToolErrorCall 在错误线程上被调用。
+            return this.onSingleCall(toolCall, nextCallback, client).handleAsync((returned, throwable) -> {
                 if (throwable != null) {
                     String message = "Exception %s, JSON is: %s"
                             .formatted(throwable.getLocalizedMessage(), toolCall.getFunction().getArguments());
@@ -438,7 +449,7 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
                     }
                 }
                 return batchResult;
-            });
+            }, this.serverExecutor());
         } catch (JsonSyntaxException exception) {
             String message = "Exception %s, JSON is: %s".formatted(exception.getLocalizedMessage(), toolCall.getFunction().getArguments());
             this.onToolErrorCall(toolCall, message, nextCallback);
@@ -492,5 +503,21 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
 
     public long getWaitingChatBubbleId() {
         return waitingChatBubbleId;
+    }
+
+    /**
+     * 返回一个保证在服务端主线程上执行任务的 {@link Executor}。
+     * <p>
+     * {@link net.minecraft.util.thread.BlockableEventLoop#execute} 内部已实现
+     * "若当前在主线程则 inline 执行，否则调度到主线程"的逻辑，
+     * 因此同步工具不会引入额外的 tick 延迟，而异步工具能正确切回主线程。
+     * <p>
+     * 若当前不在 {@link ServerLevel}，则退化为 inline 执行。
+     */
+    private Executor serverExecutor() {
+        if (maid.level instanceof ServerLevel serverLevel) {
+            return serverLevel.getServer();
+        }
+        return Runnable::run;
     }
 }

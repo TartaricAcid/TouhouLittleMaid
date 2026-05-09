@@ -42,6 +42,11 @@ public class GroundedAnswerCallback extends LLMCallback {
     }
 
     @Override
+    public boolean shouldCacheTokenUsage() {
+        return false;
+    }
+
+    @Override
     public void onFunctionCall(Message choice, LLMClient client) {
         // 知识库回答时不处理函数调用，直接忽略（理论上也不会触发此回调）
     }

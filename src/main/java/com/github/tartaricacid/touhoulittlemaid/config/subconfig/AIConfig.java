@@ -6,10 +6,12 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import org.apache.commons.lang3.StringUtils;
 
 public class AIConfig {
+    private static final int TOKEN_LIMIT_K_UNIT = 1024;
+
     public static ForgeConfigSpec.BooleanValue LLM_ENABLED;
     public static ForgeConfigSpec.BooleanValue AUTO_GEN_SETTING_ENABLED;
     public static ForgeConfigSpec.ConfigValue<String> LLM_PROXY_ADDRESS;
-    public static ForgeConfigSpec.IntValue MAID_MAX_HISTORY_LLM_SIZE;
+    public static ForgeConfigSpec.IntValue MAID_HISTORY_COMPRESS_TOKEN_LIMIT;
     public static ForgeConfigSpec.IntValue MAX_TOKENS_PER_PLAYER;
 
     public static ForgeConfigSpec.BooleanValue TTS_ENABLED;
@@ -34,8 +36,8 @@ public class AIConfig {
         builder.comment("LLM AI Proxy Address, such as 127.0.0.1:1080, empty is no proxy, SOCKS proxies are not supported");
         LLM_PROXY_ADDRESS = builder.define("LLMProxyAddress", "");
 
-        builder.comment("The maximum historical conversation length cached by the maid");
-        MAID_MAX_HISTORY_LLM_SIZE = builder.defineInRange("MaidMaxHistoryLLMSize", 24, 1, 128);
+        builder.comment("Compress the maid's LLM chat history before the next player message when the previous chat request reaches this token count, in K tokens (1K = 1024 tokens)");
+        MAID_HISTORY_COMPRESS_TOKEN_LIMIT = builder.defineInRange("MaidHistoryCompressTokenLimit", 48, 8, 1024);
 
         builder.comment("The maximum tokens that a player can use");
         MAX_TOKENS_PER_PLAYER = builder.defineInRange("MaxTokensPerPlayer", Integer.MAX_VALUE, 1, Integer.MAX_VALUE);
@@ -65,5 +67,9 @@ public class AIConfig {
         STT_PROXY_ADDRESS = builder.define("STTProxyAddress", "");
 
         builder.pop();
+    }
+
+    public static int getMaidHistoryCompressTokenLimit() {
+        return MAID_HISTORY_COMPRESS_TOKEN_LIMIT.get() * TOKEN_LIMIT_K_UNIT;
     }
 }

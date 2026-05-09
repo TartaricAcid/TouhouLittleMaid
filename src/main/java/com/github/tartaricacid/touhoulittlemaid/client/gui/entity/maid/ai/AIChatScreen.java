@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.ChatClientInfo
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.MaidAIChatManager;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.MaidAIChatSerializable;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.site.ClientAvailableSitesSync;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.DefaultLLMSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMMessage;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.Role;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.SupportLanguage;
@@ -307,7 +308,7 @@ public class AIChatScreen extends Screen {
 
         // 站点存在判定
         if (StringUtils.isBlank(this.manager.llmSite) || !llmSites.containsKey(this.manager.llmSite)) {
-            this.manager.llmSite = llmSites.keySet().stream().findFirst().orElse(StringUtils.EMPTY);
+            this.manager.llmSite = this.getDefaultLLMSite(llmSites);
         }
         if (MaidAIChatSerializable.isNoTTSSite(this.manager.ttsSite)) {
             this.manager.ttsModel = StringUtils.EMPTY;
@@ -344,6 +345,13 @@ public class AIChatScreen extends Screen {
             return models.keySet().iterator().next();
         }
         return current;
+    }
+
+    private String getDefaultLLMSite(Map<String, Map<String, String>> llmSites) {
+        if (llmSites.containsKey(DefaultLLMSite.DEEPSEEK.id())) {
+            return DefaultLLMSite.DEEPSEEK.id();
+        }
+        return llmSites.keySet().stream().findFirst().orElse(StringUtils.EMPTY);
     }
 
     @Override
