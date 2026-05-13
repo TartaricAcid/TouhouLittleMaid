@@ -1,6 +1,8 @@
 package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.geckolayer;
 
 import com.github.tartaricacid.touhoulittlemaid.compat.carryon.RenderFixer;
+import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeCompat;
+import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeRender;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.core.processor.ILocationBone;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.GeoLayerRenderer;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.IGeoEntityRenderer;
@@ -41,10 +43,18 @@ public class GeckoLayerMaidHeld<T extends Mob, R extends IGeoEntityRenderer<T>> 
         if (!offhandItem.isEmpty() || !mainHandItem.isEmpty()) {
             poseStack.pushPose();
             if (!geoModel.rightHandBones().isEmpty() && !RenderFixer.isCarryOnRender(mainHandItem, buffer)) {
-                this.renderArmWithItem(entity, mainHandItem, geoModel, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, HumanoidArm.RIGHT, poseStack, buffer, packedLight);
+                if (SlashBladeCompat.isSlashBladeItem(mainHandItem)) {
+                    SlashBladeRender.renderMaidMainhandSlashBlade(entity, geoModel, poseStack, buffer, packedLight, mainHandItem, partialTicks);
+                } else {
+                    this.renderArmWithItem(entity, mainHandItem, geoModel, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, HumanoidArm.RIGHT, poseStack, buffer, packedLight);
+                }
             }
             if (!geoModel.leftHandBones().isEmpty() && !RenderFixer.isCarryOnRender(offhandItem, buffer)) {
-                this.renderArmWithItem(entity, offhandItem, geoModel, ItemDisplayContext.THIRD_PERSON_LEFT_HAND, HumanoidArm.LEFT, poseStack, buffer, packedLight);
+                if (SlashBladeCompat.isSlashBladeItem(offhandItem)) {
+                    SlashBladeRender.renderMaidOffhandSlashBlade(geoModel, poseStack, buffer, packedLight, offhandItem);
+                } else {
+                    this.renderArmWithItem(entity, offhandItem, geoModel, ItemDisplayContext.THIRD_PERSON_LEFT_HAND, HumanoidArm.LEFT, poseStack, buffer, packedLight);
+                }
             }
             poseStack.popPose();
         }

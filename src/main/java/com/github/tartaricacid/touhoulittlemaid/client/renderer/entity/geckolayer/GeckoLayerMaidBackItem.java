@@ -3,6 +3,8 @@ package com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.geckolay
 import com.github.tartaricacid.touhoulittlemaid.api.entity.IMaid;
 import com.github.tartaricacid.touhoulittlemaid.compat.carryon.RenderFixer;
 import com.github.tartaricacid.touhoulittlemaid.compat.gun.common.GunClientUtil;
+import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeCompat;
+import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeRender;
 import com.github.tartaricacid.touhoulittlemaid.entity.backpack.BackpackManager;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.geckolib3.geo.GeoLayerRenderer;
@@ -60,7 +62,11 @@ public class GeckoLayerMaidBackItem<T extends Mob, R extends IGeoEntityRenderer<
             } else {
                 BackpackManager.getEmptyBackpack().offsetBackpackItem(matrixStack);
             }
-            Minecraft.getInstance().getItemRenderer().renderStatic(entity, stack, ItemDisplayContext.FIXED, false, matrixStack, buffer, entity.level(), packedLight, OverlayTexture.NO_OVERLAY, entity.getId());
+            if (SlashBladeCompat.isSlashBladeItem(stack)) {
+                SlashBladeRender.renderGeckoMaidBackSlashBlade(matrixStack, buffer, packedLight, stack);
+            } else {
+                Minecraft.getInstance().getItemRenderer().renderStatic(entity, stack, ItemDisplayContext.FIXED, false, matrixStack, buffer, entity.level(), packedLight, OverlayTexture.NO_OVERLAY, entity.getId());
+            }
             matrixStack.popPose();
             return;
         }

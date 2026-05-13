@@ -289,6 +289,9 @@ dependencies {
     runtimeOnly "software.bernie.geckolib:geckolib-neoforge-1.21.1:4.7.5"
     implementation "libs:superbwarfare-1.21.1:0.8.7.1"
 
+    // 拔刀剑 Resharped
+    implementation "maven.modrinth:slashblade-resharped:2.0.2-1.21.1"
+
     // 地图相关模组兼容
     // runtimeOnly "maven.modrinth:xaeros-minimap:25.2.10_NeoForge_1.21"
     // runtimeOnly "maven.modrinth:xaeros-world-map:1.40.2_NeoForge_1.21"
