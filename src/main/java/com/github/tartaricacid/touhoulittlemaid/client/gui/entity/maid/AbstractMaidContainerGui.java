@@ -20,7 +20,6 @@ import com.github.tartaricacid.touhoulittlemaid.inventory.container.AbstractMaid
 import com.github.tartaricacid.touhoulittlemaid.network.message.MaidConfigPackage;
 import com.github.tartaricacid.touhoulittlemaid.network.message.MaidTaskPackage;
 import com.github.tartaricacid.touhoulittlemaid.network.message.RequestEffectPackage;
-import com.github.tartaricacid.touhoulittlemaid.network.message.SendEffectPackage;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -32,27 +31,32 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.Rect2i;
-import net.minecraft.client.resources.language.I18n;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.MobEffectTextureManager;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
-import net.minecraft.util.StringUtil;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.fml.ModList;
+import net.neoforged.neoforge.client.ClientHooks;
+import net.neoforged.neoforge.client.event.ScreenEvent;
+import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static com.github.tartaricacid.touhoulittlemaid.util.GuiTools.NO_ACTION;
 
@@ -61,6 +65,8 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     private static final ResourceLocation SIDE = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_side.png");
     private static final ResourceLocation BUTTON = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_button.png");
     private static final ResourceLocation TASK = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "textures/gui/maid_gui_task.png");
+    private static final ResourceLocation EFFECT_BACKGROUND_LARGE_SPRITE = ResourceLocation.withDefaultNamespace("container/inventory/effect_background_large");
+    private static final ResourceLocation EFFECT_BACKGROUND_SMALL_SPRITE = ResourceLocation.withDefaultNamespace("container/inventory/effect_background_small");
 
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("00");
 
@@ -168,7 +174,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         this.drawModInfo(graphics);
         super.render(graphics, mouseX, mouseY, partialTicks);
         drawModInfo(graphics);
-        this.drawEffectInfo(graphics);
+        this.drawEffectInfo(graphics, mouseX, mouseY);
         this.drawCurrentTaskText(graphics);
         this.renderAddition(graphics, mouseX, mouseY, partialTicks);
         NeoForge.EVENT_BUS.post(new MaidContainerGuiEvent.Render(this, leftPos, topPos,
@@ -192,31 +198,102 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         graphics.drawCenteredString(font, debugInfo, leftPos + 80 / 2, topPos - 4, ChatFormatting.GRAY.getColor());
     }
 
-    @SuppressWarnings("all")
-    private void drawEffectInfo(GuiGraphics graphics) {
-        if (TASK_LIST_OPEN) {
-            return;
-        }
-        List<SendEffectPackage.EffectData> effects = maid.getEffects();
-        if (!effects.isEmpty()) {
-            int yOffset = 5;
-            for (SendEffectPackage.EffectData effect : effects) {
-                MutableComponent text = Component.translatable(effect.descriptionId());
-                if (effect.amplifier() >= 1 && effect.amplifier() <= 9) {
-                    MutableComponent levelText = Component.translatable("enchantment.level." + (effect.amplifier() + 1));
-                    text = text.append(CommonComponents.SPACE).append(levelText);
+    private void drawEffectInfo(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+        int i = this.leftPos - 32;
+        int j = this.width - i;
+        List<MobEffectInstance> collection = this.maid.getEffects();
+        if (!collection.isEmpty() && j >= 32) {
+            boolean flag = j >= 120;
+            ScreenEvent.RenderInventoryMobEffects event = ClientHooks.onScreenPotionSize(this, j, !flag, i);
+            if (event.isCanceled()) {
+                return;
+            }
+
+            flag = !event.isCompact();
+            i = event.getHorizontalOffset();
+            int k = 33;
+            if (collection.size() > 5) {
+                k = 132 / (collection.size() - 1);
+            }
+
+            Iterable<MobEffectInstance> iterable = collection.stream().filter(ClientHooks::shouldRenderEffect).sorted().collect(Collectors.toList());
+            this.renderBackgrounds(guiGraphics, i, k, iterable, flag);
+            this.renderIcons(guiGraphics, i, k, iterable, flag);
+            if (flag) {
+                this.renderLabels(guiGraphics, i, k, iterable);
+            } else if (mouseX >= i && mouseX <= i + 33) {
+                int l = this.topPos;
+                MobEffectInstance mobeffectinstance = null;
+
+                for (MobEffectInstance mobeffectinstance1 : iterable) {
+                    if (mouseY >= l && mouseY <= l + k) {
+                        mobeffectinstance = mobeffectinstance1;
+                    }
+
+                    l += k;
                 }
-                String duration;
-                if (effect.duration() == -1) {
-                    duration = I18n.get("effect.duration.infinite");
-                } else {
-                    duration = StringUtil.formatTickDuration(effect.duration(), 20);
+
+                if (mobeffectinstance != null) {
+                    List<Component> list = List.of(this.getEffectName(mobeffectinstance), MobEffectUtil.formatDuration(mobeffectinstance, 1.0F, this.minecraft.level.tickRateManager().tickrate()));
+                    guiGraphics.renderTooltip(this.font, list, Optional.empty(), mouseX, mouseY);
                 }
-                text = text.append(CommonComponents.SPACE).append(duration);
-                graphics.drawString(font, text, leftPos - font.width(text) - 3, topPos + yOffset + 5, getPotionColor(effect.category()));
-                yOffset += 10;
             }
         }
+
+    }
+
+    private void renderLabels(GuiGraphics guiGraphics, int renderX, int yOffset, Iterable<MobEffectInstance> effects) {
+        int i = this.topPos;
+
+        for (MobEffectInstance mobeffectinstance : effects) {
+            IClientMobEffectExtensions renderer = IClientMobEffectExtensions.of(mobeffectinstance);
+            Component component = this.getEffectName(mobeffectinstance);
+            guiGraphics.drawString(this.font, component, renderX + 10 + 18, i + 6, 16777215);
+            Component component1 = MobEffectUtil.formatDuration(mobeffectinstance, 1.0F, this.minecraft.level.tickRateManager().tickrate());
+            guiGraphics.drawString(this.font, component1, renderX + 10 + 18, i + 6 + 10, 8355711);
+            i += yOffset;
+        }
+
+    }
+
+    private Component getEffectName(MobEffectInstance effect) {
+        MutableComponent mutablecomponent = ((MobEffect) effect.getEffect().value()).getDisplayName().copy();
+        if (effect.getAmplifier() >= 1 && effect.getAmplifier() <= 9) {
+            MutableComponent var10000 = mutablecomponent.append(CommonComponents.SPACE);
+            int var10001 = effect.getAmplifier();
+            var10000.append(Component.translatable("enchantment.level." + (var10001 + 1)));
+        }
+
+        return mutablecomponent;
+    }
+
+    private void renderBackgrounds(GuiGraphics guiGraphics, int renderX, int yOffset, Iterable<MobEffectInstance> effects, boolean isSmall) {
+        int i = this.topPos;
+
+        for (MobEffectInstance mobeffectinstance : effects) {
+            if (isSmall) {
+                guiGraphics.blitSprite(EFFECT_BACKGROUND_LARGE_SPRITE, renderX, i, 120, 32);
+            } else {
+                guiGraphics.blitSprite(EFFECT_BACKGROUND_SMALL_SPRITE, renderX, i, 32, 32);
+            }
+
+            i += yOffset;
+        }
+
+    }
+
+    private void renderIcons(GuiGraphics guiGraphics, int renderX, int yOffset, Iterable<MobEffectInstance> effects, boolean isSmall) {
+        MobEffectTextureManager mobeffecttexturemanager = this.minecraft.getMobEffectTextures();
+        int i = this.topPos;
+
+        for (MobEffectInstance mobeffectinstance : effects) {
+            IClientMobEffectExtensions renderer = IClientMobEffectExtensions.of(mobeffectinstance);
+            Holder<MobEffect> holder = mobeffectinstance.getEffect();
+            TextureAtlasSprite textureatlassprite = mobeffecttexturemanager.get(holder);
+            guiGraphics.blit(renderX + (isSmall ? 6 : 7), i + 7, 0, 18, 18, textureatlassprite);
+            i += yOffset;
+        }
+
     }
 
     @SuppressWarnings("all")

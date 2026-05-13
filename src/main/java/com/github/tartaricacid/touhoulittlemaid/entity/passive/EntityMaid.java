@@ -56,7 +56,6 @@ import com.github.tartaricacid.touhoulittlemaid.mixin.accessor.ArrowAccessor;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.ItemBreakPackage;
 import com.github.tartaricacid.touhoulittlemaid.network.message.PlayMaidSoundPackage;
-import com.github.tartaricacid.touhoulittlemaid.network.message.SendEffectPackage;
 import com.github.tartaricacid.touhoulittlemaid.network.message.SyncYsmMaidDataPackage;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
 import com.github.tartaricacid.touhoulittlemaid.util.ParseI18n;
@@ -303,7 +302,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     public long animationRecordTime = -1L;
     public boolean shouldReset = false;
 
-    private List<SendEffectPackage.EffectData> effects = Lists.newArrayList();
+    private List<MobEffectInstance> effects = Lists.newArrayList();
     private IMaidTask task = TaskManager.getIdleTask();
     private IMaidBackpack backpack = BackpackManager.getEmptyBackpack();
     private int playerHurtSoundCount = 120;
@@ -2387,11 +2386,11 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         return structureSpawn;
     }
 
-    public List<SendEffectPackage.EffectData> getEffects() {
+    public List<MobEffectInstance> getEffects() {
         return effects;
     }
 
-    public void setEffects(List<SendEffectPackage.EffectData> effects) {
+    public void setEffects(List<MobEffectInstance> effects) {
         this.effects = effects;
     }
 

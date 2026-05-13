@@ -267,7 +267,7 @@ dependencies {
     implementation "maven.modrinth:jade:15.10.2+neoforge"
     compileOnly "maven.modrinth:the-one-probe:1.21_neo-12.0.6"
     implementation "maven.modrinth:cloth-config:15.0.140+neoforge"
-    implementation "maven.modrinth:patchouli:1.21-88-neoforge"
+    implementation "maven.modrinth:patchouli:1.21.1-92-neoforge"
 
     implementation "maven.modrinth:iron-chests:1.21-neoforge-16.0.7"
     implementation "maven.modrinth:carry-on:2.2.2-neoforge"

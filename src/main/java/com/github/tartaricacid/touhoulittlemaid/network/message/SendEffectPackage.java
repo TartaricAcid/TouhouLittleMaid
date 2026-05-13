@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.network.message;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -49,19 +50,12 @@ public record SendEffectPackage(int id, Collection<MobEffectInstance> effects) i
         }
         Entity entity = mc.level.getEntity(message.id);
         if (entity instanceof EntityMaid maid && maid.isAlive()) {
-            maid.setEffects(message.effects.stream().map(EffectData::new).toList());
+            maid.setEffects(Lists.newArrayList(message.effects));
         }
     }
 
     @Override
     public @NotNull Type<? extends CustomPacketPayload> type() {
         return TYPE;
-    }
-
-    public record EffectData(String descriptionId, int amplifier, int duration, int category) {
-        public EffectData(MobEffectInstance effect) {
-            this(effect.getDescriptionId(), effect.getAmplifier(), effect.getDuration(),
-                    effect.getEffect().value().getCategory().ordinal());
-        }
     }
 }
