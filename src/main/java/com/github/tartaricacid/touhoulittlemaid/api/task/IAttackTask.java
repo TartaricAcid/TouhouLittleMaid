@@ -13,11 +13,13 @@ import com.github.tartaricacid.touhoulittlemaid.util.TaskEquipUtil;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -25,7 +27,7 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.Optional;
 
-public interface IAttackTask extends IMaidTask {
+public interface IAttackTask extends IMultiSelectTask {
     String MAID_NO_ATTACK_TAG = "MaidNoAttack";
 
     /**
@@ -153,4 +155,24 @@ public interface IAttackTask extends IMaidTask {
     default boolean enablePanic(EntityMaid maid) {
         return false;
     }
+
+    @Override
+    default int getTaskPriority() {
+        return 4;
+    }
+
+    @Override
+    default boolean mayActivate(EntityMaid maid) {
+        var opt = maid.getBrain().getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES).flatMap(
+                mobs -> mobs.findClosest((e) -> canAttack(maid, e) &&
+                        maid.isWithinRestriction(e.blockPosition())));
+        if (opt.isEmpty()) return false;
+        return IMultiSelectTask.hasItem(maid, stack -> isWeapon(maid, stack));
+    }
+
+    @Override
+    default void activate(EntityMaid maid) {
+        IMultiSelectTask.switchItem(maid, stack -> isWeapon(maid, stack));
+    }
+
 }

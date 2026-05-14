@@ -206,4 +206,10 @@ public class TaskBowAttack implements IRangedAttackTask {
     public String getMaidActionSummary() {
         return "Use bow attack entities";
     }
+
+    @Override
+    public boolean mayActivate(EntityMaid maid) {
+        return IRangedAttackTask.super.mayActivate(maid) && hasArrow(maid);
+    }
+
 }

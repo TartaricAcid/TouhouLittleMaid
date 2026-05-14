@@ -2,6 +2,8 @@ package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain;
 
 import com.github.tartaricacid.touhoulittlemaid.api.entity.ai.IExtraMaidBrain;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
+import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.mux.TaskBehaviorGroup;
+import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.mux.TaskSwitchBehavior;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.ride.MaidRideBegTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -101,9 +103,10 @@ public final class MaidBrain {
         Pair<Integer, BehaviorControl<? super EntityMaid>> healSelf = Pair.of(3, new MaidHealSelfTask());
         Pair<Integer, BehaviorControl<? super EntityMaid>> pickupItem = Pair.of(10, new MaidPickupEntitiesTask(EntityMaid::isPickup, 0.6f));
         Pair<Integer, BehaviorControl<? super EntityMaid>> clearSleep = Pair.of(99, new MaidClearSleepTask());
+        Pair<Integer, BehaviorControl<? super EntityMaid>> taskSwitch = Pair.of(99, new TaskSwitchBehavior());
 
         List<Pair<Integer, BehaviorControl<? super EntityMaid>>> behaviors = Lists.newArrayList(swimJump, climb, breathAir, breathAirStop,
-                look, maidPanic, maidAwait, interactWithDoor, walkToTarget, followOwner, followOwnerVehicle, healSelf, pickupItem, clearSleep);
+                look, maidPanic, maidAwait, interactWithDoor, walkToTarget, followOwner, followOwnerVehicle, healSelf, pickupItem, clearSleep, taskSwitch);
         ExtraMaidBrainManager.EXTRA_MAID_BRAINS.forEach(extra -> behaviors.addAll(extra.getCoreBehaviors()));
         brain.addActivity(Activity.CORE, ImmutableList.copyOf(behaviors));
     }
@@ -129,6 +132,7 @@ public final class MaidBrain {
         Pair<Integer, BehaviorControl<? super EntityMaid>> updateActivity = Pair.of(99, new MaidUpdateActivityFromSchedule());
         IMaidTask task = maid.getTask();
         List<Pair<Integer, BehaviorControl<? super EntityMaid>>> pairMaidList = task.createBrainTasks(maid);
+        new TaskBehaviorGroup(maid, task, pairMaidList);
         if (pairMaidList.isEmpty()) {
             pairMaidList = Lists.newArrayList(updateActivity);
         } else {
@@ -184,6 +188,7 @@ public final class MaidBrain {
         Pair<Integer, BehaviorControl<? super EntityMaid>> updateActivity = Pair.of(99, new MaidUpdateActivityFromSchedule());
         IMaidTask task = maid.getTask();
         List<Pair<Integer, BehaviorControl<? super EntityMaid>>> pairMaidList = task.createRideBrainTasks(maid);
+        new TaskBehaviorGroup(maid, task, pairMaidList);
         if (pairMaidList.isEmpty()) {
             pairMaidList = Lists.newArrayList(updateActivity);
         } else {

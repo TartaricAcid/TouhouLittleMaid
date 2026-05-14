@@ -89,6 +89,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     private TouhouImageButton sound;
     private TouhouImageButton pageDown;
     private TouhouImageButton pageUp;
+    private TouhouImageButton multitask;
     private TouhouImageButton pageClose;
     private TouhouImageButton taskSwitch;
     private MaidDownloadButton modelDownload;
@@ -256,6 +257,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         renderTransTooltip(sound, graphics, x, y, "gui.touhou_little_maid.button.sound");
         renderTransTooltip(pageUp, graphics, x, y, "gui.touhou_little_maid.task.previous_page");
         renderTransTooltip(pageDown, graphics, x, y, "gui.touhou_little_maid.task.next_page");
+        renderTransTooltip(multitask, graphics, x, y, "gui.touhou_little_maid.task.multitask");
         renderTransTooltip(pageClose, graphics, x, y, "gui.touhou_little_maid.task.close");
         renderTransTooltip(taskSwitch, graphics, x, y, "gui.touhou_little_maid.task.switch");
         renderAdditionTransTooltip(graphics, x, y);
@@ -306,16 +308,24 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
         pageUp = new TouhouImageButton(leftPos - 89, topPos + 9, 16, 13, 110, 0, 14, TASK, (b) -> {
             taskPageUp();
         });
+        multitask = new MultiTaskButton(maid, leftPos - 33, topPos + 9, 13, 13, 141, 0, 14, TASK, (b) -> {
+            maid.setMultiTasking(!maid.isMultiTasking());
+            notHiddenTasks.clear();
+            notHiddenTasks.addAll(TaskManager.getNotHiddenTaskList(this.maid));
+            init();
+        });
         pageClose = new TouhouImageButton(leftPos - 19, topPos + 9, 13, 13, 127, 0, 14, TASK, (b) -> {
             TASK_LIST_OPEN = false;
             init();
         });
         this.addRenderableWidget(pageUp);
         this.addRenderableWidget(pageDown);
+        this.addRenderableWidget(multitask);
         this.addRenderableWidget(pageClose);
         pageUp.visible = TASK_LIST_OPEN;
         pageDown.visible = TASK_LIST_OPEN;
         pageClose.visible = TASK_LIST_OPEN;
+        multitask.visible = TASK_LIST_OPEN;
     }
 
     private void taskPageUp() {
@@ -360,10 +370,10 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
             }
         }
 
-        TaskButton button = new TaskButton(maidTask, enable[0], leftPos - 89, topPos + 23 + 19 * count,
+        TaskButton button = new TaskButton(maid, maidTask, enable[0], leftPos - 89, topPos + 23 + 19 * count,
                 83, 19, 93, 28, 20, TASK, 256, 256,
                 b -> taskButtonPressed(maidTask, enable[0]),
-                getTaskTooltips(maidTask, enable[0], enableConditionDesc), Component.empty());
+                getTaskTooltips(maidTask, enable[0], enableConditionDesc),Component.empty());
         this.addRenderableWidget(button);
         button.visible = TASK_LIST_OPEN;
     }
@@ -371,7 +381,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     // 用于开放切换任务时对当前 GUI 的操作
     protected void taskButtonPressed(IMaidTask maidTask, boolean enable) {
         if (enable && maid != null) {
-            maid.setTask(maidTask);
+            //maid.setTask(maidTask);
             PacketDistributor.sendToServer(new MaidTaskPackage(maid.getId(), maidTask.getUid()));
         }
     }
@@ -486,7 +496,7 @@ public abstract class AbstractMaidContainerGui<T extends AbstractMaidContainer> 
     private void drawTaskPageCount(GuiGraphics graphics) {
         if (TASK_LIST_OPEN) {
             String text = String.format("%d/%d", TASK_PAGE + 1, (notHiddenTasks.size() - 1) / TASK_COUNT_PER_PAGE + 1);
-            graphics.drawString(font, text, -48, 12, 0x333333, false);
+            graphics.drawString(font, text, -53, 12, 0x333333, false);
         }
     }
 

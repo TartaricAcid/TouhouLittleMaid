@@ -432,6 +432,7 @@
   "gui.touhou_little_maid.button.sound": "设置声音包",
   "gui.touhou_little_maid.task.next_page": "下一页",
   "gui.touhou_little_maid.task.previous_page": "上一页",
+  "gui.touhou_little_maid.task.multitask": "多选任务模式",
   "gui.touhou_little_maid.task.close": "关闭",
   "gui.touhou_little_maid.task.switch": "切换工作模式",
   "gui.touhou_little_maid.skin.text.version": "版本：%s",

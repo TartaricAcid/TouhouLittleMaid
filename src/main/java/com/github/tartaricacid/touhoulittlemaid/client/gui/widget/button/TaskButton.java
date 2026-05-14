@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button;
 
 import com.github.tartaricacid.touhoulittlemaid.api.client.gui.ITooltipButton;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
+import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -17,6 +18,7 @@ import java.util.function.Supplier;
 
 @OnlyIn(Dist.CLIENT)
 public class TaskButton extends Button implements ITooltipButton {
+    private final EntityMaid maid;
     private final IMaidTask task;
     private final boolean enable;
     private final ResourceLocation resourceLocation;
@@ -27,19 +29,19 @@ public class TaskButton extends Button implements ITooltipButton {
     private final int textureHeight;
     private final List<Component> tooltips;
 
-    public TaskButton(IMaidTask task, boolean enable, int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, OnPress onPressIn) {
-        this(task, enable, xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, 256, 256, onPressIn);
+    public TaskButton(EntityMaid maid, IMaidTask task, boolean enable, int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, OnPress onPressIn) {
+        this(maid, task, enable, xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, 256, 256, onPressIn);
     }
 
-    public TaskButton(IMaidTask task, boolean enable, int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, int textureWidth, int textureHeight, OnPress onPressIn) {
-        this(task, enable, xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, textureWidth, textureHeight, onPressIn, Component.empty());
+    public TaskButton(EntityMaid maid, IMaidTask task, boolean enable, int xIn, int yIn, int widthIn, int heightIn, int xTexStartIn, int yTexStartIn, int yDiffTextIn, ResourceLocation resourceLocationIn, int textureWidth, int textureHeight, OnPress onPressIn) {
+        this(maid, task, enable, xIn, yIn, widthIn, heightIn, xTexStartIn, yTexStartIn, yDiffTextIn, resourceLocationIn, textureWidth, textureHeight, onPressIn, Component.empty());
     }
 
-    public TaskButton(IMaidTask task, boolean enable, int x, int y, int width, int height, int xTexStart, int yTexStart, int yDiffText, ResourceLocation resourceLocation, int textureWidth, int textureHeight, OnPress onPress, Component title) {
-        this(task, enable, x, y, width, height, xTexStart, yTexStart, yDiffText, resourceLocation, textureWidth, textureHeight, onPress, Collections.emptyList(), title);
+    public TaskButton(EntityMaid maid, IMaidTask task, boolean enable, int x, int y, int width, int height, int xTexStart, int yTexStart, int yDiffText, ResourceLocation resourceLocation, int textureWidth, int textureHeight, OnPress onPress, Component title) {
+        this(maid, task, enable, x, y, width, height, xTexStart, yTexStart, yDiffText, resourceLocation, textureWidth, textureHeight, onPress, Collections.emptyList(), title);
     }
 
-    public TaskButton(IMaidTask task, boolean enable, int x, int y, int width, int height, int xTexStart, int yTexStart, int yDiffText, ResourceLocation resourceLocation, int textureWidth, int textureHeight, OnPress onPress, List<Component> tooltips, Component title) {
+    public TaskButton(EntityMaid maid, IMaidTask task, boolean enable, int x, int y, int width, int height, int xTexStart, int yTexStart, int yDiffText, ResourceLocation resourceLocation, int textureWidth, int textureHeight, OnPress onPress, List<Component> tooltips, Component title) {
         super(x, y, width, height, title, onPress, Supplier::get);
         this.task = task;
         this.enable = enable;
@@ -50,6 +52,7 @@ public class TaskButton extends Button implements ITooltipButton {
         this.yDiffTex = yDiffText;
         this.resourceLocation = resourceLocation;
         this.tooltips = tooltips;
+        this.maid = maid;
     }
 
     public IMaidTask getTask() {
@@ -70,7 +73,7 @@ public class TaskButton extends Button implements ITooltipButton {
     public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         Minecraft minecraft = Minecraft.getInstance();
         int i = this.yTexStart;
-        if (this.isHoveredOrFocused()) {
+        if (maid.isMultiTasking() ? maid.getSelectedTasks().contains(task) : maid.getTask() == task) {
             i += this.yDiffTex;
         }
         RenderSystem.enableDepthTest();

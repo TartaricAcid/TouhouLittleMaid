@@ -153,4 +153,10 @@ public class TaskFeedAnimal implements IAttackTask {
     public String getMaidActionSummary() {
         return "Feed and breed animals";
     }
+
+    @Override
+    public int getTaskPriority() {
+        return 2;
+    }
+
 }

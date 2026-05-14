@@ -48,7 +48,14 @@ public record MaidTaskPackage(int id, ResourceLocation uid) implements CustomPac
                     if (!task.isEnable(maid)) {
                         return;
                     }
-                    maid.setTask(task);
+                    if (maid.isMultiTasking()) {
+                        var set = maid.getSelectedTasks();
+                        if (!set.contains(task)) set.add(task);
+                        else set.remove(task);
+                        maid.setSelectedTask(set);
+                    } else {
+                        maid.setTask(task);
+                    }
                     if (!TaskManager.getIdleTask().equals(task) && maid.getOwner() instanceof ServerPlayer serverPlayer) {
                         InitTrigger.MAID_EVENT.get().trigger(serverPlayer, TriggerType.SWITCH_TASK);
                     }

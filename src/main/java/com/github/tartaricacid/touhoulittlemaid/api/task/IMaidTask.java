@@ -274,4 +274,21 @@ public interface IMaidTask {
     default String getMaidActionSummary() {
         return getUid().getPath();
     }
+
+    /**
+     * 智能任务切换模式下的任务优先级
+     * 5: 最高优先级，一定得先执行
+     * 4: 战斗任务
+     * 3: 高优先级任务
+     * 2: 生产任务
+     * 1: 休闲任务
+     */
+    default int getTaskPriority() {
+        return 2;
+    }
+
+    default boolean mayInterrupt(EntityMaid maid){
+        return true;
+    }
+
 }
