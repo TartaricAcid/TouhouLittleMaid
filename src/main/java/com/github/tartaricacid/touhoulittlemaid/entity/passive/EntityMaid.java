@@ -20,6 +20,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelIn
 import com.github.tartaricacid.touhoulittlemaid.compat.curios.CuriosCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.domesticationinnovation.PetBedDrop;
 import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeCompat;
+import com.github.tartaricacid.touhoulittlemaid.compat.sbackpack.MaidXpPumpHandler;
 import com.github.tartaricacid.touhoulittlemaid.compat.ysm.YsmCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.ysm.event.YsmMaidClientTickEvent;
 import com.github.tartaricacid.touhoulittlemaid.config.ServerConfig;
@@ -285,6 +286,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     private final MaidAIChatManager aiChatManager;
     private final SchedulePos schedulePos;
     private final ItemCooldowns cooldowns;
+    private final MaidXpPumpHandler maidXpPumpHandler = new MaidXpPumpHandler();
 
     public boolean guiOpening = false;
     public MaidFishingHook fishing = null;
@@ -625,6 +627,10 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
                 this.backpackData.serverTick(this);
                 this.level.getProfiler().pop();
             }
+
+            this.level.getProfiler().push("maidXpPump");
+            this.maidXpPumpHandler.tick(this);
+            this.level.getProfiler().pop();
 
             this.level.getProfiler().push("maidFavorability");
             this.favorabilityManager.tick();
