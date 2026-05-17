@@ -57,6 +57,13 @@ public class HistoryAIChatScreen extends Screen {
 
     private String summaryText = StringUtils.EMPTY;
 
+    private static final int SCROLLBAR_WIDTH = 6;
+    private static final int SCROLLBAR_MIN_THUMB = 10;
+    private static final int SCROLLBAR_MARGIN = 2;
+    private static final int SCROLLBAR_TRACK_COLOR = 0x66000000;
+    private static final int SCROLLBAR_THUMB_COLOR = 0xFFAAAAAA;
+    private static final int SCROLLBAR_THUMB_HOVER = 0xFFFFFFFF;
+
     private double scroll = 0;
     private int maxHeight = 0;
     private int posX = 0;
@@ -65,6 +72,10 @@ public class HistoryAIChatScreen extends Screen {
     private int summaryBottom = 0;
     private int historyTop = 0;
     private int historyBottom = 0;
+
+    private boolean draggingScrollbar = false;
+    private double dragStartY = 0;
+    private double dragStartScroll = 0;
 
     /**
      * 在渲染摘要时，缓存的一个变量，些许降低性能占用
@@ -192,6 +203,8 @@ public class HistoryAIChatScreen extends Screen {
             }
             graphics.pose().popPose();
             graphics.disableScissor();
+
+            this.renderScrollbar(graphics, mouseX, mouseY);
         }
     }
 
@@ -209,6 +222,111 @@ public class HistoryAIChatScreen extends Screen {
             }
         }
         return super.mouseScrolled(pMouseX, pMouseY, scrollX, scrollY);
+    }
+
+    private void renderScrollbar(GuiGraphics graphics, int mouseX, int mouseY) {
+        int visibleHeight = this.historyBottom - this.historyTop;
+        int contentHeight = this.maxHeight - this.historyTop;
+        if (contentHeight <= visibleHeight) {
+            return;
+        }
+
+        int trackLeft = posX + 128 + SCROLLBAR_MARGIN;
+        int trackRight = trackLeft + SCROLLBAR_WIDTH;
+        int trackTop = this.historyTop;
+        int trackBottom = this.historyBottom;
+
+        // 渲染轨道
+        graphics.fill(trackLeft, trackTop, trackRight, trackBottom, SCROLLBAR_TRACK_COLOR);
+
+        // 计算滑块大小和位置
+        float ratio = (float) visibleHeight / contentHeight;
+        int thumbHeight = Math.max(SCROLLBAR_MIN_THUMB, (int) (visibleHeight * ratio));
+        float scrollRatio = (float) (-this.scroll + this.historyTop) / (contentHeight - visibleHeight);
+        int thumbTop = trackTop + (int) ((visibleHeight - thumbHeight) * scrollRatio);
+        thumbTop = Math.max(trackTop, Math.min(thumbTop, trackBottom - thumbHeight));
+
+        // 判断鼠标是否悬停在滑块上
+        boolean hover = mouseX >= trackLeft && mouseX <= trackRight && mouseY >= thumbTop && mouseY <= thumbTop + thumbHeight;
+        int thumbColor = hover || draggingScrollbar ? SCROLLBAR_THUMB_HOVER : SCROLLBAR_THUMB_COLOR;
+
+        // 渲染滑块
+        graphics.fill(trackLeft, thumbTop, trackRight, thumbTop + thumbHeight, thumbColor);
+    }
+
+    private int getScrollbarTrackLeft() {
+        return posX + 128 + SCROLLBAR_MARGIN;
+    }
+
+    private int getScrollbarTrackRight() {
+        return getScrollbarTrackLeft() + SCROLLBAR_WIDTH;
+    }
+
+    private boolean isOnScrollbar(double mouseX, double mouseY) {
+        int visibleHeight = this.historyBottom - this.historyTop;
+        int contentHeight = this.maxHeight - this.historyTop;
+        if (contentHeight <= visibleHeight) {
+            return false;
+        }
+        return mouseX >= getScrollbarTrackLeft() && mouseX <= getScrollbarTrackRight()
+                && mouseY >= this.historyTop && mouseY <= this.historyBottom;
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (button == 0 && this.isOnScrollbar(mouseX, mouseY)) {
+            this.draggingScrollbar = true;
+            this.dragStartY = mouseY;
+            this.dragStartScroll = this.scroll;
+            return true;
+        }
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        if (button == 0) {
+            this.draggingScrollbar = false;
+        }
+        return super.mouseReleased(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
+        if (this.draggingScrollbar && button == 0) {
+            int visibleHeight = this.historyBottom - this.historyTop;
+            int contentHeight = this.maxHeight - this.historyTop;
+            if (contentHeight > visibleHeight) {
+                double scrollRange = contentHeight - visibleHeight;
+                int trackDragRange = visibleHeight - Math.max(SCROLLBAR_MIN_THUMB, (int) (visibleHeight * ((float) visibleHeight / contentHeight)));
+                if (trackDragRange > 0) {
+                    double delta = mouseY - this.dragStartY;
+                    this.scroll = this.dragStartScroll - (delta / trackDragRange) * scrollRange;
+                    clampScroll();
+                }
+            }
+            return true;
+        }
+        return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
+    }
+
+    private void clampScroll() {
+        int visibleHeight = this.historyBottom - this.historyTop;
+        int contentHeight = this.maxHeight - this.historyTop;
+        if (contentHeight <= visibleHeight) {
+            int emptySpace = visibleHeight - contentHeight;
+            this.scroll = emptySpace / 2d;
+        } else {
+            double topMax = this.historyTop;
+            double bottomMax = this.historyBottom;
+            double scrollBottom = scroll + maxHeight;
+            if (scroll > topMax) {
+                scroll = topMax;
+            }
+            if (bottomMax > scrollBottom) {
+                scroll = bottomMax - maxHeight;
+            }
+        }
     }
 
     @Override
