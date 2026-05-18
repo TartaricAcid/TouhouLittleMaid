@@ -242,7 +242,8 @@ public class HistoryAIChatScreen extends Screen {
         // 计算滑块大小和位置
         float ratio = (float) visibleHeight / contentHeight;
         int thumbHeight = Math.max(SCROLLBAR_MIN_THUMB, (int) (visibleHeight * ratio));
-        float scrollRatio = (float) (-this.scroll + this.historyTop) / (contentHeight - visibleHeight);
+        float scrollRatio = (float) (-this.scroll) / (contentHeight - visibleHeight);
+        scrollRatio = Math.max(0.0f, Math.min(scrollRatio, 1.0f));
         int thumbTop = trackTop + (int) ((visibleHeight - thumbHeight) * scrollRatio);
         thumbTop = Math.max(trackTop, Math.min(thumbTop, trackBottom - thumbHeight));
 
