@@ -1,5 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.manager.entity;
 
+// TTS-LANG-DEBUG: 调试语言匹配问题时取消注释
+// import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.summary.HistorySummaryManager;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.papi.PapiReplacer;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.papi.StringConstant;
@@ -102,6 +104,9 @@ public final class MaidAIChatManager extends MaidAIChatData {
 
     private void tryToChat(String message, ChatClientInfo clientInfo, @NotNull LLMSite site) {
         this.chatLanguage = clientInfo.language();
+        // TTS-LANG-DEBUG: 调试语言匹配问题时取消注释
+        // TouhouLittleMaid.LOGGER.info("[TTS-LANG-DEBUG] tryToChat: clientLanguage={}, maidTtsLanguage={}",
+        //         clientInfo.language(), this.getTTSLanguage());
         LLMClient chatClient = site.client();
         List<LLMMessage> messages = this.getMessages(this, clientInfo.language());
         if (messages.isEmpty()) {
@@ -150,11 +155,19 @@ public final class MaidAIChatManager extends MaidAIChatData {
         }
         TTSConfig config = new TTSConfig(ttsModel, ttsLang);
 
+        // 当聊天语言与 TTS 语言相同时，直接用 chatText 作为 TTS 文本
+        // 因为实测 LLM 可能不遵循 SAME_LANGUAGES 提示（要求复制 Part 1 到 Part 2），
+        // 仍然会在 --- 后输出翻译文本，导致 TTS 读到非预期语言
+        String actualTtsText = ttsText;
+        if (this.chatLanguage != null && this.chatLanguage.equals(this.getTTSLanguage())) {
+            actualTtsText = chatText;
+        }
+
         if (ttsClient instanceof TTSSystemServices services) {
-            onPlaySoundLocal(site.id(), chatText, ttsText, config, services, waitingChatBubbleId);
+            onPlaySoundLocal(site.id(), chatText, actualTtsText, config, services, waitingChatBubbleId);
         } else {
             TTSCallback callback = new TTSCallback(maid, chatText, waitingChatBubbleId);
-            ttsClient.play(ttsText, config, callback);
+            ttsClient.play(actualTtsText, config, callback);
         }
     }
 

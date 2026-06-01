@@ -66,6 +66,11 @@ public final class DefaultLLMSite {
             "grok-4.20-0309-non-reasoning", "grok-4-1-fast-non-reasoning"
     );
 
+    public static LLMOpenAISite MIMO = createSite("mimo",
+            "https://api.xiaomimimo.com/v1/chat/completions",
+            "mimo-v2.5-pro", "mimo-v2.5"
+    );
+
     public static LLMOpenAISite OPEN_ROUTER = createSite("openrouter",
             "https://openrouter.ai/api/v1/chat/completions", false,
             Map.of("HTTP-Referer", "https://github.com/TartaricAcid/TouhouLittleMaid",
@@ -126,6 +131,7 @@ public final class DefaultLLMSite {
         AvailableSites.LLM_SITES.put(KIMI.id(), KIMI);
         AvailableSites.LLM_SITES.put(GEMINI.id(), GEMINI);
         AvailableSites.LLM_SITES.put(GROK.id(), GROK);
+        AvailableSites.LLM_SITES.put(MIMO.id(), MIMO);
         AvailableSites.LLM_SITES.put(OPEN_ROUTER.id(), OPEN_ROUTER);
 
         AvailableSites.FIXED_LLM_SITES.put(DEEPSEEK.id(), FIXED_DEEPSEEK);

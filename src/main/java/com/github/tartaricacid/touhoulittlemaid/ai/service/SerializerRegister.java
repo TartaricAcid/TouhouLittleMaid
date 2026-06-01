@@ -12,6 +12,7 @@ import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.tencent.STTTencen
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.fishaudio.TTSFishAudioSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.gptsovits.TTSGptSovitsSite;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.mimo.TTSMimoSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.minimax.TTSMiniMaxSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.player2.TTSPlayer2Site;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.siliconflow.TTSSiliconflowSite;
@@ -43,6 +44,7 @@ public final class SerializerRegister {
         register.register(ServiceType.TTS, TTSPlayer2Site.API_TYPE, new TTSPlayer2Site.Serializer());
         register.register(ServiceType.TTS, TTSSiliconflowSite.API_TYPE, new TTSSiliconflowSite.Serializer());
         register.register(ServiceType.TTS, TTSMiniMaxSite.API_TYPE, new TTSMiniMaxSite.Serializer());
+        register.register(ServiceType.TTS, TTSMimoSite.API_TYPE, new TTSMimoSite.Serializer());
 
         for (ILittleMaid littleMaid : TouhouLittleMaid.EXTENSIONS) {
             littleMaid.registerAIChatSerializer(register);

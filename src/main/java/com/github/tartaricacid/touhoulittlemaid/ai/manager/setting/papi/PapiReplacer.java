@@ -1,5 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.papi;
 
+// TTS-LANG-DEBUG: 调试语言匹配问题时取消注释
+// import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.ai.agent.skill.SkillLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.Maps;
@@ -27,6 +29,11 @@ public class PapiReplacer {
      * 基础设定提示词的关键字替换
      */
     public static String replaceSetting(String input, EntityMaid maid, String language) {
+        String maidTtsLanguage = maid.getAiChatManager().getTTSLanguage();
+        // TTS-LANG-DEBUG: 调试语言匹配问题时取消注释
+        // TouhouLittleMaid.LOGGER.info("[TTS-LANG-DEBUG] clientLanguage={}, maidTtsLanguage={}, equal={}",
+        //         language, maidTtsLanguage, language.equals(maidTtsLanguage));
+
         Map<String, String> valueMap = Util.make(Maps.newHashMap(), map -> {
             map.put("main_setting", input);
             map.put("owner_name", getOwnerName(maid));
@@ -36,9 +43,13 @@ public class PapiReplacer {
         });
 
         String base = new StrSubstitutor(valueMap).replace(FULL_SETTING);
-        if (language.equals(maid.getAiChatManager().getTTSLanguage())) {
+        if (language.equals(maidTtsLanguage)) {
+            // TTS-LANG-DEBUG: 调试语言匹配问题时取消注释
+            // TouhouLittleMaid.LOGGER.info("[TTS-LANG-DEBUG] Using SAME_LANGUAGES path");
             base += new StrSubstitutor(valueMap).replace(OUTPUT_FORMAT_REQUIREMENTS_SAME_LANGUAGES);
         } else {
+            // TTS-LANG-DEBUG: 调试语言匹配问题时取消注释
+            // TouhouLittleMaid.LOGGER.info("[TTS-LANG-DEBUG] Using DIFFERENT_LANGUAGES path");
             base += new StrSubstitutor(valueMap).replace(OUTPUT_FORMAT_REQUIREMENTS_DIFFERENT_LANGUAGES);
         }
 
