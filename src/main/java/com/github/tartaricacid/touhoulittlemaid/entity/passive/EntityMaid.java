@@ -308,6 +308,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     private IMaidBackpack backpack = BackpackManager.getEmptyBackpack();
     private int playerHurtSoundCount = 120;
     private int pickupSoundCount = 5;
+    private int autoPickupDelayTicks = 0; // 丢弃物品后的拾取冷却，防止女仆自丢自捡
     private int backpackDelay = 0;
     private int passiveUseShieldTick = 0;
     private IBackpackData backpackData = null;
@@ -569,6 +570,9 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         if (playerHurtSoundCount > 0) {
             playerHurtSoundCount--;
         }
+        if (autoPickupDelayTicks > 0) {
+            autoPickupDelayTicks--;
+        }
         if (climbFallDelayTicks > 0) {
             climbFallDelayTicks--;
             this.fallDistance = 0;
@@ -716,7 +720,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     protected void pushEntities() {
         super.pushEntities();
         // 只有拾物模式开启，驯服状态下才可以捡起物品
-        if (this.isPickup() && this.isTame()) {
+        if (this.isPickup() && this.isTame() && this.autoPickupDelayTicks <= 0) {
             AABB pickupBox;
             AttributeInstance attribute = this.getAttribute(InitAttribute.MAID_PICKUP_RANGE);
             if (attribute != null) {
@@ -2149,6 +2153,14 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     public void setPickup(boolean isPickup) {
         this.configManager.setPickup(isPickup);
+    }
+
+    /**
+     * 设置自动拾取冷却。使用 {@link Math#max} 保证冷却时间不可被缩短，
+     * 防止多次丢弃操作反而缩短冷却窗口。
+     */
+    public void setAutoPickupCooldown(int ticks) {
+        this.autoPickupDelayTicks = Math.max(this.autoPickupDelayTicks, ticks);
     }
 
     public boolean isRideable() {
