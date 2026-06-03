@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.backpack;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
+import com.github.tartaricacid.touhoulittlemaid.api.backpack.IExtraStorageBackpack;
 import com.github.tartaricacid.touhoulittlemaid.api.backpack.IMaidBackpack;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader;
 import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityTombstone;
@@ -21,12 +22,14 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.wrapper.InvWrapper;
 
 import javax.annotation.Nullable;
 
 import static com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader.END_CHEST_BACKPACK;
 
-public class EnderChestBackpack extends IMaidBackpack {
+public class EnderChestBackpack extends IMaidBackpack implements IExtraStorageBackpack {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(TouhouLittleMaid.MOD_ID, "ender_chest_backpack");
 
     @Override
@@ -64,6 +67,15 @@ public class EnderChestBackpack extends IMaidBackpack {
     @Override
     public int getAvailableMaxContainerIndex() {
         return BackpackLevel.EMPTY_CAPACITY;
+    }
+
+    @Nullable
+    @Override
+    public IItemHandler getExtraStorage(EntityMaid maid) {
+        if (maid.getOwner() instanceof Player player) {
+            return new InvWrapper(player.getEnderChestInventory());
+        }
+        return null;
     }
 
     @Nullable
