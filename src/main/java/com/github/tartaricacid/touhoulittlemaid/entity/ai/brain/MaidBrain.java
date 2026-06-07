@@ -2,6 +2,8 @@ package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain;
 
 import com.github.tartaricacid.touhoulittlemaid.api.entity.ai.IExtraMaidBrain;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
+import com.github.tartaricacid.touhoulittlemaid.compat.sable.SableCompat;
+import com.github.tartaricacid.touhoulittlemaid.entity.ai.behavior.SableMoveToTargetSink;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.ride.MaidRideBegTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.*;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -95,7 +97,7 @@ public final class MaidBrain {
         Pair<Integer, BehaviorControl<? super EntityMaid>> maidPanic = Pair.of(1, new MaidPanicTask());
         Pair<Integer, BehaviorControl<? super EntityMaid>> maidAwait = Pair.of(1, new MaidAwaitTask());
         Pair<Integer, BehaviorControl<? super EntityMaid>> interactWithDoor = Pair.of(2, MaidInteractWithDoor.create());
-        Pair<Integer, BehaviorControl<? super EntityMaid>> walkToTarget = Pair.of(2, new MoveToTargetSink());
+        Pair<Integer, BehaviorControl<? super EntityMaid>> walkToTarget = Pair.of(2, SableCompat.isSableLoaded() ? new SableMoveToTargetSink() : new MoveToTargetSink());
         Pair<Integer, BehaviorControl<? super EntityMaid>> followOwner = Pair.of(3, new MaidFollowOwnerTask(0.5f, 2));
         Pair<Integer, BehaviorControl<? super EntityMaid>> followOwnerVehicle = Pair.of(3, new MaidFollowOwnerVehicleTask(0.5f, 2));
         Pair<Integer, BehaviorControl<? super EntityMaid>> healSelf = Pair.of(3, new MaidHealSelfTask());

@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task;
 
+import com.github.tartaricacid.touhoulittlemaid.compat.sable.SableCompat;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.mojang.datafixers.kinds.IdF;
 import com.mojang.datafixers.kinds.OptionalBox;
@@ -52,7 +53,10 @@ public class MaidRangedWalkToTarget {
                 walkTargetMemory.erase();
             } else {
                 positionMemory.set(new EntityTracker(target, true));
-                walkTargetMemory.set(new WalkTarget(new EntityTracker(target, false), speedModifier.apply(maid), 0));
+                walkTargetMemory.set(new WalkTarget(new EntityTracker(target, false), speedModifier.apply(maid),
+                        // TODO 在物理结构上时 MaidAttackStrafingTask 无法阻止女仆一直向目标靠近
+                        SableCompat.isInSublevel(maid) ? 8 : 0
+                ));
             }
             return true;
         };
