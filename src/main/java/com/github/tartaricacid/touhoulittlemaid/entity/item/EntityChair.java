@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.item;
 import com.github.tartaricacid.touhoulittlemaid.client.entity.GeckoChairEntity;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
+import com.github.tartaricacid.touhoulittlemaid.compat.sable.SableCompat;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.ChairConfig;
 import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.item.ItemChair;
@@ -190,6 +191,12 @@ public class EntityChair extends AbstractEntityFromItem {
             return livingEntity;
         }
         return super.getControllingPassenger();
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        SableCompat.fixSubLevelEntityLeaving(this);
     }
 
     public String getModelId() {

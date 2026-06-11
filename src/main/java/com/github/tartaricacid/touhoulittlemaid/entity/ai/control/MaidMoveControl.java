@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai.control;
 
+import com.github.tartaricacid.touhoulittlemaid.compat.sable.SableCompat;
 import com.github.tartaricacid.touhoulittlemaid.datagen.tag.TagBlock;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import net.minecraft.core.BlockPos;
@@ -66,7 +67,7 @@ public class MaidMoveControl extends MoveControl {
                 this.mob.setYRot(this.rotlerp(this.mob.getYRot(), angle, 90));
                 this.mob.setSpeed((float) (this.speedModifier * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED)));
 
-                BlockPos blockPos = this.mob.blockPosition();
+                BlockPos blockPos = SableCompat.getEntityBlockPosition(this.mob);
                 BlockState blockState = this.mob.level.getBlockState(blockPos);
                 VoxelShape voxelShape = blockState.getCollisionShape(this.mob.level(), blockPos);
 

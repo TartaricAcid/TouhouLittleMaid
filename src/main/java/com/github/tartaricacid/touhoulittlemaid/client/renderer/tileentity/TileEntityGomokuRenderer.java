@@ -6,7 +6,9 @@ import com.github.tartaricacid.touhoulittlemaid.api.game.gomoku.Statue;
 import com.github.tartaricacid.touhoulittlemaid.block.BlockGomoku;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.SimpleBedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader;
+import com.github.tartaricacid.touhoulittlemaid.compat.sable.SableCompat;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityGomoku;
+import com.github.tartaricacid.touhoulittlemaid.util.CameraHelper;
 import com.github.tartaricacid.touhoulittlemaid.util.RenderHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -110,7 +112,6 @@ public class TileEntityGomokuRenderer implements BlockEntityRenderer<TileEntityG
     private void renderTipsText(TileEntityGomoku gomoku, PoseStack poseStack, MultiBufferSource bufferIn, int combinedLightIn) {
         Statue statue = gomoku.getStatue();
         if (statue != Statue.IN_PROGRESS && inRenderDistance(gomoku, TIPS_RENDER_DISTANCE)) {
-            Camera camera = this.dispatcher.camera;
             MutableComponent loseTips;
             MutableComponent resetTips = Component.translatable("message.touhou_little_maid.gomoku.reset").withStyle(ChatFormatting.UNDERLINE).withStyle(ChatFormatting.AQUA);
             MutableComponent roundText = Component.translatable("message.touhou_little_maid.gomoku.round", gomoku.getChessCounter()).withStyle(ChatFormatting.WHITE);
@@ -131,8 +132,7 @@ public class TileEntityGomokuRenderer implements BlockEntityRenderer<TileEntityG
             float roundTipsWidth = (float) (-this.font.width(roundTips) / 2);
             poseStack.pushPose();
             poseStack.translate(0.5, 0.75, 0.5);
-            poseStack.mulPose(Axis.YN.rotationDegrees(180 + camera.getYRot()));
-            poseStack.mulPose(Axis.XN.rotationDegrees(camera.getXRot()));
+            poseStack.mulPose(CameraHelper.getCameraOrientationForBlockEntity(gomoku));
             poseStack.scale(0.03F, -0.03F, 0.03F);
             this.font.drawInBatch(loseTips, loseTipsWidth, -10, 0xFFFFFF, true, poseStack.last().pose(), bufferIn, Font.DisplayMode.POLYGON_OFFSET, 0, combinedLightIn);
             poseStack.scale(0.5F, 0.5F, 0.5F);
@@ -143,8 +143,7 @@ public class TileEntityGomokuRenderer implements BlockEntityRenderer<TileEntityG
     }
 
     private boolean inRenderDistance(TileEntityGomoku gomoku, int distance) {
-        BlockPos pos = gomoku.getBlockPos();
-        return this.dispatcher.camera.getPosition().distanceToSqr(pos.getX(), pos.getY(), pos.getZ()) < distance * distance;
+        return SableCompat.distToCenterSqr(gomoku.getLevel(), gomoku.getBlockPos(), this.dispatcher.camera.getPosition()) < distance * distance;
     }
 
     @Override

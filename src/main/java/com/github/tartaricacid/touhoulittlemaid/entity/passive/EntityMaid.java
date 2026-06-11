@@ -17,6 +17,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.BedrockMode
 import com.github.tartaricacid.touhoulittlemaid.client.resource.CustomPackLoader;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.pojo.MaidModelInfo;
 import com.github.tartaricacid.touhoulittlemaid.compat.curios.CuriosCompat;
+import com.github.tartaricacid.touhoulittlemaid.compat.sable.SableCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.ysm.YsmCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.ysm.event.YsmMaidClientTickEvent;
@@ -844,7 +845,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         for (int i = 0; i < handler.getSlots(); i++) {
             ItemStack stackInSlot = handler.getStackInSlot(i);
             if (!stackInSlot.isEmpty() && getEnchantmentLevel(access, Enchantments.MENDING, stackInSlot) > 0
-                && stackInSlot.isDamaged() && !stackInSlot.is(TagItem.MAID_MENDING_BLOCKLIST_ITEM)) {
+                    && stackInSlot.isDamaged() && !stackInSlot.is(TagItem.MAID_MENDING_BLOCKLIST_ITEM)) {
                 stacks.add(stackInSlot);
             }
         }
@@ -1105,8 +1106,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     private void sendMaidPos() {
         if (this.dead && !this.level.isClientSide
-            && this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES)
-            && this.getOwner() instanceof ServerPlayer serverPlayer) {
+                && this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES)
+                && this.getOwner() instanceof ServerPlayer serverPlayer) {
             // 支持旅行地图格式
             // [name:"name", x:-136, y:36, z:48, dim:minecraft:the_nether]
             BlockPos blockPos = this.blockPosition();
@@ -2135,7 +2136,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         if (this.hasRestriction()) {
             return this.getRestrictCenter();
         } else {
-            return this.blockPosition();
+            return SableCompat.getBlockPosWithSublevel(level, this, blockPosition());
         }
     }
 
@@ -2746,37 +2747,49 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     private boolean maybeTeleportTo(LivingEntity owner, int x, int y, int z) {
         if (teleportTooClosed(owner, x, z)) {
             return false;
-        } else if (!canTeleportTo(new BlockPos(x, y, z))) {
-            return false;
-        } else {
-            this.moveTo(x + 0.5, y, z + 0.5, this.getYRot(), this.getXRot());
-            this.getNavigation().stop();
-            this.getBrain().eraseMemory(MemoryModuleType.WALK_TARGET);
-            this.getBrain().eraseMemory(MemoryModuleType.LOOK_TARGET);
-            this.getBrain().eraseMemory(MemoryModuleType.ATTACK_TARGET);
-            this.getBrain().eraseMemory(MemoryModuleType.PATH);
-            return true;
         }
+
+        var targetPoint = calcTeleportPoint(owner, new BlockPos(x, y, z));
+        if (targetPoint == null) {
+            return false;
+        }
+
+        this.moveTo(targetPoint, this.getYRot(), this.getXRot());
+        this.getNavigation().stop();
+        this.getBrain().eraseMemory(MemoryModuleType.WALK_TARGET);
+        this.getBrain().eraseMemory(MemoryModuleType.LOOK_TARGET);
+        this.getBrain().eraseMemory(MemoryModuleType.ATTACK_TARGET);
+        this.getBrain().eraseMemory(MemoryModuleType.PATH);
+        return true;
+
     }
 
     private boolean teleportTooClosed(LivingEntity owner, int x, int z) {
         return Math.abs(x - owner.getX()) < 2 && Math.abs(z - owner.getZ()) < 2;
     }
 
-    private boolean canTeleportTo(BlockPos pos) {
+    private @Nullable Vec3 calcTeleportPoint(LivingEntity owner, BlockPos pos) {
         // 先检查下方方块是否在黑名单中
-        BlockState blockState = this.level().getBlockState(pos.below());
+
+        var level = this.level();
+
+        var newBelowPos = SableCompat.getBlockPosWithSublevel(level, owner, pos.below());
+        BlockState blockState = level.getBlockState(newBelowPos);
         if (blockState.is(TagBlock.MAID_AVOID_BLOCK)) {
-            return false;
+            return null;
         }
 
         // 再检查路径节点类型和碰撞箱
-        PathType pathNodeType = WalkNodeEvaluator.getPathTypeStatic(this, pos);
+        var newTargetPos = newBelowPos.above();
+        PathType pathNodeType = WalkNodeEvaluator.getPathTypeStatic(this, newTargetPos);
         if (pathNodeType == PathType.WALKABLE || pathNodeType == PathType.WATER) {
-            BlockPos blockPos = pos.subtract(this.blockPosition());
-            return this.level().noCollision(this, this.getBoundingBox().move(blockPos));
+            BlockPos blockPos = newTargetPos.subtract(this.blockPosition());
+            if (level.noCollision(this, this.getBoundingBox().move(blockPos))) {
+                var basePoint = Vec3.atBottomCenterOf(newTargetPos);
+                return SableCompat.transformToGlobalPosition(owner, basePoint);
+            }
         }
-        return false;
+        return null;
     }
 
     private int randomIntInclusive(RandomSource random, int min, int max) {

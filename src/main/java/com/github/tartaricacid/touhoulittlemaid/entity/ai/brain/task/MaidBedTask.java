@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task;
 
 import com.github.tartaricacid.touhoulittlemaid.block.BlockMaidBed;
+import com.github.tartaricacid.touhoulittlemaid.compat.sable.SableCompat;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitBlocks;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
@@ -38,7 +39,7 @@ public class MaidBedTask extends MaidCheckRateTask {
         if (super.checkExtraStartConditions(worldIn, maid) && maid.canBrainMoving()) {
             BlockPos bedPos = findBed(worldIn, maid);
             if (bedPos != null && maid.isWithinRestriction(bedPos)) {
-                if (bedPos.distToCenterSqr(maid.position()) < Math.pow(this.closeEnoughDist, 2)) {
+                if (SableCompat.distToCenterSqr(worldIn, bedPos, maid.position()) < Math.pow(this.closeEnoughDist, 2)) {
                     maid.getBrain().setMemory(InitEntities.TARGET_POS.get(), new BlockPosTracker(bedPos));
                     return true;
                 }
