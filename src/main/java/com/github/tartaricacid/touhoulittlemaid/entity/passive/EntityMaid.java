@@ -845,7 +845,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         for (int i = 0; i < handler.getSlots(); i++) {
             ItemStack stackInSlot = handler.getStackInSlot(i);
             if (!stackInSlot.isEmpty() && getEnchantmentLevel(access, Enchantments.MENDING, stackInSlot) > 0
-                && stackInSlot.isDamaged() && !stackInSlot.is(TagItem.MAID_MENDING_BLOCKLIST_ITEM)) {
+                    && stackInSlot.isDamaged() && !stackInSlot.is(TagItem.MAID_MENDING_BLOCKLIST_ITEM)) {
                 stacks.add(stackInSlot);
             }
         }
@@ -1106,8 +1106,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     private void sendMaidPos() {
         if (this.dead && !this.level.isClientSide
-            && this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES)
-            && this.getOwner() instanceof ServerPlayer serverPlayer) {
+                && this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES)
+                && this.getOwner() instanceof ServerPlayer serverPlayer) {
             // 支持旅行地图格式
             // [name:"name", x:-136, y:36, z:48, dim:minecraft:the_nether]
             BlockPos blockPos = this.blockPosition();
@@ -2136,7 +2136,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         if (this.hasRestriction()) {
             return this.getRestrictCenter();
         } else {
-            return this.blockPosition();
+            return SableCompat.getBlockPosWithSublevel(level, this, blockPosition());
         }
     }
 

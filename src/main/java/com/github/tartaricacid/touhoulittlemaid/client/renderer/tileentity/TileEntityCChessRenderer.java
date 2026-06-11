@@ -6,8 +6,10 @@ import com.github.tartaricacid.touhoulittlemaid.block.BlockGomoku;
 import com.github.tartaricacid.touhoulittlemaid.client.model.CChessPiecesModel;
 import com.github.tartaricacid.touhoulittlemaid.client.model.bedrock.SimpleBedrockModel;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.BedrockModelLoader;
+import com.github.tartaricacid.touhoulittlemaid.compat.sable.SableCompat;
 import com.github.tartaricacid.touhoulittlemaid.tileentity.TileEntityCChess;
 import com.github.tartaricacid.touhoulittlemaid.util.CChessUtil;
+import com.github.tartaricacid.touhoulittlemaid.util.CameraHelper;
 import com.github.tartaricacid.touhoulittlemaid.util.RenderHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -89,8 +91,7 @@ public class TileEntityCChessRenderer implements BlockEntityRenderer<TileEntityC
         float roundTipsWidth = (float) (-this.font.width(roundTips) / 2);
         poseStack.pushPose();
         poseStack.translate(0.5, 0.75, 0.5);
-        poseStack.mulPose(Axis.YN.rotationDegrees(180 + camera.getYRot()));
-        poseStack.mulPose(Axis.XN.rotationDegrees(camera.getXRot()));
+        poseStack.mulPose(CameraHelper.getCameraOrientationForBlockEntity(chess));
         poseStack.scale(0.03F, -0.03F, 0.03F);
         this.font.drawInBatch(loseTips, loseTipsWidth, -10, 0xFFFFFF, true, poseStack.last().pose(), bufferIn, Font.DisplayMode.POLYGON_OFFSET, 0, combinedLightIn);
         poseStack.scale(0.5F, 0.5F, 0.5F);
@@ -157,8 +158,7 @@ public class TileEntityCChessRenderer implements BlockEntityRenderer<TileEntityC
     }
 
     private boolean inRenderDistance(TileEntityCChess chess, int distance) {
-        BlockPos pos = chess.getBlockPos();
-        return this.dispatcher.camera.getPosition().distanceToSqr(pos.getX(), pos.getY(), pos.getZ()) < distance * distance;
+        return SableCompat.distToCenterSqr(chess.getLevel(), chess.getBlockPos(), this.dispatcher.camera.getPosition()) < distance * distance;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task;
 
+import com.github.tartaricacid.touhoulittlemaid.compat.sable.SableCompat;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.github.tartaricacid.touhoulittlemaid.util.ItemsUtil;
@@ -48,7 +49,7 @@ public class MaidCollectHoneyTask extends MaidCheckRateTask {
         if (super.checkExtraStartConditions(worldIn, maid) && maid.canBrainMoving()) {
             BlockPos beehivePos = findBeehive(worldIn, maid);
             if (beehivePos != null && maid.isWithinRestriction(beehivePos)) {
-                if (beehivePos.distToCenterSqr(maid.position()) < Math.pow(this.closeEnoughDist, 2)) {
+                if (SableCompat.distToCenterSqr(worldIn, beehivePos, maid.position()) < Math.pow(this.closeEnoughDist, 2)) {
                     maid.getBrain().setMemory(InitEntities.TARGET_POS.get(), new BlockPosTracker(beehivePos));
                     return true;
                 }

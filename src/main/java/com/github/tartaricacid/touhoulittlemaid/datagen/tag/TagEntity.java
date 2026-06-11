@@ -36,6 +36,9 @@ public class TagEntity extends EntityTypeTagsProvider {
             ResourceLocation.parse("iceandfire:immune_to_gorgon_stone")
     );
 
+    public static TagKey<EntityType<?>> SABLE_DESTROY_WHEN_LEAVING_PLOT = createTagKey(ResourceLocation.parse("sable:destroy_when_leaving_plot"));
+    public static TagKey<EntityType<?>> SABLE_RETAIN_IN_SUB_LEVEL = createTagKey(ResourceLocation.parse("sable:retain_in_sub_level"));
+
 
     public TagEntity(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, ExistingFileHelper existingFileHelper) {
         super(output, lookupProvider, TouhouLittleMaid.MOD_ID, existingFileHelper);
@@ -72,6 +75,14 @@ public class TagEntity extends EntityTypeTagsProvider {
                 InitEntities.TOMBSTONE.get(),
                 InitEntities.SIT.get(),
                 InitEntities.BROOM.get());
+
+        tag(SABLE_DESTROY_WHEN_LEAVING_PLOT).add(
+                InitEntities.SIT.get()
+        );
+        tag(SABLE_RETAIN_IN_SUB_LEVEL).add(
+                InitEntities.CHAIR.get(),
+                InitEntities.SIT.get()
+        );
 
         // 让女仆免疫冰与火的石化效果，避免石化带来的各种问题
         tag(IMMUNE_TO_GORGON_STONE).add(InitEntities.MAID.get());
