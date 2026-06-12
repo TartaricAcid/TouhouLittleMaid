@@ -21,6 +21,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.ai.behavior.PositionTracker;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.entity.schedule.Schedule;
@@ -67,6 +68,7 @@ public final class InitEntities {
     public static Supplier<MemoryModuleType<List<Entity>>> VISIBLE_PICKUP_ENTITIES = MEMORY_MODULE_TYPES.register("visible_pickup_entities", () -> new MemoryModuleType<>(Optional.empty()));
     public static Supplier<MemoryModuleType<PositionTracker>> TARGET_POS = MEMORY_MODULE_TYPES.register("target_pos", () -> new MemoryModuleType<>(Optional.empty()));
     public static Supplier<MemoryModuleType<MaidEdibleBlockAction>> MAID_EDIBLE_BLOCK_ACTION = MEMORY_MODULE_TYPES.register("maid_edible_block_action", () -> new MemoryModuleType<>(Optional.empty()));
+    public static Supplier<MemoryModuleType<Entity>> NEAREST_SIT_TARGET = MEMORY_MODULE_TYPES.register("nearest_sit_target", () -> new MemoryModuleType<>(Optional.empty()));
 
     public static Supplier<SensorType<MaidNearestLivingEntitySensor>> MAID_NEAREST_LIVING_ENTITY_SENSOR = SENSOR_TYPES.register("maid_nearest_living_entity", () -> new SensorType<>(MaidNearestLivingEntitySensor::new));
     public static Supplier<SensorType<MaidHostilesSensor>> MAID_HOSTILES_SENSOR = SENSOR_TYPES.register("maid_hostiles", () -> new SensorType<>(MaidHostilesSensor::new));

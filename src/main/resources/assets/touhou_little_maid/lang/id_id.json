@@ -460,6 +460,8 @@
   "gui.touhou_little_maid.monster_type.add": "Tambah",
   "pack.touhou_little_maid.legacy_resources_pack.title": "TLM Paket Legacy",
   "chat_bubble.touhou_little_maid.inner.fishing.no_sit": "Saya harus duduk di kursi atau di perahu untuk memancing!",
+  "chat_bubble.touhou_little_maid.inner.fishing.no_water": "Aku tidak bisa menemukan air di dekat sini untuk memancing!",
+  "chat_bubble.touhou_little_maid.inner.fishing.no_rod": "Aku tidak punya tongkat pancing!",
   "message.touhou_little_maid.missing_patchouli.title": "[TLM]",
   "message.touhou_little_maid.missing_patchouli.click_here": "Klik di sini untuk menginstal mod Pathcouli untuk mendapatkan Manual",
   "message.touhou_little_maid.missing_patchouli.url": "https://www.curseforge.com/minecraft/mc-mods/patchouli",

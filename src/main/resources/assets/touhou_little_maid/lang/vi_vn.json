@@ -606,6 +606,8 @@
   "chat_bubble.touhou_little_maid.inner.home_meal.two_hand_is_full": "Tay của em nhiều đồ quá...\nEm không ăn được!",
   "chat_bubble.touhou_little_maid.inner.home_meal.meal_is_empty": "Cho em đồ ăn, cho em đồ ăn!\nEm không có gì để ăn hết!",
   "chat_bubble.touhou_little_maid.inner.fishing.no_sit": "Em phải ngồi trên ghế hoặc thuyền mới câu cá được!",
+  "chat_bubble.touhou_little_maid.inner.fishing.no_water": "Em không tìm thấy nước gần đây để câu cá!",
+  "chat_bubble.touhou_little_maid.inner.fishing.no_rod": "Em không có cần câu cá!",
   "message.touhou_little_maid.missing_patchouli.title": "[TLM]",
   "message.touhou_little_maid.missing_patchouli.click_here": "Nhấn vào đây để cài mod Patchouli để có hướng dẫn",
   "message.touhou_little_maid.missing_patchouli.url": "https://www.curseforge.com/minecraft/mc-mods/patchouli",

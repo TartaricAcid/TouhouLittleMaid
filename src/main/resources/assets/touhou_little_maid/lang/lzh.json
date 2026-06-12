@@ -451,6 +451,8 @@
   "chat_bubble.touhou_little_maid.inner.home_meal.two_hand_is_full": "小女子之手不得以空而不得以食！",
   "chat_bubble.touhou_little_maid.inner.home_meal.meal_is_empty": "速速備菜，小女子無食也！",
   "chat_bubble.touhou_little_maid.inner.fishing.no_sit": "小女子唯臥舟榻者上以漁也！",
+  "chat_bubble.touhou_little_maid.inner.fishing.no_water": "近無水澤，何以漁之！",
+  "chat_bubble.touhou_little_maid.inner.fishing.no_rod": "無竿，何以漁之！",
   "message.touhou_little_maid.missing_patchouli.title": "[東方丫鬟]",
   "message.touhou_little_maid.missing_patchouli.click_here": "擊以措置廣藿曆之義補以得書冊",
   "message.touhou_little_maid.missing_patchouli.url": "https://www.curseforge.com/minecraft/mc-mods/patchouli",

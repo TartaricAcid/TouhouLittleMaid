@@ -475,6 +475,8 @@
   "gui.touhou_little_maid.monster_type.add": "Ajouter",
   "gui.touhou_little_maid.default_task_config.title": "La tâche actuelle n'a pas de configuration...",
   "chat_bubble.touhou_little_maid.inner.fishing.no_sit": "Je dois m'asseoir sur une chaise ou un bateau pour pêcher !",
+  "chat_bubble.touhou_little_maid.inner.fishing.no_water": "Je ne trouve pas d'eau à proximité pour pêcher !",
+  "chat_bubble.touhou_little_maid.inner.fishing.no_rod": "Je n'ai pas de canne à pêche !",
   "message.touhou_little_maid.missing_patchouli.title": "[TLM]",
   "message.touhou_little_maid.missing_patchouli.click_here": "Cliquez ici pour installer le mod Patchouli pour ainsi obtenir le manuel",
   "message.touhou_little_maid.missing_patchouli.url": "https://www.curseforge.com/minecraft/mc-mods/patchouli",

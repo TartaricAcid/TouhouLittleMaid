@@ -390,6 +390,8 @@
   "gui.touhou_little_maid.monster_type.add": "追加",
   "gui.touhou_little_maid.default_task_config.title": "現在のお仕事には細かい設定はありません...",
   "chat_bubble.touhou_little_maid.inner.fishing.no_sit": "椅子やボートに座りながら釣りがしたいです！",
+  "chat_bubble.touhou_little_maid.inner.fishing.no_water": "近くに釣りができる水場が見つかりません！",
+  "chat_bubble.touhou_little_maid.inner.fishing.no_rod": "釣り竿を持っていません！",
   "message.touhou_little_maid.missing_patchouli.title": "[TLM]",
   "message.touhou_little_maid.missing_patchouli.click_here": "覚えやすい幻想郷を手に入れるための Patchouli Mod をインストールするには、ここをクリックしてください。",
   "message.touhou_little_maid.missing_patchouli.url": "https://www.curseforge.com/minecraft/mc-mods/patchouli",
