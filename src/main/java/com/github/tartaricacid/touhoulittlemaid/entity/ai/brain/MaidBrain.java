@@ -35,7 +35,8 @@ public final class MaidBrain {
                 MemoryModuleType.ATTACK_TARGET,
                 MemoryModuleType.ATTACK_COOLING_DOWN,
                 InitEntities.TARGET_POS.get(),
-                InitEntities.MAID_EDIBLE_BLOCK_ACTION.get()
+                InitEntities.MAID_EDIBLE_BLOCK_ACTION.get(),
+                InitEntities.NEAREST_SIT_TARGET.get()
         );
         ExtraMaidBrainManager.EXTRA_MAID_BRAINS.forEach(extra -> defaultTypes.addAll(extra.getExtraMemoryTypes()));
         return ImmutableList.copyOf(defaultTypes);

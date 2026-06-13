@@ -517,6 +517,8 @@
   "chat_bubble.touhou_little_maid.inner.home_meal.two_hand_is_full": "Mis manos estaban llenas de objetos...\n ¡No pude comer!",
   "chat_bubble.touhou_little_maid.inner.home_meal.meal_is_empty": "Deprisa, Deprisa.\n¡No tengo nada que comer!",
   "chat_bubble.touhou_little_maid.inner.fishing.no_sit": "¡Tengo que sentarme on una silla o bote para pescar!",
+  "chat_bubble.touhou_little_maid.inner.fishing.no_water": "¡No encuentro agua cerca para pescar!",
+  "chat_bubble.touhou_little_maid.inner.fishing.no_rod": "¡No tengo caña de pescar!",
   "message.touhou_little_maid.missing_patchouli.title": "[TLM]",
   "message.touhou_little_maid.missing_patchouli.click_here": "Haz clic aquí para instalar el mod Patchouli para obtener el manual",
   "message.touhou_little_maid.missing_patchouli.url": "https://www.curseforge.com/minecraft/mc-mods/patchouli",

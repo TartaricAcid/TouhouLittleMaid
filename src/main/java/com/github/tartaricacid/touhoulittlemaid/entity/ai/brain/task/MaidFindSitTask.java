@@ -1,15 +1,14 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task;
 
-import com.github.tartaricacid.touhoulittlemaid.entity.item.EntityChair;
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitEntities;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
-import net.minecraft.world.entity.ai.memory.NearestVisibleLivingEntities;
-import net.minecraft.world.entity.vehicle.Boat;
 
 public class MaidFindSitTask extends MaidCheckRateTask {
     private static final int MAX_DELAY_TIME = 12;
@@ -18,8 +17,7 @@ public class MaidFindSitTask extends MaidCheckRateTask {
     private long chatBubbleKey = -1;
 
     public MaidFindSitTask(float speedModifier) {
-        super(ImmutableMap.of(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryStatus.VALUE_PRESENT,
-                MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT));
+        super(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT));
         this.speedModifier = speedModifier;
         this.setMaxCheckRate(MAX_DELAY_TIME);
     }
@@ -32,16 +30,17 @@ public class MaidFindSitTask extends MaidCheckRateTask {
     @Override
     protected void start(ServerLevel worldIn, EntityMaid maid, long gameTimeIn) {
         this.sitEntity = null;
-        this.getEntities(maid)
-                .find(e -> filterEntity(maid, e))
-                .findFirst()
-                .ifPresentOrElse(entity -> {
-                    this.sitEntity = entity;
-                    BehaviorUtils.setWalkAndLookTargetMemories(maid, this.sitEntity, this.speedModifier, 0);
-                }, () -> {
-                    String langKey = "chat_bubble.touhou_little_maid.inner.fishing.no_sit";
-                    this.chatBubbleKey = maid.getChatBubbleManager().addTextChatBubbleIfTimeout(langKey, this.chatBubbleKey);
-                });
+        Entity sitTarget = maid.getBrain().getMemory(InitEntities.NEAREST_SIT_TARGET.get()).orElse(null);
+
+        if (sitTarget != null) {
+            // 找到坐具后清除旧的 no_sit 气泡，防止残留
+            clearChatBubble(maid);
+            this.sitEntity = sitTarget;
+            BehaviorUtils.setWalkAndLookTargetMemories(maid, this.sitEntity, this.speedModifier, 0);
+        } else {
+            String langKey = "chat_bubble.touhou_little_maid.inner.fishing.no_sit";
+            this.chatBubbleKey = maid.getChatBubbleManager().addTextChatBubbleIfTimeout(langKey, this.chatBubbleKey);
+        }
 
         if (sitEntity != null && sitEntity.isAlive() && sitEntity.closerThan(maid, 2)) {
             if (sitEntity.getPassengers().isEmpty()) {
@@ -51,20 +50,11 @@ public class MaidFindSitTask extends MaidCheckRateTask {
         }
     }
 
-    private boolean filterEntity(EntityMaid maid, Entity entity) {
-        if (!entity.isAlive()) {
-            return false;
+    private void clearChatBubble(EntityMaid maid) {
+        if (this.chatBubbleKey >= 0) {
+            maid.getChatBubbleManager().removeChatBubble(this.chatBubbleKey);
+            maid.getChatBubbleManager().forceUpdateChatBubble();
+            this.chatBubbleKey = -1;
         }
-        if (!maid.isWithinRestriction(entity.blockPosition())) {
-            return false;
-        }
-        if (!entity.getPassengers().isEmpty()) {
-            return false;
-        }
-        return entity instanceof EntityChair || entity instanceof Boat;
-    }
-
-    private NearestVisibleLivingEntities getEntities(EntityMaid maid) {
-        return maid.getBrain().getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES).orElse(NearestVisibleLivingEntities.empty());
     }
 }

@@ -545,6 +545,8 @@
   "chat_bubble.touhou_little_maid.inner.home_meal.two_hand_is_full": "我的雙手根本空不出來……\n我沒法吃飯了！",
   "chat_bubble.touhou_little_maid.inner.home_meal.meal_is_empty": "快上菜、快上菜！\n我都沒東西吃了！",
   "chat_bubble.touhou_little_maid.inner.fishing.no_sit": "我必須坐在椅子或船上才能釣魚！",
+  "chat_bubble.touhou_little_maid.inner.fishing.no_water": "附近找不到可以釣魚的水域！",
+  "chat_bubble.touhou_little_maid.inner.fishing.no_rod": "我沒有釣魚竿！",
   "message.touhou_little_maid.missing_patchouli.title": "[車萬女僕]",
   "message.touhou_little_maid.missing_patchouli.click_here": "點擊這裡安裝帕秋莉手冊模組來獲取手冊",
   "message.touhou_little_maid.missing_patchouli.url": "https://www.curseforge.com/minecraft/mc-mods/patchouli",
