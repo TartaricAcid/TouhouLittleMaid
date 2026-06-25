@@ -32,3 +32,4 @@ src/test
 forge*changelog.txt
 /src/generated/resources/.cache/
 .sisyphus
+.workbuddy

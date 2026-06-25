@@ -12,6 +12,7 @@ import com.github.tartaricacid.touhoulittlemaid.util.Rectangle;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
@@ -21,6 +22,7 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.util.Mth;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.commons.lang3.StringUtils;
 
@@ -37,9 +39,13 @@ import static net.minecraft.network.chat.CommonComponents.GUI_BACK;
 public class TTSSiteEditorScreen extends Screen {
     private static final int LABEL_COLOR = 0xFF777777;
     private static final int BASE_WIDTH = 400;
-    private static final int BASE_HEIGHT = 230;
+    private static final int MIN_BASE_HEIGHT = 230;
+    private static final int MAX_BASE_HEIGHT = 330;
+    private static final int SCREEN_MARGIN_Y = 32;
+    private static final int CONTENT_SCROLL_STEP = 24;
     private static final int FIELD_ROW_HEIGHT = 35;
     private static final int MODEL_ROW_HEIGHT = 22;
+    private static final int MODEL_AREA_MAX_ROWS = 5;
 
     private final AIChatSettingsTTSSiteScreen parent;
     private final TTSSiteFormLayout layout;
@@ -56,12 +62,19 @@ public class TTSSiteEditorScreen extends Screen {
 
     private int startX;
     private int startY;
+    private int baseHeight;
 
     /**
      * 模型列表滚动区域
      */
     private Rectangle modelArea;
     private int modelScrollOffset;
+    private Rectangle contentArea;
+    private int contentScrollOffset;
+    private int contentHeight;
+    private boolean addingScrollingWidgets;
+    private final List<Renderable> scrollingRenderables = Lists.newArrayList();
+    private final List<AbstractWidget> scrollingWidgets = Lists.newArrayList();
 
     /**
      * 保存时的提示信息
@@ -97,7 +110,14 @@ public class TTSSiteEditorScreen extends Screen {
     @Override
     @SuppressWarnings("all")
     public <T extends GuiEventListener & Renderable & NarratableEntry> T addRenderableWidget(T pWidget) {
-        return super.addRenderableWidget(pWidget);
+        T widget = super.addRenderableWidget(pWidget);
+        if (this.addingScrollingWidgets) {
+            this.scrollingRenderables.add(widget);
+            if (widget instanceof AbstractWidget abstractWidget) {
+                this.scrollingWidgets.add(abstractWidget);
+            }
+        }
+        return widget;
     }
 
     @Override
@@ -107,45 +127,65 @@ public class TTSSiteEditorScreen extends Screen {
         this.modelRows.forEach(ModelRow::syncFromBox);
 
         this.clearWidgets();
+        this.scrollingRenderables.clear();
+        this.scrollingWidgets.clear();
 
+        this.baseHeight = Mth.clamp(this.height - SCREEN_MARGIN_Y, MIN_BASE_HEIGHT, MAX_BASE_HEIGHT);
         this.startX = (this.width - BASE_WIDTH) / 2;
-        this.startY = (this.height - BASE_HEIGHT) / 2;
+        this.startY = (this.height - this.baseHeight) / 2;
 
         int left = this.startX + 12;
         int contentWidth = BASE_WIDTH - 24;
-        int bottomY = this.startY + BASE_HEIGHT - 24;
+        int bottomY = this.startY + this.baseHeight - 24;
+        int contentTop = this.startY + 28;
+        int contentBottom = bottomY - 8;
+        this.contentArea = new Rectangle(left, contentTop, contentWidth, Math.max(32, contentBottom - contentTop));
 
-        // 固定字段区（不滚动）
-        int fieldY = this.startY + 28;
+        // 内容区：字段、额外按钮和模型区整体滚动，底部保存/返回按钮固定
+        int fieldY = contentTop;
         int fieldMaxSize = this.fields.size();
         // 奇数，那么最后一个占一整行，否则是均分，左右各一个
         boolean isOdd = fieldMaxSize % 2 == 1;
-        for (int i = 0; i < fieldMaxSize; i++) {
-            FormField field = this.fields.get(i);
-            // 最后一行，奇数，占一整行
-            if (isOdd && i == fieldMaxSize - 1) {
-                // 偶数且在中间位置，跳过到下一行
-                this.createFieldWidget(field, left, fieldY, contentWidth);
-                fieldY += FIELD_ROW_HEIGHT;
+        int fieldIndex = 0;
+        int fieldRow = 0;
+        int extraAfterRows = this.layout.extraInitAfterFieldRows();
+        boolean extraAdded = false;
+        while (fieldIndex < fieldMaxSize) {
+            if (isOdd && fieldIndex == fieldMaxSize - 1) {
+                FormField field = this.fields.get(fieldIndex++);
+                this.createFieldWidget(field, left, this.contentY(fieldY), contentWidth);
             } else {
-                boolean isLeft = i % 2 == 0;
                 int fieldWidth = (contentWidth - 6) / 2;
-                this.createFieldWidget(field, left + (isLeft ? 0 : fieldWidth + 6), fieldY, fieldWidth);
-                if (!isLeft) {
-                    fieldY += FIELD_ROW_HEIGHT;
+                FormField leftField = this.fields.get(fieldIndex++);
+                this.createFieldWidget(leftField, left, this.contentY(fieldY), fieldWidth);
+                if (fieldIndex < fieldMaxSize) {
+                    FormField rightField = this.fields.get(fieldIndex++);
+                    this.createFieldWidget(rightField, left + fieldWidth + 6, this.contentY(fieldY), fieldWidth);
                 }
             }
+            fieldY += FIELD_ROW_HEIGHT;
+            fieldRow++;
+            if (!extraAdded && fieldRow >= extraAfterRows) {
+                fieldY += this.createExtraWidgets(left, this.contentY(fieldY), contentWidth);
+                extraAdded = true;
+            }
         }
-
-        // 额外组件
-        fieldY += layout.extraInit(left, fieldY, contentWidth, this);
+        if (!extraAdded) {
+            fieldY += this.createExtraWidgets(left, this.contentY(fieldY), contentWidth);
+        }
 
         // 可滚动模型区
         if (this.layout.supportsModelRows()) {
             int modelTop = fieldY + 14;
-            int modelBottom = this.startY + BASE_HEIGHT - 48;
-            this.modelArea = new Rectangle(left, modelTop, contentWidth, modelBottom - modelTop);
-            this.createModelRows(left, contentWidth);
+            int modelHeight = this.getPreferredModelAreaHeight();
+            this.modelArea = new Rectangle(left, this.contentY(modelTop), contentWidth, modelHeight);
+            this.addingScrollingWidgets = true;
+            try {
+                this.createModelRows(left, contentWidth);
+            } finally {
+                this.addingScrollingWidgets = false;
+            }
+            fieldY = modelTop + modelHeight + 10;
 
             this.addRenderableWidget(new FlatColorButton(left, bottomY, 96, 20, ADD_MODEL_NAME, b -> {
                 this.modelRows.add(new ModelRow(StringUtils.EMPTY, StringUtils.EMPTY));
@@ -153,7 +193,18 @@ public class TTSSiteEditorScreen extends Screen {
                 this.modelScrollOffset = Math.max(0, this.modelRows.size() - visibleCount);
                 this.init();
             }));
+        } else {
+            this.modelArea = null;
         }
+
+        this.contentHeight = Math.max((int) this.contentArea.h, fieldY - contentTop);
+        int maxContentScrollOffset = this.getMaxContentScrollOffset();
+        if (this.contentScrollOffset > maxContentScrollOffset) {
+            this.contentScrollOffset = maxContentScrollOffset;
+            this.init();
+            return;
+        }
+        this.updateScrollingWidgetVisibility();
 
         // 底部按钮
         this.addRenderableWidget(new FlatColorButton(this.startX + BASE_WIDTH - 200, bottomY, 90, 20, SAVE_NAME, b -> this.saveSite()));
@@ -169,6 +220,9 @@ public class TTSSiteEditorScreen extends Screen {
         if (field.secret) {
             box.setFormatter((text, pos) -> FormattedCharSequence.forward("·".repeat(text.length()), Style.EMPTY));
         }
+        boolean visible = this.contentIntersects(left, y - 14, width, FIELD_ROW_HEIGHT + 14);
+        box.visible = visible;
+        box.active = field.editable && visible;
         this.addWidget(box);
         field.box = box;
     }
@@ -201,12 +255,17 @@ public class TTSSiteEditorScreen extends Screen {
             row.idBox.setMaxLength(512);
             row.idBox.setBordered(false);
             row.idBox.setValue(preId);
+            boolean visible = this.contentIntersects(left, rowY - 6, contentWidth, MODEL_ROW_HEIGHT);
+            row.idBox.visible = visible;
+            row.idBox.active = visible;
             this.addWidget(row.idBox);
 
             row.nameBox = new EditBox(this.font, left + 16 + idWidth + gap, rowY + 2, nameWidth - 26, 16, Component.literal("Display Name"));
             row.nameBox.setMaxLength(512);
             row.nameBox.setBordered(false);
             row.nameBox.setValue(preName);
+            row.nameBox.visible = visible;
+            row.nameBox.active = visible;
             this.addWidget(row.nameBox);
 
             final int index = i;
@@ -240,16 +299,18 @@ public class TTSSiteEditorScreen extends Screen {
             renderable.render(graphics, mouseX, mouseY, partialTick);
         }
 
+        this.renderContentScrollbar(graphics);
+
         // 保存提示
         if (System.currentTimeMillis() - this.tipTimestamp < 2000) {
             int x = this.startX + BASE_WIDTH - 155;
-            int y = this.startY + BASE_HEIGHT - 35;
+            int y = this.startY + this.baseHeight - 35;
             graphics.drawCenteredString(this.font, this.statusMessage, x, y, 0xFFADADAD);
         }
     }
 
     private void renderInputField(GuiGraphics graphics, EditBox box, int mouseX, int mouseY, float partialTick) {
-        if (box == null) {
+        if (box == null || !box.visible) {
             return;
         }
 
@@ -266,15 +327,25 @@ public class TTSSiteEditorScreen extends Screen {
     private void renderModelArea(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         int left = (int) this.modelArea.x;
         int top = (int) this.modelArea.y;
+        if (!this.contentIntersects(left, top - 18, (int) this.modelArea.w, (int) this.modelArea.h + 20)) {
+            return;
+        }
 
         // 主标题
-        graphics.drawString(this.font, this.layout.modelsTitle(), left + 2, top - 14, LABEL_COLOR, false);
+        if (this.contentIntersects(left, top - 18, (int) this.modelArea.w, 16)) {
+            graphics.drawString(this.font, this.layout.modelsTitle(), left + 2, top - 14, LABEL_COLOR, false);
+        }
 
         int visibleCount = this.getVisibleModelCount();
         int startIndex = this.modelScrollOffset;
         int endIndex = Math.min(this.modelRows.size(), startIndex + visibleCount);
 
-        graphics.enableScissor(left, top - 2, (int) this.modelArea.right(), (int) this.modelArea.bottom() + 2);
+        int scissorTop = Math.max(top - 2, (int) this.contentArea.y);
+        int scissorBottom = Math.min((int) this.modelArea.bottom() + 2, (int) this.contentArea.bottom());
+        if (scissorBottom <= scissorTop) {
+            return;
+        }
+        graphics.enableScissor(left, scissorTop, (int) this.modelArea.right(), scissorBottom);
         for (int i = startIndex; i < endIndex; i++) {
             ModelRow row = this.modelRows.get(i);
             if (row.idBox != null && row.nameBox != null) {
@@ -299,9 +370,10 @@ public class TTSSiteEditorScreen extends Screen {
         // 模型区滚动条
         if (this.modelRows.size() > visibleCount) {
             // 滚动条轨道的起始 Y 坐标
-            int trackTop = top - 2;
+            int trackTop = Math.max(top - 2, (int) this.contentArea.y);
             // 滚动条轨道的总高度
-            int trackHeight = (int) this.modelArea.h - 8;
+            int trackBottom = Math.min((int) this.modelArea.bottom() - 2, (int) this.contentArea.bottom());
+            int trackHeight = Math.max(1, trackBottom - trackTop);
             // 滑块高度：按可见行数占总行数的比例缩放，但最小不低于 12px，防止滑块太小难以点击
             int thumbHeight = Math.max(12, visibleCount * trackHeight / this.modelRows.size());
             // 可滚动的最大偏移量（总行数 - 可见行数），至少为 1 防止除零
@@ -319,19 +391,13 @@ public class TTSSiteEditorScreen extends Screen {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double horizontalDelta, double verticalDelta) {
-        if (this.modelArea != null && this.modelArea.contains(mouseX, mouseY)) {
-            int visibleCount = this.getVisibleModelCount();
-            int maxOffset = Math.max(0, this.modelRows.size() - visibleCount);
-            if (verticalDelta < 0 && this.modelScrollOffset < maxOffset) {
-                this.modelScrollOffset++;
-                this.init();
-                return true;
-            }
-            if (verticalDelta > 0 && this.modelScrollOffset > 0) {
-                this.modelScrollOffset--;
-                this.init();
-                return true;
-            }
+        if (this.modelArea != null && this.modelArea.contains(mouseX, mouseY)
+                && this.contentArea != null && this.contentArea.contains(mouseX, mouseY)
+                && this.scrollModelRows(verticalDelta)) {
+            return true;
+        }
+        if (this.contentArea != null && this.contentArea.contains(mouseX, mouseY) && this.scrollContent(verticalDelta)) {
+            return true;
         }
         return super.mouseScrolled(mouseX, mouseY, horizontalDelta, verticalDelta);
     }
@@ -354,6 +420,99 @@ public class TTSSiteEditorScreen extends Screen {
 
     private int getVisibleModelCount() {
         return Math.max(1, (int) ((this.modelArea.h - 4) / MODEL_ROW_HEIGHT));
+    }
+
+    private int createExtraWidgets(int x, int y, int width) {
+        this.addingScrollingWidgets = true;
+        try {
+            return this.layout.extraInit(x, y, width, this);
+        } finally {
+            this.addingScrollingWidgets = false;
+        }
+    }
+
+    private int contentY(int logicalY) {
+        return logicalY - this.contentScrollOffset;
+    }
+
+    private int getPreferredModelAreaHeight() {
+        int visibleRows = Math.min(Math.max(this.modelRows.size(), 3), MODEL_AREA_MAX_ROWS);
+        return visibleRows * MODEL_ROW_HEIGHT + 6;
+    }
+
+    private int getMaxContentScrollOffset() {
+        if (this.contentArea == null) {
+            return 0;
+        }
+        return Math.max(0, this.contentHeight - (int) this.contentArea.h);
+    }
+
+    private boolean scrollModelRows(double verticalDelta) {
+        int visibleCount = this.getVisibleModelCount();
+        int maxOffset = Math.max(0, this.modelRows.size() - visibleCount);
+        if (verticalDelta < 0 && this.modelScrollOffset < maxOffset) {
+            this.modelScrollOffset++;
+            this.init();
+            return true;
+        }
+        if (verticalDelta > 0 && this.modelScrollOffset > 0) {
+            this.modelScrollOffset--;
+            this.init();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean scrollContent(double verticalDelta) {
+        int maxOffset = this.getMaxContentScrollOffset();
+        if (maxOffset <= 0) {
+            return false;
+        }
+        int oldOffset = this.contentScrollOffset;
+        if (verticalDelta < 0) {
+            this.contentScrollOffset = Math.min(maxOffset, this.contentScrollOffset + CONTENT_SCROLL_STEP);
+        } else if (verticalDelta > 0) {
+            this.contentScrollOffset = Math.max(0, this.contentScrollOffset - CONTENT_SCROLL_STEP);
+        }
+        if (oldOffset != this.contentScrollOffset) {
+            this.init();
+            return true;
+        }
+        return false;
+    }
+
+    private void renderContentScrollbar(GuiGraphics graphics) {
+        if (this.contentArea == null || this.contentHeight <= this.contentArea.h) {
+            return;
+        }
+        int trackLeft = this.startX + BASE_WIDTH - 7;
+        int trackTop = (int) this.contentArea.y;
+        int trackHeight = (int) this.contentArea.h;
+        int thumbHeight = Math.max(24, (int) (this.contentArea.h * trackHeight / this.contentHeight));
+        int scrollRange = Math.max(1, this.getMaxContentScrollOffset());
+        int thumbOffset = (trackHeight - thumbHeight) * this.contentScrollOffset / scrollRange;
+
+        graphics.fill(trackLeft, trackTop, trackLeft + 3, trackTop + trackHeight, 0x66333333);
+        graphics.fill(trackLeft - 1, trackTop + thumbOffset,
+                trackLeft + 4, trackTop + thumbOffset + thumbHeight, 0xFF55FF55);
+    }
+
+    private void updateScrollingWidgetVisibility() {
+        for (AbstractWidget widget : this.scrollingWidgets) {
+            boolean visible = this.contentIntersects(widget.getX(), widget.getY(), widget.getWidth(), widget.getHeight());
+            widget.visible = visible;
+            widget.active = visible;
+        }
+    }
+
+    private boolean contentIntersects(int x, int y, int width, int height) {
+        if (this.contentArea == null) {
+            return false;
+        }
+        return x < this.contentArea.right()
+                && x + width > this.contentArea.x
+                && y < this.contentArea.bottom()
+                && y + height > this.contentArea.y;
     }
 
     private void saveSite() {

@@ -13,11 +13,15 @@ public class FormField {
     public static final String SECRET_KEY = "secret_key";
     public static final String MODEL = "model";
     public static final String MODELS = "models";
+    public static final String LANGUAGE = "language";
+    public static final String CUSTOM_MODEL = "custom_model";
     public static final String APP_KEY = "app_key";
     public static final String ENG_SER_VICE_TYPE = "eng_ser_vice_type";
     public static final String HOT_WORD = "hot_word";
     public static final String REF_AUDIO_PATH = "ref_audio_path";
     public static final String PROMPT_TEXT = "prompt_text";
+    public static final String VOICE_PROMPT = "voice_prompt";
+    public static final String VOICE_CLONE_AUDIO = "voice_clone_audio";
 
     public final String label;
     public final boolean editable;

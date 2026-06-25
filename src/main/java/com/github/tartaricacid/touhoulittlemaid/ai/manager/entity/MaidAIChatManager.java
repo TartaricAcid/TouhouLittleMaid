@@ -150,11 +150,19 @@ public final class MaidAIChatManager extends MaidAIChatData {
         }
         TTSConfig config = new TTSConfig(ttsModel, ttsLang);
 
+        // 当聊天语言与 TTS 语言相同时，直接用 chatText 作为 TTS 文本
+        // 因为实测 LLM 可能不遵循 SAME_LANGUAGES 提示（要求复制 Part 1 到 Part 2），
+        // 仍然会在 --- 后输出翻译文本，导致 TTS 读到非预期语言
+        String actualTtsText = ttsText;
+        if (this.chatLanguage != null && this.chatLanguage.equals(this.getTTSLanguage())) {
+            actualTtsText = chatText;
+        }
+
         if (ttsClient instanceof TTSSystemServices services) {
-            onPlaySoundLocal(site.id(), chatText, ttsText, config, services, waitingChatBubbleId);
+            onPlaySoundLocal(site.id(), chatText, actualTtsText, config, services, waitingChatBubbleId);
         } else {
             TTSCallback callback = new TTSCallback(maid, chatText, waitingChatBubbleId);
-            ttsClient.play(ttsText, config, callback);
+            ttsClient.play(actualTtsText, config, callback);
         }
     }
 

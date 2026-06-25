@@ -25,6 +25,8 @@ public interface Translations {
     MutableComponent SECRET_ID_IS_EMPTY = Component.translatable("ai.touhou_little_maid.chat.settings.hub.secret_id_is_empty");
     MutableComponent SECRET_KEY_IS_EMPTY = Component.translatable("ai.touhou_little_maid.chat.settings.hub.secret_key_is_empty");
     MutableComponent APP_KEY_IS_EMPTY = Component.translatable("ai.touhou_little_maid.chat.settings.hub.app_key_is_empty");
+    MutableComponent VOICE_PROMPT_IS_EMPTY = Component.translatable("ai.touhou_little_maid.chat.settings.hub.voice_prompt_is_empty");
+    MutableComponent VOICE_CLONE_AUDIO_IS_EMPTY = Component.translatable("ai.touhou_little_maid.chat.settings.hub.voice_clone_audio_is_empty");
     MutableComponent VOICE_IS_EMPTY = Component.translatable("ai.touhou_little_maid.chat.settings.hub.voice_is_empty");
 
     MutableComponent SITE_NAME = Component.translatable("ai.touhou_little_maid.chat.settings.hub.site").withStyle(ChatFormatting.UNDERLINE);

@@ -6,6 +6,7 @@ public enum TTSApiType {
     GPT_SOVITS("gpt-sovits"),
     SILICONFLOW("siliconflow"),
     MINIMAX("minimax"),
+    MIMO("mimo"),
     SYSTEM("system");
 
     private final String name;

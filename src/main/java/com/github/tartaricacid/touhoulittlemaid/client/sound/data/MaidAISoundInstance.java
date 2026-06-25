@@ -31,18 +31,27 @@ public class MaidAISoundInstance extends EntityBoundSoundInstance {
                 try {
                     return new Mp3AudioStream(this.data);
                 } catch (UnsupportedAudioFileException e) {
-                    OggReader.Type oggType = OggReader.getOggType(this.data);
-                    if (oggType.equals(OggReader.Type.OPUS)) {
-                        return new OpusAudioStream(this.data);
-                    }
-                    if (oggType.equals(OggReader.Type.VORBIS)) {
-                        return new JOrbisAudioStream(new ByteArrayInputStream(this.data));
-                    }
+                    return this.createFallbackStream();
                 }
             } catch (Exception e) {
                 TouhouLittleMaid.LOGGER.error(e);
             }
             return null;
         }, Util.backgroundExecutor());
+    }
+
+    private AudioStream createFallbackStream() throws Exception {
+        try {
+            return new WavAudioStream(this.data);
+        } catch (UnsupportedAudioFileException e) {
+            OggReader.Type oggType = OggReader.getOggType(this.data);
+            if (oggType.equals(OggReader.Type.OPUS)) {
+                return new OpusAudioStream(this.data);
+            }
+            if (oggType.equals(OggReader.Type.VORBIS)) {
+                return new JOrbisAudioStream(new ByteArrayInputStream(this.data));
+            }
+            throw e;
+        }
     }
 }

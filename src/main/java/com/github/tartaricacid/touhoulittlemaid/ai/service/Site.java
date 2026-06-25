@@ -25,6 +25,14 @@ public interface Site {
     String HAS_THINKING_FIELD = "has_thinking_field";
     // 仅用于 MiniMax TTS，表示语音合成的模型，和 MODELS 里列出的模型不同，MODELS 里列出的是 voice_id，而 siteModel 是一个独立的参数
     String SITE_MODEL = "site_model";
+    // 可选的自定义模型名，非空时覆盖站点选择的预置模型
+    String CUSTOM_MODEL = "custom_model";
+    // 仅用于需要额外风格/音色描述的 TTS 站点
+    String VOICE_PROMPT = "voice_prompt";
+    // 仅用于 MiMo voiceclone 的参考音频
+    String VOICE_CLONE_AUDIO = "voice_clone_audio";
+    String VOICE_CLONE_INPUT_MODE = "voice_clone_input_mode";
+    String VOICE_CLONE_MIME_TYPE = "voice_clone_mime_type";
     // 腾讯云 asr 语言类型
     String ENG_SER_VICE_TYPE = "eng_ser_vice_type";
     // 腾讯云 asr 热词

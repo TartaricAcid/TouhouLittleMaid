@@ -6,12 +6,14 @@ import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.LLMSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.llm.openai.LLMOpenAISite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.STTSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.aliyun.STTAliyunSite;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.mimo.STTMimoSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.player2.STTPlayer2Site;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.siliconflow.STTSiliconflowSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.tencent.STTTencentSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.TTSSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.fishaudio.TTSFishAudioSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.gptsovits.TTSGptSovitsSite;
+import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.mimo.TTSMimoSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.minimax.TTSMiniMaxSite;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.player2.TTSPlayer2Site;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.tts.siliconflow.TTSSiliconflowSite;
@@ -36,6 +38,7 @@ public final class SerializerRegister {
         register.register(ServiceType.STT, STTAliyunSite.API_TYPE, new STTAliyunSite.Serializer());
         register.register(ServiceType.STT, STTSiliconflowSite.API_TYPE, new STTSiliconflowSite.Serializer());
         register.register(ServiceType.STT, STTTencentSite.API_TYPE, new STTTencentSite.Serializer());
+        register.register(ServiceType.STT, STTMimoSite.API_TYPE, new STTMimoSite.Serializer());
 
         register.register(ServiceType.TTS, TTSSystemSite.API_TYPE, new TTSSystemSite.Serializer());
         register.register(ServiceType.TTS, TTSFishAudioSite.API_TYPE, new TTSFishAudioSite.Serializer());
@@ -43,6 +46,7 @@ public final class SerializerRegister {
         register.register(ServiceType.TTS, TTSPlayer2Site.API_TYPE, new TTSPlayer2Site.Serializer());
         register.register(ServiceType.TTS, TTSSiliconflowSite.API_TYPE, new TTSSiliconflowSite.Serializer());
         register.register(ServiceType.TTS, TTSMiniMaxSite.API_TYPE, new TTSMiniMaxSite.Serializer());
+        register.register(ServiceType.TTS, TTSMimoSite.API_TYPE, new TTSMimoSite.Serializer());
 
         for (ILittleMaid littleMaid : TouhouLittleMaid.EXTENSIONS) {
             littleMaid.registerAIChatSerializer(register);
