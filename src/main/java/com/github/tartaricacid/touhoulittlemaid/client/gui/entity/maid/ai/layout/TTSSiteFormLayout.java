@@ -41,6 +41,10 @@ public abstract class TTSSiteFormLayout {
         return 0;
     }
 
+    public int extraInitAfterFieldRows() {
+        return Integer.MAX_VALUE;
+    }
+
     public Map<String, String> getInitialModels() {
         return Map.of();
     }

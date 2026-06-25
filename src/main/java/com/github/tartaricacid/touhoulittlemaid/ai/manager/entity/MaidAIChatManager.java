@@ -1,7 +1,5 @@
 package com.github.tartaricacid.touhoulittlemaid.ai.manager.entity;
 
-// TTS-LANG-DEBUG: 调试语言匹配问题时取消注释
-// import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.summary.HistorySummaryManager;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.papi.PapiReplacer;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.setting.papi.StringConstant;
@@ -104,9 +102,6 @@ public final class MaidAIChatManager extends MaidAIChatData {
 
     private void tryToChat(String message, ChatClientInfo clientInfo, @NotNull LLMSite site) {
         this.chatLanguage = clientInfo.language();
-        // TTS-LANG-DEBUG: 调试语言匹配问题时取消注释
-        // TouhouLittleMaid.LOGGER.info("[TTS-LANG-DEBUG] tryToChat: clientLanguage={}, maidTtsLanguage={}",
-        //         clientInfo.language(), this.getTTSLanguage());
         LLMClient chatClient = site.client();
         List<LLMMessage> messages = this.getMessages(this, clientInfo.language());
         if (messages.isEmpty()) {

@@ -18,22 +18,26 @@ public class TTSMimoRequest {
     @SerializedName("audio")
     private Audio audio = new Audio(Format.WAV.getId(), null);
 
-    public static TTSMimoRequest create(String siteModel, String voicePrompt, String message, String voice) {
+    public static TTSMimoRequest create(String siteModel, String voicePrompt, @Nullable String voiceCloneAudio,
+                                        String message, String voice) {
         TTSMimoRequest request = new TTSMimoRequest();
         request.model = siteModel;
-        if (StringUtils.isNotBlank(voicePrompt)) {
-            request.messages.add(new Message("user", voicePrompt));
+        boolean voiceClone = TTSMimoSite.isVoiceCloneModel(siteModel);
+        if (StringUtils.isNotBlank(voicePrompt) || voiceClone) {
+            request.messages.add(new Message("user", StringUtils.defaultString(voicePrompt)));
         }
         request.messages.add(new Message("assistant", message));
-        if (TTSMimoSite.MODEL_VOICE_DESIGN.equals(siteModel)) {
+        if (TTSMimoSite.isVoiceDesignModel(siteModel)) {
             request.audio = new Audio(Format.WAV.getId(), null);
+        } else if (voiceClone) {
+            request.audio = new Audio(Format.WAV.getId(), voiceCloneAudio);
         } else {
             request.audio = new Audio(Format.WAV.getId(), voice);
         }
         return request;
     }
 
-    private record Message(String role, String content) {
+    private record Message(String role, Object content) {
     }
 
     private record Audio(String format, @Nullable String voice) {

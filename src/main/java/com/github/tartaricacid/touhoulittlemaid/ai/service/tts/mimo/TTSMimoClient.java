@@ -8,6 +8,7 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.gson.JsonSyntaxException;
 import com.google.common.net.HttpHeaders;
 import com.google.common.net.MediaType;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -16,7 +17,10 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Duration;
+import java.util.Base64;
 
 public class TTSMimoClient implements TTSClient {
     private static final Duration MAX_TIMEOUT = Duration.ofSeconds(20);
@@ -35,8 +39,17 @@ public class TTSMimoClient implements TTSClient {
         URI url = URI.create(this.site.url());
         String apiKey = this.site.secretKey();
         String voice = TTSMimoSite.getApiVoiceName(config.model());
+        String siteModel = this.site.effectiveSiteModel();
+        String voiceCloneAudio;
 
-        TTSMimoRequest request = TTSMimoRequest.create(this.site.siteModel(), this.site.voicePrompt(), message, voice);
+        try {
+            voiceCloneAudio = this.createVoiceCloneAudio(siteModel);
+        } catch (Exception e) {
+            callback.onFailure(null, e, ErrorCode.REQUEST_SENDING_ERROR);
+            return;
+        }
+
+        TTSMimoRequest request = TTSMimoRequest.create(siteModel, this.site.voicePrompt(), voiceCloneAudio, message, voice);
 
         HttpRequest.Builder builder = HttpRequest.newBuilder()
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.JSON_UTF_8.toString())
@@ -90,5 +103,36 @@ public class TTSMimoClient implements TTSClient {
             throw new IllegalStateException("Mimo TTS returned empty response body");
         }
         return mimoResponse.decodeAudioData();
+    }
+
+    @Nullable
+    private String createVoiceCloneAudio(String siteModel) throws IOException {
+        if (!TTSMimoSite.isVoiceCloneModel(siteModel)) {
+            return null;
+        }
+        String source = this.site.voiceCloneAudio();
+        if (StringUtils.isBlank(source)) {
+            throw new IllegalStateException("Mimo voiceclone reference audio is empty");
+        }
+
+        String base64Audio;
+        if (TTSMimoSite.VOICE_CLONE_MODE_FILE.equals(this.site.voiceCloneInputMode())) {
+            Path path = Path.of(TTSMimoSite.normalizeVoiceCloneFilePath(source));
+            if (!Files.exists(path)) {
+                throw new IOException("Mimo voiceclone reference audio file not found on server: " + path);
+            }
+            if (!Files.isRegularFile(path)) {
+                throw new IOException("Mimo voiceclone reference audio path is not a file on server: " + path);
+            }
+            if (!Files.isReadable(path)) {
+                throw new IOException("Mimo voiceclone reference audio file is not readable on server: " + path);
+            }
+            byte[] audio = Files.readAllBytes(path);
+            base64Audio = Base64.getEncoder().encodeToString(audio);
+        } else {
+            base64Audio = StringUtils.defaultString(source).replaceAll("\\s+", "");
+        }
+        String mimeType = TTSMimoSite.normalizeVoiceCloneMimeType(this.site.voiceCloneMimeType());
+        return "data:%s;base64,%s".formatted(mimeType, base64Audio);
     }
 }

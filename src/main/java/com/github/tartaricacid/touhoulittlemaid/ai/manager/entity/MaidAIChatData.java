@@ -151,14 +151,9 @@ public abstract class MaidAIChatData extends MaidAIChatSerializable {
 
     public String getTTSLanguage() {
         if (StringUtils.isNotBlank(ttsLanguage)) {
-            // TTS-LANG-DEBUG: 调试语言匹配问题时取消注释
-            // TouhouLittleMaid.LOGGER.info("[TTS-LANG-DEBUG] getTTSLanguage: using maid value={}", ttsLanguage);
             return ttsLanguage;
         }
-        String global = AIConfig.TTS_LANGUAGE.get();
-        // TTS-LANG-DEBUG: 调试语言匹配问题时取消注释
-        // TouhouLittleMaid.LOGGER.info("[TTS-LANG-DEBUG] getTTSLanguage: maid value blank, falling back to global={}", global);
-        return global;
+        return AIConfig.TTS_LANGUAGE.get();
     }
 
     public String getChatLanguage() {
