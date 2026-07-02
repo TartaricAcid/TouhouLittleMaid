@@ -116,10 +116,13 @@ public class TileEntityGomokuRenderer implements BlockEntityRenderer<TileEntityG
             MutableComponent postRoundIcon = Component.literal(" ⏹").withStyle(ChatFormatting.GREEN);
             MutableComponent roundTips = preRoundIcon.append(roundText).append(postRoundIcon);
             if (statue == Statue.WIN) {
-                if (gomoku.isPlayerTurn()) {
-                    loseTips = Component.translatable("message.touhou_little_maid.gomoku.win").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.DARK_PURPLE);
+                int winner = gomoku.getWinnerType();
+                if (winner == Point.BLACK) {
+                    loseTips = Component.translatable("message.touhou_little_maid.gomoku.black_win").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.DARK_PURPLE);
+                } else if (winner == Point.WHITE) {
+                    loseTips = Component.translatable("message.touhou_little_maid.gomoku.white_win").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.DARK_PURPLE);
                 } else {
-                    loseTips = Component.translatable("message.touhou_little_maid.gomoku.lose").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.DARK_PURPLE);
+                    loseTips = Component.translatable("message.touhou_little_maid.gomoku.win").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.DARK_PURPLE);
                 }
             } else {
                 loseTips = Component.translatable("message.touhou_little_maid.gomoku.draw").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.DARK_PURPLE);

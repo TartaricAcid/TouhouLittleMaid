@@ -59,6 +59,9 @@ public class MaidUpdateActivityFromSchedule extends Behavior<EntityMaid> {
         long dayTime = level.getDayTime();
         if (maid.isMaidInSittingPose() || maid.isPassenger()) {
             if (gameTime - brain.lastScheduleUpdate > 20L) {
+                if (maid.getVehicle() instanceof EntitySit) {
+                    return;
+                }
                 brain.lastScheduleUpdate = gameTime;
                 Activity activity = brain.getSchedule().getActivityAt((int) (dayTime % 24000L));
                 Activity riderActivity;

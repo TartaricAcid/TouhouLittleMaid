@@ -74,7 +74,8 @@ public class MaidFishingHookRenderer<T extends MaidFishingHook> extends EntityRe
         double cos = Mth.cos(lerpBodyRot);
 
         double x1 = Mth.lerp(partialTicks, maid.xo, maid.getX()) - cos * 0.35D - sin * 0.8D;
-        double y1 = maid.yo + maid.getEyeHeight() + (maid.getY() - maid.yo) * partialTicks - 0.45D;
+        double yShift = maid.getVehicle() == null ? 0.0D : -0.65D;
+        double y1 = maid.yo + maid.getEyeHeight() + (maid.getY() - maid.yo) * partialTicks + yShift;
         double z1 = Mth.lerp(partialTicks, maid.zo, maid.getZ()) - sin * 0.35D + cos * 0.8D;
 
         double x2 = Mth.lerp(partialTicks, fishingHook.xo, fishingHook.getX());
@@ -82,7 +83,7 @@ public class MaidFishingHookRenderer<T extends MaidFishingHook> extends EntityRe
         double z2 = Mth.lerp(partialTicks, fishingHook.zo, fishingHook.getZ());
 
         float x = (float) (x1 - x2);
-        float y = (float) (y1 - y2) - 0.1875F;
+        float y = (float) (y1 - y2) + 0.0625F;
         float z = (float) (z1 - z2);
 
         float[] colors = getLineColor(fishingHook);

@@ -508,8 +508,7 @@ public class MaidFishingHook extends Projectile {
         ItemStack mainHandItem = maid.getMainHandItem();
         boolean hasFishingRod = mainHandItem.canPerformAction(ToolActions.FISHING_ROD_CAST);
         boolean isFishingTask = maid.getTask() instanceof TaskFishing;
-        boolean hasVehicle = maid.getVehicle() != null;
-        if (!maid.isRemoved() && maid.isAlive() && hasVehicle && isFishingTask && hasFishingRod && this.distanceToSqr(maid) < 256) {
+        if (!maid.isRemoved() && maid.isAlive() && isFishingTask && hasFishingRod && this.distanceToSqr(maid) < 256) {
             return false;
         } else {
             this.discard();

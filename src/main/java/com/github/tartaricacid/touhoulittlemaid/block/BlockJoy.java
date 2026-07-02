@@ -86,9 +86,13 @@ public abstract class BlockJoy extends BaseEntityBlock {
         if (!state.is(newState.getBlock())) {
             BlockEntity blockEntity = worldIn.getBlockEntity(pos);
             if (blockEntity instanceof TileEntityJoy joy && worldIn instanceof ServerLevel serverLevel) {
-                Entity entity = serverLevel.getEntity(joy.getSitId());
-                if (entity instanceof EntitySit) {
-                    entity.discard();
+                Entity entityA = serverLevel.getEntity(joy.getSitId());
+                if (entityA instanceof EntitySit) {
+                    entityA.discard();
+                }
+                Entity entityB = serverLevel.getEntity(joy.getSitIdB());
+                if (entityB instanceof EntitySit) {
+                    entityB.discard();
                 }
             }
         }
