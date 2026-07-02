@@ -69,9 +69,9 @@ public class TileEntityCChessRenderer implements BlockEntityRenderer<TileEntityC
 
         if (chess.isCheckmate()) {
             if (!chess.isPlayerTurn()) {
-                loseTips = Component.translatable("message.touhou_little_maid.gomoku.win").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.DARK_PURPLE);
+                loseTips = Component.translatable("message.touhou_little_maid.cchess.red_win").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.DARK_PURPLE);
             } else {
-                loseTips = Component.translatable("message.touhou_little_maid.gomoku.lose").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.DARK_PURPLE);
+                loseTips = Component.translatable("message.touhou_little_maid.cchess.black_win").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.DARK_PURPLE);
             }
         } else if (chess.isMoveNumberLimit()) {
             loseTips = Component.translatable("message.touhou_little_maid.cchess.move_limit").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.DARK_PURPLE);
@@ -128,9 +128,19 @@ public class TileEntityCChessRenderer implements BlockEntityRenderer<TileEntityC
                     byte piecesIndex = data[Position.COORD_XY(x, y)];
                     if (CChessUtil.isRed(piecesIndex) || CChessUtil.isBlack(piecesIndex)) {
                         CChessPiecesModel chessPiecesModel = this.chessPiecesModels[piecesIndex];
-                        chessPiecesModel.renderToBuffer(poseStack, piecesBuff, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
-                        if (selectX == x && selectY == y) {
-                            selectedModels.renderToBuffer(poseStack, piecesBuff, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
+                        if (CChessUtil.isBlack(piecesIndex)) {
+                            poseStack.pushPose();
+                            poseStack.mulPose(Axis.YN.rotationDegrees(180));
+                            chessPiecesModel.renderToBuffer(poseStack, piecesBuff, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
+                            if (selectX == x && selectY == y) {
+                                selectedModels.renderToBuffer(poseStack, piecesBuff, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
+                            }
+                            poseStack.popPose();
+                        } else {
+                            chessPiecesModel.renderToBuffer(poseStack, piecesBuff, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
+                            if (selectX == x && selectY == y) {
+                                selectedModels.renderToBuffer(poseStack, piecesBuff, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
+                            }
                         }
                     }
                     poseStack.translate(0.304, 0, 0);

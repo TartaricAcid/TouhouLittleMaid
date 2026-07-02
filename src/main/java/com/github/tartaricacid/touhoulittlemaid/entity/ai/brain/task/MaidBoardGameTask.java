@@ -11,6 +11,7 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
 import net.minecraft.world.entity.ai.behavior.BlockPosTracker;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
@@ -83,7 +84,9 @@ public class MaidBoardGameTask extends MaidCheckRateTask {
     private boolean isOccupied(ServerLevel worldIn, BlockPos pos) {
         BlockEntity te = worldIn.getBlockEntity(pos);
         if (te instanceof IBoardGameEntityBlock gameBlock) {
-            return worldIn.getEntity(gameBlock.getSitId()) != null;
+            Entity seatA = worldIn.getEntity(gameBlock.getSitId());
+            Entity seatB = worldIn.getEntity(gameBlock.getSitIdB());
+            return seatA != null && seatB != null;
         }
         return true;
     }

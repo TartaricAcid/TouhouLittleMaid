@@ -6,6 +6,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -19,7 +21,9 @@ import java.util.UUID;
 
 public abstract class TileEntityJoy extends BlockEntity {
     private static final String SIT_ID = "SitId";
+    private static final String SIT_ID_B = "SitIdB";
     private UUID sitId = Util.NIL_UUID;
+    private UUID sitIdB = Util.NIL_UUID;
 
     public TileEntityJoy(BlockEntityType<?> type, BlockPos pos, BlockState blockState) {
         super(type, pos, blockState);
@@ -28,6 +32,7 @@ public abstract class TileEntityJoy extends BlockEntity {
     @Override
     protected void saveAdditional(CompoundTag tag) {
         getPersistentData().putUUID(SIT_ID, this.sitId);
+        getPersistentData().putUUID(SIT_ID_B, this.sitIdB);
         super.saveAdditional(tag);
     }
 
@@ -35,6 +40,7 @@ public abstract class TileEntityJoy extends BlockEntity {
     public void load(CompoundTag nbt) {
         super.load(nbt);
         this.sitId = getPersistentData().getUUID(SIT_ID);
+        this.sitIdB = getPersistentData().getUUID(SIT_ID_B);
     }
 
     @Override
@@ -68,5 +74,34 @@ public abstract class TileEntityJoy extends BlockEntity {
 
     public UUID getSitId() {
         return this.sitId;
+    }
+
+    public void setSitIdB(UUID sitIdB) {
+        this.sitIdB = sitIdB;
+    }
+
+    public UUID getSitIdB() {
+        return this.sitIdB;
+    }
+
+    public boolean isFullyOccupied(ServerLevel level) {
+        return level.getEntity(this.sitId) != null && level.getEntity(this.sitIdB) != null;
+    }
+
+    public int getOccupiedSeatCount(ServerLevel level) {
+        int count = 0;
+        if (level.getEntity(this.sitId) != null) count++;
+        if (level.getEntity(this.sitIdB) != null) count++;
+        return count;
+    }
+
+    @Nullable
+    public Entity getSeatAEntity(ServerLevel level) {
+        return level.getEntity(this.sitId);
+    }
+
+    @Nullable
+    public Entity getSeatBEntity(ServerLevel level) {
+        return level.getEntity(this.sitIdB);
     }
 }

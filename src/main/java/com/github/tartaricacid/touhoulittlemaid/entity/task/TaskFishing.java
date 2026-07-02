@@ -3,8 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.entity.task;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.task.FunctionCallSwitchResult;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
-import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.ride.MaidRideFindWaterTask;
-import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidFindSitTask;
+import com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.task.MaidFishingTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
 import com.github.tartaricacid.touhoulittlemaid.util.TaskEquipUtil;
@@ -43,12 +42,12 @@ public class TaskFishing implements IMaidTask {
 
     @Override
     public List<Pair<Integer, BehaviorControl<? super EntityMaid>>> createBrainTasks(EntityMaid maid) {
-        return Lists.newArrayList(Pair.of(5, new MaidFindSitTask(0.6f)));
+        return Lists.newArrayList(Pair.of(5, new MaidFishingTask()));
     }
 
     @Override
     public List<Pair<Integer, BehaviorControl<? super EntityMaid>>> createRideBrainTasks(EntityMaid maid) {
-        return Lists.newArrayList(Pair.of(5, new MaidRideFindWaterTask(6, 3)));
+        return Collections.emptyList();
     }
 
     @Override
@@ -58,7 +57,7 @@ public class TaskFishing implements IMaidTask {
 
     @Override
     public boolean workPointTask(EntityMaid maid) {
-        return true;
+        return false;
     }
 
     @Override
@@ -75,5 +74,15 @@ public class TaskFishing implements IMaidTask {
     @Override
     public String getMaidActionSummary() {
         return "Use fishing rod to fish";
+    }
+
+    @Override
+    public boolean enableLookAndRandomWalk(EntityMaid maid) {
+        return false;
+    }
+
+    @Override
+    public boolean canSitInJoy(EntityMaid maid, String joyType) {
+        return "fishing".equals(joyType);
     }
 }

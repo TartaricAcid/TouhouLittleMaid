@@ -17,18 +17,25 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.network.NetworkHooks;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.UUID;
 
 public class EntitySit extends Entity {
     public static final EntityType<EntitySit> TYPE = EntityType.Builder.<EntitySit>of(EntitySit::new, MobCategory.MISC)
             .sized(0.5f, 0.1f).clientTrackingRange(10).build("sit");
     private static final EntityDataAccessor<String> SIT_TYPE = SynchedEntityData.defineId(EntitySit.class, EntityDataSerializers.STRING);
+    private static final UUID REACH_MODIFIER_UUID = UUID.fromString("c9d276a3-33d5-4b7a-a206-d2b18e2da4d5");
     private int passengerTick = 0;
     private BlockPos associatedBlockPos = BlockPos.ZERO;
+    private UUID reachModifiedPlayer = null;
 
     public EntitySit(EntityType<?> entityTypeIn, Level worldIn) {
         super(entityTypeIn, worldIn);
@@ -73,9 +80,19 @@ public class EntitySit extends Entity {
     public void tick() {
         if (!this.level.isClientSide) {
             this.checkBelowWorld();
+            this.checkGroundValid();
             this.checkPassengers();
+            this.tickReachModifier();
             if (this.getFirstPassenger() instanceof EntityMaid maid) {
                 this.tickMaid(maid);
+            }
+        }
+    }
+
+    private void checkGroundValid() {
+        if ("fishing".equals(this.getJoyType())) {
+            if (!this.level.getBlockState(this.associatedBlockPos.below()).blocksMotion()) {
+                this.discard();
             }
         }
     }
@@ -88,18 +105,38 @@ public class EntitySit extends Entity {
             String joyType = this.getJoyType();
             IMaidTask task = maid.getTask();
 
-            // 给予好感度提升
             manager.apply(joyType);
-            // 如果是空闲状态，那么娱乐方块可以随便坐
             if (this.isIdleSchedule(maid)) {
                 return;
             }
-            // 如果是工作状态，看看这个工作是否允许你坐在上面
             if (this.isWorkSchedule(maid) && task.canSitInJoy(maid, joyType)) {
                 return;
             }
-            // 否则，不允许在上面待着
             maid.stopRiding();
+        }
+    }
+
+    private void tickReachModifier() {
+        Entity passenger = this.getFirstPassenger();
+        if (passenger instanceof Player player) {
+            if (reachModifiedPlayer == null || !reachModifiedPlayer.equals(player.getUUID())) {
+                var attr = player.getAttribute(ForgeMod.BLOCK_REACH.get());
+                if (attr != null && attr.getModifier(REACH_MODIFIER_UUID) == null) {
+                    attr.addTransientModifier(new AttributeModifier(REACH_MODIFIER_UUID, "gomoku_reach", 3.0, AttributeModifier.Operation.ADDITION));
+                }
+                reachModifiedPlayer = player.getUUID();
+            }
+        } else if (reachModifiedPlayer != null) {
+            if (this.level instanceof ServerLevel serverLevel) {
+                Player oldPlayer = serverLevel.getPlayerByUUID(reachModifiedPlayer);
+                if (oldPlayer != null) {
+                    var attr = oldPlayer.getAttribute(ForgeMod.BLOCK_REACH.get());
+                    if (attr != null) {
+                        attr.removeModifier(REACH_MODIFIER_UUID);
+                    }
+                }
+            }
+            reachModifiedPlayer = null;
         }
     }
 
