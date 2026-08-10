@@ -45,11 +45,8 @@ public class TTSFishAudioClient implements TTSClient {
                 .POST(HttpRequest.BodyPublishers.ofString(GSON.toJson(request)))
                 .timeout(MAX_TIMEOUT).uri(url);
 
-        // 2026/05/03：最近 Fish Audio 升级了接口，必须要带一个 model 参数
-        if (!this.site.headers().containsKey("model")) {
-            builder.header("model", "s2-pro");
-        }
         this.site.headers().forEach(builder::header);
+        builder.setHeader("model", this.site.siteModel());
         HttpRequest httpRequest = builder.build();
 
         httpClient.sendAsync(httpRequest, HttpResponse.BodyHandlers.ofByteArray())

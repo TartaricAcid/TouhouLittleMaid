@@ -16,6 +16,7 @@ import java.util.Map;
 
 public final class TTSFishAudioSite implements TTSSite, SupportModelSelect {
     public static final String API_TYPE = TTSApiType.FISH_AUDIO.getName();
+    public static final String DEFAULT_SITE_MODEL = "s2.1-pro";
 
     private final String id;
     private final ResourceLocation icon;
@@ -25,14 +26,17 @@ public final class TTSFishAudioSite implements TTSSite, SupportModelSelect {
     private String url;
     private boolean enabled;
     private String secretKey;
+    private String siteModel;
 
     public TTSFishAudioSite(String id, ResourceLocation icon, String url, boolean enabled,
-                            String secretKey, Map<String, String> headers, Map<String, String> models) {
+                            String secretKey, String siteModel,
+                            Map<String, String> headers, Map<String, String> models) {
         this.id = id;
         this.icon = icon;
         this.url = url;
         this.enabled = enabled;
         this.secretKey = secretKey;
+        this.siteModel = StringUtils.defaultIfBlank(siteModel, headers.getOrDefault("model", DEFAULT_SITE_MODEL));
         this.headers = headers;
         this.models = models;
     }
@@ -71,6 +75,10 @@ public final class TTSFishAudioSite implements TTSSite, SupportModelSelect {
         return secretKey;
     }
 
+    public String siteModel() {
+        return siteModel;
+    }
+
     @Override
     public Map<String, String> headers() {
         return headers;
@@ -99,6 +107,10 @@ public final class TTSFishAudioSite implements TTSSite, SupportModelSelect {
         this.secretKey = secretKey;
     }
 
+    public void setSiteModel(String siteModel) {
+        this.siteModel = siteModel;
+    }
+
     public static class Serializer implements SerializableSite<TTSFishAudioSite> {
         public static final Codec<TTSFishAudioSite> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Codec.STRING.fieldOf(ID).forGetter(TTSFishAudioSite::id),
@@ -106,6 +118,7 @@ public final class TTSFishAudioSite implements TTSSite, SupportModelSelect {
                 Codec.STRING.fieldOf(URL).forGetter(TTSFishAudioSite::url),
                 Codec.BOOL.fieldOf(ENABLED).forGetter(TTSFishAudioSite::enabled),
                 Codec.STRING.fieldOf(SECRET_KEY).forGetter(TTSFishAudioSite::secretKey),
+                Codec.STRING.optionalFieldOf(SITE_MODEL, StringUtils.EMPTY).forGetter(TTSFishAudioSite::siteModel),
                 Codec.unboundedMap(Codec.STRING, Codec.STRING).fieldOf(HEADERS).forGetter(TTSFishAudioSite::headers),
                 Codec.unboundedMap(Codec.STRING, Codec.STRING).fieldOf(MODELS).forGetter(TTSFishAudioSite::models)
         ).apply(instance, TTSFishAudioSite::new));
@@ -113,7 +126,7 @@ public final class TTSFishAudioSite implements TTSSite, SupportModelSelect {
         @Override
         public TTSFishAudioSite defaultSite() {
             return new TTSFishAudioSite(API_TYPE, SerializableSite.defaultIcon(API_TYPE),
-                    "https://api.fish.audio/v1/tts", false, StringUtils.EMPTY, Map.of(),
+                    "https://api.fish.audio/v1/tts", false, StringUtils.EMPTY, DEFAULT_SITE_MODEL, Map.of(),
                     Map.of("b2b2d0fa88ee44d789da28ebbd97421e", "Neuro-sama (EN)",
                             "4858e0be678c4449bf3a7646186edd42", "Nahida (EN)",
                             "1aacaeb1b840436391b835fd5513f4c4", "Furina (CN)",

@@ -30,7 +30,7 @@ public class TTSSiliconflowClient implements TTSClient {
         String voice = config.model();
 
         TTSSiliconflowRequest request = TTSSiliconflowRequest.create()
-                .setInput(message).setModel(TTSSiliconflowSite.VOICE_MODEL)
+                .setInput(message).setModel(this.site.siteModel())
                 .setVoice(voice);
 
         HttpRequest.Builder builder = HttpRequest.newBuilder()

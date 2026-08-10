@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class TTSSiliconflowSite implements TTSSite, SupportModelSelect {
     public static final String API_TYPE = TTSApiType.SILICONFLOW.getName();
-    public static final String VOICE_MODEL = "FunAudioLLM/CosyVoice2-0.5B";
+    public static final String DEFAULT_SITE_MODEL = "FunAudioLLM/CosyVoice2-0.5B";
 
     private final String id;
     private final ResourceLocation icon;
@@ -26,14 +26,17 @@ public class TTSSiliconflowSite implements TTSSite, SupportModelSelect {
     private String url;
     private boolean enabled;
     private String secretKey;
+    private String siteModel;
 
     public TTSSiliconflowSite(String id, ResourceLocation icon, String url, boolean enabled,
-                              String secretKey, Map<String, String> headers, Map<String, String> models) {
+                              String secretKey, String siteModel,
+                              Map<String, String> headers, Map<String, String> models) {
         this.id = id;
         this.icon = icon;
         this.url = url;
         this.enabled = enabled;
         this.secretKey = secretKey;
+        this.siteModel = StringUtils.defaultIfBlank(siteModel, DEFAULT_SITE_MODEL);
         this.headers = headers;
         this.models = models;
     }
@@ -72,6 +75,10 @@ public class TTSSiliconflowSite implements TTSSite, SupportModelSelect {
         return secretKey;
     }
 
+    public String siteModel() {
+        return siteModel;
+    }
+
     @Override
     public Map<String, String> headers() {
         return headers;
@@ -100,6 +107,10 @@ public class TTSSiliconflowSite implements TTSSite, SupportModelSelect {
         this.secretKey = secretKey;
     }
 
+    public void setSiteModel(String siteModel) {
+        this.siteModel = siteModel;
+    }
+
     public static class Serializer implements SerializableSite<TTSSiliconflowSite> {
         public static final Codec<TTSSiliconflowSite> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Codec.STRING.fieldOf(ID).forGetter(TTSSiliconflowSite::id),
@@ -107,6 +118,7 @@ public class TTSSiliconflowSite implements TTSSite, SupportModelSelect {
                 Codec.STRING.fieldOf(URL).forGetter(TTSSiliconflowSite::url),
                 Codec.BOOL.fieldOf(ENABLED).forGetter(TTSSiliconflowSite::enabled),
                 Codec.STRING.fieldOf(SECRET_KEY).forGetter(TTSSiliconflowSite::secretKey),
+                Codec.STRING.optionalFieldOf(SITE_MODEL, StringUtils.EMPTY).forGetter(TTSSiliconflowSite::siteModel),
                 Codec.unboundedMap(Codec.STRING, Codec.STRING).fieldOf(HEADERS).forGetter(TTSSiliconflowSite::headers),
                 Codec.unboundedMap(Codec.STRING, Codec.STRING).fieldOf(MODELS).forGetter(TTSSiliconflowSite::models)
         ).apply(instance, TTSSiliconflowSite::new));
@@ -114,11 +126,12 @@ public class TTSSiliconflowSite implements TTSSite, SupportModelSelect {
         @Override
         public TTSSiliconflowSite defaultSite() {
             return new TTSSiliconflowSite(API_TYPE, SerializableSite.defaultIcon(API_TYPE),
-                    "https://api.siliconflow.cn/v1/audio/speech", false, StringUtils.EMPTY, Map.of(),
-                    Map.of(VOICE_MODEL + ":anna", "anna",
-                            VOICE_MODEL + ":bella", "bella",
-                            VOICE_MODEL + ":claire", "claire",
-                            VOICE_MODEL + ":diana", "diana"));
+                    "https://api.siliconflow.cn/v1/audio/speech", false, StringUtils.EMPTY,
+                    DEFAULT_SITE_MODEL, Map.of(),
+                    Map.of(DEFAULT_SITE_MODEL + ":anna", "anna",
+                            DEFAULT_SITE_MODEL + ":bella", "bella",
+                            DEFAULT_SITE_MODEL + ":claire", "claire",
+                            DEFAULT_SITE_MODEL + ":diana", "diana"));
         }
 
         @Override

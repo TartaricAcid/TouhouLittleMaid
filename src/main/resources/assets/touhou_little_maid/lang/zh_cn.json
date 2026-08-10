@@ -58,6 +58,8 @@
   "ai.touhou_little_maid.chat.settings.hub.model.reasoning": "思考模型",
   "ai.touhou_little_maid.chat.settings.hub.model.normal": "普通模型",
   "ai.touhou_little_maid.chat.settings.hub.model": "模型",
+  "ai.touhou_little_maid.chat.settings.hub.gpt_model_path": "GPT 模型路径",
+  "ai.touhou_little_maid.chat.settings.hub.sovits_model_path": "SoVITS 模型路径",
   "ai.touhou_little_maid.chat.settings.hub.voices": "声音列表",
   "ai.touhou_little_maid.chat.settings.hub.secret_id_is_empty": "秘钥 ID 不能为空",
   "ai.touhou_little_maid.chat.settings.hub.secret_key_is_empty": "秘钥不能为空",

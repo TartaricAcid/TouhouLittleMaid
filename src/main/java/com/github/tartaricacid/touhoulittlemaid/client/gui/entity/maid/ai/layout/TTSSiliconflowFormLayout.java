@@ -11,12 +11,11 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.FormField.SECRET_KEY;
-import static com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.FormField.URL;
+import static com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.FormField.*;
 import static com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai.Translations.*;
 
 /**
- * SiliconFlow TTS：URL + Secret Key + 模型列表
+ * SiliconFlow TTS：URL + Secret Key + 基础模型 + 音色列表
  */
 public class TTSSiliconflowFormLayout extends TTSSiteFormLayout {
     public TTSSiliconflowFormLayout(TTSSite sourceSite) {
@@ -28,7 +27,8 @@ public class TTSSiliconflowFormLayout extends TTSSiteFormLayout {
         TTSSiliconflowSite site = (TTSSiliconflowSite) this.sourceSite;
         return List.of(
                 new FieldDescriptor(URL, site.url(), true, false),
-                new FieldDescriptor(SECRET_KEY, site.secretKey(), true, true)
+                new FieldDescriptor(SECRET_KEY, site.secretKey(), true, true),
+                new FieldDescriptor(MODEL, site.siteModel(), true, false)
         );
     }
 
@@ -55,11 +55,16 @@ public class TTSSiliconflowFormLayout extends TTSSiteFormLayout {
             showStatus.accept(SECRET_KEY_IS_EMPTY);
             return null;
         }
-        if (models.isEmpty()) {
+        String siteModel = fieldValues.apply(MODEL);
+        if (StringUtils.isBlank(siteModel)) {
             showStatus.accept(MODEL_IS_EMPTY);
             return null;
         }
+        if (models.isEmpty()) {
+            showStatus.accept(VOICE_IS_EMPTY);
+            return null;
+        }
         return new TTSSiliconflowSite(site.id(), site.icon(), url, site.enabled(),
-                fieldValues.apply(SECRET_KEY), site.headers(), models);
+                secretKey, siteModel, site.headers(), models);
     }
 }
