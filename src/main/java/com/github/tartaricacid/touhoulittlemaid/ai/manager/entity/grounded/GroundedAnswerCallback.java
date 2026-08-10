@@ -47,6 +47,12 @@ public class GroundedAnswerCallback extends LLMCallback {
     }
 
     @Override
+    public String cacheIsolationKey() {
+        // 子 agent 使用独立的隔离键，避免与主对话共用缓存路由，相互冲刷前缀缓存
+        return super.cacheIsolationKey() + "-grounded";
+    }
+
+    @Override
     public void onFunctionCall(Message choice, LLMClient client) {
         // 知识库回答时不处理函数调用，直接忽略（理论上也不会触发此回调）
     }

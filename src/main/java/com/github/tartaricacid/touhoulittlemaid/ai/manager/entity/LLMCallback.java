@@ -116,6 +116,17 @@ public class LLMCallback implements ResponseCallback<ResponseChat> {
     }
 
     /**
+     * 用于部分站点（如 DeepSeek、OpenRouter）的前缀缓存隔离，避免主对话与子 agent 对话
+     * （如知识库问答的 {@code GroundedAnswerCallback}）共用同一个缓存路由 / KVCache 槽位，
+     * 相互刷新导致缓存命中率下降。
+     * <p>
+     * 默认使用女仆的 UUID 作为主对话的隔离键，子 agent 回调应当覆盖此方法返回一个不同的键。
+     */
+    public String cacheIsolationKey() {
+        return maid.getStringUUID();
+    }
+
+    /**
      * 当前是否运行在服务端主线程。
      * <p>
      * 若当前上下文不在 {@link ServerLevel}，则返回 {@code false}。
