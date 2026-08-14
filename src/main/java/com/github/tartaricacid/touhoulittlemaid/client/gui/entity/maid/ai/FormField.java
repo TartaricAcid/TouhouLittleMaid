@@ -18,6 +18,8 @@ public class FormField {
     public static final String HOT_WORD = "hot_word";
     public static final String REF_AUDIO_PATH = "ref_audio_path";
     public static final String PROMPT_TEXT = "prompt_text";
+    public static final String GPT_MODEL_PATH = "gpt_model_path";
+    public static final String SOVITS_MODEL_PATH = "sovits_model_path";
 
     public final String label;
     public final boolean editable;

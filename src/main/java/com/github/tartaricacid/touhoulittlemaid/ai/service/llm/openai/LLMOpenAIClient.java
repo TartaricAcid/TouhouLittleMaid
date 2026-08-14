@@ -113,6 +113,17 @@ public class LLMOpenAIClient implements LLMClient {
             chatCompletion.mergeSystemMessages();
         }
 
+        // 部分站点支持通过隔离键将不同的逻辑对话路由到独立的前缀缓存 / KVCache 槽位，
+        // 避免主对话与子 agent 对话（如知识库问答）共用同一份缓存，相互冲刷导致命中率下降
+        String cacheIsolationKey = callback.cacheIsolationKey();
+        if (this.site.id().equals(DefaultLLMSite.DEEPSEEK.id())) {
+            // https://api-docs.deepseek.com/zh-cn/quick_start/rate_limit
+            chatCompletion.userId(cacheIsolationKey);
+        } else if (this.site.id().equals(DefaultLLMSite.OPEN_ROUTER.id())) {
+            // https://openrouter.ai/docs/guides/overview/models
+            chatCompletion.sessionId(cacheIsolationKey);
+        }
+
         HttpRequest.Builder builder = HttpRequest.newBuilder()
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.JSON_UTF_8.toString())
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + apiKey)

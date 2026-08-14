@@ -26,6 +26,22 @@ public class ChatCompletion {
     @SerializedName("thinking")
     private Thinking thinking = null;
 
+    /**
+     * DeepSeek 专用，用于 KVCache 隔离，避免主对话与子 agent 对话相互冲刷前缀缓存
+     * <p>
+     * https://api-docs.deepseek.com/zh-cn/quick_start/rate_limit
+     */
+    @SerializedName("user_id")
+    private String userId = null;
+
+    /**
+     * OpenRouter 专用，用于 Provider Sticky Routing，避免主对话与子 agent 对话相互冲刷前缀缓存
+     * <p>
+     * https://openrouter.ai/docs/guides/overview/models
+     */
+    @SerializedName("session_id")
+    private String sessionId = null;
+
     public static ChatCompletion create() {
         return new ChatCompletion();
     }
@@ -75,6 +91,16 @@ public class ChatCompletion {
 
     public ChatCompletion disableThinking() {
         this.thinking = Thinking.disabled();
+        return this;
+    }
+
+    public ChatCompletion userId(String userId) {
+        this.userId = userId;
+        return this;
+    }
+
+    public ChatCompletion sessionId(String sessionId) {
+        this.sessionId = sessionId;
         return this;
     }
 

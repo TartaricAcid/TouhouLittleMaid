@@ -19,7 +19,7 @@ import static com.github.tartaricacid.touhoulittlemaid.client.gui.entity.maid.ai
 
 
 /**
- * GPT-SoVITS TTS：URL + Secret Key + 参考音频 + 提示文本 + 语言/切分选项
+ * GPT-SoVITS TTS：URL + Secret Key + GPT/SoVITS 模型 + 参考音频 + 提示文本 + 语言/切分选项
  */
 public class TTSGptSovitsFormLayout extends TTSSiteFormLayout {
     private static final List<String> PROMPT_LANG_OPTIONS = List.of("en", "zh", "jp", "auto");
@@ -41,6 +41,8 @@ public class TTSGptSovitsFormLayout extends TTSSiteFormLayout {
         return List.of(
                 new FieldDescriptor(URL, site.url(), true, false),
                 new FieldDescriptor(SECRET_KEY, site.secretKey(), true, true),
+                new FieldDescriptor(GPT_MODEL_PATH, site.gptModelPath(), true, false),
+                new FieldDescriptor(SOVITS_MODEL_PATH, site.sovitsModelPath(), true, false),
                 new FieldDescriptor(REF_AUDIO_PATH, site.refAudioPath(), true, false),
                 new FieldDescriptor(PROMPT_TEXT, site.promptText(), true, false)
         );
@@ -101,6 +103,8 @@ public class TTSGptSovitsFormLayout extends TTSSiteFormLayout {
         }
         return new TTSGptSovitsSite(site.id(), site.icon(), url, site.enabled(),
                 fieldValues.apply(SECRET_KEY),
+                fieldValues.apply(GPT_MODEL_PATH),
+                fieldValues.apply(SOVITS_MODEL_PATH),
                 fieldValues.apply(REF_AUDIO_PATH),
                 fieldValues.apply(PROMPT_TEXT),
                 this.promptLangValue,

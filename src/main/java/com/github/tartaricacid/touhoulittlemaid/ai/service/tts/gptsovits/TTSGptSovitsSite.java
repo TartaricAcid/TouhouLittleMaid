@@ -26,13 +26,16 @@ public final class TTSGptSovitsSite implements TTSSite {
     private String url;
     private boolean enabled;
     private String secretKey;
+    private String gptModelPath;
+    private String sovitsModelPath;
     private String refAudioPath;
     private String promptText;
     private String promptLang;
     private String textSplitMethod;
 
     public TTSGptSovitsSite(String id, ResourceLocation icon, String url, boolean enabled,
-                            String secretKey, String refAudioPath,
+                            String secretKey, String gptModelPath, String sovitsModelPath,
+                            String refAudioPath,
                             String promptText, String promptLang,
                             String textSplitMethod, List<String> auxRefAudioPaths,
                             Map<String, String> headers) {
@@ -41,6 +44,8 @@ public final class TTSGptSovitsSite implements TTSSite {
         this.url = url;
         this.enabled = enabled;
         this.secretKey = secretKey;
+        this.gptModelPath = gptModelPath;
+        this.sovitsModelPath = sovitsModelPath;
         this.refAudioPath = refAudioPath;
         this.promptText = promptText;
         this.promptLang = promptLang;
@@ -81,6 +86,14 @@ public final class TTSGptSovitsSite implements TTSSite {
 
     public String secretKey() {
         return secretKey;
+    }
+
+    public String gptModelPath() {
+        return gptModelPath;
+    }
+
+    public String sovitsModelPath() {
+        return sovitsModelPath;
     }
 
     public String refAudioPath() {
@@ -126,6 +139,14 @@ public final class TTSGptSovitsSite implements TTSSite {
         this.secretKey = secretKey;
     }
 
+    public void setGptModelPath(String gptModelPath) {
+        this.gptModelPath = gptModelPath;
+    }
+
+    public void setSovitsModelPath(String sovitsModelPath) {
+        this.sovitsModelPath = sovitsModelPath;
+    }
+
     public void setRefAudioPath(String refAudioPath) {
         this.refAudioPath = refAudioPath;
     }
@@ -149,6 +170,8 @@ public final class TTSGptSovitsSite implements TTSSite {
                 Codec.STRING.fieldOf(URL).forGetter(TTSGptSovitsSite::url),
                 Codec.BOOL.fieldOf(ENABLED).forGetter(TTSGptSovitsSite::enabled),
                 Codec.STRING.fieldOf(SECRET_KEY).forGetter(TTSGptSovitsSite::secretKey),
+                Codec.STRING.optionalFieldOf("gpt_model_path", StringUtils.EMPTY).forGetter(TTSGptSovitsSite::gptModelPath),
+                Codec.STRING.optionalFieldOf("sovits_model_path", StringUtils.EMPTY).forGetter(TTSGptSovitsSite::sovitsModelPath),
                 Codec.STRING.fieldOf("ref_audio_path").forGetter(TTSGptSovitsSite::refAudioPath),
                 Codec.STRING.fieldOf("prompt_text").forGetter(TTSGptSovitsSite::promptText),
                 Codec.STRING.fieldOf("prompt_lang").forGetter(TTSGptSovitsSite::promptLang),
@@ -162,6 +185,7 @@ public final class TTSGptSovitsSite implements TTSSite {
             return new TTSGptSovitsSite(API_TYPE, SerializableSite.defaultIcon(API_TYPE),
                     "http://127.0.0.1:9880/tts", false,
                     StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY,
+                    StringUtils.EMPTY, StringUtils.EMPTY,
                     "zh", "cut1", List.of(), Map.of()
             );
         }

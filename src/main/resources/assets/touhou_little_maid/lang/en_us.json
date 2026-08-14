@@ -50,6 +50,8 @@
   "ai.touhou_little_maid.chat.settings.hub.secret_id": "Secret ID",
   "ai.touhou_little_maid.chat.settings.hub.secret_key": "Secret Key",
   "ai.touhou_little_maid.chat.settings.hub.model": "Model",
+  "ai.touhou_little_maid.chat.settings.hub.gpt_model_path": "GPT Model Path",
+  "ai.touhou_little_maid.chat.settings.hub.sovits_model_path": "SoVITS Model Path",
   "ai.touhou_little_maid.chat.settings.hub.models": "Models",
   "ai.touhou_little_maid.chat.settings.hub.voices": "Voices",
   "ai.touhou_little_maid.chat.settings.hub.app_key": "App Key",
