@@ -147,6 +147,10 @@ public class BlockAltar extends Block implements EntityBlock {
                 if (!stack.isEmpty()) {
                     Block.popResource(worldIn, pos.offset(0, 1, 0), stack);
                 }
+                // [修复] 机械动力动力钻头等非玩家破坏路径会走 onRemove，
+                // 原本未清理祭坛数据导致 PosListData 残留，进而引发 altarCraft 数组越界。
+                // 此处补充调用 restoreStorageBlock，与 playerWillDestroy / onBlockExploded 行为一致。
+                this.restoreStorageBlock(worldIn, pos, altar.getBlockPosList());
             });
         }
         super.onRemove(state, worldIn, pos, newState, isMoving);
@@ -237,7 +241,14 @@ public class BlockAltar extends Block implements EntityBlock {
         for (int i = 0; i < posList.size(); i++) {
             BlockEntity te = world.getBlockEntity(posList.get(i));
             if (te instanceof TileEntityAltar) {
-                arrayList.add(i, ((TileEntityAltar) te).getStorageItem());
+                // [修复] 原来使用 arrayList.add(i, ...)，当某个祭坛位置因被动力钻头破坏
+                // 而缺失 TileEntityAltar 时，arrayList 的实际 size 会小于 i，
+                // 下一次 add(i, ...) 将触发 ArrayIndexOutOfBoundsException 导致存档崩溃。
+                // 改为顺序 add，并在位置无效时用空物品栈占位，保证最终列表长度与祭坛槽位数一致。
+                arrayList.add(((TileEntityAltar) te).getStorageItem());
+            } else {
+                // 位置上的 TileEntity 不存在（祭坛结构已被破坏），用空物品栈占位
+                arrayList.add(ItemStack.EMPTY);
             }
         }
         if (arrayList.isEmpty()) {
