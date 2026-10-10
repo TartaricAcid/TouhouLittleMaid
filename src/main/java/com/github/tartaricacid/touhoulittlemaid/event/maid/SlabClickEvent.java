@@ -22,7 +22,7 @@ public final class SlabClickEvent {
         Item emptySmartSlab = InitItems.SMART_SLAB_EMPTY.get();
         Item maidSmartSlab = InitItems.SMART_SLAB_HAS_MAID.get();
         if (stack.getItem() == emptySmartSlab) {
-            if (!player.getCooldowns().isOnCooldown(emptySmartSlab)) {
+            if (!event.getWorld().isClientSide && !player.getCooldowns().isOnCooldown(emptySmartSlab)) {
                 ItemStack output = maidSmartSlab.getDefaultInstance();
                 maid.setHomeModeEnable(false);
                 ItemSmartSlab.storeMaidData(output, maid);
