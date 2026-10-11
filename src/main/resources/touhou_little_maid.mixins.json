@@ -7,7 +7,6 @@
   "refmap": "touhou_little_maid.refmap.json",
   "mixins": [
     "ArrowMixin",
-    "BlockBurningCache",
     "ConduitBlockEntityMixin",
     "EntityMixin",
     "FishingHookPredicateMixin",
