@@ -12,6 +12,7 @@
     "FishingHookPredicateMixin",
     "MobInteractMixin",
     "NavigationMixin",
+    "NodeEvaluatorBurningCacher",
     "PersistentEntitySectionManagerMixin",
     "PlayerMixin",
     "StructureTemplateMixin",
