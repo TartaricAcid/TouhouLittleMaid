@@ -333,7 +333,10 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
      */
     private int climbFallDelayTicks = 0;
 
-    protected EntityMaid(EntityType<EntityMaid> type, Level world) {
+    // This fixes a manual recompile of https://www.curseforge.com/minecraft/mc-mods/touhou-little-maid-soul-pact
+    // as there is a type in that mod which extends EntityMaid which immedately calls "super(type, level);" in
+    // its code. The issue is when using this as a dependency then that mod cannot be recompiled.
+    protected EntityMaid(EntityType<? extends EntityMaid> type, Level world) {
         super(type, world);
         this.favorabilityManager = new FavorabilityManager(this);
         this.aiChatManager = new MaidAIChatManager(this);
