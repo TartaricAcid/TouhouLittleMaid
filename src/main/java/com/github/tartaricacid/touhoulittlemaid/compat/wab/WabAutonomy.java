@@ -10,8 +10,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
@@ -80,18 +82,37 @@ public final class WabAutonomy {
         long day = maid.level().getDayTime() / 24000L;
         Map<String, Long> stepDays = lastStepRun.computeIfAbsent(maid.getUUID(), k -> new HashMap<>());
 
+        // 同一时段可能排了好几步：按 weight × random 加权抽一条，而不是每步各自掷骰子、
+        // 一小时内把「挖矿」「喂饭」「抱一下」全做一遍。
+        List<Integer> due = new ArrayList<>();
+        List<Double> weights = new ArrayList<>();
         for (int i = 0; i < steps.size(); i++) {
             if (!steps.get(i).isJsonObject()) continue;
             JsonObject step = steps.get(i).getAsJsonObject();
-            String at = WabJson.str(step, "at");
-            double probability = WabJson.number(step, "random", 1.0);
-            if (!at.equals(now)) continue;
+            if (!WabJson.str(step, "at").equals(now)) continue;
             Long lastDay = stepDays.get(String.valueOf(i));
             if (lastDay != null && lastDay == day) continue;
-            if (random.nextDouble() > probability) continue;
-            stepDays.put(String.valueOf(i), day);
-            executeStep(maid, step);
+            double probability = Math.max(0, Math.min(1, WabJson.number(step, "random", 1.0)));
+            double weight = Math.max(0, WabJson.number(step, "weight", 1.0));
+            if (probability <= 0 || weight <= 0) continue;
+            due.add(i);
+            weights.add(probability * weight);
         }
+        if (due.isEmpty()) return;
+        double total = 0;
+        for (double weight : weights) total += weight;
+        double pick = random.nextDouble() * total;
+        int chosen = due.size() - 1;
+        for (int i = 0; i < due.size(); i++) {
+            pick -= weights.get(i);
+            if (pick <= 0) {
+                chosen = i;
+                break;
+            }
+        }
+        int index = due.get(chosen);
+        stepDays.put(String.valueOf(index), day);
+        executeStep(maid, steps.get(index).getAsJsonObject());
     }
 
     private void executeStep(EntityMaid maid, JsonObject step) {
@@ -111,7 +132,9 @@ public final class WabAutonomy {
                 params.addProperty("action", doWhat);
                 params.addProperty("filter", WabJson.str(step, "filter"));
                 params.addProperty("count", String.valueOf(WabJson.integer(step, "count", 16)));
-                WabActions.Job job = WabActions.startGather(bridge, maid, params, 1200, true, null);
+                // 协议里的 hours 是这一步打算持续多久（游戏内小时）；换算成 tick 当预算，缺省 1 小时。
+                int budget = Math.max(200, Math.min(24000, WabJson.integer(step, "hours", 1) * 1000));
+                WabActions.Job job = WabActions.startGather(bridge, maid, params, budget, true, null);
                 bridge.dispatcher().noteJob(job);
             }
             case "collect" -> {
