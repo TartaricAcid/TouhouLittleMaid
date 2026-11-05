@@ -1,0 +1,36 @@
+modLoader = "javafml"
+loaderVersion = "[47,)"
+license = "MIT"
+
+[[mods]]
+modId = "wab_testkit"
+version = "1.0"
+displayName = "WAB Bridge Testkit (临时)"
+description = '''临时用的链路测试模组：在游戏里假装成 WarmAsBefore 宿主，
+把车万女仆 WAB 桥的所有外界入口按一遍——UDP 发现、HMAC 配对、TCP 握手、
+每一帧入站消息、每一条命令的成功与失败分支、世界事件、拍照、语音，
+最后逐条打 PASS/FAIL/SKIP。测完请把这个 jar 从 mods/ 里删掉。'''
+
+[[dependencies.wab_testkit]]
+modId = "forge"
+mandatory = true
+versionRange = "[47.2.0,)"
+ordering = "NONE"
+side = "SERVER"
+
+[[dependencies.wab_testkit]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.20.1,1.21)"
+ordering = "NONE"
+side = "SERVER"
+
+# 这里故意不写版本号范围：我们的分支版本是 1.5.3-forge+mc1.20.1-wab.1，
+# Maven 区间对带 -/+ 后缀的判定和上游附属模组并不总是一致，
+# 用 [0,) 只求「必须装了车万女仆」这件事本身。
+[[dependencies.wab_testkit]]
+modId = "touhou_little_maid"
+mandatory = true
+versionRange = "[0,)"
+ordering = "AFTER"
+side = "SERVER"

@@ -32,6 +32,12 @@ jobs:
           chmod +x ./gradlew
           ./gradlew build -x test --no-daemon --stacktrace
 
+      # 临时测试模组：假 WAB 宿主 + /wtest 用例表，单独一个 Gradle 工程，只依赖上面编出来的 class
+      - name: Build testkit jar
+        run: |
+          cd wab-testkit
+          ../gradlew build -x test --no-daemon --stacktrace
+
       - name: Game test server (drop-in check)
         continue-on-error: true
         run: |
@@ -53,5 +59,13 @@ jobs:
         with:
           name: wab-maid-bridge-jar
           path: build/libs/*.jar
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload testkit jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: wab-testkit-jar
+          path: wab-testkit/build/libs/*.jar
           if-no-files-found: error
           retention-days: 30
