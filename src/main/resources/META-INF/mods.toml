@@ -4,8 +4,10 @@ license = "MIT / CC BY-NC-SA 4.0"
 
 [[mods]]
 modId = "touhou_little_maid"
+# modId 必须跟上游一致：附属模组按 modId 依赖车万女仆，这个 jar 是顶替官方那一份用的。
+# 区分靠版本后缀（${file.jarVersion} = gradle.properties 的 mod_version）和这里的 displayName/description。
 version = "${file.jarVersion}"
-displayName = "Touhou Little Maid"
+displayName = "Touhou Little Maid (WAB bridge)"
 issueTrackerURL = "https://github.com/TartaricAcid/TouhouLittleMaid/issues"
 displayURL = "https://discord.gg/re4xQtb"
 logoFile = "logo.png"
@@ -13,7 +15,7 @@ credits = "Verclene, ZUN"
 # A text field displayed in the mod UI
 authors = "TartaricAcid, Snownee, Succinum, Pajinyi, Zhi_Ban, CrystalizedSun, Foky, ZeniCrow, Paulzzh, Yuriscat, Lappland162"
 # The description text for the mod (multi line!) (#mandatory)
-description = "A new version of the minecraft mod inspired by the LittleMaidReengaged mod."
+description = "Unofficial branch of Touhou Little Maid with the WarmAsBefore (WAB) AI maid bridge. Same modId, registry names and gameplay as upstream, so it is a drop-in replacement for the official jar. Upstream code and assets stay with their original authors under MIT / CC BY-NC-SA 4.0: https://github.com/TartaricAcid/TouhouLittleMaid"
 
 [modproperties.touhou_little_maid]
 catalogueItemIcon = "touhou_little_maid:hakurei_gohei"
