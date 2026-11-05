@@ -72,6 +72,8 @@ public final class WabBridge {
     private ServerPlayer owner;
     private String ownerName = "";
     private String worldName = "";
+    /** 上一轮扫描数出来的「每个玩家名下有几只女仆」：主人认这个，不认谁先服。见 pickOwner。 */
+    private final Map<UUID, Integer> maidsByOwner = new HashMap<>();
 
     private final Map<UUID, EntityMaid> maids = new ConcurrentHashMap<>();
     private final Map<UUID, WabHud.Stats> stats = new ConcurrentHashMap<>();
@@ -483,13 +485,13 @@ public final class WabBridge {
 
     private void refreshOwner() {
         List<ServerPlayer> players = server.getPlayerList().getPlayers();
-        ServerPlayer first = players.isEmpty() ? null : players.get(0);
-        if (first != null) {
-            ownerName = first.getGameProfile().getName();
+        ServerPlayer picked = players.isEmpty() ? null : pickOwner(players);
+        if (picked != null) {
+            ownerName = picked.getGameProfile().getName();
             worldName = server.getWorldData().getLevelName();
-            if (owner == null || !owner.getUUID().equals(first.getUUID())) {
+            if (owner == null || !owner.getUUID().equals(picked.getUUID())) {
                 boolean hadOwner = owner != null;
-                owner = first;
+                owner = picked;
                 WabSession current = session;
                 if (hadOwner && current != null) current.close("owner changed");
                 updateBeaconMaids();
@@ -497,6 +499,29 @@ public final class WabBridge {
         } else {
             owner = null;
         }
+    }
+
+    /**
+     * 主人认「谁名下的女仆最多」，一样多就继续认现在这个，别一会儿认张三一会儿认李四。
+     * 原来取的是「第一个进服的玩家」：多人服上那个人多半不是开着 WAB 的，认错了人，
+     * 女仆名册（按主人筛）、聊天路由、喂食、陪着睡觉就全落到一个陌生人身上。
+     * 一轮女仆都没数到才退回老取法——那时桥里本来没有女仆可错位，单人也照旧能配对。
+     */
+    private ServerPlayer pickOwner(List<ServerPlayer> players) {
+        int most = 0;
+        for (ServerPlayer player : players) {
+            most = Math.max(most, maidsByOwner.getOrDefault(player.getUUID(), 0));
+        }
+        if (most <= 0) return players.get(0);
+        ServerPlayer current = owner;
+        if (current != null && maidsByOwner.getOrDefault(current.getUUID(), 0) == most
+                && server.getPlayerList().getPlayer(current.getUUID()) != null) {
+            return current;
+        }
+        for (ServerPlayer player : players) {
+            if (maidsByOwner.getOrDefault(player.getUUID(), 0) == most) return player;
+        }
+        return players.get(0);
     }
 
     public ServerPlayer currentOwner() {
@@ -508,15 +533,20 @@ public final class WabBridge {
         if (tickCounter % 20 != 0) return;
         Map<UUID, EntityMaid> fresh = new HashMap<>();
         UUID ownerId = owner == null ? null : owner.getUUID();
+        Map<UUID, Integer> counts = new HashMap<>();
         for (ServerLevel level : server.getAllLevels()) {
-            for (EntityMaid maid : level.getEntities(EntityMaid.TYPE, e -> e.isAlive() && e.isTame()
-                    && (ownerId == null || ownerId.equals(e.getOwnerUUID())))) {
+            // 这一趟不带主人过滤地扫：份数既是下一轮认主人用的，也顺手筛出这次的名册。
+            for (EntityMaid maid : level.getEntities(EntityMaid.TYPE, e -> e.isAlive() && e.isTame())) {
                 // 协议封顶：一次会话最多认 256 个女仆，超出部分不参与桥。
                 if (fresh.size() >= MAX_MAIDS) break;
-                fresh.put(maid.getUUID(), maid);
+                UUID keeper = maid.getOwnerUUID();
+                if (keeper != null) counts.merge(keeper, 1, Integer::sum);
+                if (ownerId == null || ownerId.equals(keeper)) fresh.put(maid.getUUID(), maid);
             }
             if (fresh.size() >= MAX_MAIDS) break;
         }
+        maidsByOwner.clear();
+        maidsByOwner.putAll(counts);
         // 先比对再换名册：清完再问「上一版里有她吗」永远是否，复活会被认成 every chunk reload。
         noteReappear(new HashMap<>(maids), fresh);
         maids.clear();
@@ -979,17 +1009,18 @@ public final class WabBridge {
     public static void onChat(ServerChatEvent event) {
         WabBridge bridge = instance;
         if (bridge == null || !bridge.connected()) return;
-        // 只转主人本人的话。女仆缓存是「首名玩家的」，别人靠近时把他的话吞掉，
-        // 多人服上等于凭空丢了条聊天。
+        // 只转主人的话：女仆名册是按主人筛的，别人的话既对不上「她的」女仆，
+        // 取消事件又把他的聊天凭空吞掉。
         if (bridge.owner == null || !event.getPlayer().getUUID().equals(bridge.owner.getUUID())) return;
         String text = event.getRawText().trim();
         if (text.isEmpty() || text.startsWith("/")) return;
         EntityMaid maid = bridge.nearestMaid(event.getPlayer(), WabConfig.chatRange());
         if (maid == null) return;
-        event.setCanceled(true);
+        // 不取消事件：这句话照常进聊天框，记录、翻译、反作弊那些监听聊天的模组仍在链上。
+        // 原来取消完只在 action bar 把原文重播一遍，等于把聊天挪了个地方，还顺手丢了别人的监听。
         bridge.sendChat(maid, text);
         event.getPlayer().displayClientMessage(
-                Component.literal("对 " + cleanName(maid) + " 说：" + text).withStyle(ChatFormatting.GRAY), true);
+                Component.literal("这句交给 " + cleanName(maid) + " 回答。").withStyle(ChatFormatting.GRAY), true);
     }
 
     @SubscribeEvent
