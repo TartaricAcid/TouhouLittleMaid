@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.cloth;
 
 import com.github.tartaricacid.touhoulittlemaid.api.event.client.AddClothConfigEvent;
+import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.*;
 import com.github.tartaricacid.touhoulittlemaid.event.MaidMealRegConfigEvent;
 import com.google.common.collect.Lists;
@@ -27,6 +28,7 @@ public class MenuIntegration {
         miscConfig(root, entryBuilder);
         vanillaConfig(root, entryBuilder);
         renderConfig(root, entryBuilder);
+        wabConfig(root, entryBuilder);
         GlobalAIIntegration.aiChat(root, entryBuilder);
         NeoForge.EVENT_BUS.post(new AddClothConfigEvent(root, entryBuilder));
         return root;
@@ -522,6 +524,95 @@ public class MenuIntegration {
                 .setDefaultValue(true).setSaveConsumer(value -> {
                     RenderConfig.ENABLE_SHEARS_TIP.set(value);
                     RenderConfig.ENABLE_SHEARS_TIP.save();
+                }).build());
+    }
+
+    private static void wabConfig(ConfigBuilder root, ConfigEntryBuilder entryBuilder) {
+        ConfigCategory wab = root.getOrCreateCategory(Component.translatable("config.touhou_little_maid.wab"));
+
+        if (!WabConfig.loaded()) {
+            wab.addEntry(entryBuilder.startTextDescription(Component.translatable("config.touhou_little_maid.wab.unloaded")).build());
+            return;
+        }
+
+        wab.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.wab.enabled"), WabConfig.ENABLED.get())
+                .setDefaultValue(WabConfig.ENABLED.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.wab.enabled.tooltip"))
+                .setSaveConsumer(v -> {
+                    WabConfig.ENABLED.set(v);
+                    WabConfig.ENABLED.save();
+                }).build());
+
+        wab.addEntry(entryBuilder.startIntField(Component.translatable("config.touhou_little_maid.wab.discovery_port"), WabConfig.DISCOVERY_PORT.get())
+                .setDefaultValue(WabConfig.DISCOVERY_PORT.getDefault()).setMin(1).setMax(65535)
+                .setTooltip(Component.translatable("config.touhou_little_maid.wab.discovery_port.tooltip"))
+                .setSaveConsumer(v -> {
+                    WabConfig.DISCOVERY_PORT.set(v);
+                    WabConfig.DISCOVERY_PORT.save();
+                }).build());
+
+        wab.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.wab.lan_discovery"), WabConfig.LAN_DISCOVERY.get())
+                .setDefaultValue(WabConfig.LAN_DISCOVERY.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.wab.lan_discovery.tooltip"))
+                .setSaveConsumer(v -> {
+                    WabConfig.LAN_DISCOVERY.set(v);
+                    WabConfig.LAN_DISCOVERY.save();
+                }).build());
+
+        wab.addEntry(entryBuilder.startIntField(Component.translatable("config.touhou_little_maid.wab.beacon_interval"), WabConfig.BEACON_INTERVAL_SECONDS.get())
+                .setDefaultValue(WabConfig.BEACON_INTERVAL_SECONDS.getDefault()).setMin(1).setMax(60)
+                .setTooltip(Component.translatable("config.touhou_little_maid.wab.beacon_interval.tooltip"))
+                .setSaveConsumer(v -> {
+                    WabConfig.BEACON_INTERVAL_SECONDS.set(v);
+                    WabConfig.BEACON_INTERVAL_SECONDS.save();
+                }).build());
+
+        wab.addEntry(entryBuilder.startIntSlider(Component.translatable("config.touhou_little_maid.wab.chat_range"), WabConfig.CHAT_RANGE.get(), 1, 64)
+                .setDefaultValue(WabConfig.CHAT_RANGE.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.wab.chat_range.tooltip"))
+                .setSaveConsumer(v -> {
+                    WabConfig.CHAT_RANGE.set(v);
+                    WabConfig.CHAT_RANGE.save();
+                }).build());
+
+        wab.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.wab.show_hud"), WabConfig.SHOW_HUD.get())
+                .setDefaultValue(WabConfig.SHOW_HUD.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.wab.show_hud.tooltip"))
+                .setSaveConsumer(v -> {
+                    WabConfig.SHOW_HUD.set(v);
+                    WabConfig.SHOW_HUD.save();
+                }).build());
+
+        wab.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.wab.autonomy"), WabConfig.AUTONOMY_ENABLED.get())
+                .setDefaultValue(WabConfig.AUTONOMY_ENABLED.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.wab.autonomy.tooltip"))
+                .setSaveConsumer(v -> {
+                    WabConfig.AUTONOMY_ENABLED.set(v);
+                    WabConfig.AUTONOMY_ENABLED.save();
+                }).build());
+
+        wab.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.wab.player_in_maid_bed"), WabConfig.PLAYER_IN_MAID_BED.get())
+                .setDefaultValue(WabConfig.PLAYER_IN_MAID_BED.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.wab.player_in_maid_bed.tooltip"))
+                .setSaveConsumer(v -> {
+                    WabConfig.PLAYER_IN_MAID_BED.set(v);
+                    WabConfig.PLAYER_IN_MAID_BED.save();
+                }).build());
+
+        wab.addEntry(entryBuilder.startIntField(Component.translatable("config.touhou_little_maid.wab.maid_chat_cooldown"), WabConfig.MAID_CHAT_COOLDOWN.get())
+                .setDefaultValue(WabConfig.MAID_CHAT_COOLDOWN.getDefault()).setMin(10).setMax(3600)
+                .setTooltip(Component.translatable("config.touhou_little_maid.wab.maid_chat_cooldown.tooltip"))
+                .setSaveConsumer(v -> {
+                    WabConfig.MAID_CHAT_COOLDOWN.set(v);
+                    WabConfig.MAID_CHAT_COOLDOWN.save();
+                }).build());
+
+        wab.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.wab.debug"), WabConfig.DEBUG.get())
+                .setDefaultValue(WabConfig.DEBUG.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.wab.debug.tooltip"))
+                .setSaveConsumer(v -> {
+                    WabConfig.DEBUG.set(v);
+                    WabConfig.DEBUG.save();
                 }).build());
     }
 
