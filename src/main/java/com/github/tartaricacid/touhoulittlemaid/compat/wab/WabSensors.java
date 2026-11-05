@@ -141,6 +141,9 @@ public final class WabSensors {
 
     public static JsonObject scan(WabBridge bridge, EntityMaid maid, JsonObject params) {
         int radius = Math.max(4, Math.min(64, WabJson.integer(params, "radius", 16)));
+        // 方块/流体是立方体遍历（(2r+1)^3 次 getBlockState）：r=64 时是 210 万次，
+        // 一帧就能把服务器线程卡住。实体查询走 AABB，成本低得多，所以只夹方块那一半。
+        int blockRadius = Math.min(radius, 24);
         boolean wantEntities = WabJson.bool(params, "entities", true);
         boolean wantBlocks = WabJson.bool(params, "blocks", true);
         boolean wantFluids = WabJson.bool(params, "fluids", true);
@@ -151,16 +154,17 @@ public final class WabSensors {
         out.add("world", world(bridge));
         out.add("from", snapshot(bridge, maid));
         out.addProperty("radius", radius);
+        out.addProperty("blockRadius", blockRadius);
 
         if (wantEntities) out.add("entities", entities(maid, radius));
         if (wantBlocks) {
-            JsonObject blocks = blocks(level, maid, radius);
+            JsonObject blocks = blocks(level, maid, blockRadius);
             out.add("ores", blocks.get("ores"));
             out.add("containers", blocks.get("containers"));
             out.add("crops", blocks.get("crops"));
             out.add("beds", blocks.get("beds"));
         }
-        if (wantFluids) out.add("fluids", fluids(level, maid, radius));
+        if (wantFluids) out.add("fluids", fluids(level, maid, blockRadius));
         if (wantLight) out.add("light", light(level, maid));
         out.add("drops", itemEntities(maid, Math.min(radius, 12)));
         return out;

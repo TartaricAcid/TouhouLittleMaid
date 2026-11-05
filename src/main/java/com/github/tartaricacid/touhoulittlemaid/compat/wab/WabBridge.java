@@ -56,6 +56,10 @@ public final class WabBridge {
      */
     private static final String BRIDGE_BUILD = "1.5.0";
     private static final String MAGIC = "WAB-MAID";
+    /** 协议承诺的上限：单次会话的女仆数、事件冷却缓存、世界绑定。 */
+    private static final int MAX_MAIDS = 256;
+    private static final int MAX_EVENTS = 128;
+    private static final int MAX_BINDINGS = 64;
     private static WabBridge instance;
 
     private final MinecraftServer server;
@@ -295,6 +299,11 @@ public final class WabBridge {
             case "tts_reply" -> WabVoice.onTtsReply(this, frame);
             case "tts_audio" -> WabVoice.onTtsAudio(this, frame);
             case "stt_reply" -> WabVoice.onSttReply(this, frame);
+            case "settings" -> {
+                // WAB 在设置页改了白名单后只推这一帧、不断线；不接的话游戏侧的闸门会一直停在握手时的值。
+                JsonObject settings = WabJson.obj(frame, "settings");
+                applySettings(settings.size() > 0 ? settings : frame);
+            }
             case "command" -> {
                 String id = WabJson.str(frame, "id");
                 String method = WabJson.str(frame, "method").toLowerCase(Locale.ROOT);
@@ -315,9 +324,7 @@ public final class WabBridge {
     }
 
     private void onWelcome(WabSession from, JsonObject welcome) {
-        JsonObject settings = WabJson.obj(welcome, "settings");
-        if (settings.has("allowWorldActions")) allowWorldActions = WabJson.bool(settings, "allowWorldActions", true);
-        if (settings.has("allowGestures")) allowGestures = WabJson.bool(settings, "allowGestures", true);
+        applySettings(WabJson.obj(welcome, "settings"));
         // 宿主没宣告 voice 就是老版本：能力按「没有」处理，绑了角色也仍用游戏自己的语音。
         JsonObject voice = WabJson.obj(welcome, "voice");
         voiceTts = WabJson.bool(voice, "tts", false);
@@ -326,7 +333,7 @@ public final class WabBridge {
         JsonObject bound = WabJson.obj(welcome, "bound");
         for (String maidId : bound.keySet()) {
             try {
-                boundCharacters.put(UUID.fromString(maidId), WabJson.str(bound, maidId));
+                rememberCharacter(UUID.fromString(maidId), WabJson.str(bound, maidId));
             } catch (IllegalArgumentException ignored) {
             }
         }
@@ -340,12 +347,36 @@ public final class WabBridge {
         }
     }
 
+    /** 握手与 settings 帧共用：只认这两个开关，缺省保持当前值。 */
+    private void applySettings(JsonObject settings) {
+        boolean changed = false;
+        if (settings.has("allowWorldActions")) {
+            allowWorldActions = WabJson.bool(settings, "allowWorldActions", allowWorldActions);
+            changed = true;
+        }
+        if (settings.has("allowGestures")) {
+            allowGestures = WabJson.bool(settings, "allowGestures", allowGestures);
+            changed = true;
+        }
+        if (changed && !allowWorldActions) {
+            // 关掉世界操作的那一刻，正在跑的采集也得停：闸门只拦新指令的话，日程会继续挖下去。
+            server.execute(() -> dispatcher.cancelAll("WAB 关闭了世界操作"));
+        }
+    }
+
+    /** 绑定表按协议封顶 64 个世界绑定，超出后只保留先到的。 */
+    private void rememberCharacter(UUID maidId, String character) {
+        if (character == null || character.isEmpty()) return;
+        if (!boundCharacters.containsKey(maidId) && boundCharacters.size() >= MAX_BINDINGS) return;
+        boundCharacters.put(maidId, character);
+    }
+
     private void onBind(JsonObject bind) {
         JsonObject bound = WabJson.obj(bind, "bindings");
         boundCharacters.clear();
         for (String maidId : bound.keySet()) {
             try {
-                boundCharacters.put(UUID.fromString(maidId), WabJson.str(bound, maidId));
+                rememberCharacter(UUID.fromString(maidId), WabJson.str(bound, maidId));
             } catch (IllegalArgumentException ignored) {
             }
         }
@@ -367,12 +398,11 @@ public final class WabBridge {
         value.mood = WabJson.integer(frame, "mood", 0);
         value.receivedAt = System.currentTimeMillis();
         stats.put(maidId, value);
-        boolean boundChanged = false;
-        if (value.character != null && !value.character.isEmpty()) {
-            boundChanged = !value.character.equals(boundCharacters.put(maidId, value.character));
-        }
+        String boundBefore = boundCharacters.get(maidId);
+        rememberCharacter(maidId, value.character);
+        String boundAfter = boundCharacters.get(maidId);
         // 角色是在对话里才认上的（auto-bind）时，客户端也要立刻知道这具身体改走 WAB 的语音。
-        if (boundChanged) WabVoice.pushClientState(this);
+        if (boundAfter != null && !boundAfter.equals(boundBefore)) WabVoice.pushClientState(this);
     }
 
     private void onChatReply(JsonObject frame) {
@@ -481,8 +511,11 @@ public final class WabBridge {
         for (ServerLevel level : server.getAllLevels()) {
             for (EntityMaid maid : level.getEntities(EntityMaid.TYPE, e -> e.isAlive() && e.isTame()
                     && (ownerId == null || ownerId.equals(e.getOwnerUUID())))) {
+                // 协议封顶：一次会话最多认 256 个女仆，超出部分不参与桥。
+                if (fresh.size() >= MAX_MAIDS) break;
                 fresh.put(maid.getUUID(), maid);
             }
+            if (fresh.size() >= MAX_MAIDS) break;
         }
         // 先比对再换名册：清完再问「上一版里有她吗」永远是否，复活会被认成 every chunk reload。
         noteReappear(new HashMap<>(maids), fresh);
@@ -881,6 +914,11 @@ public final class WabBridge {
         long now = System.currentTimeMillis();
         Long last = lastEventAt.get(maid.getUUID());
         if (last != null && now - last < millis) return false;
+        if (lastEventAt.size() >= MAX_EVENTS) {
+            // 事件冷却表按协议封顶 128 项；满了先清掉 60 秒前的旧记录，再不行就整表重置。
+            lastEventAt.entrySet().removeIf(entry -> now - entry.getValue() > 60_000L);
+            if (lastEventAt.size() >= MAX_EVENTS) lastEventAt.clear();
+        }
         lastEventAt.put(maid.getUUID(), now);
         return true;
     }

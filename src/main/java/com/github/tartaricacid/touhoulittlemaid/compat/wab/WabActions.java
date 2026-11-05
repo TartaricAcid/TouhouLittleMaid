@@ -14,6 +14,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraft.world.item.ItemStack;
@@ -66,9 +67,13 @@ public final class WabActions {
 
         return switch (mode) {
             case "to", "near" -> {
-                Entity target = resolveEntity(maid, targetName, targetName.isEmpty() ? bridge.currentOwner() : null);
                 BlockPos dest = remotePos(maid, posArr, NAV_REACH);
-                double stopDistance = mode.equals("near") ? distance : 1.0;
+                // 只给了坐标时不能再去回退到主人：否则「走到 120,64,300」会变成「跟着主人走」，
+                // 坐标参数被悄悄吞掉。名字和坐标同时给时以名字为准。
+                Entity target = targetName.isEmpty() && dest != null
+                        ? null
+                        : resolveEntity(maid, targetName, targetName.isEmpty() ? bridge.currentOwner() : null);
+                double stopDistance = clampStopDistance(mode.equals("near") ? distance : 1.0);
                 if (target == null && dest != null) {
                     if (!navigateTo(maid, dest.getX() + 0.5, dest.getY(), dest.getZ() + 0.5, stopDistance)) {
                         yield fail("cannot_reach", "找不到可以走过去的路。");
@@ -134,9 +139,29 @@ public final class WabActions {
         };
     }
 
+    /**
+     * 寻路到 (x,y,z) 附近，并在离目标 stopDistance 处停下。
+     * 原版寻路没有「停在几格之外」的概念，这里改成朝目标前方一点走：
+     * 停在距目标 stopDistance 的位置，而不是挤到目标方块上。距离已经够近时直接停。
+     */
     private static boolean navigateTo(EntityMaid maid, double x, double y, double z, double stopDistance) {
         if (!(maid.level() instanceof ServerLevel)) return false;
-        return maid.getNavigation().moveTo(x, y, z, 1.0F);
+        double stop = clampStopDistance(stopDistance);
+        double dx = x - maid.getX();
+        double dz = z - maid.getZ();
+        double horizontal = Math.sqrt(dx * dx + dz * dz);
+        if (horizontal <= stop) {
+            maid.getNavigation().stop();
+            return true;
+        }
+        double scale = (horizontal - stop) / horizontal;
+        return maid.getNavigation().moveTo(maid.getX() + dx * scale, y, maid.getZ() + dz * scale, 1.0F);
+    }
+
+    /** 停止距离来自远端数字，夹到 0.5—16 格之间，避免「停 0 格」或「停 100 格」这种怪值。 */
+    private static double clampStopDistance(double raw) {
+        if (!Double.isFinite(raw)) return 1.0;
+        return Math.max(0.5, Math.min(16.0, raw));
     }
 
     private static Entity resolveEntity(EntityMaid maid, String name, Entity fallback) {
@@ -182,34 +207,42 @@ public final class WabActions {
     public static JsonObject attack(WabBridge bridge, EntityMaid maid, JsonObject p) {
         String targetName = WabJson.str(p, "target");
         Entity target = resolveEntity(maid, targetName, null);
-        if (target == null) {
-            target = nearestLiving(maid, 8.0);
+        if (target == null && targetName.isEmpty()) {
+            // 没点名时只找有敌意的目标，不再「谁最近打谁」——主人站在旁边时那等于让她打主人。
+            target = nearestHostile(maid, 8.0);
         }
         if (target == null) {
             return fail("no_target", "附近没有可以攻击的目标。");
         }
-        maid.setTarget(target instanceof LivingEntity le ? le : null);
+        ServerPlayer owner = bridge.currentOwner();
+        if (owner != null && target.getUUID().equals(owner.getUUID())) {
+            return fail("refused", "她不会对主人动手。");
+        }
         double distance = maid.distanceToSqr(target);
         if (distance > 3.5 * 3.5) {
             navigateTo(maid, target.getX(), target.getY(), target.getZ(), 2.0);
+            return fail("too_far", "目标还在 " + Math.round(Math.sqrt(distance) * 10) / 10.0 + " 格外，先让她靠近。");
         }
+        maid.setTarget(target instanceof LivingEntity le ? le : null);
+        maid.getLookControl().setLookAt(target, 30F, 30F);
         maid.swing(InteractionHand.MAIN_HAND);
-        maid.doHurtTarget(target);
+        boolean hit = maid.doHurtTarget(target);
+        if (!hit) {
+            return fail("attack_failed", "这一下没打中 " + target.getName().getString() + "。");
+        }
         return ok(maid, "对 " + target.getName().getString() + " 出手了。");
     }
 
-    private static Entity nearestLiving(EntityMaid maid, double radius) {
+    private static Entity nearestHostile(EntityMaid maid, double radius) {
         LivingEntity best = null;
         double bestDistance = radius * radius;
         List<Entity> candidates = maid.level().getEntities(maid, maid.getBoundingBox().inflate(radius),
-                entity -> entity instanceof LivingEntity && entity.isAlive());
+                entity -> entity instanceof Monster && entity.isAlive());
         for (Entity entity : candidates) {
-            if (entity == maid) continue;
-            LivingEntity living = (LivingEntity) entity;
-            double distance = maid.distanceToSqr(living);
+            double distance = maid.distanceToSqr(entity);
             if (distance <= bestDistance) {
                 bestDistance = distance;
-                best = living;
+                best = (LivingEntity) entity;
             }
         }
         return best;
@@ -355,7 +388,8 @@ public final class WabActions {
                 if (recipient == null) {
                     yield fail("no_recipient", to.isEmpty() ? "主人不在线。" : "找不到要递给她的人：" + to);
                 }
-                if (recipient.level() != maid.level() || maid.distanceToSqr(recipient) > 8 * 8) {
+                // 协议里递东西是 3 格内的手边动作；8 格等于允许隔空投喂。
+                if (recipient.level() != maid.level() || maid.distanceToSqr(recipient) > 3 * 3) {
                     if (recipient.level() == maid.level()) {
                         navigateTo(maid, recipient.getX(), recipient.getY(), recipient.getZ(), 2.0);
                     }
@@ -390,7 +424,7 @@ public final class WabActions {
             case "feed_player" -> {
                 ServerPlayer owner = bridge.currentOwner();
                 if (owner == null) yield fail("no_owner", "主人不在线。");
-                if (owner.level() != maid.level() || owner.distanceToSqr(maid) > 4 * 4) {
+                if (owner.level() != maid.level() || owner.distanceToSqr(maid) > 3 * 3) {
                     if (owner.level() == maid.level()) navigateTo(maid, owner.getX(), owner.getY(), owner.getZ(), 2.0);
                     yield fail("too_far", "隔得太远，喂不到。");
                 }
@@ -576,8 +610,9 @@ public final class WabActions {
         private void executeAction(BlockPos pos) {
             switch (action) {
                 case "mine", "chop", "harvest" -> {
-                    boolean destroyed = maid.destroyBlock(pos, true);
-                    got++;
+                    // 保护区/工具不对时 destroyBlock 会返回 false：不能照样记一次「挖到」，
+                    // 否则 AI 以为拿到了资源，背包里其实什么都没有。
+                    if (maid.destroyBlock(pos, true)) got++;
                 }
                 case "collect" -> {
                     List<ItemEntity> nearby = new ArrayList<>();
