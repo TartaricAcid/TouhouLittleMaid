@@ -8,16 +8,18 @@ import net.minecraftforge.common.ForgeConfigSpec;
 public final class WabConfig {
     public static final ForgeConfigSpec SPEC;
 
-    private static final ForgeConfigSpec.BooleanValue ENABLED;
-    private static final ForgeConfigSpec.BooleanValue SHOW_HUD;
-    private static final ForgeConfigSpec.BooleanValue DEBUG;
-    private static final ForgeConfigSpec.IntValue CHAT_RANGE;
-    private static final ForgeConfigSpec.IntValue DISCOVERY_PORT;
-    private static final ForgeConfigSpec.BooleanValue LAN_DISCOVERY;
-    private static final ForgeConfigSpec.IntValue BEACON_INTERVAL_SECONDS;
-    private static final ForgeConfigSpec.BooleanValue AUTONOMY_ENABLED;
-    private static final ForgeConfigSpec.BooleanValue PLAYER_IN_MAID_BED;
-    private static final ForgeConfigSpec.IntValue MAID_CHAT_COOLDOWN;
+    // 这些值对象要给 Cloth 设置页直接读写，所以是 public；
+    // 下面那批 enabled()/chatRange() 之类仍保留，它们带兜底，供可能在配置加载前取值的场合用。
+    public static final ForgeConfigSpec.BooleanValue ENABLED;
+    public static final ForgeConfigSpec.BooleanValue SHOW_HUD;
+    public static final ForgeConfigSpec.BooleanValue DEBUG;
+    public static final ForgeConfigSpec.IntValue CHAT_RANGE;
+    public static final ForgeConfigSpec.IntValue DISCOVERY_PORT;
+    public static final ForgeConfigSpec.BooleanValue LAN_DISCOVERY;
+    public static final ForgeConfigSpec.IntValue BEACON_INTERVAL_SECONDS;
+    public static final ForgeConfigSpec.BooleanValue AUTONOMY_ENABLED;
+    public static final ForgeConfigSpec.BooleanValue PLAYER_IN_MAID_BED;
+    public static final ForgeConfigSpec.IntValue MAID_CHAT_COOLDOWN;
 
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -48,6 +50,20 @@ public final class WabConfig {
     }
 
     private WabConfig() {
+    }
+
+    /**
+     * 这份配置是 SERVER 型的，要存档跑起来才加载得动；在主菜单点「配置」时它还没进内存，
+     * 读会拿到默认值、写会直接抛。设置页先用这一句问明白，答 no 就只给一行提示。
+     */
+    public static boolean loaded() {
+        try {
+            boolean current = bool(ENABLED, true);
+            ENABLED.set(current);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private static boolean bool(ForgeConfigSpec.BooleanValue value, boolean fallback) {
