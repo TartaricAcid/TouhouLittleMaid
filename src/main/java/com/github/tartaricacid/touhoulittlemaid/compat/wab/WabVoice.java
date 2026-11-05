@@ -38,12 +38,13 @@ public final class WabVoice {
     }
 
     private static final class PendingTts {
-        final UUID maid;
+        /** 客户端靠实体 id 认领是哪具身体在说话，跟 STT 的回执用同一个键。 */
+        final int maid;
         final UUID player;
         final long at = System.currentTimeMillis();
         int parts = -1;
 
-        PendingTts(UUID maid, UUID player) {
+        PendingTts(int maid, UUID player) {
             this.maid = maid;
             this.player = player;
         }
@@ -72,7 +73,7 @@ public final class WabVoice {
             spoken = spoken.substring(0, MAX_TTS_TEXT);
         }
         int request = nextRequest();
-        TTS.put(request, new PendingTts(maid.getUUID(), player.getUUID()));
+        TTS.put(request, new PendingTts(maid.getId(), player.getUUID()));
         JsonObject frame = frame("tts", request);
         frame.addProperty("maid", maid.getUUID().toString());
         frame.addProperty("text", spoken);
