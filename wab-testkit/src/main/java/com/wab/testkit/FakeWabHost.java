@@ -1,5 +1,6 @@
 package com.wab.testkit;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -162,6 +163,11 @@ public final class FakeWabHost {
     }
 
     public boolean sendWelcome(boolean allowWorldActions, boolean allowGestures, boolean voiceTts, boolean voiceStt) {
+        return sendWelcome(allowWorldActions, allowGestures, voiceTts, voiceStt, null);
+    }
+
+    /** fields 非空时一起下发插件字段表——真 WAB 就是把 plugin.json 描成一张表推给游戏的。 */
+    public boolean sendWelcome(boolean allowWorldActions, boolean allowGestures, boolean voiceTts, boolean voiceStt, JsonArray fields) {
         JsonObject welcome = new JsonObject();
         welcome.addProperty("v", 1);
         welcome.addProperty("type", "welcome");
@@ -175,6 +181,7 @@ public final class FakeWabHost {
         voice.addProperty("tts", voiceTts);
         voice.addProperty("stt", voiceStt);
         welcome.add("voice", voice);
+        if (fields != null) welcome.add("fields", fields);
         welcome.add("bound", new JsonObject());
         return send(welcome);
     }
@@ -188,6 +195,51 @@ public final class FakeWabHost {
         settings.addProperty("allowGestures", allowGestures);
         frame.add("settings", settings);
         return send(frame);
+    }
+
+    /** 热推一帧完整形状（settings + voice + fields，任一可为 null），验证「WAB 里改完，游戏里跟着变」。 */
+    public boolean sendSettings(JsonObject settings, JsonObject voice, JsonArray fields) {
+        JsonObject frame = new JsonObject();
+        frame.addProperty("v", 1);
+        frame.addProperty("type", "settings");
+        if (settings != null) frame.add("settings", settings);
+        if (voice != null) frame.add("voice", voice);
+        if (fields != null) frame.add("fields", fields);
+        return send(frame);
+    }
+
+    /** 假扮宿主拒绝一次从游戏里发上来的设置改动。 */
+    public boolean sendConfigRejected(String key, String message) {
+        JsonObject frame = new JsonObject();
+        frame.addProperty("v", 1);
+        frame.addProperty("type", "error");
+        frame.addProperty("code", "config_rejected");
+        frame.addProperty("key", key == null ? "" : key);
+        frame.addProperty("message", message == null ? "" : message);
+        return send(frame);
+    }
+
+    /** plugin.json 里一个设置字段在桥上的形状：宿主那边就是这么描的，游戏侧照 this 长控件。 */
+    public static JsonObject fieldRow(String key, String label, String type, String value, String defaultValue,
+                                      String help, boolean locked, String... options) {
+        JsonObject row = new JsonObject();
+        row.addProperty("key", key);
+        row.addProperty("label", label);
+        row.addProperty("type", type);
+        row.addProperty("value", value);
+        row.addProperty("default", defaultValue);
+        row.addProperty("help", help);
+        row.addProperty("locked", locked);
+        if (options.length > 0) {
+            JsonArray list = new JsonArray();
+            for (String option : options) list.add(option);
+            row.add("options", list);
+        }
+        return row;
+    }
+
+    public JsonObject awaitConfigSet(long timeoutMs) {
+        return await("config_set", timeoutMs);
     }
 
     public boolean sendBind(JsonObject bindings, String notes) {

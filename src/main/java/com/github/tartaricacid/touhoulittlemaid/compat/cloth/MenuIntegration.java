@@ -2,12 +2,16 @@ package com.github.tartaricacid.touhoulittlemaid.compat.cloth;
 
 import com.github.tartaricacid.touhoulittlemaid.api.event.client.AddClothConfigEvent;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabConfig;
+import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabRemoteConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.*;
 import com.github.tartaricacid.touhoulittlemaid.event.MaidMealRegConfigEvent;
 import com.google.common.collect.Lists;
+import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
+import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.common.MinecraftForge;
@@ -403,6 +407,65 @@ public class MenuIntegration {
                 .setDefaultValue(WabConfig.DEBUG.getDefault())
                 .setTooltip(Component.translatable("config.touhou_little_maid.wab.debug.tooltip"))
                 .setSaveConsumer(v -> saveWabConfig(() -> WabConfig.DEBUG.set(v))).build());
+
+        pluginConfig(entryBuilder, wab);
+    }
+
+    /**
+     * WarmAsBefore 插件那一侧的设置：字段表由宿主按 plugin.json 现描现发，这里一个键名都不写死。
+     * 插件以后加项、改默认值或换了中文名，游戏里这一栏跟着长出来，不需要再动模组——
+     * 两头各存一份清单迟早漂移，那样「游戏里改的」和「WAB 里生效的」就不是同一件事。
+     */
+    private static void pluginConfig(ConfigEntryBuilder entryBuilder, ConfigCategory wab) {
+        SubCategoryBuilder builder = entryBuilder.startSubCategory(Component.translatable("config.touhou_little_maid.wab.plugin"));
+        builder.setExpanded(false);
+        if (!WabRemoteConfig.present()) {
+            builder.add(entryBuilder.startTextDescription(Component.translatable("config.touhou_little_maid.wab.plugin.empty")).build());
+            wab.addEntry(builder.build());
+            return;
+        }
+        for (WabRemoteConfig.Field field : WabRemoteConfig.fields()) {
+            builder.add(pluginEntry(entryBuilder, field));
+        }
+        wab.addEntry(builder.build());
+    }
+
+    private static AbstractConfigListEntry<?> pluginEntry(ConfigEntryBuilder entryBuilder, WabRemoteConfig.Field field) {
+        Component title = Component.literal(field.label());
+        Component tooltip = Component.literal(field.help().isEmpty()
+                ? "这一项由 WarmAsBefore 保存，改完在 WAB 那边立刻生效；以 WAB 实际生效的值为准。"
+                : field.help() + "（改完在 WAB 那边立刻生效，以实际生效值为准）");
+        if (field.locked()) {
+            // 只读一行：Cloth 的 setEditable(false) 只把字画灰、点击照样写值，那样看着像锁死其实还能改，比不灰更骗人。
+            return entryBuilder.startTextDescription(Component.literal(field.label()).withStyle(ChatFormatting.GRAY))
+                    .setTooltip(tooltip).build();
+        }
+        switch (field.type()) {
+            case "switch": {
+                boolean def = "true".equalsIgnoreCase(field.defaultValue());
+                return entryBuilder.startBooleanToggle(title, field.on())
+                        .setDefaultValue(def).setTooltip(tooltip)
+                        .setSaveConsumer(v -> WabRemoteConfig.save(field.key(), String.valueOf(v))).build();
+            }
+            case "number": {
+                int def = parseInt(field.defaultValue(), 0);
+                return entryBuilder.startIntField(title, parseInt(field.value(), def))
+                        .setDefaultValue(def).setTooltip(tooltip)
+                        .setSaveConsumer(v -> WabRemoteConfig.save(field.key(), String.valueOf(v))).build();
+            }
+            default:
+                return entryBuilder.startStrField(title, field.value())
+                        .setDefaultValue(field.defaultValue()).setTooltip(tooltip)
+                        .setSaveConsumer(v -> WabRemoteConfig.save(field.key(), v == null ? "" : v)).build();
+        }
+    }
+
+    private static int parseInt(String raw, int fallback) {
+        try {
+            return Integer.parseInt(raw.trim());
+        } catch (Exception e) {
+            return fallback;
+        }
     }
 
     /** Cloth 的开关只改内存里的那份配置，得自己落盘；女仆 AI 设置页也是这么写的。 */

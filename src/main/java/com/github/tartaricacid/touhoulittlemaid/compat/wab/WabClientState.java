@@ -13,6 +13,8 @@ import java.util.UUID;
 public final class WabClientState {
     private static volatile Set<UUID> bound = Collections.emptySet();
     private static volatile boolean stt;
+    private static volatile boolean tts;
+    private static volatile boolean chat;
 
     private WabClientState() {
     }
@@ -20,9 +22,30 @@ public final class WabClientState {
     static void apply(WabBindingSync message) {
         bound = Set.copyOf(message.maids());
         stt = message.stt();
+        tts = message.tts();
+        chat = message.chat();
     }
 
     public static boolean sttFor(EntityMaid maid) {
         return stt && maid != null && bound.contains(maid.getUUID());
+    }
+
+    /** 桥还挂着、且这具身体绑了角色：回话由 WAB 出，模组自己的「启用大语言模型」不该拦这次开口。 */
+    public static boolean chatFor(EntityMaid maid) {
+        return chat && maid != null && bound.contains(maid.getUUID());
+    }
+
+    public static boolean connected() {
+        return chat;
+    }
+
+    /** 宿主此刻能听写：设置页据此把游戏自己的语音识别那几项标成「已由 WAB 承担」。 */
+    public static boolean sttByWab() {
+        return stt;
+    }
+
+    /** 宿主此刻能合成语音，同上。这两个值已经把「桥断了」算进去了，不必再叠 connected()。 */
+    public static boolean ttsByWab() {
+        return tts;
     }
 }

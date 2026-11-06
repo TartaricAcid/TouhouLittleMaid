@@ -54,7 +54,7 @@ public final class WabBridge {
      * 否则宿主拿到的是「车万女仆的版本」，永远看不出用户装的桥是上个月那一份还是今天这一份。
      * 加协议无关的新字段、新事件时 +0.1；改线上帧的语义才动 PROTOCOL。
      */
-    private static final String BRIDGE_BUILD = "1.5.0";
+    private static final String BRIDGE_BUILD = "1.6.0";
     private static final String MAGIC = "WAB-MAID";
     /** 协议承诺的上限：单次会话的女仆数、事件冷却缓存、世界绑定。 */
     private static final int MAX_MAIDS = 256;
@@ -278,6 +278,8 @@ public final class WabBridge {
             dispatcher.cancelAll("WAB 断开了");
             voiceTts = false;
             voiceStt = false;
+            // 宿主发下来的插件字段表跟着作废：不然设置页还画着一排点得动、却再也发不出去的开关。
+            WabRemoteConfig.clear();
             WabVoice.reset(this);
             clearPendingReplies();
             for (Map.Entry<UUID, UUID> entry : new HashMap<>(followTargets).entrySet()) {
@@ -301,11 +303,9 @@ public final class WabBridge {
             case "tts_reply" -> WabVoice.onTtsReply(this, frame);
             case "tts_audio" -> WabVoice.onTtsAudio(this, frame);
             case "stt_reply" -> WabVoice.onSttReply(this, frame);
-            case "settings" -> {
-                // WAB 在设置页改了白名单后只推这一帧、不断线；不接的话游戏侧的闸门会一直停在握手时的值。
-                JsonObject settings = WabJson.obj(frame, "settings");
-                applySettings(settings.size() > 0 ? settings : frame);
-            }
+            case "settings" ->
+                    // WAB 在设置页改了插件设置后只推这一帧、不断线；不接的话游戏侧的闸门会一直停在握手时的值。
+                    applyRemote(frame);
             case "command" -> {
                 String id = WabJson.str(frame, "id");
                 String method = WabJson.str(frame, "method").toLowerCase(Locale.ROOT);
@@ -318,19 +318,26 @@ public final class WabBridge {
                     from.sendResult(id, false, null, "internal_error", "游戏端执行这条命令时出了错。");
                 }
             }
-            case "error" -> TouhouLittleMaid.LOGGER.warn("[WAB] WAB error {} {}",
-                    WabJson.str(frame, "code"), WabJson.str(frame, "message"));
+            case "error" -> {
+                String code = WabJson.str(frame, "code");
+                String message = WabJson.str(frame, "message");
+                TouhouLittleMaid.LOGGER.warn("[WAB] WAB error {} {}", code, message);
+                // 游戏里改了插件设置被宿主拒绝：这句得让主人看见，否则滑块弹回去却不知道为什么不生效。
+                if ("config_rejected".equals(code)) {
+                    ServerPlayer player = currentOwner();
+                    if (player != null) {
+                        player.displayClientMessage(Component.literal("WarmAsBefore 没接受这项设置：" + message)
+                                .withStyle(ChatFormatting.GRAY), false);
+                    }
+                }
+            }
             default -> {
             }
         }
     }
 
     private void onWelcome(WabSession from, JsonObject welcome) {
-        applySettings(WabJson.obj(welcome, "settings"));
-        // 宿主没宣告 voice 就是老版本：能力按「没有」处理，绑了角色也仍用游戏自己的语音。
-        JsonObject voice = WabJson.obj(welcome, "voice");
-        voiceTts = WabJson.bool(voice, "tts", false);
-        voiceStt = WabJson.bool(voice, "stt", false);
+        applyRemote(welcome);
         boundCharacters.clear();
         JsonObject bound = WabJson.obj(welcome, "bound");
         for (String maidId : bound.keySet()) {
@@ -349,7 +356,34 @@ public final class WabBridge {
         }
     }
 
-    /** 握手与 settings 帧共用：只认这两个开关，缺省保持当前值。 */
+    /**
+     * welcome 与 settings 帧共用一份收口：宿主改完插件设置推的 settings 帧，形状跟握手时几乎一样
+     * （settings + voice + fields），分开写两遍迟早漏掉其中一样。
+     * 老版 WAB 不发 voice / fields，缺省就保持现值——绑了角色也仍用游戏自己的语音，设置页只留一行说明。
+     */
+    private void applyRemote(JsonObject frame) {
+        JsonObject settings = WabJson.obj(frame, "settings");
+        // 老宿主把开关直接摊在帧根上，新版才收进 settings——两种形状都认，别因为一次升级就把闸门冻在旧值。
+        applySettings(settings.size() > 0 ? settings : frame);
+        if (frame.has("voice") && applyVoice(WabJson.obj(frame, "voice"))) {
+            WabVoice.pushClientState(this);
+        }
+        if (frame.has("fields")) {
+            WabRemoteConfig.apply(WabJson.arr(frame, "fields"));
+        }
+    }
+
+    /** 语音能力位只在真的变了才惊动客户端——每次握手都推一遍状态会白白重排一次女仆名册。 */
+    private boolean applyVoice(JsonObject voice) {
+        boolean tts = WabJson.bool(voice, "tts", voiceTts);
+        boolean stt = WabJson.bool(voice, "stt", voiceStt);
+        if (tts == voiceTts && stt == voiceStt) return false;
+        voiceTts = tts;
+        voiceStt = stt;
+        return true;
+    }
+
+    /** 只认这两个开关，缺省保持当前值。 */
     private void applySettings(JsonObject settings) {
         boolean changed = false;
         if (settings.has("allowWorldActions")) {
@@ -598,6 +632,9 @@ public final class WabBridge {
         out.addProperty("world", worldName);
         out.addProperty("player", ownerName);
         out.add("maids", beaconMaids);
+        // 握手就把这台游戏的配置报上去：宿主拿它跟插件设置对账，两边打架时当场说破。
+        // 不带这一份的话，宿主那个「模组侧配置」镜像永远是空的。
+        out.add("config", WabConfig.snapshot());
         return out.toString();
     }
 
@@ -668,6 +705,9 @@ public final class WabBridge {
             list.add(WabSensors.snapshot(this, maid));
         }
         msg.add("maids", list);
+        // 配置也跟着状态一起报：用户在 WAB 里改完插件设置、或在游戏里改了 WAB 配置，
+        // 宿主要立刻看到「此刻生效的是什么」，不然两侧对照表会停在握手那一瞬的旧值。
+        msg.add("config", WabConfig.snapshot());
         String hash = msg.toString();
         long now = System.currentTimeMillis();
         if (!force && hash.equals(lastStateHash) && now - lastStateAt < 30000) return;
@@ -714,6 +754,22 @@ public final class WabBridge {
         chat.addProperty("name", cleanName(maid));
         chat.addProperty("text", text);
         current.send(chat);
+    }
+
+    /**
+     * 游戏里改了 WAB 插件的设置：把键值发回宿主落盘。
+     * 这里只发不判——哪些能改、值合不合规矩由宿主那边说了算，
+     * 模组不认识 plugin.json 的字段，也不该存一份会过期的副本。
+     */
+    public void sendConfigSet(String key, String value) {
+        WabSession current = session;
+        if (current == null || current.isClosed()) return;
+        JsonObject msg = new JsonObject();
+        msg.addProperty("v", Integer.parseInt(PROTOCOL));
+        msg.addProperty("type", "config_set");
+        msg.addProperty("key", key == null ? "" : key);
+        msg.addProperty("value", value == null ? "" : value);
+        current.send(msg);
     }
 
     /**
@@ -984,6 +1040,8 @@ public final class WabBridge {
         WabSession current = old.session;
         if (current != null) current.close("server stopping");
         old.dispatcher.cancelAll("server stopping");
+        // 换存档/关服都会走到这里：不清的话，下一个世界的设置页会先画出上一个存档那套插件开关
+        WabRemoteConfig.clear();
         TouhouLittleMaid.LOGGER.info("[WAB] bridge stopped");
     }
 

@@ -52,14 +52,16 @@ public final class MaidAIChatManager extends MaidAIChatData {
     }
 
     public void chat(String message, ChatClientInfo clientInfo, ServerPlayer sender) {
+        // 绑了 WAB 角色的女仆只认角色自己绑定的 LLM：这句话交给 WAB，游戏里不再挑站点。
+        // 必须排在 LLM_ENABLED 前面——插件接管后端时玩家往往把模组自带的大模型开关关掉，
+        // 那句判据一挡，WAB 这条路也跟着哑了。
+        WabBridge bridge = WabBridge.get();
+        if (bridge != null && bridge.sendChatIfBound(this.maid, message)) {
+            return;
+        }
         if (!AIConfig.LLM_ENABLED.get()) {
             sender.sendSystemMessage(Component.translatable("ai.touhou_little_maid.chat.disable")
                     .withStyle(ChatFormatting.RED));
-            return;
-        }
-        // 绑了 WAB 角色的女仆只认角色自己绑定的 LLM：这句话交给 WAB，游戏里不再挑站点。
-        WabBridge bridge = WabBridge.get();
-        if (bridge != null && bridge.sendChatIfBound(this.maid, message)) {
             return;
         }
         sender.getCapability(ChatTokensCapabilityProvider.CHAT_TOKENS_CAP).ifPresent(chatTokens -> {

@@ -6,6 +6,7 @@ import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabConfig;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabError;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabHud;
+import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabRemoteConfig;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabSensors;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabStorage;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -31,6 +32,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
 import java.util.Base64;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
@@ -49,6 +51,16 @@ import java.util.concurrent.TimeUnit;
 public final class WabSuite {
     private static final long CMD = 8000;
     private static final long HEAVY = 20000;
+
+    /** 模组往上报的那十项，必须和宿主 MaidBridgeService.ModConfigKeys 一项不差。 */
+    private static final String[] CONFIG_KEYS = {
+            "enabled", "discoveryPort", "lanDiscovery", "beaconIntervalSeconds", "chatRange",
+            "showHud", "autonomyEnabled", "playerCanSleepInMaidBed", "maidChatCooldownSeconds", "debug"
+    };
+
+    /** 握手时下发的样例字段表里，改了要重连的那三项。 */
+    private static final String[] LOCKED_PLUGIN_KEYS = {"enabled", "port", "lan"};
+    private static final int PLUGIN_FIELD_COUNT = 15;
 
     private final FakeWabHost host;
     private final MinecraftServer server;
@@ -92,6 +104,7 @@ public final class WabSuite {
             inbound();
             actions();
             gates();
+            settingsLink();
             worldEvents();
             photo();
             voice();
@@ -184,7 +197,7 @@ public final class WabSuite {
         });
 
         WabReport.check("回 welcome，握手完成并推出 state", () -> {
-            WabReport.need(host.sendWelcome(true, true, true, true), "welcome 发不出去");
+            WabReport.need(host.sendWelcome(true, true, true, true, pluginFields()), "welcome 发不出去");
             JsonObject state = host.await("state", 15000);
             WabReport.need(state != null, "握手后 15 秒没等到 state：桥在 onWelcome 里要主动推一次全量状态");
             WabReport.need(FakeWabHost.has(state, "world") && FakeWabHost.has(state, "maids"), "state 缺 world/maids");
@@ -779,6 +792,201 @@ public final class WabSuite {
             WabReport.need(ok(result) || !code(result).isEmpty(), "既没成功也没 code：" + describe(result));
             return clip(txt(data(result), "message")) + " code=" + code(result);
         });
+    }
+
+    // ==================== 6.5 设置联动 ====================
+
+    /**
+     * 「设置随游戏变化」这一条的整条链路：游戏里的 config 上得去，插件的字段表下得来，
+     * 游戏里拨一下开关还能变成桥上的 config_set 上行帧，宿主拒绝时也只说原因不断线。
+     * <p>
+     * 排在这里而不是握手那节，是因为前面几节会反复发 settings 帧；字段表要等闸门用例跑完才看得准。
+     */
+    private void settingsLink() {
+        WabReport.section("6.5 设置联动（游戏 config 上报 → 插件字段表下发 → 游戏里改 → config_set 上行）");
+
+        WabReport.check("hello 就把这份游戏的 config 一起报上去", () -> {
+            JsonObject cfg = configOf(host.hello());
+            WabReport.need(cfg != null, "hello 没有 config 节点：WAB 的设置页读不到游戏里的值");
+            String missing = missingKeys(cfg, CONFIG_KEYS);
+            WabReport.need(missing.length() == 0, "config 缺键：" + missing);
+            WabReport.need(cfg.get("chatRange").getAsInt() == WabConfig.chatRange(),
+                    "chatRange 报的是 " + cfg.get("chatRange").getAsInt() + "，游戏里是 " + WabConfig.chatRange());
+            WabReport.need(cfg.get("playerCanSleepInMaidBed").getAsBoolean() == WabConfig.playerCanSleepInMaidBed(),
+                    "playerCanSleepInMaidBed 和游戏里的值对不上");
+            return "十键齐 聊天半径=" + cfg.get("chatRange").getAsInt();
+        });
+
+        WabReport.check("state 帧带同一份 config（游戏里改了设置不用重连）", () -> {
+            onServer(() -> {
+                bridge.sendState(true);
+                return "已推";
+            });
+            JsonObject state = host.await("state", 8000);
+            WabReport.need(state != null, "8 秒内没等到 state");
+            JsonObject cfg = configOf(state);
+            WabReport.need(cfg != null, "state 没有 config 节点");
+            String missing = missingKeys(cfg, CONFIG_KEYS);
+            WabReport.need(missing.length() == 0, "state 的 config 缺键：" + missing);
+            WabReport.need(cfg.get("autonomyEnabled").getAsBoolean() == WabConfig.autonomyEnabled(),
+                    "autonomyEnabled 对不上");
+            return "同样十键 hud=" + cfg.get("showHud").getAsBoolean();
+        });
+
+        WabReport.check("welcome 带的字段表被收下：锁着的、开关、数字、下拉各认得出来", () -> {
+            waitFields(PLUGIN_FIELD_COUNT);
+            List<WabRemoteConfig.Field> rows = WabRemoteConfig.fields();
+            WabReport.need(rows.size() == PLUGIN_FIELD_COUNT, "收到 " + rows.size() + " 项，welcome 里是 " + PLUGIN_FIELD_COUNT + " 项");
+            int locked = 0;
+            for (WabRemoteConfig.Field field : rows) {
+                if (field.locked()) locked++;
+            }
+            WabReport.need(locked == LOCKED_PLUGIN_KEYS.length,
+                    "该锁 " + LOCKED_PLUGIN_KEYS.length + " 项，实际锁了 " + locked + " 项：放行改了也不生效的项，玩家会以为是自己手滑");
+            for (String key : LOCKED_PLUGIN_KEYS) {
+                WabReport.need(row(key).locked(), key + " 没标成锁着");
+            }
+            WabRemoteConfig.Field sw = row("chat_affection");
+            WabReport.need("switch".equals(sw.type()), "chat_affection 类型是 " + sw.type() + "，设置页长不出开关");
+            WabReport.need(sw.on(), "开关项 value=" + sw.value() + " 认成了关");
+            WabReport.need(!row("lan").on(), "value=false 的开关被认成了开");
+            WabRemoteConfig.Field num = row("autonomy_pulse_minutes");
+            WabReport.need(num.number(-1) == 20, "数字项 parse 出 " + num.number(-1) + "，设置页会画错当前值");
+            WabReport.need(row("think_scenes").options().isEmpty(), "文本项凭空多出候选值");
+            WabReport.need(!row("think_scenes").help().isEmpty(), "说明文字没下来，设置页只能靠猜");
+            WabReport.need(WabRemoteConfig.updatedAt() > 0L, "没记到达时间，页面显示不出这份表有多新");
+            return rows.size() + " 项，其中锁着 " + locked + " 项";
+        });
+
+        WabReport.check("settings 帧热替换字段表（WAB 里改了插件设置，游戏里跟着变）", () -> {
+            JsonArray hot = new JsonArray();
+            hot.add(FakeWabHost.fieldRow("think_scenes", "她会为什么事想一次", "text", "weather", "interaction",
+                    "逗号分隔的场景键。留空 = 只在有事时被动回应。", false));
+            hot.add(FakeWabHost.fieldRow("backup_minutes", "快照间隔（分钟）", "number", "5", "10",
+                    "每隔多久给女仆做一次完整 NBT 快照；0 = 只在连接和手动时备份。", false));
+            WabReport.need(host.sendSettings(null, null, hot), "settings 帧发不出去");
+            waitFields(2);
+            List<WabRemoteConfig.Field> rows = WabRemoteConfig.fields();
+            WabReport.need(rows.size() == 2, "表还是 " + rows.size() + " 项：热替换没生效，页面会留着已经删掉的项");
+            WabReport.need("weather".equals(row("think_scenes").value()), "文本项的值没跟着换");
+            WabReport.need(row("backup_minutes").number(-1) == 5, "数字项的值没跟着换");
+            boolean open = onServer(() -> bridge.allowWorldActions() && bridge.allowGestures());
+            WabReport.need(open, "只带 fields 的 settings 帧把世界操作闸门一起改了？");
+            return "换成 " + rows.size() + " 项，闸门没被顺手改掉";
+        });
+
+        WabReport.check("只带 voice 的 settings 帧不该把字段表抹掉", () -> {
+            int before = WabRemoteConfig.fields().size();
+            JsonObject voice = onServer(() -> {
+                JsonObject out = new JsonObject();
+                out.addProperty("tts", bridge.voiceTts());
+                out.addProperty("stt", bridge.voiceStt());
+                return out;
+            });
+            WabReport.need(host.sendSettings(null, voice, null), "settings 帧发不出去");
+            Thread.sleep(600);
+            WabReport.need(WabRemoteConfig.fields().size() == before,
+                    "缺 fields 的帧把表清成了 " + WabRemoteConfig.fields().size() + " 项：旧版 WAB 一发语音开关，游戏里那一栏就空了");
+            return "还是 " + before + " 项";
+        });
+
+        WabReport.check("游戏里拨一下开关 → 桥上真的发出 config_set", () -> {
+            WabReport.need(host.sendSettings(null, null, pluginFields()), "把字段表恢复回去时发不出去");
+            waitFields(PLUGIN_FIELD_COUNT);
+            WabRemoteConfig.save("chat_affection", "false");
+            JsonObject up = host.awaitConfigSet(6000);
+            WabReport.need(up != null, "6 秒内桥上没发出 config_set：游戏里点开关等于什么都没做");
+            WabReport.need("chat_affection".equals(txt(up, "key")), "key=" + txt(up, "key"));
+            WabReport.need("false".equals(txt(up, "value")), "value=" + txt(up, "value") + "（宿主按文本收，别发布尔原值）");
+            WabReport.need(up.has("v") && up.get("v").getAsInt() == 1, "没带协议版本");
+            return txt(up, "key") + "=" + txt(up, "value");
+        });
+
+        WabReport.check("数字项原样上行：钳范围是宿主的事", () -> {
+            WabRemoteConfig.save("autonomy_pulse_minutes", "30");
+            JsonObject up = host.awaitConfigSet(6000);
+            WabReport.need(up != null, "没发出 config_set");
+            WabReport.need("30".equals(txt(up, "value")), "value=" + txt(up, "value"));
+            return txt(up, "key") + "=" + txt(up, "value");
+        });
+
+        WabReport.check("键名为空不许上行（控件挂错也不该发出去）", () -> {
+            WabRemoteConfig.save("", "true");
+            WabRemoteConfig.save(null, "true");
+            JsonObject up = host.awaitConfigSet(500);
+            WabReport.need(up == null, "空键名也发出去了：" + clip(up == null ? "" : String.valueOf(up)));
+            return "两次都没发";
+        });
+
+        WabReport.check("宿主回 error/config_rejected：说清原因，不断线也不卡服务器线程", () -> {
+            WabReport.need(host.sendConfigRejected("port", "这一项改了要重连才生效，请在 WAB 的插件页面里改"), "发不出去");
+            Thread.sleep(600);
+            WabReport.need(bridge.connected(), "被拒绝一次就把会话断了？");
+            JsonObject result = host.command("status", param("maid", maidId), CMD);
+            WabReport.need(ok(result) || !code(result).isEmpty(), "拒绝帧之后命令不应答：" + describe(result));
+            return "照样回执，服务器线程没事";
+        });
+
+        WabReport.check("表作废后下一帧又能长回来（断桥清干净，重连即刻恢复）", () -> {
+            WabRemoteConfig.clear();
+            WabReport.need(!WabRemoteConfig.present(), "clear 之后 present() 仍为真：设置页会画出一排发不出去的开关");
+            WabReport.need(WabRemoteConfig.fields().isEmpty(), "表没清空");
+            WabReport.need(WabRemoteConfig.updatedAt() == 0L, "到达时间没归零");
+            WabReport.need(host.sendSettings(null, null, pluginFields()), "settings 帧发不出去");
+            waitFields(PLUGIN_FIELD_COUNT);
+            WabReport.need(WabRemoteConfig.present(), "重新下发后设置页仍然读不到表");
+            return "重新长出 " + WabRemoteConfig.fields().size() + " 项";
+        });
+    }
+
+    /** 照宿主 BuildPluginConfigJson 那份表描一遍：项、类型、默认值都对得上 wab_minecraft/plugin.json。 */
+    private static JsonArray pluginFields() {
+        JsonArray out = new JsonArray();
+        out.add(FakeWabHost.fieldRow("enabled", "启用桥接", "switch", "true", "true", "关闭后宿主不再监听端口，游戏里的女仆回落到原版行为。", true));
+        out.add(FakeWabHost.fieldRow("port", "TCP 端口", "number", "27322", "27322", "模组连进来的端口；0 = 启动时自动挑一个空闲端口。改完保存会自动重连。", true));
+        out.add(FakeWabHost.fieldRow("lan", "允许局域网连接", "switch", "false", "false", "默认只接受本机回环。开局域网后别的机器也能连进这份存档。", true));
+        out.add(FakeWabHost.fieldRow("auto_create_characters", "自动建角色", "switch", "true", "true", "游戏里出现匹配不到角色的女仆时，用她的名字新建一个角色再绑定。", false));
+        out.add(FakeWabHost.fieldRow("allow_world_actions", "允许世界动作", "switch", "true", "true", "挖/放/取水/丢物等会改变游戏世界的动作。", false));
+        out.add(FakeWabHost.fieldRow("allow_gestures", "允许动作与语录", "switch", "true", "true", "招手、抱抱、说话、坐下这类不改世界的动作。", false));
+        out.add(FakeWabHost.fieldRow("allow_photo", "允许她看一眼画面", "switch", "true", "true", "拍照时从主人的客户端取一张游戏内画面。", false));
+        out.add(FakeWabHost.fieldRow("allow_voice", "借 WAB 的声音说话和听话", "switch", "true", "true", "绑了角色的女仆合成语音、听写主人说话都由 WAB 完成。", false));
+        out.add(FakeWabHost.fieldRow("chat_affection", "游戏内聊天让她判好感", "switch", "true", "true", "对女仆说话会回传 WAB，由她本人判该涨还是该跌。", false));
+        out.add(FakeWabHost.fieldRow("autonomy_pulse_minutes", "主动思考间隔（分钟）", "number", "20", "0", "每隔多久主动让 AI 想想女仆接下来该干嘛；0 = 完全交给日程。", false));
+        out.add(FakeWabHost.fieldRow("think_scenes", "她会为什么事想一次", "text", "interaction,hurt", "interaction", "逗号分隔的场景键。留空 = 只在有事时被动回应。", false));
+        out.add(FakeWabHost.fieldRow("think_cooldown_seconds", "同一件事的冷却（秒）", "number", "90", "90", "同一个人物、同一类事，隔够这么久才允许再想一次。", false));
+        out.add(FakeWabHost.fieldRow("love_words", "陪睡时的爱语", "switch", "true", "true", "主人睡觉时她靠过去睡下，并说一句只有这时候才会说的话。", false));
+        out.add(FakeWabHost.fieldRow("auto_switch_save", "允许桥替你切存档", "switch", "false", "false", "打开后她才会自己去读这份世界绑定的那份存档。", false));
+        out.add(FakeWabHost.fieldRow("backup_minutes", "快照间隔（分钟）", "number", "10", "10", "每隔多久给女仆做一次完整 NBT 快照；0 = 只在连接和手动时备份。", false));
+        return out;
+    }
+
+    private void waitFields(int count) throws InterruptedException {
+        for (int i = 0; i < 30 && WabRemoteConfig.fields().size() != count; i++) {
+            Thread.sleep(100);
+        }
+    }
+
+    /** 表里没有这一项就直接算这条用例失败，免得后面处处判空。 */
+    private static WabRemoteConfig.Field row(String key) {
+        WabRemoteConfig.Field found = null;
+        for (WabRemoteConfig.Field field : WabRemoteConfig.fields()) {
+            if (key.equals(field.key())) found = field;
+        }
+        WabReport.need(found != null, "字段表里没有 " + key);
+        return found;
+    }
+
+    private static JsonObject configOf(JsonObject frame) {
+        if (frame == null || !frame.has("config") || !frame.get("config").isJsonObject()) return null;
+        return frame.getAsJsonObject("config");
+    }
+
+    private static String missingKeys(JsonObject src, String[] keys) {
+        StringBuilder missing = new StringBuilder();
+        for (String key : keys) {
+            if (!FakeWabHost.has(src, key)) missing.append(missing.length() == 0 ? "" : ",").append(key);
+        }
+        return missing.toString();
     }
 
     // ==================== 7 世界事件 ====================
