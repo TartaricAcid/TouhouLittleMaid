@@ -3,6 +3,8 @@ package com.github.tartaricacid.touhoulittlemaid.compat.wab;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -37,9 +39,17 @@ public class WabDetailsReply {
     public static void handle(WabDetailsReply message, Supplier<NetworkEvent.Context> contextSupplier) {
         NetworkEvent.Context context = contextSupplier.get();
         if (context.getDirection().getReceptionSide().isClient()) {
-            context.enqueueWork(() -> net.minecraft.client.Minecraft.getInstance()
-                    .setScreen(new WabDetailsScreen(message.data)));
+            context.enqueueWork(() -> onHandle(message));
         }
         context.setPacketHandled(true);
+    }
+
+    /**
+     * 客户端收尾必须待在带 @OnlyIn 的具名方法里：写在 lambda 里的话，合成方法剥不掉，
+     * 专用服务器做类校验时会顺着 new WabDetailsScreen 摸到 Screen 直接炸。
+     */
+    @OnlyIn(Dist.CLIENT)
+    private static void onHandle(WabDetailsReply message) {
+        net.minecraft.client.Minecraft.getInstance().setScreen(new WabDetailsScreen(message.data));
     }
 }

@@ -40,6 +40,9 @@ jobs:
 
       - name: Game test server (drop-in check)
         continue-on-error: true
+        # 服务器启动失败时 gradle/FML 可能不退出（1.20 线实测干等 40 分钟），必须设上限，
+        # 否则后面的 jar 上传全部饿死。
+        timeout-minutes: 10
         run: |
           ./gradlew runGameTestServer --no-daemon --stacktrace
 
