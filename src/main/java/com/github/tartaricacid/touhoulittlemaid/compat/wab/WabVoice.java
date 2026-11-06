@@ -185,7 +185,7 @@ public final class WabVoice {
         ServerPlayer player = bridge.currentOwner();
         if (player == null) return;
         List<UUID> maids = new ArrayList<>(bridge.boundMaidIds());
-        NetworkHandler.sendToClientPlayer(new WabBindingSync(maids, bridge.voiceStt()), player);
+        NetworkHandler.sendToClientPlayer(new WabBindingSync(maids, bridge.voiceStt(), bridge.voiceTts(), bridge.connected()), player);
     }
 
     private static JsonObject frame(String type, int request) {

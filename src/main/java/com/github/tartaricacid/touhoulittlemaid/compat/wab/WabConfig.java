@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.wab;
 
+import com.google.gson.JsonObject;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
 /**
@@ -125,5 +126,25 @@ public final class WabConfig {
 
     public static int maidChatCooldownSeconds() {
         return integer(MAID_CHAT_COOLDOWN, 90);
+    }
+
+    /**
+     * 这份配置的一份可发送副本，随 hello / state 帧上报给 WAB。
+     * 宿主那边的「两侧开关是否打架」全靠这一份：不发，插件页面上看到的游戏侧配置永远是空的。
+     * 用带兜底的取值方法，配置没加载（主菜单、存档还没跑起来）也只是报默认值，不会抛。
+     */
+    public static JsonObject snapshot() {
+        JsonObject out = new JsonObject();
+        out.addProperty("enabled", enabled());
+        out.addProperty("discoveryPort", discoveryPort());
+        out.addProperty("lanDiscovery", lanDiscovery());
+        out.addProperty("beaconIntervalSeconds", beaconIntervalSeconds());
+        out.addProperty("chatRange", chatRange());
+        out.addProperty("showHud", showHud());
+        out.addProperty("autonomyEnabled", autonomyEnabled());
+        out.addProperty("playerCanSleepInMaidBed", playerCanSleepInMaidBed());
+        out.addProperty("maidChatCooldownSeconds", maidChatCooldownSeconds());
+        out.addProperty("debug", debug());
+        return out;
     }
 }
