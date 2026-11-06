@@ -76,6 +76,9 @@ public final class InitItems {
     public static DeferredItem<Item> CCHESS_BOARD_STATE = ITEMS.register("cchess_board_state", ItemBoardState::new);
     public static DeferredItem<Item> WCHESS_BOARD_STATE = ITEMS.register("wchess_board_state", ItemBoardState::new);
     public static DeferredItem<Item> SNACK_CABINET = ITEMS.register("snack_cabinet", () -> new BlockItem(InitBlocks.SNACK_CABINET.get(), new Item.Properties()));
+    public static DeferredItem<Item> SPOON = ITEMS.register("spoon", () -> new ItemMaidUtensil("spoon"));
+    public static DeferredItem<Item> FORK_KNIFE = ITEMS.register("fork_knife", () -> new ItemMaidUtensil("fork_knife"));
+    public static DeferredItem<Item> CHOPSTICKS = ITEMS.register("chopsticks", () -> new ItemMaidUtensil("chopsticks"));
     @SuppressWarnings("deprecation")
     public static DeferredItem<Item> MONSTER_LIST = ITEMS.register("monster_list", ItemMonsterList::new);
 

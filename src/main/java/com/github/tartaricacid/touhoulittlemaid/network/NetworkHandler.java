@@ -2,6 +2,9 @@ package com.github.tartaricacid.touhoulittlemaid.network;
 
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabAnimationMessage;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabBindingSync;
+import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabDetailsReply;
+import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabDetailsRequest;
+import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabHeadInfo;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabPhotoReply;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabPhotoRequest;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabVoiceAudio;
@@ -100,6 +103,12 @@ public class NetworkHandler {
         registrar.playToServer(WabVoiceClip.TYPE, WabVoiceClip.STREAM_CODEC, WabVoiceClip::handle);
         registrar.playToClient(WabVoiceText.TYPE, WabVoiceText.STREAM_CODEC, WabVoiceText::handle);
         registrar.playToClient(WabVoiceAudio.TYPE, WabVoiceAudio.STREAM_CODEC, WabVoiceAudio::handle);
+
+        // 喂食三条：详细信息请求（客户端→服务器）、详细信息回执与头顶信息（服务器→主人客户端）。
+        // H 键没按、头顶开关没开时这些路径一次都不会被走到。
+        registrar.playToServer(WabDetailsRequest.TYPE, WabDetailsRequest.STREAM_CODEC, WabDetailsRequest::handle);
+        registrar.playToClient(WabDetailsReply.TYPE, WabDetailsReply.STREAM_CODEC, WabDetailsReply::handle);
+        registrar.playToClient(WabHeadInfo.TYPE, WabHeadInfo.STREAM_CODEC, WabHeadInfo::handle);
     }
 
     public static void sendToClientPlayer(CustomPacketPayload payload, ServerPlayer player) {
