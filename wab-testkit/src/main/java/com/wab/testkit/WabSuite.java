@@ -5,6 +5,7 @@ import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabBridge;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabConfig;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabError;
+import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabFeedRules;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabHud;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabRemoteConfig;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabSensors;
@@ -52,10 +53,11 @@ public final class WabSuite {
     private static final long CMD = 8000;
     private static final long HEAVY = 20000;
 
-    /** 模组往上报的那十项，必须和宿主 MaidBridgeService.ModConfigKeys 一项不差。 */
+    /** 模组往上报的那十四项，必须和宿主 MaidBridgeService.ModConfigKeys 一项不差。 */
     private static final String[] CONFIG_KEYS = {
             "enabled", "discoveryPort", "lanDiscovery", "beaconIntervalSeconds", "chatRange",
-            "showHud", "autonomyEnabled", "playerCanSleepInMaidBed", "maidChatCooldownSeconds", "debug"
+            "showHud", "autonomyEnabled", "playerCanSleepInMaidBed", "maidChatCooldownSeconds", "debug",
+            "feedingEnabled", "ownerOnlyFeeding", "multiplayerFeeding", "showAboveMaid"
     };
 
     /** 握手时下发的样例字段表里，改了要重连的那三项。 */
@@ -105,6 +107,7 @@ public final class WabSuite {
             actions();
             gates();
             settingsLink();
+            feedRules();
             worldEvents();
             photo();
             voice();
@@ -979,6 +982,76 @@ public final class WabSuite {
     private static JsonObject configOf(JsonObject frame) {
         if (frame == null || !frame.has("config") || !frame.get("config").isJsonObject()) return null;
         return frame.getAsJsonObject("config");
+    }
+
+    // ==================== 6.6 投喂口味 ====================
+
+    /**
+     * feed_rules 这条链：宿主全量下发口味表，模组照表判定挑食/喜爱/吃腻；
+     * 断桥 clear 之后一切回到 NORMAL，「不连 WAB 与原版一致」的底线也顺带验一遍。
+     */
+    private void feedRules() {
+        WabReport.section("6.6 投喂口味（feed_rules 下发 → 判定跟随 → clear 清场）");
+
+        WabReport.check("空表也收得下：判定一律 NORMAL", () -> {
+            JsonObject frame = new JsonObject();
+            frame.addProperty("v", 1);
+            frame.addProperty("type", "feed_rules");
+            frame.add("picky", new JsonArray());
+            frame.add("favorite", new JsonArray());
+            frame.addProperty("boredomLimit", 5);
+            frame.add("counts", new JsonObject());
+            WabReport.need(host.send(frame), "feed_rules 发不出去");
+            Thread.sleep(600);
+            String state = onServer(() -> "apple=" + WabFeedRules.classify(new ItemStack(Items.APPLE)).name()
+                    + " hasRules=" + WabFeedRules.hasRules());
+            WabReport.need(state.contains("apple=NORMAL") && state.contains("hasRules=false"), state);
+            return state;
+        });
+
+        WabReport.check("挑食/喜爱/吃腻计数逐项生效", () -> {
+            JsonObject frame = new JsonObject();
+            frame.addProperty("v", 1);
+            frame.addProperty("type", "feed_rules");
+            JsonArray picky = new JsonArray();
+            picky.add("minecraft:rotten_flesh");
+            JsonArray favorite = new JsonArray();
+            favorite.add("minecraft:apple");
+            favorite.add("#forge:candy");
+            frame.add("picky", picky);
+            frame.add("favorite", favorite);
+            frame.addProperty("boredomLimit", 3);
+            JsonObject counts = new JsonObject();
+            counts.addProperty("minecraft:bread", 3);
+            frame.add("counts", counts);
+            WabReport.need(host.send(frame), "feed_rules 发不出去");
+            Thread.sleep(600);
+            String state = onServer(() -> {
+                WabFeedRules.Verdict apple = WabFeedRules.classify(new ItemStack(Items.APPLE));
+                WabFeedRules.Verdict flesh = WabFeedRules.classify(new ItemStack(Items.ROTTEN_FLESH));
+                WabFeedRules.Verdict bread = WabFeedRules.classify(new ItemStack(Items.BREAD));
+                return "apple=" + apple.name() + " flesh=" + flesh.name() + " bread=" + bread.name()
+                        + " picky=" + WabFeedRules.pickyCount() + " favorite=" + WabFeedRules.favoriteCount()
+                        + " limit=" + WabFeedRules.boredomLimit() + " tracked=" + WabFeedRules.trackedCount();
+            });
+            WabReport.need(state.contains("apple=FAVORITE"), state);
+            WabReport.need(state.contains("flesh=PICKY"), state);
+            WabReport.need(state.contains("bread=BORED"), state);
+            return state;
+        });
+
+        WabReport.check("note 累加一笔、clear 清场回到 NORMAL", () -> {
+            String state = onServer(() -> {
+                int noted = WabFeedRules.note(new ItemStack(Items.BREAD));
+                WabFeedRules.clear();
+                return "noted=" + noted
+                        + " afterClear=" + WabFeedRules.classify(new ItemStack(Items.BREAD)).name()
+                        + "/" + WabFeedRules.trackedCount();
+            });
+            WabReport.need(state.contains("noted=4"), state);
+            WabReport.need(state.contains("afterClear=NORMAL/0"), state);
+            return state;
+        });
     }
 
     private static String missingKeys(JsonObject src, String[] keys) {

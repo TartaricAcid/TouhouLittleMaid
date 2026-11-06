@@ -76,6 +76,9 @@ public final class InitItems {
     public static RegistryObject<Item> CCHESS_BOARD_STATE = ITEMS.register("cchess_board_state", ItemBoardState::new);
     public static RegistryObject<Item> WCHESS_BOARD_STATE = ITEMS.register("wchess_board_state", ItemBoardState::new);
     public static RegistryObject<Item> SNACK_CABINET = ITEMS.register("snack_cabinet", () -> new BlockItem(InitBlocks.SNACK_CABINET.get(), new Item.Properties()));
+    public static RegistryObject<Item> SPOON = ITEMS.register("spoon", () -> new ItemMaidUtensil("spoon"));
+    public static RegistryObject<Item> FORK_KNIFE = ITEMS.register("fork_knife", () -> new ItemMaidUtensil("fork_knife"));
+    public static RegistryObject<Item> CHOPSTICKS = ITEMS.register("chopsticks", () -> new ItemMaidUtensil("chopsticks"));
     @SuppressWarnings("deprecation")
     public static RegistryObject<Item> MONSTER_LIST = ITEMS.register("monster_list", ItemMonsterList::new);
 

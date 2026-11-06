@@ -408,6 +408,24 @@ public class MenuIntegration {
                 .setTooltip(Component.translatable("config.touhou_little_maid.wab.debug.tooltip"))
                 .setSaveConsumer(v -> saveWabConfig(() -> WabConfig.DEBUG.set(v))).build());
 
+        ConfigCategory feeding = root.getOrCreateCategory(Component.translatable("config.touhou_little_maid.wab.feeding"));
+        feeding.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.wab.feeding_enabled"), WabConfig.FEEDING_ENABLED.get())
+                .setDefaultValue(WabConfig.FEEDING_ENABLED.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.wab.feeding_enabled.tooltip"))
+                .setSaveConsumer(v -> saveWabConfig(() -> WabConfig.FEEDING_ENABLED.set(v))).build());
+        feeding.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.wab.owner_only_feeding"), WabConfig.OWNER_ONLY_FEEDING.get())
+                .setDefaultValue(WabConfig.OWNER_ONLY_FEEDING.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.wab.owner_only_feeding.tooltip"))
+                .setSaveConsumer(v -> saveWabConfig(() -> WabConfig.OWNER_ONLY_FEEDING.set(v))).build());
+        feeding.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.wab.multiplayer_feeding"), WabConfig.MULTIPLAYER_FEEDING.get())
+                .setDefaultValue(WabConfig.MULTIPLAYER_FEEDING.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.wab.multiplayer_feeding.tooltip"))
+                .setSaveConsumer(v -> saveWabConfig(() -> WabConfig.MULTIPLAYER_FEEDING.set(v))).build());
+        feeding.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.wab.show_above_maid"), WabConfig.SHOW_ABOVE_MAID.get())
+                .setDefaultValue(WabConfig.SHOW_ABOVE_MAID.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.wab.show_above_maid.tooltip"))
+                .setSaveConsumer(v -> saveWabConfig(() -> WabConfig.SHOW_ABOVE_MAID.set(v))).build());
+
         pluginConfig(entryBuilder, wab);
     }
 

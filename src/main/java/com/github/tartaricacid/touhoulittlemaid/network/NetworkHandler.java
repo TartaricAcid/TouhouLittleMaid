@@ -183,6 +183,24 @@ public final class NetworkHandler {
                 com.github.tartaricacid.touhoulittlemaid.compat.wab.WabVoiceAudio::decode,
                 com.github.tartaricacid.touhoulittlemaid.compat.wab.WabVoiceAudio::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+
+        CHANNEL.registerMessage(66, com.github.tartaricacid.touhoulittlemaid.compat.wab.WabDetailsRequest.class,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabDetailsRequest::encode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabDetailsRequest::decode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabDetailsRequest::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
+
+        CHANNEL.registerMessage(67, com.github.tartaricacid.touhoulittlemaid.compat.wab.WabDetailsReply.class,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabDetailsReply::encode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabDetailsReply::decode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabDetailsReply::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+
+        CHANNEL.registerMessage(68, com.github.tartaricacid.touhoulittlemaid.compat.wab.WabHeadInfo.class,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabHeadInfo::encode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabHeadInfo::decode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabHeadInfo::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 
     public static void sendToClientPlayer(Object message, Player player) {

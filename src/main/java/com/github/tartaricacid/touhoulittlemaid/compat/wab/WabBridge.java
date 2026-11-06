@@ -280,6 +280,8 @@ public final class WabBridge {
             voiceStt = false;
             // 宿主发下来的插件字段表跟着作废：不然设置页还画着一排点得动、却再也发不出去的开关。
             WabRemoteConfig.clear();
+            // 口味表也一样：断桥后回到「不挑食、不腻」，classify 恒 NORMAL，行为对齐上游。
+            WabFeedRules.clear();
             WabVoice.reset(this);
             clearPendingReplies();
             for (Map.Entry<UUID, UUID> entry : new HashMap<>(followTargets).entrySet()) {
@@ -306,6 +308,9 @@ public final class WabBridge {
             case "settings" ->
                     // WAB 在设置页改了插件设置后只推这一帧、不断线；不接的话游戏侧的闸门会一直停在握手时的值。
                     applyRemote(frame);
+            case "feed_rules" ->
+                    // 宿主那边 AI 改了口味：挑食表、喜爱表、吃腻阈值整包下发，这里整包替换。
+                    WabFeedRules.apply(frame);
             case "command" -> {
                 String id = WabJson.str(frame, "id");
                 String method = WabJson.str(frame, "method").toLowerCase(Locale.ROOT);
@@ -490,7 +495,10 @@ public final class WabBridge {
 
         if (tickCounter % 40 == 0) {
             updateBeaconMaids();
-            if (connected()) WabHud.tick(this);
+            if (connected()) {
+                WabHud.tick(this);
+                WabHeadSync.tick(this);
+            }
         }
         if (tickCounter % 100 == 0 && connected()) sendState(false);
     }

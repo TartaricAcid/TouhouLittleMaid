@@ -22,6 +22,7 @@ import com.github.tartaricacid.touhoulittlemaid.compat.domesticationinnovation.P
 import com.github.tartaricacid.touhoulittlemaid.compat.slashblade.SlashBladeCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.ysm.YsmCompat;
 import com.github.tartaricacid.touhoulittlemaid.compat.ysm.event.YsmMaidClientTickEvent;
+import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabFeeding;
 import com.github.tartaricacid.touhoulittlemaid.config.ServerConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MaidConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.MiscConfig;
@@ -672,6 +673,11 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
                 return InteractionResult.SUCCESS;
             }
         } else {
+            // 喂食系统：非主人拿盛着食物的餐具（或潜行拿食物）右键，先过喂食这一关——
+            // 拒绝或喂出去都算处理完；空手或没拿吃的照旧走驯服，与上游一致。
+            if (WabFeeding.refuseNonOwner(playerIn, this, playerIn.getItemInHand(hand))) {
+                return InteractionResult.SUCCESS;
+            }
             return tameMaid(playerIn.getItemInHand(hand), playerIn);
         }
         return InteractionResult.PASS;
