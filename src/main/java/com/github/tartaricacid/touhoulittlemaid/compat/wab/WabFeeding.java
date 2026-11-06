@@ -142,7 +142,8 @@ public final class WabFeeding {
     }
 
     private static boolean isFood(ItemStack stack) {
-        return !stack.isEmpty() && stack.isEdible() && foodProps(stack) != null;
+        // 1.21 没有 ItemStack.isEdible：食物判定就是「能取到 FoodProperties」。
+        return !stack.isEmpty() && foodProps(stack) != null;
     }
 
     private static @Nullable FoodProperties foodProps(ItemStack stack) {
@@ -158,7 +159,7 @@ public final class WabFeeding {
         if (props == null) return null;
         String id = BuiltInRegistries.ITEM.getKey(food.getItem()).toString();
         return new Portion(id, food.getHoverName().getString(), source, fraction,
-                props.getNutrition(), props.getSaturationModifier());
+                props.nutrition(), props.saturation());
     }
 
     private static void consumeBite(Level level, BlockPos pos, Bite bite) {
@@ -200,7 +201,7 @@ public final class WabFeeding {
 
     /** 客户端与服务端共用判据：潜行 + 拿着吃的 + 系统开着，这一右键就被投喂吃掉、不再开她的界面。 */
     public static boolean wantsDirectFeed(Player player, EntityMaid maid, ItemStack held) {
-        return WabConfig.feedingEnabled() && maid.isAlive() && held.isEdible() && player.isShiftKeyDown();
+        return WabConfig.feedingEnabled() && maid.isAlive() && foodProps(held) != null && player.isShiftKeyDown();
     }
 
     /**
@@ -211,7 +212,7 @@ public final class WabFeeding {
     public static boolean refuseNonOwner(Player player, EntityMaid maid, ItemStack held) {
         if (!WabConfig.feedingEnabled()) return false;
         boolean utensilBite = held.getItem() instanceof ItemMaidUtensil && read(held) != null;
-        boolean directFood = player.isShiftKeyDown() && held.isEdible();
+        boolean directFood = player.isShiftKeyDown() && foodProps(held) != null;
         if (!utensilBite && !directFood) return false;
         if (WabConfig.ownerOnlyFeeding() && !maid.isOwnedBy(player)) {
             if (!player.level().isClientSide) {

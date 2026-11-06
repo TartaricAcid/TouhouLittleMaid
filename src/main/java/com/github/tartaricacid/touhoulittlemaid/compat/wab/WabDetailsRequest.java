@@ -4,9 +4,8 @@ import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
@@ -28,10 +27,9 @@ public record WabDetailsRequest(UUID maid) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<WabDetailsRequest> TYPE =
             new CustomPacketPayload.Type<>(getResourceLocation("wab_details_request"));
 
-    public static final StreamCodec<ByteBuf, WabDetailsRequest> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.UUID_STREAM_CODEC,
-            WabDetailsRequest::maid,
-            WabDetailsRequest::new
+    public static final StreamCodec<FriendlyByteBuf, WabDetailsRequest> STREAM_CODEC = StreamCodec.of(
+            (buf, message) -> buf.writeUUID(message.maid()),
+            buf -> new WabDetailsRequest(buf.readUUID())
     );
 
     @Override

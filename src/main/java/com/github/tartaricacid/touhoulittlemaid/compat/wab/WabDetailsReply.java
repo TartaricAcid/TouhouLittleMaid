@@ -2,8 +2,8 @@ package com.github.tartaricacid.touhoulittlemaid.compat.wab;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.neoforged.api.distmarker.Dist;
@@ -27,7 +27,7 @@ public record WabDetailsReply(JsonObject data) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<WabDetailsReply> TYPE =
             new CustomPacketPayload.Type<>(getResourceLocation("wab_details_reply"));
 
-    public static final StreamCodec<ByteBuf, WabDetailsReply> STREAM_CODEC = StreamCodec.of(
+    public static final StreamCodec<FriendlyByteBuf, WabDetailsReply> STREAM_CODEC = StreamCodec.of(
             (buf, message) -> buf.writeUtf(message.data().toString(), MAX_CHARS),
             buf -> {
                 JsonObject data = new JsonObject();

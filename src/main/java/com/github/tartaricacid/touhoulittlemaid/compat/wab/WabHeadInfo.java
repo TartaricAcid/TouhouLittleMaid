@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.wab;
 
-import io.netty.buffer.ByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
@@ -23,7 +23,7 @@ public record WabHeadInfo(List<WabClientHeads.Entry> entries) implements CustomP
     public static final CustomPacketPayload.Type<WabHeadInfo> TYPE =
             new CustomPacketPayload.Type<>(getResourceLocation("wab_head_info"));
 
-    public static final StreamCodec<ByteBuf, WabHeadInfo> STREAM_CODEC = StreamCodec.of((buf, message) -> {
+    public static final StreamCodec<FriendlyByteBuf, WabHeadInfo> STREAM_CODEC = StreamCodec.of((buf, message) -> {
         buf.writeVarInt(message.entries().size());
         for (WabClientHeads.Entry entry : message.entries()) {
             buf.writeUUID(entry.maid());

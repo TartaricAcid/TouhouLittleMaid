@@ -118,8 +118,8 @@ public class WabDetailsScreen extends Screen {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
-        turnPage(delta < 0 ? 1 : -1);
+    public boolean mouseScrolled(double mouseX, double mouseY, double deltaX, double deltaY) {
+        turnPage(deltaY < 0 ? 1 : -1);
         return true;
     }
 
