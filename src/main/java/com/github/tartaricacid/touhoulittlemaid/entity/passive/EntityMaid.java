@@ -189,6 +189,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     public static final String MAID_BACKPACK_TYPE = "MaidBackpackType";
     public static final String MAID_INVENTORY_TAG = "MaidInventory";
     public static final String MAID_BAUBLE_INVENTORY_TAG = "MaidBaubleInventory";
+    public static final String WAB_PHONE_TAG = "WabPhoneInventory";
     public static final String MAID_HIDE_INVENTORY_TAG = "MaidHideInventory";
     public static final String MAID_TASK_INVENTORY_TAG = "MaidTaskInventory";
     public static final String EXPERIENCE_TAG = "MaidExperience";
@@ -271,6 +272,8 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
     private final EntityHandsInvWrapper handsInvWrapper = new MaidHandsInvWrapper(this);
     private final ItemStackHandler maidInv = new MaidBackpackHandler(36, this);
     private final BaubleItemHandler maidBauble = new BaubleItemHandler(BAUBLE_INV_SIZE);
+    // WAB 手机专用单格：独立于 30 格饰品栏，避免旧档扩容逻辑把它撑成 30 格
+    private final ItemStackHandler wabPhone = new ItemStackHandler(1);
     // 用于暂存副手物品的物品栏
     private final ItemStackHandler hideInv = new ItemStackHandler(1);
     // 用于工作任务可能需要的物品栏
@@ -1369,6 +1372,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
         compound.putString(TASK_TAG, getTask().getUid().toString());
         compound.put(MAID_INVENTORY_TAG, maidInv.serializeNBT());
         compound.put(MAID_BAUBLE_INVENTORY_TAG, maidBauble.serializeNBT());
+        compound.put(WAB_PHONE_TAG, wabPhone.serializeNBT());
         compound.put(MAID_HIDE_INVENTORY_TAG, hideInv.serializeNBT());
         compound.put(MAID_TASK_INVENTORY_TAG, taskInv.serializeNBT());
         compound.putBoolean(STRUCK_BY_LIGHTNING_TAG, isStruckByLightning());
@@ -1464,6 +1468,9 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
                 }
             }
             maidBauble.deserializeNBT(baubleTag);
+        }
+        if (compound.contains(WAB_PHONE_TAG, Tag.TAG_COMPOUND)) {
+            wabPhone.deserializeNBT(compound.getCompound(WAB_PHONE_TAG));
         }
         if (compound.contains(MAID_HIDE_INVENTORY_TAG, Tag.TAG_COMPOUND)) {
             hideInv.deserializeNBT(compound.getCompound(MAID_HIDE_INVENTORY_TAG));
@@ -1568,7 +1575,7 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
             tombstone.setMaidName(this.getDisplayName());
 
             // 女仆物品栏
-            CombinedInvWrapper invWrapper = new CombinedInvWrapper(armorInvWrapper, handsInvWrapper, maidInv, maidBauble, hideInv, taskInv);
+            CombinedInvWrapper invWrapper = new CombinedInvWrapper(armorInvWrapper, handsInvWrapper, maidInv, maidBauble, hideInv, taskInv, wabPhone);
             // 需要考虑消失诅咒附魔
             destroyVanishingCursedItems(invWrapper);
             for (int i = 0; i < invWrapper.getSlots(); i++) {
@@ -2327,6 +2334,10 @@ public class EntityMaid extends TamableAnimal implements CrossbowAttackMob, IMai
 
     public BaubleItemHandler getMaidBauble() {
         return maidBauble;
+    }
+
+    public ItemStackHandler getWabPhone() {
+        return wabPhone;
     }
 
     /**

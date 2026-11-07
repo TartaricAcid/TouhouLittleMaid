@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " I ",
+    "ILI",
+    " R "
+  ],
+  "key": {
+    "I": { "item": "minecraft:iron_ingot" },
+    "L": { "item": "minecraft:redstone_lamp" },
+    "R": { "item": "minecraft:redstone" }
+  },
+  "result": {
+    "item": "touhou_little_maid:wab_phone"
+  }
+}
