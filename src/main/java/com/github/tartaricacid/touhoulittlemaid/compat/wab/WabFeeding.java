@@ -98,6 +98,7 @@ public final class WabFeeding {
         Player player = ctx.getPlayer();
         Level level = ctx.getLevel();
         if (player == null) return InteractionResult.PASS;
+        if (read(ctx.getItemInHand()) != null) return InteractionResult.PASS;
         Bite bite = resolveBite(level, ctx.getClickedPos());
         if (bite == null) return InteractionResult.PASS;
         if (!level.isClientSide) {
@@ -108,6 +109,11 @@ public final class WabFeeding {
                     bite.portion().foodName()).withStyle(ChatFormatting.GRAY), true);
         }
         return InteractionResult.sidedSuccess(level.isClientSide);
+    }
+
+    /** 这个方块能不能用餐具盛一口（蛋糕这类有 bites 的，或方块本体就是食物的）。左键/右键拦截前先问它。 */
+    public static boolean canTakeBite(Level level, BlockPos pos) {
+        return resolveBite(level, pos) != null;
     }
 
     /** 通用取一口：有 bites 属性的方块（原版蛋糕、蜡烛蛋糕、其他模组复用同属性或自带 bites 的餐点）咬一口；方块本体是食物的直接整份取走。 */

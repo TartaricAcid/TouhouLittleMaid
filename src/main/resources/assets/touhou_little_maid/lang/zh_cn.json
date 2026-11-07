@@ -363,7 +363,7 @@
   "tooltips.touhou_little_maid.smart_slab.maid_name.unknown": "未知",
   "tooltips.touhou_little_maid.trumpet.desc.usage": "召回所有女仆",
   "tooltips.touhou_little_maid.trumpet.desc.note": "§c请谨记：只有加载区块上的女仆才可以被召回！",
-  "tooltips.touhou_little_maid.utensil.usage.take": "潜行 + 右键 蛋糕等可放置食物：盛起一口",
+  "tooltips.touhou_little_maid.utensil.usage.take": "左键 / 右键 蛋糕等可放置食物：盛起一口",
   "tooltips.touhou_little_maid.utensil.usage.feed": "右键 女仆：喂出盛着的那一口",
   "tooltips.touhou_little_maid.utensil.usage.direct": "潜行拿食物右键女仆：直接投喂，无需餐具",
   "tooltips.touhou_little_maid.utensil.empty": "空餐具。",

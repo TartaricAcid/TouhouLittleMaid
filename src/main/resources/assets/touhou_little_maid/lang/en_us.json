@@ -363,7 +363,7 @@
   "tooltips.touhou_little_maid.smart_slab.maid_name.unknown": "Unknown",
   "tooltips.touhou_little_maid.trumpet.desc.usage": "Recall all of your maids",
   "tooltips.touhou_little_maid.trumpet.desc.note": "Please note: only the maids on loaded chunks can be recalled!",
-  "tooltips.touhou_little_maid.utensil.usage.take": "Sneak + right-click a placeable food (cake): scoop up a bite",
+  "tooltips.touhou_little_maid.utensil.usage.take": "Left- or right-click a placeable food (cake): scoop up a bite",
   "tooltips.touhou_little_maid.utensil.usage.feed": "Right-click a maid: feed the held bite",
   "tooltips.touhou_little_maid.utensil.usage.direct": "Sneak with food and right-click a maid: feed directly, no utensil needed",
   "tooltips.touhou_little_maid.utensil.empty": "Empty.",
