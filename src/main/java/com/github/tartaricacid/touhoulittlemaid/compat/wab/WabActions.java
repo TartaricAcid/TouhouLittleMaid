@@ -327,7 +327,11 @@ public final class WabActions {
                 }
                 yield ok(maid, "看向那边。");
             }
-            case "interact_addon" -> ok(maid, WabCompat.invokeAddonAction(bridge, maid, WabJson.str(p, "arg")));
+            case "interact_addon" -> {
+                String arg = WabJson.str(p, "arg");
+                String trait = WabTraits.handleAct(maid, arg);
+                yield trait != null ? ok(maid, trait) : ok(maid, WabCompat.invokeAddonAction(bridge, maid, arg));
+            }
             default -> fail("unknown_action", "不认识的动作：" + action);
         };
     }
