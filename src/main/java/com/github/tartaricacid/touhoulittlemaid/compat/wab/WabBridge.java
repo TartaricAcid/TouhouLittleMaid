@@ -432,6 +432,7 @@ public final class WabBridge {
         if (maidId == null) return;
         WabHud.Stats value = new WabHud.Stats();
         value.character = WabJson.str(frame, "character");
+        value.characterName = WabJson.str(frame, "characterName");
         value.affection = WabJson.integer(frame, "affection", 0);
         value.affectionPoints = WabJson.integer(frame, "affectionPoints", 0);
         value.trust = WabJson.integer(frame, "trust", 0);
