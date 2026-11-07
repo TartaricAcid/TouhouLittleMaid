@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * SHOW_ABOVE_MAID 开着时，把绑定女仆的紧凑数值周期性推给主人的客户端（头顶渲染用）。
+ * headInfo 开着时，把绑定女仆的紧凑数值周期性推给主人的客户端（头顶渲染用）。
  * 详细的分页数据是另一条按需通道（WabDetailsRequest），这里只求常驻、小、快。
  */
 public final class WabHeadSync {
@@ -16,7 +16,7 @@ public final class WabHeadSync {
     }
 
     public static void tick(WabBridge bridge) {
-        if (!WabConfig.showAboveMaid()) return;
+        if (!WabConfig.headInfo()) return;
         ServerPlayer owner = bridge.currentOwner();
         if (owner == null) return;
         List<WabClientHeads.Entry> list = new ArrayList<>();

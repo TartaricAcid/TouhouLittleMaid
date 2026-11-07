@@ -641,12 +641,12 @@ public class MenuIntegration {
                     WabConfig.MULTIPLAYER_FEEDING.set(v);
                     WabConfig.MULTIPLAYER_FEEDING.save();
                 }).build());
-        feeding.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.wab.show_above_maid"), WabConfig.SHOW_ABOVE_MAID.get())
-                .setDefaultValue(WabConfig.SHOW_ABOVE_MAID.getDefault())
+        feeding.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.wab.show_above_maid"), WabConfig.HEAD_INFO.get())
+                .setDefaultValue(WabConfig.HEAD_INFO.getDefault())
                 .setTooltip(Component.translatable("config.touhou_little_maid.wab.show_above_maid.tooltip"))
                 .setSaveConsumer(v -> {
-                    WabConfig.SHOW_ABOVE_MAID.set(v);
-                    WabConfig.SHOW_ABOVE_MAID.save();
+                    WabConfig.HEAD_INFO.set(v);
+                    WabConfig.HEAD_INFO.save();
                 }).build());
 
         pluginConfig(entryBuilder, wab);
