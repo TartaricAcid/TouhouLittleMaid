@@ -56,6 +56,7 @@ public class InitCreativeTabs {
                 output.accept(NIMBLE_FABRIC.get());
                 output.accept(ITEM_MAGNET_BAUBLE.get());
                 output.accept(MUTE_BAUBLE.get());
+                output.accept(WAB_PHONE.get());
                 output.accept(WIRELESS_IO.get());
                 output.accept(TRUMPET.get());
                 output.accept(RED_FOX_SCROLL.get());
