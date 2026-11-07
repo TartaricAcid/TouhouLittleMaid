@@ -25,6 +25,9 @@ public final class WabConfig {
     public static final ModConfigSpec.BooleanValue OWNER_ONLY_FEEDING;
     public static final ModConfigSpec.BooleanValue MULTIPLAYER_FEEDING;
     public static final ModConfigSpec.BooleanValue HEAD_INFO;
+    public static final ModConfigSpec.BooleanValue HUNGER_BEG;
+    public static final ModConfigSpec.IntValue HUNGER_BEG_THRESHOLD;
+    public static final ModConfigSpec.BooleanValue HUNGER_BEG_HIGHER;
 
     static {
         ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
@@ -58,6 +61,12 @@ public final class WabConfig {
         // 框架不会更新已存在的值，只有换键名才能让「默认开」真正生效。
         HEAD_INFO = builder.comment("Render WAB status info above the maid's head, facing the player. On by default; needs a WAB connection for data.")
                 .define("headInfo", true);
+        HUNGER_BEG = builder.comment("When her hunger crosses the threshold the maid asks the owner for food (a chat bubble). Needs a WAB connection (hunger is WAB-controlled while connected).")
+                .define("hungerBeg", true);
+        HUNGER_BEG_THRESHOLD = builder.comment("Hunger threshold for asking food. Interpret it together with hungerHigherIsHungry.")
+                .defineInRange("hungerBegThreshold", 14, 0, 100);
+        HUNGER_BEG_HIGHER = builder.comment("true: bigger hunger value = hungrier (beg when >= threshold). false: smaller = hungrier (beg when <= threshold).")
+                .define("hungerHigherIsHungry", true);
         DEBUG = builder.comment("Log every bridge frame.")
                 .define("debug", false);
         builder.pop();
@@ -162,6 +171,20 @@ public final class WabConfig {
         return bool(HEAD_INFO, true);
     }
 
+    /** 饿了会向主人讨食（头顶气泡）。默认开；连桥后饥饿由 WAB 接管时才有意义。 */
+    public static boolean hungerBeg() {
+        return bool(HUNGER_BEG, true);
+    }
+
+    public static int hungerBegThreshold() {
+        return integer(HUNGER_BEG_THRESHOLD, 14);
+    }
+
+    /** true = 数值越大越饿；false = 数值越小越饿。 */
+    public static boolean hungerBegHigher() {
+        return bool(HUNGER_BEG_HIGHER, true);
+    }
+
     /**
      * 这份配置的一份可发送副本，随 hello / state 帧上报给 WAB。
      * 宿主那边的「两侧开关是否打架」全靠这一份：不发，插件页面上看到的游戏侧配置永远是空的。
@@ -183,6 +206,9 @@ public final class WabConfig {
         out.addProperty("multiplayerFeeding", multiplayerFeeding());
         // 线上键名保留 showAboveMaid：宿主 MaidBridgeService 的 ModConfigKeys 白名单按这个名字镜像。
         out.addProperty("showAboveMaid", headInfo());
+        out.addProperty("hungerBeg", hungerBeg());
+        out.addProperty("hungerBegThreshold", hungerBegThreshold());
+        out.addProperty("hungerHigherIsHungry", hungerBegHigher());
         out.addProperty("debug", debug());
         return out;
     }
