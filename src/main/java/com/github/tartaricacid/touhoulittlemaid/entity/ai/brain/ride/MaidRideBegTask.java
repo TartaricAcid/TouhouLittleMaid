@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.entity.ai.brain.ride;
 
+import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabFeeding;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.server.level.ServerLevel;
@@ -53,6 +54,6 @@ public class MaidRideBegTask extends Behavior<EntityMaid> {
     }
 
     private boolean holdTemptationItem(EntityMaid owner, LivingEntity e) {
-        return owner.getTemptationItem().test(e.getMainHandItem());
+        return WabFeeding.temptsMaid(owner, e.getMainHandItem());
     }
 }

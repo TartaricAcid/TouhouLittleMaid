@@ -26,6 +26,7 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -109,6 +110,29 @@ public final class WabFeeding {
     /** 这个方块能不能用餐具盛一口（蛋糕这类有 bites 的，或方块本体就是食物的）。左键/右键拦截前先问它。 */
     public static boolean canTakeBite(Level level, BlockPos pos) {
         return resolveBite(level, pos) != null;
+    }
+
+    /**
+     * 手里拿着的东西算不算「吸引她的食物」：原版物品本身，或餐具里盛着的那一口对应的物品。
+     * 这样把食物盛进勺子后，她仍会像被原版食物吸引一样凑过来。
+     */
+    public static boolean temptsMaid(EntityMaid maid, ItemStack held) {
+        if (held.isEmpty()) return false;
+        Ingredient temptation = maid.getTemptationItem();
+        if (temptation.test(held)) return true;
+        if (held.getItem() instanceof ItemMaidUtensil) {
+            Portion portion = read(held);
+            if (portion != null) {
+                ItemStack food = foodStack(portion);
+                return isTemptationFood(maid, food);
+            }
+        }
+        return false;
+    }
+
+    /** 这一口是不是她喜欢（被吸引）的食物。 */
+    private static boolean isTemptationFood(EntityMaid maid, ItemStack food) {
+        return !food.isEmpty() && maid.getTemptationItem().test(food);
     }
 
     /** 通用取一口：有 bites 属性的方块（原版蛋糕、蜡烛蛋糕、其他模组复用同属性或自带 bites 的餐点）咬一口；方块本体是食物的直接整份取走。 */
@@ -274,11 +298,12 @@ public final class WabFeeding {
             }
         }
 
-        // 吃：挥手、食物粒子、吃声；最爱吃的多来几颗爱心。
+        // 吃：挥手、食物粒子、吃声；最爱的、或是她喜欢的吸引食物，多来几颗爱心。
+        boolean liked = verdict == WabFeedRules.Verdict.FAVORITE || isTemptationFood(maid, food);
         maid.swing(InteractionHand.MAIN_HAND);
-        maid.spawnItemParticles(food, verdict == WabFeedRules.Verdict.FAVORITE ? 10 : 6);
+        maid.spawnItemParticles(food, liked ? 10 : 6);
         maid.playSound(SoundEvents.GENERIC_EAT, 0.8f, 1.0f);
-        if (verdict == WabFeedRules.Verdict.FAVORITE) {
+        if (liked) {
             NetworkHandler.sendToNearby(maid, new SpawnParticleMessage(maid.getId(), SpawnParticleMessage.Type.HEART, 20));
         }
         maid.heal((int) Math.max(1, Math.round(portion.nutrition() * portion.fraction() * 0.5f)));
