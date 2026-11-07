@@ -19,7 +19,9 @@ import net.minecraftforge.fml.ModLoadingContext;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public class MenuIntegration {
     public static ConfigBuilder getConfigBuilder() {
@@ -443,9 +445,41 @@ public class MenuIntegration {
             return;
         }
         for (WabRemoteConfig.Field field : WabRemoteConfig.fields()) {
-            builder.add(pluginEntry(entryBuilder, field));
+            if ("multiselect".equalsIgnoreCase(field.type()) && !field.options().isEmpty()) {
+                addMultiSelect(builder, entryBuilder, field);
+            } else {
+                builder.add(pluginEntry(entryBuilder, field));
+            }
         }
         wab.addEntry(builder.build());
+    }
+
+    /**
+     * 多选：Cloth 没有现成的多选控件，就按选项拆成一排开关，每拨一下把整条逗号串写回去。
+     * 值和「实时面板」页里那些复选框是同一串，不走两套语义。
+     */
+    private static void addMultiSelect(SubCategoryBuilder builder, ConfigEntryBuilder entryBuilder,
+                                       WabRemoteConfig.Field field) {
+        Component tooltip = Component.literal(field.help().isEmpty()
+                ? "勾上的都会触发一次思考；一个都不勾 = 只在有事时被动回应。"
+                : field.help());
+        builder.add(entryBuilder.startTextDescription(Component.literal(field.label()))
+                .setTooltip(tooltip).build());
+        Set<String> picked = new LinkedHashSet<>();
+        for (String token : field.value().split(",")) {
+            String trimmed = token.trim();
+            if (!trimmed.isEmpty()) picked.add(trimmed);
+        }
+        for (String option : field.options()) {
+            builder.add(entryBuilder.startBooleanToggle(Component.literal("· " + option), picked.contains(option))
+                    .setDefaultValue(false)
+                    .setTooltip(tooltip)
+                    .setSaveConsumer(v -> {
+                        if (v) picked.add(option);
+                        else picked.remove(option);
+                        WabRemoteConfig.save(field.key(), String.join(",", picked));
+                    }).build());
+        }
     }
 
     private static AbstractConfigListEntry<?> pluginEntry(ConfigEntryBuilder entryBuilder, WabRemoteConfig.Field field) {
