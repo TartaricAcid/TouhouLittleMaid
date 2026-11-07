@@ -360,7 +360,7 @@
   "tooltips.touhou_little_maid.film.no_data.desc": "This Film Is Missing Maid Data",
   "tooltips.touhou_little_maid.photo.maid.desc": "Maid Name: %s",
   "tooltips.touhou_little_maid.camera.desc": "Can capture a maid, at least in most cases...",
-  "tooltips.touhou_little_maid.utensil.usage.take": "Sneak + right-click a placeable food (cake): scoop up a bite",
+  "tooltips.touhou_little_maid.utensil.usage.take": "Left- or right-click a placeable food (cake): scoop up a bite",
   "tooltips.touhou_little_maid.utensil.usage.feed": "Right-click a maid: feed the held bite",
   "tooltips.touhou_little_maid.utensil.usage.direct": "Sneak with food and right-click a maid: feed directly, no utensil needed",
   "tooltips.touhou_little_maid.utensil.empty": "Empty.",
