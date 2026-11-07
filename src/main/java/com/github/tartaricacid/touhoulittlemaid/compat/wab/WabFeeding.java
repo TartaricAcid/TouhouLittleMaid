@@ -284,7 +284,10 @@ public final class WabFeeding {
             return false;
         }
 
+        boolean temptation = isTemptationFood(maid, food);
         WabFeedRules.Verdict verdict = WabFeedRules.classify(food);
+        // 她「被吸引」的食物永远不算吃腻：不判腻、也不累计吃腻计数。
+        if (temptation && verdict == WabFeedRules.Verdict.BORED) verdict = WabFeedRules.Verdict.NORMAL;
         switch (verdict) {
             case PICKY -> {
                 ChatBubbleManger.addInnerChatText(maid, "chat_bubble.touhou_little_maid.feed.refuse_picky");
@@ -305,7 +308,7 @@ public final class WabFeeding {
         }
 
         // 吃：挥手、食物粒子、吃声；最爱的、或是她喜欢的吸引食物，多来几颗爱心。
-        boolean liked = verdict == WabFeedRules.Verdict.FAVORITE || isTemptationFood(maid, food);
+        boolean liked = verdict == WabFeedRules.Verdict.FAVORITE || temptation;
         maid.swing(InteractionHand.MAIN_HAND);
         maid.spawnItemParticles(food, liked ? 10 : 6);
         maid.playSound(SoundEvents.GENERIC_EAT, 0.8f, 1.0f);
@@ -315,7 +318,7 @@ public final class WabFeeding {
         maid.heal((int) Math.max(1, Math.round(portion.nutrition() * portion.fraction() * 0.5f)));
         // 模组自己的 favorability：CakeEdible 一口是 1，最爱吃的给 3，其余 1。
         maid.getFavorabilityManager().apply(Type.WORK_MEAL, verdict == WabFeedRules.Verdict.FAVORITE ? 3 : 1);
-        int count = WabFeedRules.note(food);
+        int count = temptation ? WabFeedRules.count(food) : WabFeedRules.note(food);
 
         if (verdict == WabFeedRules.Verdict.FAVORITE) {
             ChatBubbleManger.addInnerChatText(maid, "chat_bubble.touhou_little_maid.feed.favorite");

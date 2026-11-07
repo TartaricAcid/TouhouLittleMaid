@@ -1,7 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.wab;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
-import com.github.tartaricacid.touhoulittlemaid.entity.chatbubble.ChatBubbleManger;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.SpawnParticlePackage;
@@ -32,6 +31,7 @@ public final class WabHeadPat {
     private static final int COOLDOWN_TICKS = 1200;
     private static final String TAG_UNTIL = "WabPatUntil";
     private static final String TAG_LAST = "WabPatLast";
+    private static final String TAG_BUBBLE = "WabPatBubble";
 
     private WabHeadPat() {
     }
@@ -48,7 +48,8 @@ public final class WabHeadPat {
         if (maid.getRandom().nextFloat() >= CHANCE) return;
         data.putLong(TAG_LAST, now);
         data.putLong(TAG_UNTIL, now + WINDOW_TICKS);
-        ChatBubbleManger.addInnerChatText(maid, "chat_bubble.touhou_little_maid.head_pat.request");
+        data.putLong(TAG_BUBBLE,
+                maid.getChatBubbleManager().addTextChatBubble("chat_bubble.touhou_little_maid.head_pat.request"));
     }
 
     /** 主人离她 20 格内，或主人看得见她、或她看得见主人，都算够得着。 */
@@ -64,6 +65,7 @@ public final class WabHeadPat {
         long until = data.getLong(TAG_UNTIL);
         if (until <= 0) return false;
         if (maid.level().getGameTime() > until) {
+            clearRequestBubble(maid);
             data.remove(TAG_UNTIL);
             return false;
         }
@@ -71,10 +73,21 @@ public final class WabHeadPat {
     }
 
     private static void pet(EntityMaid maid) {
+        clearRequestBubble(maid);
         maid.getPersistentData().remove(TAG_UNTIL);
-        ChatBubbleManger.addInnerChatText(maid, "chat_bubble.touhou_little_maid.head_pat.ok");
+        maid.getChatBubbleManager().addTextChatBubble("chat_bubble.touhou_little_maid.head_pat.ok");
         NetworkHandler.sendToNearby(maid, new SpawnParticlePackage(maid.getId(), SpawnParticlePackage.Type.HEART, 12));
         maid.playSound(SoundEvents.CAT_PURR, 0.6f, 1.4f);
+    }
+
+    /** 立刻抹掉「讨摸摸」那条气泡，避免它和「好舒服」叠着留很久。 */
+    private static void clearRequestBubble(EntityMaid maid) {
+        CompoundTag data = maid.getPersistentData();
+        long bubble = data.getLong(TAG_BUBBLE);
+        if (bubble > 0 && maid.getChatBubbleManager().getChatBubble(bubble) != null) {
+            maid.getChatBubbleManager().removeChatBubble(bubble);
+        }
+        data.remove(TAG_BUBBLE);
     }
 
     @SubscribeEvent
