@@ -192,6 +192,8 @@ public final class WabDispatcher {
             job.tick();
             if (!job.isActive()) {
                 jobs.remove(key);
+                // 干完一件活（采集等），按概率向她主人讨摸摸。
+                WabHeadPat.maybeRequest(job.maid);
             }
         }
     }

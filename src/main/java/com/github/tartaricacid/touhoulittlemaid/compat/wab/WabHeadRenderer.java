@@ -29,12 +29,17 @@ public final class WabHeadRenderer {
 
     @SubscribeEvent
     public static void onRenderMaid(RenderLivingEvent.Post<?, ?> event) {
-        if (!(event.getEntity() instanceof EntityMaid maid) || maid.isInvisible()) return;
+        if (!(event.getEntity() instanceof EntityMaid maid) || maid.isInvisible() || !maid.isTame()) return;
         if (!WabConfig.headInfo()) return;
-        WabClientHeads.Entry entry = WabClientHeads.get(maid.getUUID());
-        if (entry == null) return;
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || mc.player.distanceToSqr(maid) > MAX_DISTANCE_SQR) return;
+
+        // 连桥有 WAB 数值就展示完整信息；没连桥也至少显示名字 + 模组自身的好感与生命。
+        WabClientHeads.Entry entry = WabClientHeads.get(maid.getUUID());
+        String l0 = entry != null ? entry.l1() : maid.getName().getString();
+        String l1 = "生命 " + (int) Math.ceil(maid.getHealth()) + "/" + (int) Math.ceil(maid.getMaxHealth())
+                + "  好感 " + maid.getFavorability();
+        String l2 = entry != null ? entry.l2() : null;
 
         Font font = mc.font;
         PoseStack pose = event.getPoseStack();
@@ -46,8 +51,9 @@ public final class WabHeadRenderer {
         pose.mulPose(mc.getEntityRenderDispatcher().cameraOrientation());
         pose.scale(-0.025F, -0.025F, 0.025F);
         Matrix4f matrix = pose.last().pose();
-        drawLine(font, buffer, matrix, entry.l1(), 0, 0xFFFFFFFF, light);
-        drawLine(font, buffer, matrix, entry.l2(), 10, 0xFFFFE08A, light);
+        drawLine(font, buffer, matrix, l0, 0, 0xFFFFFFFF, light);
+        drawLine(font, buffer, matrix, l1, 10, 0xFFE6E6E6, light);
+        if (l2 != null) drawLine(font, buffer, matrix, l2, 20, 0xFFFFE08A, light);
         pose.popPose();
     }
 
