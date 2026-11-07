@@ -117,11 +117,19 @@ public final class WabFeeding {
         String source = "block:" + BuiltInRegistries.BLOCK.getKey(state.getBlock());
         for (Property<?> prop : state.getProperties()) {
             if (!(prop instanceof IntegerProperty ip) || !"bites".equals(ip.getName())) continue;
+            int max = Collections.max(ip.getPossibleValues());
             ItemStack food = edibleBlockFood(level, pos, state);
-            if (food.isEmpty()) return null;
-            Portion portion = portionOf(food, 1.0f / (Collections.max(ip.getPossibleValues()) + 1), source);
+            Portion portion;
+            if (!food.isEmpty()) {
+                portion = portionOf(food, 1.0f / (max + 1), source);
+            } else {
+                // 蛋糕这类方块物品本身不可食（原版 cake 没有 FoodProperties）：按每片 2 点营养、饱和度系数 0.1 记一份。
+                food = new ItemStack(state.getBlock());
+                portion = new Portion(BuiltInRegistries.ITEM.getKey(food.getItem()).toString(),
+                        food.getHoverName().getString(), source, 1.0f, 2, 0.1f);
+            }
             if (portion == null) return null;
-            return new Bite(state, ip, state.getValue(ip), Collections.max(ip.getPossibleValues()), food, portion);
+            return new Bite(state, ip, state.getValue(ip), max, food, portion);
         }
         ItemStack food = edibleBlockFood(level, pos, state);
         if (food.isEmpty()) return null;
