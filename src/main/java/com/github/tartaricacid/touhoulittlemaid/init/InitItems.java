@@ -37,6 +37,7 @@ public final class InitItems {
     public static DeferredItem<Item> NIMBLE_FABRIC = ITEMS.register("nimble_fabric", () -> new ItemDamageableBauble(64));
     public static DeferredItem<Item> ITEM_MAGNET_BAUBLE = ITEMS.register("item_magnet_bauble", ItemNormalBauble::new);
     public static DeferredItem<Item> MUTE_BAUBLE = ITEMS.register("mute_bauble", ItemNormalBauble::new);
+    public static DeferredItem<Item> WAB_PHONE = ITEMS.register("wab_phone", ItemNormalBauble::new);
     public static DeferredItem<Item> ENTITY_PLACEHOLDER = ITEMS.register("entity_placeholder", ItemEntityPlaceholder::new);
     public static DeferredItem<Item> SUBSTITUTE_JIZO = ITEMS.register("substitute_jizo", ItemSubstituteJizo::new);
     public static DeferredItem<Item> POWER_POINT = ITEMS.register("power_point", ItemPowerPoint::new);

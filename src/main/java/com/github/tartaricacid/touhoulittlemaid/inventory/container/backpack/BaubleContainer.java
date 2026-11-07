@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.api.backpack.ITriggerSlotChange;
 import com.github.tartaricacid.touhoulittlemaid.api.bauble.IMaidBauble;
 import com.github.tartaricacid.touhoulittlemaid.api.event.MaidBaubleChangeEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.inventory.container.MaidMainContainer;
 import com.github.tartaricacid.touhoulittlemaid.item.bauble.BaubleManager;
 import com.github.tartaricacid.touhoulittlemaid.network.message.SyncBaublePackage;
@@ -80,6 +81,14 @@ public class BaubleContainer extends MaidMainContainer {
                 addSlot(new BaubleSlot(maid, index, 152 + 18 * x, 45 + 18 * y));
             }
         }
+        // WAB 手机专用单格：只允许 WAB 手机，独立于上面 30 格饰品栏
+        // 236/18：留在 256 宽的 GUI 内，且避开首行饰品格(y>=45)与好感遮罩(x152..240,y81..151)
+        addSlot(new SlotItemHandler(maid.getWabPhone(), 0, 236, 18) {
+            @Override
+            public boolean mayPlace(ItemStack stack) {
+                return !stack.isEmpty() && stack.getItem() == InitItems.WAB_PHONE.get();
+            }
+        });
     }
 
     @Override

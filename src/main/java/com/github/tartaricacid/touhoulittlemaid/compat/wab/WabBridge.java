@@ -508,6 +508,7 @@ public final class WabBridge {
                 WabHeadSync.tick(this);
                 WabHungerBeg.tick(this);
                 WabTraits.tick(this);
+                WabPhone.tick(this);
             }
         }
         if (tickCounter % 100 == 0 && connected()) sendState(false);
@@ -772,6 +773,23 @@ public final class WabBridge {
         chat.addProperty("name", cleanName(maid));
         chat.addProperty("text", text);
         current.send(chat);
+    }
+
+    /**
+     * 女仆戴着 WAB 手机时定时发来的情境消息。与 sendChat 同一套早退：
+     * 会话没了就静静丢掉，绝不因为一个装饰品把服务器线程拖下水。
+     */
+    public void sendPhoneMessage(EntityMaid maid, String text) {
+        WabSession current = session;
+        if (current == null || current.isClosed()) return;
+        String flat = text == null ? "" : text.replace('\r', ' ').replace('\n', ' ');
+        JsonObject msg = new JsonObject();
+        msg.addProperty("v", Integer.parseInt(PROTOCOL));
+        msg.addProperty("type", "phone_message");
+        msg.addProperty("maid", maid.getUUID().toString());
+        msg.addProperty("text", flat);
+        msg.addProperty("hint", "女仆用 WAB 手机发来的一条消息");
+        current.send(msg);
     }
 
     /**

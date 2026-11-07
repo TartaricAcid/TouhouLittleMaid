@@ -59,6 +59,12 @@ public class BaubleContainerScreen extends AbstractMaidContainerGui<BaubleContai
         RenderSystem.setShaderTexture(0, BAUBLE_BG);
         graphics.blit(BAUBLE_BG, leftPos + 85, topPos + 36, 0, 0, 165, 128);
 
+        // WAB 手机专用格的槽底：放在好感遮罩矩形之外，避免被涂掉
+        int phoneX = leftPos + 236;
+        int phoneY = topPos + 18;
+        graphics.fill(phoneX, phoneY, phoneX + 18, phoneY + 18, 0xff8b8b8b);
+        graphics.fill(phoneX + 1, phoneY + 1, phoneX + 17, phoneY + 17, 0xff373737);
+
         // 0 级和 1 级：只有前两层
         // 2 级，前四层
         // 3 级及以上，全部开放
