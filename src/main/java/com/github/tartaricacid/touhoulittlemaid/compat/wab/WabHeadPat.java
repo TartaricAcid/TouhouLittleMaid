@@ -18,14 +18,14 @@ import net.minecraftforge.fml.common.Mod;
 
 /**
  * 摸头：她打完敌对生物、干完一件活、或被喂过之后，有 30% 概率向主人讨摸摸——
- * 前提是主人就在她 5 格半径内。讨摸时头顶冒一句气泡，主人右键她的头部即算摸到，
+ * 前提是主人在她 20 格内，或彼此视线通畅（看得见）。讨摸时头顶冒一句气泡，主人右键她的头部即算摸到，
  * 冒心心并收下这句「好舒服」。只在服务端判定与结算，客户端只负责显示气泡/爱心。
  */
 @Mod.EventBusSubscriber(modid = TouhouLittleMaid.MOD_ID)
 public final class WabHeadPat {
     private static final float CHANCE = 0.30f;
-    /** 主人在她半径 5 格的圆内（平方距离）。 */
-    private static final double OWNER_RANGE_SQR = 25.0;
+    /** 主人在她半径 20 格的圆内（平方距离）；超出范围时退化为「彼此看得见」。 */
+    private static final double OWNER_RANGE_SQR = 400.0;
     /** 讨摸状态保留时长（tick）：10 秒内没被摸就作罢。 */
     private static final int WINDOW_TICKS = 200;
     /** 两次讨摸之间的冷却，避免刷屏。 */
@@ -41,7 +41,7 @@ public final class WabHeadPat {
         if (maid == null || !maid.isAlive() || !maid.isTame()) return;
         if (maid.level().isClientSide) return;
         if (!(maid.getOwner() instanceof ServerPlayer owner)) return;
-        if (owner.distanceToSqr(maid) > OWNER_RANGE_SQR) return;
+        if (!withinReach(owner, maid)) return;
         long now = maid.level().getGameTime();
         CompoundTag data = maid.getPersistentData();
         if (now - data.getLong(TAG_LAST) < COOLDOWN_TICKS) return;
@@ -49,6 +49,13 @@ public final class WabHeadPat {
         data.putLong(TAG_LAST, now);
         data.putLong(TAG_UNTIL, now + WINDOW_TICKS);
         ChatBubbleManger.addInnerChatText(maid, "chat_bubble.touhou_little_maid.head_pat.request");
+    }
+
+    /** 主人离她 20 格内，或主人看得见她、或她看得见主人，都算够得着。 */
+    private static boolean withinReach(ServerPlayer owner, EntityMaid maid) {
+        return owner.distanceToSqr(maid) <= OWNER_RANGE_SQR
+                || owner.hasLineOfSight(maid)
+                || maid.hasLineOfSight(owner);
     }
 
     private static boolean wantsPat(EntityMaid maid) {
