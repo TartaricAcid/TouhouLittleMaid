@@ -24,7 +24,10 @@ public final class WabHeadSync {
             WabHud.Stats stats = bridge.stats(maid.getUUID());
             if (stats == null) continue;
             String name = WabBridge.cleanName(maid);
-            String l1 = stats.character.isEmpty() ? name : name + " @" + stats.character;
+            // 头顶第一行显示 WAB 角色名（宿主在 stats 帧里下发 characterName）；
+            // 老宿主只发角色 id 时退回 id，两者都没有就照旧显示女仆自己的名字。
+            String l1 = !stats.characterName.isEmpty() ? stats.characterName
+                    : !stats.character.isEmpty() ? stats.character : name;
             String l2 = "好感 " + stats.affection + "  信任 " + stats.trust
                     + "  心情 " + stats.mood + "  精力 " + stats.energy;
             list.add(new WabClientHeads.Entry(maid.getUUID(), l1, l2));

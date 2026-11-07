@@ -13,6 +13,7 @@ import net.minecraft.server.level.ServerPlayer;
 public final class WabHud {
     public static class Stats {
         public String character = "";
+        public String characterName = "";
         public int affection;
         public int affectionPoints;
         public int trust;
@@ -34,7 +35,8 @@ public final class WabHud {
             if (stats == null) continue;
             sb.append(WabBridge.cleanName(maid));
             sb.append("(好感 ").append(stats.affection).append(" 信任 ").append(stats.trust);
-            if (!stats.character.isEmpty()) sb.append(" @").append(stats.character);
+            String shown = !stats.characterName.isEmpty() ? stats.characterName : stats.character;
+            if (!shown.isEmpty()) sb.append(" @").append(shown);
             sb.append(") ");
         }
         owner.displayClientMessage(Component.literal(sb.toString()).withStyle(ChatFormatting.DARK_GRAY), true);
