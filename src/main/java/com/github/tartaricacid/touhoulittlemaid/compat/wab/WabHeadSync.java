@@ -25,7 +25,8 @@ public final class WabHeadSync {
             if (stats == null) continue;
             String name = WabBridge.cleanName(maid);
             String l1 = stats.character.isEmpty() ? name : name + " @" + stats.character;
-            String l2 = "好感 " + stats.affection + "  信任 " + stats.trust;
+            String l2 = "好感 " + stats.affection + "  信任 " + stats.trust
+                    + "  心情 " + stats.mood + "  精力 " + stats.energy;
             list.add(new WabClientHeads.Entry(maid.getUUID(), l1, l2));
         }
         NetworkHandler.sendToClientPlayer(new WabHeadInfo(list), owner);

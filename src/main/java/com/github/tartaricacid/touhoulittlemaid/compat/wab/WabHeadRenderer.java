@@ -35,7 +35,10 @@ public final class WabHeadRenderer {
         // 连桥有 WAB 数值就展示完整信息；没连桥也至少显示名字 + 模组自身的好感与生命。
         WabClientHeads.Entry entry = WabClientHeads.get(maid.getUUID());
         String l0 = entry != null ? entry.l1() : maid.getName().getString();
-        String l1 = "生命 " + (int) Math.ceil(maid.getHealth()) + "/" + (int) Math.ceil(maid.getMaxHealth())
+        // 连桥时好感只有 WAB 那一份（下面一行），这里不再重复游戏侧的数值，免得两个数并排打架。
+        String l1 = entry != null
+                ? "生命 " + (int) Math.ceil(maid.getHealth()) + "/" + (int) Math.ceil(maid.getMaxHealth())
+                : "生命 " + (int) Math.ceil(maid.getHealth()) + "/" + (int) Math.ceil(maid.getMaxHealth())
                 + "  好感 " + maid.getFavorability();
         String l2 = entry != null ? entry.l2() : null;
 
