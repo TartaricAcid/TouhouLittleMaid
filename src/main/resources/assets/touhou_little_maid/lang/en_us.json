@@ -619,6 +619,8 @@
   "chat_bubble.touhou_little_maid.feed.bored": "This again...? I'm tired of it.",
   "chat_bubble.touhou_little_maid.feed.favorite": "My favorite! Thank you so much!",
   "chat_bubble.touhou_little_maid.feed.eat": "Yum, thank you!",
+  "chat_bubble.touhou_little_maid.head_pat.request": "Master, please pat my head...?",
+  "chat_bubble.touhou_little_maid.head_pat.ok": "Mmm... that feels nice.",
   "message.touhou_little_maid.missing_patchouli.title": "[TLM]",
   "message.touhou_little_maid.missing_patchouli.click_here": "Click Here To Install Patchouli Mod To Get The Manual",
   "message.touhou_little_maid.missing_patchouli.url": "https://www.curseforge.com/minecraft/mc-mods/patchouli",

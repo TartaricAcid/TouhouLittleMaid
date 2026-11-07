@@ -332,6 +332,8 @@ public final class WabFeeding {
                     ? "chat_bubble.touhou_little_maid.feed.favorite" : "chat_bubble.touhou_little_maid.feed.eat").getString());
         }
         report(feeder, maid, portion, utensil, verdict.name().toLowerCase(Locale.ROOT), count);
+        // 被喂过一口也算「干完事」：可能向主人讨摸摸。
+        WabHeadPat.maybeRequest(maid);
         return true;
     }
 
