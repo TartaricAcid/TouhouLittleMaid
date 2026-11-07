@@ -439,6 +439,13 @@ public final class WabBridge {
         value.mood = WabJson.integer(frame, "mood", 0);
         value.receivedAt = System.currentTimeMillis();
         stats.put(maidId, value);
+        // 好感的权威数值在 WAB：游戏里那格「好感」不再自己长、也不许和 WAB 打架。
+        // 0–100 的 affection 映射到原版 0/64/192/384 的四档，等级与血量/攻击加成跟着一起变。
+        EntityMaid favorMaid = resolveMaid(WabJson.str(frame, "maid"));
+        if (favorMaid != null) {
+            int favor = (int) Math.round(Math.max(0, Math.min(100, value.affection)) * 3.84);
+            if (favorMaid.getFavorability() != favor) favorMaid.setFavorability(favor);
+        }
         String boundBefore = boundCharacters.get(maidId);
         rememberCharacter(maidId, value.character);
         String boundAfter = boundCharacters.get(maidId);
