@@ -498,6 +498,7 @@ public final class WabBridge {
             if (connected()) {
                 WabHud.tick(this);
                 WabHeadSync.tick(this);
+                WabHungerBeg.tick(this);
             }
         }
         if (tickCounter % 100 == 0 && connected()) sendState(false);
