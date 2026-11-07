@@ -421,10 +421,10 @@ public class MenuIntegration {
                 .setDefaultValue(WabConfig.MULTIPLAYER_FEEDING.getDefault())
                 .setTooltip(Component.translatable("config.touhou_little_maid.wab.multiplayer_feeding.tooltip"))
                 .setSaveConsumer(v -> saveWabConfig(() -> WabConfig.MULTIPLAYER_FEEDING.set(v))).build());
-        feeding.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.wab.show_above_maid"), WabConfig.SHOW_ABOVE_MAID.get())
-                .setDefaultValue(WabConfig.SHOW_ABOVE_MAID.getDefault())
+        feeding.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.wab.show_above_maid"), WabConfig.HEAD_INFO.get())
+                .setDefaultValue(WabConfig.HEAD_INFO.getDefault())
                 .setTooltip(Component.translatable("config.touhou_little_maid.wab.show_above_maid.tooltip"))
-                .setSaveConsumer(v -> saveWabConfig(() -> WabConfig.SHOW_ABOVE_MAID.set(v))).build());
+                .setSaveConsumer(v -> saveWabConfig(() -> WabConfig.HEAD_INFO.set(v))).build());
 
         pluginConfig(entryBuilder, wab);
     }

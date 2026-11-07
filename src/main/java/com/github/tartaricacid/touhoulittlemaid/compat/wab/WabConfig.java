@@ -24,7 +24,7 @@ public final class WabConfig {
     public static final ForgeConfigSpec.BooleanValue FEEDING_ENABLED;
     public static final ForgeConfigSpec.BooleanValue OWNER_ONLY_FEEDING;
     public static final ForgeConfigSpec.BooleanValue MULTIPLAYER_FEEDING;
-    public static final ForgeConfigSpec.BooleanValue SHOW_ABOVE_MAID;
+    public static final ForgeConfigSpec.BooleanValue HEAD_INFO;
 
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -54,8 +54,10 @@ public final class WabConfig {
                 .define("ownerOnlyFeeding", true);
         MULTIPLAYER_FEEDING = builder.comment("Let players feed each other with a loaded utensil. Off by default.")
                 .define("multiplayerFeeding", false);
-        SHOW_ABOVE_MAID = builder.comment("Render WAB status info above the maid's head, facing the player. Off by default.")
-                .define("showAboveMaid", false);
+        // 键名从 showAboveMaid 换成 headInfo：老键的 false 已经写进玩家配置文件，
+        // Forge 不会更新已存在的值，只有换键名才能让「默认开」真正生效。
+        HEAD_INFO = builder.comment("Render WAB status info above the maid's head, facing the player. On by default; needs a WAB connection for data.")
+                .define("headInfo", true);
         DEBUG = builder.comment("Log every bridge frame.")
                 .define("debug", false);
         builder.pop();
@@ -155,9 +157,9 @@ public final class WabConfig {
         return bool(MULTIPLAYER_FEEDING, false);
     }
 
-    /** WAB 状态信息渲染在女仆头顶（正对玩家）。默认关。 */
-    public static boolean showAboveMaid() {
-        return bool(SHOW_ABOVE_MAID, false);
+    /** WAB 状态信息渲染在女仆头顶（正对玩家）。默认开；要有 WAB 连接推来的数值才有东西可画。 */
+    public static boolean headInfo() {
+        return bool(HEAD_INFO, true);
     }
 
     /**
@@ -179,7 +181,8 @@ public final class WabConfig {
         out.addProperty("feedingEnabled", feedingEnabled());
         out.addProperty("ownerOnlyFeeding", ownerOnlyFeeding());
         out.addProperty("multiplayerFeeding", multiplayerFeeding());
-        out.addProperty("showAboveMaid", showAboveMaid());
+        // 线上键名保留 showAboveMaid：宿主 MaidBridgeService 的 ModConfigKeys 白名单按这个名字镜像。
+        out.addProperty("showAboveMaid", headInfo());
         out.addProperty("debug", debug());
         return out;
     }

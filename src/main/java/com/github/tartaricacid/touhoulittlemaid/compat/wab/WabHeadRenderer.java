@@ -30,7 +30,7 @@ public final class WabHeadRenderer {
     @SubscribeEvent
     public static void onRenderMaid(RenderLivingEvent.Post<?, ?> event) {
         if (!(event.getEntity() instanceof EntityMaid maid) || maid.isInvisible()) return;
-        if (!WabConfig.showAboveMaid()) return;
+        if (!WabConfig.headInfo()) return;
         WabClientHeads.Entry entry = WabClientHeads.get(maid.getUUID());
         if (entry == null) return;
         Minecraft mc = Minecraft.getInstance();

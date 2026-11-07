@@ -58,6 +58,9 @@ public class ItemMaidUtensil extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
+        tooltip.add(Component.translatable("tooltips.touhou_little_maid.utensil.usage.take").withStyle(ChatFormatting.DARK_GRAY));
+        tooltip.add(Component.translatable("tooltips.touhou_little_maid.utensil.usage.feed").withStyle(ChatFormatting.DARK_GRAY));
+        tooltip.add(Component.translatable("tooltips.touhou_little_maid.utensil.usage.direct").withStyle(ChatFormatting.DARK_GRAY));
         WabFeeding.Portion portion = WabFeeding.read(stack);
         if (portion == null) {
             tooltip.add(Component.translatable("tooltips.touhou_little_maid.utensil.empty").withStyle(ChatFormatting.GRAY));
