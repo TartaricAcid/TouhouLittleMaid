@@ -1,16 +1,16 @@
 modLoader = "javafml"
 loaderVersion = "${loader_version_range}"
 license = "${mod_license}"
-issueTrackerURL = "https://github.com/TartaricAcid/TouhouLittleMaid/issues"
+issueTrackerURL = "https://github.com/gongchanwangzilin/TouhouLittleMaid-WAB/issues"
 
 [[mods]]
     modId = "${mod_id}"
     version = "${mod_version}"
     displayName = "${mod_name}"
     # updateJSONURL="https://change.me.example.invalid/updates.json"
-    displayURL = "https://discord.gg/re4xQtb"
+    displayURL = "https://github.com/gongchanwangzilin/TouhouLittleMaid-WAB"
     logoFile = "logo.png"
-    credits = "Verclene, ZUN"
+    credits = "Verclene, ZUN, WarmAsBefore (WAB bridge)"
     authors = "${mod_authors}"
     description = '''${mod_description}'''
 
