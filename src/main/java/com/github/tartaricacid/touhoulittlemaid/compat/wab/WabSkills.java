@@ -7,11 +7,33 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.BoatItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SmeltingRecipe;
+import net.minecraft.world.level.block.CraftingTableBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -366,6 +388,679 @@ final class WabSkills {
         return items;
     }
 
+    // ==================== 多女仆分工 ====================
+
+    /**
+     * crew：assign / status / stop。
+     * 把「谁干什么」摊到附近所有女仆身上：每只各拿一个 Job，天然并行。
+     */
+    static JsonObject crew(WabBridge bridge, EntityMaid leader, JsonObject p) {
+        String action = WabJson.str(p, "action").toLowerCase(Locale.ROOT);
+        if (action.isEmpty()) action = "assign";
+        double radius = Math.max(4, Math.min(64, WabJson.number(p, "radius", 24)));
+
+        List<EntityMaid> team = new ArrayList<>();
+        for (EntityMaid maid : bridge.ownedMaids()) {
+            if (maid == null || !maid.isAlive()) continue;
+            if (maid.level() != leader.level()) continue;
+            if (maid.distanceToSqr(leader) > radius * radius) continue;
+            team.add(maid);
+        }
+        if (team.isEmpty()) {
+            return fail("no_maid", "附近 " + Math.round(radius) + " 格里没有你名下的女仆。");
+        }
+        WabDispatcher dispatcher = bridge.dispatcher();
+
+        if (action.equals("stop")) {
+            for (EntityMaid maid : team) dispatcher.cancelJob(maid, "主人让停手");
+            return ok(leader, "让 " + team.size() + " 只女仆停手了。");
+        }
+        if (action.equals("status")) {
+            JsonArray arr = new JsonArray();
+            for (EntityMaid maid : team) {
+                JsonObject one = new JsonObject();
+                one.addProperty("maid", maid.getName().getString());
+                one.addProperty("busy", dispatcher.hasJob(maid));
+                one.addProperty("health", Math.round(maid.getHealth()));
+                one.addProperty("x", maid.blockPosition().getX());
+                one.addProperty("y", maid.blockPosition().getY());
+                one.addProperty("z", maid.blockPosition().getZ());
+                arr.add(one);
+            }
+            JsonObject out = ok(leader, "队伍里 " + team.size() + " 只女仆。");
+            out.add("team", arr);
+            return out;
+        }
+
+        String role = WabJson.str(p, "role").toLowerCase(Locale.ROOT);
+        if (!role.equals("miner") && !role.equals("farmer") && !role.equals("hauler") && !role.equals("guard")) {
+            return fail("unknown_role", "分工只支持 miner / farmer / hauler / guard。");
+        }
+        for (EntityMaid maid : team) {
+            dispatcher.cancelJob(maid, "分工调整");
+            switch (role) {
+                case "miner" -> {
+                    JsonObject params = new JsonObject();
+                    params.addProperty("action", "mine");
+                    params.addProperty("filter", "ores");
+                    params.addProperty("count", 32);
+                    params.addProperty("radius", 16);
+                    dispatcher.noteJob(WabActions.startGather(bridge, maid, params, 4000, true, quiet()));
+                }
+                case "farmer" -> {
+                    JsonObject params = new JsonObject();
+                    params.addProperty("action", "harvest");
+                    params.addProperty("count", 32);
+                    params.addProperty("radius", 16);
+                    dispatcher.noteJob(WabActions.startGather(bridge, maid, params, 4000, true, quiet()));
+                }
+                case "hauler" -> {
+                    JsonObject collect = new JsonObject();
+                    collect.addProperty("action", "collect");
+                    collect.addProperty("count", 32);
+                    collect.addProperty("radius", 8);
+                    WabActions.collect(bridge, maid, collect);
+                    JsonObject dump = new JsonObject();
+                    dump.addProperty("action", "dump");
+                    dump.addProperty("radius", 8);
+                    container(maid, dump);
+                }
+                default -> {
+                    JsonObject guard = new JsonObject();
+                    guard.addProperty("action", "guard");
+                    guard.addProperty("radius", 12);
+                    fight(maid, guard);
+                }
+            }
+        }
+        return ok(leader, "给 " + team.size() + " 只女仆派了「" + role + "」。");
+    }
+
+    private static WabActions.Responder quiet() {
+        return new WabActions.Responder() {
+            @Override
+            public void success(JsonObject data) {
+            }
+
+            @Override
+            public void failure(String code, String message) {
+            }
+        };
+    }
+
+    // ==================== 合成与冶炼 ====================
+
+    /**
+     * craft：craft / smelt / list。
+     * 只用原版配方表，材料按「背包里真的有」逐条扣；做不出来就说缺什么，不猜。
+     */
+    static JsonObject craft(EntityMaid maid, JsonObject p) {
+        if (!(maid.level() instanceof ServerLevel level)) {
+            return fail("bad_level", "这个维度做不了。");
+        }
+        String action = WabJson.str(p, "action").toLowerCase(Locale.ROOT);
+        if (action.isEmpty()) action = "craft";
+        String itemId = normalizeId(WabJson.str(p, "item"));
+        int count = Math.max(1, Math.min(64, WabJson.integer(p, "count", 1)));
+        IItemHandler inv = maid.getAvailableInv(false);
+
+        return switch (action) {
+            case "list" -> listCraftable(level, inv);
+            case "craft" -> doCraft(level, maid, inv, itemId, count, p);
+            case "smelt" -> doSmelt(level, maid, inv, itemId, count);
+            default -> fail("unknown_action", "合成只支持 craft / smelt / list。");
+        };
+    }
+
+    private static JsonObject listCraftable(ServerLevel level, IItemHandler inv) {
+        JsonArray items = new JsonArray();
+        int n = 0;
+        for (CraftingRecipe recipe : level.getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING)) {
+            if (n >= 24) break;
+            ItemStack result = recipe.getResultItem(level.registryAccess());
+            if (result.isEmpty()) continue;
+            if (!canConsume(inv, recipe.getIngredients())) continue;
+            JsonObject one = new JsonObject();
+            one.addProperty("item", idOf(result));
+            one.addProperty("name", result.getHoverName().getString());
+            one.addProperty("count", result.getCount());
+            items.add(one);
+            n++;
+        }
+        JsonObject out = ok(null, items.size() == 0 ? "背包里的材料什么都做不了。" : "现在能做 " + items.size() + " 样东西。");
+        out.add("craftable", items);
+        return out;
+    }
+
+    private static JsonObject doCraft(ServerLevel level, EntityMaid maid, IItemHandler inv,
+                                      String itemId, int count, JsonObject p) {
+        if (itemId.isEmpty()) {
+            return fail("no_item", "要做什么？给个产物 id，比如 minecraft:stick。");
+        }
+        CraftingRecipe recipe = null;
+        boolean sawRecipe = false;
+        for (CraftingRecipe candidate : level.getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING)) {
+            ItemStack result = candidate.getResultItem(level.registryAccess());
+            if (result.isEmpty() || !idOf(result).equals(itemId)) continue;
+            sawRecipe = true;
+            if (!hasWorkstation(level, maid, candidate, p)) continue;
+            if (!canConsume(inv, candidate.getIngredients())) continue;
+            recipe = candidate;
+            break;
+        }
+        if (recipe == null) {
+            return sawRecipe
+                    ? fail("missing_materials", "配方有，但材料不够，或者附近没有工作台。")
+                    : fail("no_recipe", "没有「" + itemId + "」的合成配方。");
+        }
+
+        int crafted = 0;
+        for (int i = 0; i < count; i++) {
+            if (!canConsume(inv, recipe.getIngredients())) break;
+            consume(inv, recipe.getIngredients());
+            ItemStack result = recipe.getResultItem(level.registryAccess()).copy();
+            giveToMaid(level, maid, inv, result);
+            crafted++;
+        }
+        if (crafted == 0) {
+            return fail("missing_materials", "材料不够，一个都没做出来。");
+        }
+        return ok(maid, "做了 " + crafted + " 个「" + itemId + "」。");
+    }
+
+    private static JsonObject doSmelt(ServerLevel level, EntityMaid maid, IItemHandler inv,
+                                      String itemId, int count) {
+        if (itemId.isEmpty()) {
+            return fail("no_item", "要烧什么？给个产物 id，比如 minecraft:iron_ingot。");
+        }
+        SmeltingRecipe recipe = null;
+        for (SmeltingRecipe candidate : level.getRecipeManager().getAllRecipesFor(RecipeType.SMELTING)) {
+            ItemStack result = candidate.getResultItem(level.registryAccess());
+            if (result.isEmpty() || !idOf(result).equals(itemId)) continue;
+            recipe = candidate;
+            break;
+        }
+        if (recipe == null) {
+            return fail("no_recipe", "没有「" + itemId + "」的冶炼配方。");
+        }
+        List<Ingredient> ingredients = recipe.getIngredients();
+        if (ingredients.isEmpty()) {
+            return fail("no_recipe", "这条配方没有原料信息。");
+        }
+        Ingredient input = ingredients.get(0);
+
+        int smelted = 0;
+        int burnTicks = 0;
+        while (smelted < count) {
+            int inputSlot = findSlot(inv, input);
+            if (inputSlot < 0) break;
+            if (burnTicks < 200) {
+                int fuelSlot = findFuel(inv);
+                if (fuelSlot < 0) break;
+                int burn = ForgeHooks.getBurnTime(inv.getStackInSlot(fuelSlot), RecipeType.SMELTING);
+                if (burn <= 0) break;
+                inv.extractItem(fuelSlot, 1, false);
+                burnTicks += burn;
+            }
+            burnTicks -= 200;
+            inv.extractItem(inputSlot, 1, false);
+            giveToMaid(level, maid, inv, recipe.getResultItem(level.registryAccess()).copy());
+            smelted++;
+        }
+        if (smelted == 0) {
+            return fail("nothing_smelted", "原料或燃料不够，一个都没烧出来。");
+        }
+        JsonObject out = ok(maid, "烧出 " + smelted + " 个「" + itemId + "」。");
+        out.addProperty("smelted", smelted);
+        out.addProperty("fuelTicksLeft", burnTicks);
+        return out;
+    }
+
+    /** 3×3 配方需要有工作台在手边；背包 2×2 能做的就不要求。 */
+    private static boolean hasWorkstation(ServerLevel level, EntityMaid maid, CraftingRecipe recipe, JsonObject p) {
+        if (recipe.canCraftInDimensions(2, 2)) return true;
+        BlockPos given = blockPosOf(WabJson.arr(p, "pos"));
+        if (given != null && level.getBlockState(given).getBlock() instanceof CraftingTableBlock) {
+            return maid.distanceToSqr(given.getX() + 0.5, given.getY() + 0.5, given.getZ() + 0.5) <= 25;
+        }
+        BlockPos origin = maid.blockPosition();
+        for (BlockPos cursor : BlockPos.betweenClosed(origin.offset(-4, -2, -4), origin.offset(4, 2, 4))) {
+            if (level.getBlockState(cursor).getBlock() instanceof CraftingTableBlock) return true;
+        }
+        return false;
+    }
+
+    private static boolean canConsume(IItemHandler inv, List<Ingredient> ingredients) {
+        int[] left = new int[inv.getSlots()];
+        for (int i = 0; i < left.length; i++) left[i] = inv.getStackInSlot(i).getCount();
+        for (Ingredient ingredient : ingredients) {
+            if (ingredient == null || ingredient.isEmpty()) continue;
+            boolean took = false;
+            for (int i = 0; i < left.length; i++) {
+                if (left[i] <= 0) continue;
+                if (!ingredient.test(inv.getStackInSlot(i))) continue;
+                left[i]--;
+                took = true;
+                break;
+            }
+            if (!took) return false;
+        }
+        return true;
+    }
+
+    private static void consume(IItemHandler inv, List<Ingredient> ingredients) {
+        for (Ingredient ingredient : ingredients) {
+            if (ingredient == null || ingredient.isEmpty()) continue;
+            int slot = findSlot(inv, ingredient);
+            if (slot >= 0) inv.extractItem(slot, 1, false);
+        }
+    }
+
+    private static int findSlot(IItemHandler inv, Ingredient ingredient) {
+        for (int i = 0; i < inv.getSlots(); i++) {
+            ItemStack stack = inv.getStackInSlot(i);
+            if (stack.isEmpty()) continue;
+            if (ingredient.test(stack)) return i;
+        }
+        return -1;
+    }
+
+    private static int findFuel(IItemHandler inv) {
+        for (int i = 0; i < inv.getSlots(); i++) {
+            ItemStack stack = inv.getStackInSlot(i);
+            if (stack.isEmpty()) continue;
+            if (ForgeHooks.getBurnTime(stack, RecipeType.SMELTING) > 0) return i;
+        }
+        return -1;
+    }
+
+    private static void giveToMaid(ServerLevel level, EntityMaid maid, IItemHandler inv, ItemStack stack) {
+        ItemStack leftover = ItemHandlerHelper.insertItemStacked(inv, stack, false);
+        if (!leftover.isEmpty()) {
+            net.minecraft.world.entity.item.ItemEntity drop = new net.minecraft.world.entity.item.ItemEntity(
+                    level, maid.getX(), maid.getY() + 0.5, maid.getZ(), leftover);
+            level.addFreshEntity(drop);
+        }
+    }
+
+    // ==================== 建造 ====================
+
+    /**
+     * build：line / wall / box / fill / pillar。
+     * 一次最多 512 格；没有材料就停在原地，不凭空变方块。
+     */
+    static JsonObject build(EntityMaid maid, JsonObject p) {
+        if (!(maid.level() instanceof ServerLevel level)) {
+            return fail("bad_level", "这个维度建不了。");
+        }
+        String action = WabJson.str(p, "action").toLowerCase(Locale.ROOT);
+        if (action.isEmpty()) action = "fill";
+        BlockPos from = blockPosOf(WabJson.arr(p, "from"));
+        if (from == null) {
+            return fail("bad_pos", "要给起点坐标 from。");
+        }
+        JsonArray toArr = WabJson.arr(p, "to");
+        BlockPos to = toArr.size() >= 3 ? blockPosOf(toArr) : from;
+        if (to == null) {
+            return fail("bad_pos", "终点坐标不完整。");
+        }
+        int height = Math.max(1, Math.min(32, WabJson.integer(p, "height", 1)));
+        if (action.equals("wall") || action.equals("pillar")) {
+            to = new BlockPos(to.getX(), from.getY(), to.getZ());
+        }
+
+        BlockItem blockItem = resolveBlockItem(maid, p);
+        if (blockItem == null) {
+            return fail("no_block", "没指定方块，手上也不是方块。给个 block 物品 id。");
+        }
+        if (maid.distanceToSqr(from.getX() + 0.5, from.getY() + 0.5, from.getZ() + 0.5) > 32 * 32) {
+            return fail("too_far", "起点太远了，先走过去。");
+        }
+
+        List<BlockPos> positions = planPositions(action, from, to, height);
+        if (positions.isEmpty()) {
+            return fail("nothing_to_do", "这个形状算不出要放的方块。");
+        }
+        boolean replace = WabJson.bool(p, "replace", false);
+        IItemHandler inv = maid.getAvailableInv(false);
+
+        int placed = 0;
+        int skipped = 0;
+        int missing = 0;
+        for (BlockPos pos : positions) {
+            if (placed >= 512) break;
+            if (!level.isLoaded(pos)) {
+                skipped++;
+                continue;
+            }
+            BlockState current = level.getBlockState(pos);
+            if (current.hasBlockEntity()) {
+                skipped++;
+                continue;
+            }
+            if (!current.isAir() && !replace) {
+                skipped++;
+                continue;
+            }
+            if (!consumeBlockItem(inv, blockItem)) {
+                missing++;
+                break;
+            }
+            level.setBlockAndUpdate(pos, blockItem.getBlock().defaultBlockState());
+            placed++;
+        }
+
+        if (placed == 0) {
+            return fail("nothing_placed", missing > 0 ? "背包里没有这种方块了。" : "这些位置都放不下（被占着或者是容器）。");
+        }
+        JsonObject out = ok(maid, "放了 " + placed + " 格" + (skipped > 0 ? "，跳过 " + skipped + " 格" : "")
+                + (missing > 0 ? "，材料用完" : "") + "。");
+        out.addProperty("placed", placed);
+        out.addProperty("skipped", skipped);
+        out.addProperty("planned", positions.size());
+        return out;
+    }
+
+    private static List<BlockPos> planPositions(String action, BlockPos from, BlockPos to, int height) {
+        List<BlockPos> list = new ArrayList<>();
+        switch (action) {
+            case "line" -> {
+                int dx = Integer.signum(to.getX() - from.getX());
+                int dy = Integer.signum(to.getY() - from.getY());
+                int dz = Integer.signum(to.getZ() - from.getZ());
+                BlockPos cursor = from;
+                for (int i = 0; i < 512; i++) {
+                    list.add(cursor);
+                    if (cursor.equals(to)) break;
+                    cursor = cursor.offset(dx, dy, dz);
+                }
+            }
+            case "wall" -> {
+                int dx = Integer.signum(to.getX() - from.getX());
+                int dz = Integer.signum(to.getZ() - from.getZ());
+                BlockPos cursor = from;
+                for (int i = 0; i < 512 && list.size() < 512; i++) {
+                    for (int h = 0; h < height && list.size() < 512; h++) {
+                        list.add(cursor.offset(0, h, 0));
+                    }
+                    if (cursor.getX() == to.getX() && cursor.getZ() == to.getZ()) break;
+                    cursor = cursor.offset(dx, 0, dz);
+                }
+            }
+            case "pillar" -> {
+                for (int h = 0; h < height && list.size() < 512; h++) {
+                    list.add(from.offset(0, h, 0));
+                }
+            }
+            case "box" -> {
+                int top = Math.max(from.getY(), to.getY());
+                if (height > 1) top = from.getY() + height - 1;
+                for (BlockPos cursor : BlockPos.betweenClosed(
+                        new BlockPos(Math.min(from.getX(), to.getX()), from.getY(), Math.min(from.getZ(), to.getZ())),
+                        new BlockPos(Math.max(from.getX(), to.getX()), top, Math.max(from.getZ(), to.getZ())))) {
+                    boolean edge = cursor.getX() == Math.min(from.getX(), to.getX())
+                            || cursor.getX() == Math.max(from.getX(), to.getX())
+                            || cursor.getZ() == Math.min(from.getZ(), to.getZ())
+                            || cursor.getZ() == Math.max(from.getZ(), to.getZ())
+                            || cursor.getY() == from.getY()
+                            || cursor.getY() == top;
+                    if (edge) list.add(cursor.immutable());
+                    if (list.size() >= 512) break;
+                }
+            }
+            default -> {
+                for (BlockPos cursor : BlockPos.betweenClosed(
+                        new BlockPos(Math.min(from.getX(), to.getX()), Math.min(from.getY(), to.getY()), Math.min(from.getZ(), to.getZ())),
+                        new BlockPos(Math.max(from.getX(), to.getX()), Math.max(from.getY(), to.getY()), Math.max(from.getZ(), to.getZ())))) {
+                    list.add(cursor.immutable());
+                    if (list.size() >= 512) break;
+                }
+            }
+        }
+        return list;
+    }
+
+    private static BlockItem resolveBlockItem(EntityMaid maid, JsonObject p) {
+        String blockId = normalizeId(WabJson.str(p, "block"));
+        if (!blockId.isEmpty()) {
+            ResourceLocation key = ResourceLocation.tryParse(blockId);
+            if (key != null) {
+                Item item = ForgeRegistries.ITEMS.getValue(key);
+                if (item instanceof BlockItem blockItem) return blockItem;
+            }
+            return null;
+        }
+        ItemStack hand = maid.getMainHandItem();
+        return hand.getItem() instanceof BlockItem blockItem ? blockItem : null;
+    }
+
+    private static boolean consumeBlockItem(IItemHandler inv, BlockItem blockItem) {
+        for (int i = 0; i < inv.getSlots(); i++) {
+            ItemStack stack = inv.getStackInSlot(i);
+            if (stack.isEmpty()) continue;
+            if (stack.getItem() != blockItem) continue;
+            inv.extractItem(i, 1, false);
+            return true;
+        }
+        return false;
+    }
+
+    // ==================== 骑乘 ====================
+
+    /**
+     * ride：mount / boat / cart / dismount。
+     * 只骑船、矿车、马这类「本来就是坐骑」的东西，不抢玩家和其它实体的座位。
+     */
+    static JsonObject ride(EntityMaid maid, JsonObject p) {
+        if (!(maid.level() instanceof ServerLevel level)) {
+            return fail("bad_level", "这个维度骑不了。");
+        }
+        String action = WabJson.str(p, "action").toLowerCase(Locale.ROOT);
+        if (action.isEmpty()) action = "mount";
+        return switch (action) {
+            case "dismount" -> {
+                if (!maid.isPassenger()) {
+                    yield fail("not_riding", "她本来就没骑东西。");
+                }
+                maid.stopRiding();
+                yield ok(maid, "下来了。");
+            }
+            case "boat" -> placeVehicle(maid, level, true);
+            case "cart" -> placeVehicle(maid, level, false);
+            default -> {
+                Entity target = resolveRideable(maid, WabJson.str(p, "target"),
+                        Math.max(2, Math.min(24, WabJson.number(p, "radius", 10))));
+                if (target == null) {
+                    yield fail("no_vehicle", "附近没有能骑的东西。");
+                }
+                if (maid.isPassenger()) maid.stopRiding();
+                boolean mounted = maid.startRiding(target, true);
+                yield mounted
+                        ? ok(maid, "骑上「" + target.getName().getString() + "」了。")
+                        : fail("cannot_ride", "那个东西上不去。");
+            }
+        };
+    }
+
+    private static Entity resolveRideable(EntityMaid maid, String name, double radius) {
+        List<Entity> candidates = maid.level().getEntities(maid, maid.getBoundingBox().inflate(radius),
+                entity -> entity instanceof Boat || entity instanceof AbstractMinecart || entity instanceof AbstractHorse);
+        Entity best = null;
+        double bestDistance = Double.MAX_VALUE;
+        for (Entity entity : candidates) {
+            if (!entity.isAlive()) continue;
+            if (!name.isEmpty() && !entity.getName().getString().equalsIgnoreCase(name.trim())) continue;
+            double d = maid.distanceToSqr(entity);
+            if (d < bestDistance) {
+                bestDistance = d;
+                best = entity;
+            }
+        }
+        return best;
+    }
+
+    private static JsonObject placeVehicle(EntityMaid maid, ServerLevel level, boolean boat) {
+        IItemHandler inv = maid.getAvailableInv(false);
+        int slot = -1;
+        for (int i = 0; i < inv.getSlots(); i++) {
+            ItemStack stack = inv.getStackInSlot(i);
+            if (stack.isEmpty()) continue;
+            if (boat ? stack.getItem() instanceof BoatItem : stack.is(Items.MINECART)) {
+                slot = i;
+                break;
+            }
+        }
+        if (slot < 0) {
+            return fail("no_vehicle_item", boat ? "背包里没有船。" : "背包里没有矿车。");
+        }
+        Entity vehicle = boat ? EntityType.BOAT.create(level) : EntityType.MINECART.create(level);
+        if (vehicle == null) {
+            return fail("spawn_failed", "载具放不出来。");
+        }
+        vehicle.moveTo(maid.getX(), maid.getY(), maid.getZ(), maid.getYRot(), 0);
+        level.addFreshEntity(vehicle);
+        inv.extractItem(slot, 1, false);
+        if (maid.isPassenger()) maid.stopRiding();
+        maid.startRiding(vehicle, true);
+        return ok(maid, boat ? "放下一条船并坐上去了。" : "放下一辆矿车并坐上去了。");
+    }
+
+    // ==================== 战斗策略 ====================
+
+    /**
+     * fight：guard / defend / attack / retreat。
+     * 换武器按 ATTACK_DAMAGE 挑，不认「剑比斧好」这种写死的偏好。
+     */
+    static JsonObject fight(EntityMaid maid, JsonObject p) {
+        if (!(maid.level() instanceof ServerLevel level)) {
+            return fail("bad_level", "这个维度打不了。");
+        }
+        String action = WabJson.str(p, "action").toLowerCase(Locale.ROOT);
+        if (action.isEmpty()) action = "guard";
+        double radius = Math.max(2, Math.min(32, WabJson.number(p, "radius", 12)));
+        String name = WabJson.str(p, "target");
+
+        return switch (action) {
+            case "retreat" -> {
+                maid.setTarget(null);
+                LivingEntity owner = maid.getOwner();
+                if (owner != null && owner.isAlive()) {
+                    maid.getNavigation().moveTo(owner, 1.1);
+                    yield ok(maid, "先撤到主人身边。");
+                }
+                JsonObject home = pointOf(loadWaypoints(maid), "家");
+                if (home != null && WabJson.str(home, "dim").equals(maid.level().dimension().location().toString())) {
+                    maid.getNavigation().moveTo(WabJson.integer(home, "x", 0) + 0.5,
+                            WabJson.integer(home, "y", 0), WabJson.integer(home, "z", 0) + 0.5, 1.1);
+                    yield ok(maid, "往「家」撤。");
+                }
+                yield fail("no_retreat_target", "没有主人也没有「家」这个地点，不知道撤去哪。");
+            }
+            case "defend" -> {
+                LivingEntity owner = maid.getOwner();
+                LivingEntity attacker = owner == null ? null : owner.getLastHurtByMob();
+                if (attacker == null || !attacker.isAlive()) {
+                    yield fail("no_attacker", "主人这会儿没被谁打。");
+                }
+                yield engage(maid, attacker);
+            }
+            case "attack" -> {
+                LivingEntity target = pickTarget(maid, name, radius);
+                if (target == null) {
+                    yield fail("no_target", name.isEmpty() ? "周围没有可打的敌人。" : "找不到「" + name + "」。");
+                }
+                yield engage(maid, target);
+            }
+            default -> {
+                LivingEntity target = pickTarget(maid, name, radius);
+                if (target == null) {
+                    yield ok(maid, "守着呢，周围没有敌人。");
+                }
+                yield engage(maid, target);
+            }
+        };
+    }
+
+    private static LivingEntity pickTarget(EntityMaid maid, String name, double radius) {
+        List<Entity> candidates = maid.level().getEntities(maid, maid.getBoundingBox().inflate(radius),
+                entity -> entity instanceof LivingEntity && entity.isAlive());
+        LivingEntity best = null;
+        double bestDistance = Double.MAX_VALUE;
+        for (Entity entity : candidates) {
+            if (entity == maid) continue;
+            if (!name.isEmpty()) {
+                if (!entity.getName().getString().equalsIgnoreCase(name.trim())) continue;
+            } else if (!(entity instanceof Monster)) {
+                continue;
+            }
+            double d = maid.distanceToSqr(entity);
+            if (d < bestDistance) {
+                bestDistance = d;
+                best = (LivingEntity) entity;
+            }
+        }
+        return best;
+    }
+
+    private static JsonObject engage(EntityMaid maid, LivingEntity target) {
+        equipBestWeapon(maid);
+        maid.setTarget(target);
+        maid.getLookControl().setLookAt(target, 30F, 30F);
+        if (maid.distanceToSqr(target) > 9) {
+            maid.getNavigation().moveTo(target, 1.0);
+            return ok(maid, "盯上了「" + target.getName().getString() + "」，正在逼近。");
+        }
+        boolean hurt = maid.doHurtTarget(target);
+        return ok(maid, (hurt ? "打了「" : "没打中「") + target.getName().getString() + "」。");
+    }
+
+    /** 从背包挑攻击力最高的那把换到主手；原来手上的东西退回背包。 */
+    private static void equipBestWeapon(EntityMaid maid) {
+        IItemHandler inv = maid.getAvailableInv(false);
+        int bestSlot = -1;
+        double bestDamage = 0;
+        for (int i = 0; i < inv.getSlots(); i++) {
+            double damage = attackDamage(inv.getStackInSlot(i));
+            if (damage > bestDamage) {
+                bestDamage = damage;
+                bestSlot = i;
+            }
+        }
+        if (bestSlot < 0) return;
+        ItemStack weapon = inv.extractItem(bestSlot, 1, false);
+        if (weapon.isEmpty()) return;
+        ItemStack previous = maid.getMainHandItem().copy();
+        maid.setItemInHand(InteractionHand.MAIN_HAND, weapon);
+        if (!previous.isEmpty()) {
+            ItemStack leftover = ItemHandlerHelper.insertItemStacked(inv, previous, false);
+            if (!leftover.isEmpty()) {
+                maid.spawnAtLocation(leftover);
+            }
+        }
+    }
+
+    private static double attackDamage(ItemStack stack) {
+        if (stack.isEmpty()) return 0;
+        double total = 0;
+        for (AttributeModifier modifier : stack.getAttributeModifiers(EquipmentSlot.MAINHAND)
+                .get(Attributes.ATTACK_DAMAGE)) {
+            total += modifier.getAmount();
+        }
+        return total;
+    }
+
+    private static String normalizeId(String raw) {
+        String id = raw == null ? "" : raw.trim().toLowerCase(Locale.ROOT);
+        if (id.isEmpty()) return "";
+        if (!id.contains(":")) id = "minecraft:" + id;
+        return id;
+    }
+
+    private static String idOf(ItemStack stack) {
+        var key = ForgeRegistries.ITEMS.getKey(stack.getItem());
+        return key == null ? "" : key.toString();
+    }
+
     private static BlockPos blockPosOf(JsonArray arr) {
         if (arr.size() < 3) return null;
         try {
@@ -388,7 +1083,7 @@ final class WabSkills {
 
     private static JsonObject ok(EntityMaid maid, String message) {
         JsonObject out = new JsonObject();
-        out.addProperty("maid", maid.getUUID().toString());
+        if (maid != null) out.addProperty("maid", maid.getUUID().toString());
         out.addProperty("message", message);
         return out;
     }

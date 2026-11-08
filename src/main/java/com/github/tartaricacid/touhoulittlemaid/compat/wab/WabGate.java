@@ -20,6 +20,10 @@ final class WabGate {
             case "attack":
             case "hold":
             case "container":
+            case "craft":
+            case "build":
+            case "ride":
+            case "crew":
                 return true;
             case "act":
                 return switchesWorld(WabJson.str(params, "action").toLowerCase(Locale.ROOT));

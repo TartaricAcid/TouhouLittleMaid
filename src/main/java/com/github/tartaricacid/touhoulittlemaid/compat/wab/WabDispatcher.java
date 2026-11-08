@@ -116,6 +116,49 @@ public final class WabDispatcher {
             return;
         }
 
+        if (method.equals("craft") || method.equals("build")) {
+            if (!bridge.allowWorldActions()) {
+                from.sendResult(id, false, null, "world_actions_disabled", "游戏端没有开放世界操作权限。");
+                return;
+            }
+            if (maid == null) {
+                from.sendResult(id, false, null, "maid_not_found", "找不到这个女仆。");
+                return;
+            }
+            respond(from, id, method.equals("craft")
+                    ? WabSkills.craft(maid, params)
+                    : WabSkills.build(maid, params));
+            return;
+        }
+
+        if (method.equals("ride") || method.equals("fight")) {
+            if (!bridge.allowWorldActions()) {
+                from.sendResult(id, false, null, "world_actions_disabled", "游戏端没有开放世界操作权限。");
+                return;
+            }
+            if (maid == null) {
+                from.sendResult(id, false, null, "maid_not_found", "找不到这个女仆。");
+                return;
+            }
+            respond(from, id, method.equals("ride")
+                    ? WabSkills.ride(maid, params)
+                    : WabSkills.fight(maid, params));
+            return;
+        }
+
+        if (method.equals("crew")) {
+            if (!bridge.allowWorldActions()) {
+                from.sendResult(id, false, null, "world_actions_disabled", "游戏端没有开放世界操作权限。");
+                return;
+            }
+            if (maid == null) {
+                from.sendResult(id, false, null, "maid_not_found", "找不到这个女仆。");
+                return;
+            }
+            respond(from, id, WabSkills.crew(bridge, maid, params));
+            return;
+        }
+
         if (method.equals("go") || method.equals("act") || method.equals("attack")
                 || method.equals("gather") || method.equals("hold")) {
             if (!bridge.allowWorldActions() && WabGate.commandNeedsWorldActions(method, params)) {
@@ -139,6 +182,23 @@ public final class WabDispatcher {
                     }
                     if ("fill".equals(gatherAction)) {
                         respond(from, id, WabActions.fill(bridge, maid, params));
+                        return;
+                    }
+                    if ("tunnel".equals(gatherAction)) {
+                        cancelJob(maid, "被新的挖掘任务取代");
+                        WabActions.Responder tunnelResponder = new WabActions.Responder() {
+                            @Override
+                            public void success(JsonObject data) {
+                                from.sendResult(id, true, data, null, null);
+                            }
+
+                            @Override
+                            public void failure(String code, String message) {
+                                from.sendResult(id, false, null, code, message);
+                            }
+                        };
+                        WabActions.Job tunnel = WabActions.startTunnel(bridge, maid, params, 4800, tunnelResponder);
+                        jobs.put(maid.getUUID(), tunnel);
                         return;
                     }
                     cancelJob(maid, "被新的采集任务取代");
