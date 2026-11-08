@@ -94,6 +94,28 @@ public final class WabDispatcher {
             return;
         }
 
+        if (method.equals("waypoint")) {
+            if (maid == null) {
+                from.sendResult(id, false, null, "maid_not_found", "找不到这个女仆。");
+                return;
+            }
+            respond(from, id, WabSkills.waypoint(bridge, maid, params));
+            return;
+        }
+
+        if (method.equals("container")) {
+            if (!bridge.allowWorldActions()) {
+                from.sendResult(id, false, null, "world_actions_disabled", "游戏端没有开放世界操作权限。");
+                return;
+            }
+            if (maid == null) {
+                from.sendResult(id, false, null, "maid_not_found", "找不到这个女仆。");
+                return;
+            }
+            respond(from, id, WabSkills.container(maid, params));
+            return;
+        }
+
         if (method.equals("go") || method.equals("act") || method.equals("attack")
                 || method.equals("gather") || method.equals("hold")) {
             if (!bridge.allowWorldActions() && WabGate.commandNeedsWorldActions(method, params)) {

@@ -19,6 +19,7 @@ final class WabGate {
             case "gather":
             case "attack":
             case "hold":
+            case "container":
                 return true;
             case "act":
                 return switchesWorld(WabJson.str(params, "action").toLowerCase(Locale.ROOT));
