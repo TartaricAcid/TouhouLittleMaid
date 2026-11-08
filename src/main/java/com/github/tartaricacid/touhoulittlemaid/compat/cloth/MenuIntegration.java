@@ -697,11 +697,6 @@ public class MenuIntegration {
             builder.add(entryBuilder.startBooleanToggle(Component.literal("· " + field.labelOf(option)), picked.contains(option))
                     .setDefaultValue(false)
                     .setTooltip(tooltip)
-                    .setChangeListener(v -> {
-                        if (v) picked.add(option);
-                        else picked.remove(option);
-                        WabRemoteConfig.save(field.key(), String.join(",", picked));
-                    })
                     .setSaveConsumer(v -> {
                         if (v) picked.add(option);
                         else picked.remove(option);
@@ -725,9 +720,6 @@ public class MenuIntegration {
                 boolean def = "true".equalsIgnoreCase(field.defaultValue());
                 return entryBuilder.startBooleanToggle(title, field.on())
                         .setDefaultValue(def).setTooltip(tooltip)
-                        // 拨动即发，不等「保存并退出」：以前改完不生效说不清是发送丢了还是保存回调没跑，
-                        // 现在拨一下就直接走 save()（自带日志与桥状态检查），宿主的权威值随后回推覆盖。
-                        .setChangeListener(v -> WabRemoteConfig.save(field.key(), String.valueOf(v)))
                         .setSaveConsumer(v -> WabRemoteConfig.save(field.key(), String.valueOf(v))).build();
             }
             case "number": {
