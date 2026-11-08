@@ -748,6 +748,61 @@ public final class WabActions {
         return job;
     }
 
+    /** 挖一条巷道：朝向为轴，可选三格宽，按需插火把。 */
+    public static Job startTunnel(WabBridge bridge, EntityMaid maid, JsonObject params, int budgetTicks,
+                                  Responder responder) {
+        int length = Math.max(2, Math.min(64, WabJson.integer(params, "length", 16)));
+        int width = WabJson.integer(params, "width", 1) >= 3 ? 3 : 1;
+        int torchEvery = Math.max(0, Math.min(16, WabJson.integer(params, "torchEvery", 0)));
+        double yaw = Math.toRadians(maid.getYRot());
+        int dx = (int) Math.round(-Math.sin(yaw));
+        int dz = (int) Math.round(Math.cos(yaw));
+        if (dx == 0 && dz == 0) dz = 1;
+        int px = -dz;
+        int pz = dx;
+        BlockPos start = maid.blockPosition();
+        List<BlockPos> carve = new ArrayList<>();
+        List<BlockPos> torches = new ArrayList<>();
+        for (int step = 1; step <= length; step++) {
+            for (int i = 0; i < width; i++) {
+                int off = width == 3 ? i - 1 : 0;
+                BlockPos base = start.offset(dx * step + px * off, 0, dz * step + pz * off);
+                carve.add(base.immutable());
+                carve.add(base.above().immutable());
+            }
+            if (torchEvery > 0 && step % torchEvery == 0) {
+                torches.add(start.offset(dx * step, 0, dz * step).immutable());
+            }
+        }
+        Job job = new Job(bridge, maid, "mine", carve.size(), budgetTicks, false, responder);
+        job.targets.addAll(carve);
+        job.begin();
+        placeTorches(maid, torches);
+        return job;
+    }
+
+    /** 沿途插火把：只在空气格上放，背包里没火把就安静地跳过。 */
+    private static void placeTorches(EntityMaid maid, List<BlockPos> spots) {
+        if (spots.isEmpty()) return;
+        if (!(maid.level() instanceof ServerLevel level)) return;
+        CombinedInvWrapper inv = maid.getAvailableInv(true);
+        int slot = -1;
+        for (int i = 0; i < inv.getSlots(); i++) {
+            if (inv.getStackInSlot(i).is(Items.TORCH)) {
+                slot = i;
+                break;
+            }
+        }
+        if (slot < 0) return;
+        for (BlockPos pos : spots) {
+            if (!level.isLoaded(pos)) continue;
+            if (!level.getBlockState(pos).isAir()) continue;
+            if (inv.getStackInSlot(slot).isEmpty()) break;
+            inv.extractItem(slot, 1, false);
+            level.setBlockAndUpdate(pos, Blocks.TORCH.defaultBlockState());
+        }
+    }
+
     public static JsonObject collect(WabBridge bridge, EntityMaid maid, JsonObject params) {
         String item = WabJson.str(params, "filter");
         int count = WabJson.integer(params, "count", 16);
