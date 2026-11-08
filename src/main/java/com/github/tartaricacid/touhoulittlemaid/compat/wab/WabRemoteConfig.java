@@ -76,7 +76,11 @@ public final class WabRemoteConfig {
                 options.add(option.getAsString());
             }
             Map<String, String> labels = new LinkedHashMap<>();
-            if (row.get("option_labels") instanceof JsonObject ol) {
+            // 宿主发的是驼峰 optionLabels；保险起见旧的下划线写法也认。
+            JsonObject ol = null;
+            if (row.get("optionLabels") instanceof JsonObject o1) ol = o1;
+            else if (row.get("option_labels") instanceof JsonObject o2) ol = o2;
+            if (ol != null) {
                 for (Map.Entry<String, JsonElement> e : ol.entrySet()) {
                     if (e.getValue().isJsonPrimitive()) labels.put(e.getKey(), e.getValue().getAsString());
                 }
