@@ -12,7 +12,7 @@ import net.minecraft.SharedConstants;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ForcedChunksSavedData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -571,89 +571,79 @@ public final class WabBridge {
      * 她离开（挪窝/死亡/换维度）后把占着的区块交出来。这块功能与「万法皆通·女仆饰品锚定核心」重叠，
      * applySettings 在开启那一刻已经警告过；这里只管区块的加减，不动饰品本身。
      */
-    private final Map<UUID, Set<Long>> forcedChunks = new HashMap<>();
-    private final Map<UUID, Long> forcedCenter = new HashMap<>();
-    private final Map<UUID, Integer> forcedRadius = new HashMap<>();
+    /**
+     * 女仆周围强制加载：主人名下每个被 WAB 认领的女仆，其所在区块周围按半径持续强制加载，
+     * 她离开（挪窝/死亡/换维度）后把占着的区块交出来。这块功能与「万法皆通·女仆饰品锚定核心」重叠，
+     * applySettings 在开启那一刻已经警告过；这里只管区块的加减，不动饰品本身。
+     *
+     * 实现说明：1.20.1 Forge 与 1.21.1 NeoForge 都没有暴露 ForcedChunksSavedData
+     *（getForcedChunksSaveData 不存在），统一走 ServerLevel.setChunkForced(ChunkPos, boolean)。
+     * 每 20 tick 重算「期望区块集合」并与「当前已强载集合」做差量：新增的 setChunkForced(true)、
+     * 消失的 setChunkForced(false)。这样天然处理多女仆叠同一区块、女仆移动、死亡、跨维度等情况，无需引用计数。
+     */
+    private final Map<ResourceLocation, Set<Long>> forcedNow = new HashMap<>();
+
+    /** 把区块坐标压成 long（不依赖 ChunkPos.asLong()，不同 MC 版本该方法签名不一致）。 */
+    private static long packChunk(int x, int z) {
+        return ((long) x & 0xFFFFFFFFL) | (((long) z & 0xFFFFFFFFL) << 32);
+    }
+
+    private void setForced(ServerLevel level, long packed, boolean forced) {
+        level.setChunkForced(new ChunkPos((int) (packed & 0xFFFFFFFFL), (int) (packed >>> 32)), forced);
+    }
 
     private void tickForceLoad() {
         if (tickCounter % 20 != 0) return;
-        if (!forceLoadChunks || forceLoadRadius <= 0) {
-            releaseAllForceLoad();
-            return;
-        }
-        Set<UUID> alive = new HashSet<>(maids.keySet());
-        // 已消失（死了 / 不再是主人名下）的女仆：把她占着的区块交出来，别留着变成永久 forceload。
-        for (Iterator<UUID> it = forcedChunks.keySet().iterator(); it.hasNext();) {
-            UUID id = it.next();
-            if (!alive.contains(id)) {
-                releaseMaidForceLoad(id);
-                it.remove();
-                forcedCenter.remove(id);
-                forcedRadius.remove(id);
+        Map<ResourceLocation, Set<Long>> want = new HashMap<>();
+        if (forceLoadChunks && forceLoadRadius > 0) {
+            for (EntityMaid maid : maids.values()) {
+                if (!maid.isAlive()) continue;
+                if (!(maid.level() instanceof ServerLevel level)) continue;
+                ResourceLocation dim = level.dimension().location();
+                ChunkPos center = new ChunkPos(maid.blockPosition());
+                Set<Long> set = want.computeIfAbsent(dim, k -> new HashSet<>());
+                int r = forceLoadRadius;
+                for (int dx = -r; dx <= r; dx++)
+                    for (int dz = -r; dz <= r; dz++)
+                        set.add(packChunk(center.x + dx, center.z + dz));
             }
         }
-        for (EntityMaid maid : maids.values()) {
-            if (!maid.isAlive()) continue;
-            if (!(maid.level() instanceof ServerLevel level)) continue;
-            ChunkPos center = new ChunkPos(maid.blockPosition());
-            long packed = center.asLong();
-            UUID id = maid.getUUID();
-            // 没挪窝、半径也没变：跳过，避免每轮都重排一遍区块表。
-            Integer prevR = forcedRadius.get(id);
-            Long prevC = forcedCenter.get(id);
-            if (prevC != null && prevC == packed && prevR != null && prevR == forceLoadRadius) continue;
-            releaseMaidForceLoad(id);
-            Set<Long> desired = new HashSet<>();
-            ForcedChunksSavedData data = level.getForcedChunksSaveData();
-            for (int dx = -forceLoadRadius; dx <= forceLoadRadius; dx++) {
-                for (int dz = -forceLoadRadius; dz <= forceLoadRadius; dz++) {
-                    ChunkPos pos = new ChunkPos(center.x + dx, center.z + dz);
-                    data.add(pos, id);
-                    desired.add(pos.asLong());
-                }
-            }
-            forcedChunks.put(id, desired);
-            forcedCenter.put(id, packed);
-            forcedRadius.put(id, forceLoadRadius);
-        }
-    }
-
-    /** 摘掉某一只女仆占着的所有区块；她已经不在世界里时兜底扫一遍所有维度，按她的 UUID 摘。 */
-    private void releaseMaidForceLoad(UUID maidId) {
-        Set<Long> set = forcedChunks.get(maidId);
-        if (set == null || set.isEmpty()) return;
-        EntityMaid maid = maids.get(maidId);
-        if (maid != null && maid.level() instanceof ServerLevel level) {
-            ForcedChunksSavedData d = level.getForcedChunksSaveData();
-            for (Long packed : set) d.remove(new ChunkPos(packed), maidId);
-        } else {
-            for (ServerLevel lv : server.getAllLevels()) {
-                ForcedChunksSavedData d = lv.getForcedChunksSaveData();
-                for (Long packed : set) d.remove(new ChunkPos(packed), maidId);
+        Map<ResourceLocation, ServerLevel> levels = new HashMap<>();
+        for (ServerLevel lv : server.getAllLevels()) levels.put(lv.dimension().location(), lv);
+        // 新增：want 有、forcedNow 没有 -> 强载
+        for (Map.Entry<ResourceLocation, Set<Long>> e : want.entrySet()) {
+            ServerLevel lv = levels.get(e.getKey());
+            if (lv == null) continue;
+            Set<Long> cur = forcedNow.getOrDefault(e.getKey(), Set.of());
+            for (Long packed : e.getValue()) {
+                if (!cur.contains(packed)) setForced(lv, packed, true);
             }
         }
+        // 移除：forcedNow 有、want 没有 -> 卸载
+        for (Map.Entry<ResourceLocation, Set<Long>> e : forcedNow.entrySet()) {
+            ServerLevel lv = levels.get(e.getKey());
+            if (lv == null) continue;
+            Set<Long> w = want.getOrDefault(e.getKey(), Set.of());
+            for (Long packed : e.getValue()) {
+                if (!w.contains(packed)) setForced(lv, packed, false);
+            }
+        }
+        forcedNow.clear();
+        for (Map.Entry<ResourceLocation, Set<Long>> e : want.entrySet())
+            forcedNow.put(e.getKey(), new HashSet<>(e.getValue()));
     }
 
     /** 全部交还：开关被关、或桥断开/换存档时调用。 */
     private void releaseAllForceLoad() {
-        if (forcedChunks.isEmpty()) return;
-        for (UUID id : new HashSet<>(forcedChunks.keySet())) {
-            Set<Long> set = forcedChunks.get(id);
-            if (set == null) continue;
-            EntityMaid maid = maids.get(id);
-            if (maid != null && maid.level() instanceof ServerLevel level) {
-                ForcedChunksSavedData d = level.getForcedChunksSaveData();
-                for (Long packed : set) d.remove(new ChunkPos(packed), id);
-            } else {
-                for (ServerLevel lv : server.getAllLevels()) {
-                    ForcedChunksSavedData d = lv.getForcedChunksSaveData();
-                    for (Long packed : set) d.remove(new ChunkPos(packed), id);
-                }
-            }
+        if (forcedNow.isEmpty()) return;
+        Map<ResourceLocation, ServerLevel> levels = new HashMap<>();
+        for (ServerLevel lv : server.getAllLevels()) levels.put(lv.dimension().location(), lv);
+        for (Map.Entry<ResourceLocation, Set<Long>> e : forcedNow.entrySet()) {
+            ServerLevel lv = levels.get(e.getKey());
+            if (lv == null) continue;
+            for (Long packed : e.getValue()) setForced(lv, packed, false);
         }
-        forcedChunks.clear();
-        forcedCenter.clear();
-        forcedRadius.clear();
+        forcedNow.clear();
     }
 
     public void setFollow(EntityMaid maid, ServerPlayer target) {
