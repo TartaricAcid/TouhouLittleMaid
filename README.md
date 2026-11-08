@@ -42,7 +42,7 @@
 ## 安装
 
 1. Minecraft **1.21.1 + NeoForge 21.x**
-2. 把 `touhoulittlemaid-1.5.3-neoforge+mc1.21.1-wab.1-all.jar` 放进 `mods/`
+2. 把 `touhoulittlemaid-1.5.3-neoforge+mc1.21.1-wab.2-all.jar` 放进 `mods/`
    - 已有官方车万女仆 jar 请删掉（`modId` 相同会冲突）
 3. 进游戏后在设置 → 模组设置里改桥接参数
 
@@ -60,7 +60,7 @@ WAB 插件 `wab_minecraft` 填 TCP 端口（默认 27321），需要时打开局
 ./gradlew build -x test
 ```
 
-产物：`build/libs/touhoulittlemaid-1.5.3-neoforge+mc1.21.1-wab.1-all.jar`。
+产物：`build/libs/touhoulittlemaid-1.5.3-neoforge+mc1.21.1-wab.2-all.jar`。
 
 CI：推送到 `ci/wab-1.21` 会自动编译并上传 artifact。
 
