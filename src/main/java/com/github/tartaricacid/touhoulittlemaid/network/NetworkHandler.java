@@ -5,6 +5,8 @@ import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabBindingSync;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabDetailsReply;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabDetailsRequest;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabHeadInfo;
+import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabPhoneAction;
+import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabPhoneData;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabPhotoReply;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabPhotoRequest;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabVoiceAudio;
@@ -109,6 +111,10 @@ public class NetworkHandler {
         registrar.playToServer(WabDetailsRequest.TYPE, WabDetailsRequest.STREAM_CODEC, WabDetailsRequest::handle);
         registrar.playToClient(WabDetailsReply.TYPE, WabDetailsReply.STREAM_CODEC, WabDetailsReply::handle);
         registrar.playToClient(WabHeadInfo.TYPE, WabHeadInfo.STREAM_CODEC, WabHeadInfo::handle);
+
+        // 手机界面一对通用转发包：动作（客户端→服务器）、回执（服务器→客户端）。
+        registrar.playToServer(WabPhoneAction.TYPE, WabPhoneAction.STREAM_CODEC, WabPhoneAction::handle);
+        registrar.playToClient(WabPhoneData.TYPE, WabPhoneData.STREAM_CODEC, WabPhoneData::handle);
     }
 
     public static void sendToClientPlayer(CustomPacketPayload payload, ServerPlayer player) {
