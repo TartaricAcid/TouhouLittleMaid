@@ -1,0 +1,53 @@
+name: WAB Dist Branch 1.21
+
+# 把编译好的 jar 推到 ci/dist-1.21 分支，作为「取包通道」。
+# 起因：这台机器连不上 github.com 的 HTTPS（Release 下载 502 / 超时），但 SSH（ssh.github.com:443）是通的，
+# 于是让 CI 把 jar 塞进 git 分支，本地用 git fetch 取——走的还是同一个 SSH 通道。
+# 触发方式：把任意提交推到 dist/** 分支，例如
+#   git push origin ci/wab-1.21:dist/1.21
+on:
+  push:
+    branches:
+      - 'dist/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  dist:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v5
+        with:
+          java-version: '21'
+          distribution: 'microsoft'
+          cache: 'gradle'
+
+      - name: Build
+        run: |
+          chmod +x ./gradlew
+          ./gradlew build -x test --no-daemon
+
+      # 1.21 能装进游戏的是 shadowJar 出的 -all.jar；只带可安装的那份，不带 -sources。
+      - name: Push jars to ci/dist-1.21
+        run: |
+          set -e
+          mkdir -p /tmp/jars
+          find build/libs -name '*.jar' ! -name '*-sources.jar' -exec cp {} /tmp/jars/ \;
+          ls -la /tmp/jars
+          git config user.name "WAB CI"
+          git config user.email "ci@wab.local"
+          git checkout --orphan dist-tmp
+          git rm -rf --cached . >/dev/null 2>&1 || true
+          find . -maxdepth 1 -mindepth 1 ! -name '.git' -exec rm -rf {} +
+          cp /tmp/jars/*.jar .
+          ls -la
+          git add -A
+          git commit -m "dist: ${GITHUB_REF_NAME} (${GITHUB_SHA::7})"
+          git push -f origin HEAD:ci/dist-1.21
