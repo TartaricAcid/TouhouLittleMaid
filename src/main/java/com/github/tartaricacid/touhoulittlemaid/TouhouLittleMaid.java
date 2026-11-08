@@ -31,7 +31,11 @@ public final class TouhouLittleMaid {
         InitTrigger.init();
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GeneralConfig.init());
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfig.init());
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, WabConfig.SPEC, "touhou_little_maid-wab-server.toml");
+        // WAB 桥接配置是「这台游戏机本地要不要参与」的偏好，不该是存档域(SERVER)的：
+        // 客户端 Cloth 设置页改了之后，SERVER 型会落到 world serverconfig 之外、集成服务器读不到，
+        // 表现就是「保存不生效、重进设置和没改一样」。改成 CLIENT 型，全局 client 配置文件即权威副本，
+        // 设置页改完 SPEC.save() 直接落到游戏读取的那一份，单人游戏时集成服务器线程也能读到。
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, WabConfig.SPEC, "touhou_little_maid-wab-client.toml");
         CommonDefaultPack.initCommonDefaultPack();
         AquacultureCompat.init();
     }
