@@ -88,6 +88,10 @@ public final class WabBridge {
     private volatile boolean voiceStt;
     /** 交给 WAB 作答的聊天：女仆 UUID → 那句「思考中」气泡的 id，回话后换成正文，失败就撤掉。 */
     private final Map<UUID, Long> pendingReplies = new ConcurrentHashMap<>();
+    /** 手机界面发来的请求：requestId → 发起玩家 / 发起时间。phone_reply 按 id 定向送回。 */
+    private final Map<String, ServerPlayer> pendingPhone = new ConcurrentHashMap<>();
+    private final Map<String, Long> pendingPhoneAt = new ConcurrentHashMap<>();
+    private static final long PHONE_TIMEOUT_MS = 30_000L;
     /** 死过的女仆：她的 UUID → 死时候的名字和时间。复活在原版里没有事件，只能自己认，见 onMaidTransform 与 noteReappear。 */
     private final Map<UUID, Mourned> mourned = new ConcurrentHashMap<>();
     /** 从胶片里爬出来的是全新实体（UUID 整个换掉）：ToMaid 事件先把「这个新 UUID 是谁回来了」钉住。 */
@@ -284,6 +288,7 @@ public final class WabBridge {
             WabFeedRules.clear();
             WabVoice.reset(this);
             clearPendingReplies();
+            clearPendingPhoneRequests();
             for (Map.Entry<UUID, UUID> entry : new HashMap<>(followTargets).entrySet()) {
                 EntityMaid maid = maids.get(entry.getKey());
                 if (maid == null) continue;
@@ -336,6 +341,7 @@ public final class WabBridge {
                     }
                 }
             }
+            case "phone_reply" -> onPhoneReply(frame);
             default -> {
             }
         }
@@ -497,6 +503,7 @@ public final class WabBridge {
         tickFollow();
         autonomy.tick();
         tickPhotos();
+        tickPhoneRequests();
         WabVoice.tick(this);
         if (tickCounter % 200 == 0) tickPairChat();
         if (tickCounter % 10 == 0) tickOwnerSleep();
@@ -830,6 +837,92 @@ public final class WabBridge {
             if (maid != null && maid.isAlive()) maid.getChatBubbleManager().removeChatBubble(entry.getValue());
         }
         pendingReplies.clear();
+    }
+
+    /**
+     * 宿主从桥上回的手机界面数据：按 id 找到当初那位玩家，包成 S2C 定向送回。
+     * 找不到就丢掉（多半是超时后才迟到的回执）。游戏侧不解析业务字段，只搬 data 对象。
+     */
+    private void onPhoneReply(JsonObject frame) {
+        String id = WabJson.str(frame, "id");
+        boolean ok = WabJson.bool(frame, "ok", false);
+        String action = WabJson.str(frame, "action");
+        String code = WabJson.str(frame, "code");
+        String error = WabJson.str(frame, "error");
+        String payload = WabJson.obj(frame, "data").toString();
+        ServerPlayer player = pendingPhone.remove(id);
+        pendingPhoneAt.remove(id);
+        if (player == null) {
+            return;
+        }
+        NetworkHandler.sendToClientPlayer(new WabPhoneData(id, action, ok, code, error, payload), player);
+    }
+
+    /**
+     * 手机界面点了一下：把 action / params 原样封成 phone_request 帧交给宿主算。
+     * 桥没连就当场本地回一个 not_connected，界面不会一直转圈、也不会发空请求死循环。
+     * 联系人 / 消息 / 加好友 / AI 回复全在宿主，游戏侧不存也不判。
+     */
+    public void sendPhoneRequest(ServerPlayer requester, String id, String action, JsonObject params) {
+        if (requester == null || id == null || id.isEmpty()) {
+            return;
+        }
+        WabSession current = session;
+        if (current == null || current.isClosed()) {
+            replyLocal(requester, id, action, "not_connected", "WAB 未连接");
+            return;
+        }
+        JsonObject msg = new JsonObject();
+        msg.addProperty("v", Integer.parseInt(PROTOCOL));
+        msg.addProperty("type", "phone_request");
+        msg.addProperty("id", flat(id));
+        msg.addProperty("action", flat(action));
+        msg.add("params", params == null ? new JsonObject() : params);
+        pendingPhone.put(id, requester);
+        pendingPhoneAt.put(id, System.currentTimeMillis());
+        // WabSession.send 把 JsonObject.toString() 排进 outbox，写线程按一行一帧写出。
+        // Gson 紧凑输出本身没有裸换行（字符串里的换行会被转义成 \n），
+        // id / action 再压一道，客户端在组装 params 时也已把输入压成空格，整帧始终单行。
+        current.send(msg);
+    }
+
+    /** 没连桥时的本地回执，直接组一个 S2C 包定向送回，不经过桥。 */
+    private void replyLocal(ServerPlayer player, String id, String action, String code, String error) {
+        NetworkHandler.sendToClientPlayer(new WabPhoneData(id, action, false, code, error, ""), player);
+    }
+
+    /** 30 秒没等到 phone_reply：撤掉等待项，也给界面一个明确的 timeout。 */
+    private void tickPhoneRequests() {
+        if (pendingPhone.isEmpty()) {
+            return;
+        }
+        long now = System.currentTimeMillis();
+        for (Map.Entry<String, Long> entry : new HashMap<>(pendingPhoneAt).entrySet()) {
+            if (now - entry.getValue() < PHONE_TIMEOUT_MS) {
+                continue;
+            }
+            String id = entry.getKey();
+            ServerPlayer player = pendingPhone.remove(id);
+            pendingPhoneAt.remove(id);
+            if (player != null) {
+                NetworkHandler.sendToClientPlayer(
+                        new WabPhoneData(id, "", false, "timeout", "请求超时", ""), player);
+            }
+        }
+    }
+
+    /** 断线照 clearPendingReplies 的写法：清空等待表，并给每个等待者回一个 not_connected。 */
+    private void clearPendingPhoneRequests() {
+        for (Map.Entry<String, ServerPlayer> entry : new HashMap<>(pendingPhone).entrySet()) {
+            NetworkHandler.sendToClientPlayer(new WabPhoneData(entry.getKey(), "", false,
+                    "not_connected", "WAB 未连接", ""), entry.getValue());
+        }
+        pendingPhone.clear();
+        pendingPhoneAt.clear();
+    }
+
+    private static String flat(String s) {
+        return s == null ? "" : s.replace('\r', ' ').replace('\n', ' ');
     }
 
     /**

@@ -201,6 +201,19 @@ public final class NetworkHandler {
                 com.github.tartaricacid.touhoulittlemaid.compat.wab.WabHeadInfo::decode,
                 com.github.tartaricacid.touhoulittlemaid.compat.wab.WabHeadInfo::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+
+        // 手机界面一对通用转发包：动作（客户端→服务器）、回执（服务器→客户端）。
+        CHANNEL.registerMessage(69, com.github.tartaricacid.touhoulittlemaid.compat.wab.WabPhoneAction.class,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabPhoneAction::encode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabPhoneAction::decode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabPhoneAction::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
+
+        CHANNEL.registerMessage(70, com.github.tartaricacid.touhoulittlemaid.compat.wab.WabPhoneData.class,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabPhoneData::encode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabPhoneData::decode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabPhoneData::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 
     public static void sendToClientPlayer(Object message, Player player) {
