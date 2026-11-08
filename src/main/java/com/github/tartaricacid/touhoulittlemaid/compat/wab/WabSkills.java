@@ -38,7 +38,6 @@ import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.block.CraftingTableBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 
@@ -605,7 +604,7 @@ final class WabSkills {
             if (burnTicks < 200) {
                 int fuelSlot = findFuel(inv);
                 if (fuelSlot < 0) break;
-                int burn = CommonHooks.getBurnTime(inv.getStackInSlot(fuelSlot), RecipeType.SMELTING);
+                int burn = inv.getStackInSlot(fuelSlot).getBurnTime(RecipeType.SMELTING);
                 if (burn <= 0) break;
                 inv.extractItem(fuelSlot, 1, false);
                 burnTicks += burn;
@@ -677,7 +676,7 @@ final class WabSkills {
         for (int i = 0; i < inv.getSlots(); i++) {
             ItemStack stack = inv.getStackInSlot(i);
             if (stack.isEmpty()) continue;
-            if (CommonHooks.getBurnTime(stack, RecipeType.SMELTING) > 0) return i;
+            if (stack.getBurnTime(RecipeType.SMELTING) > 0) return i;
         }
         return -1;
     }
