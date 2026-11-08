@@ -28,7 +28,8 @@
 | **语音** | TTS 合成与 STT 听写借 WAB 的嗓子和耳朵，音色、参考音全按角色自己的设置 |
 | **感知** | `state` 帧上报位置、维度、血量、饱食、当前任务、爱憎数值、是否戴手机；`event` 帧上报互动、受伤、死亡、复活、主人睡觉、同伴搭话、投喂、干完活、天气时段 |
 | **看画面** | 需要时请求主人客户端截图，交给 WAB 识图；WAB 没配识图端点时用大模型兜底 |
-| **工具** | 11 个 `maid_*` 工具：`status / scan / go / act / hold / gather / see / plan / backup / bind / feed_rules`，由 AI 自己决定做什么 |
+| **工具** | 18 个 `maid_*` 工具：`status / scan / go / act / hold / gather / see / plan / backup / bind / feed_rules / waypoint / container / craft / build / ride / fight / crew`，由 AI 自己决定做什么 |
+| **动手过日子** | 地点记忆（让她记住「仓库」「矿洞」并自己走回去）；容器存取（`list / store / take / dump`，只碰 6 格内的箱子）；合成与冶炼（按产物 id 查原版配方，材料从背包逐条扣，3×3 要工作台）；建造（`line / wall / box / fill / pillar`，一次最多 512 格，默认不覆盖非空气）；骑乘（船 / 矿车 / 马）；战斗策略（`guard / defend / attack / retreat`，换武器按攻击力挑）；多女仆分工（`miner / farmer / hauler / guard` 一次派给附近所有女仆）；挖巷道（按朝向挖一条 2 格高的隧道，可按间隔插火把） |
 | **场景思考** | 被打、死亡、复活、主人睡觉、同伴搭话、天气变、时段变、被互动——每类可单独勾选，带冷却；她用自己的性格想一次 |
 | **日程与自发** | 日程写进女仆持久数据、跟着存档走；自发行为与主动思考间隔可调 |
 | **投喂** | 口味表（喜爱 / 挑食 / 吃腻）、饿时讨食、按口味给不同反应 |
