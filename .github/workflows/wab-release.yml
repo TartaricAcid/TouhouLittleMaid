@@ -1,0 +1,65 @@
+name: WAB Release 1.21
+
+# 打标签即出正式 Release：不用网页点，也不用手工传 jar。
+# 标签命名：wab.<版本>-neoforge-<mc版本>，例如 wab.3-neoforge-1.21.1
+on:
+  push:
+    tags:
+      - 'wab.*-neoforge-*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v5
+        with:
+          java-version: '21'
+          distribution: 'microsoft'
+          cache: 'gradle'
+
+      - name: Build
+        run: |
+          chmod +x ./gradlew
+          ./gradlew build -x test --no-daemon
+
+      # 1.21 的 build.gradle 关了默认 jar 任务，能装进游戏的是 shadowJar 出的 -all.jar。
+      # 源码包一起传，让人能对着看；但说明里要写清楚该下哪个。
+      - name: Collect jars
+        run: |
+          mkdir -p dist
+          find build/libs -name '*.jar' -exec cp {} dist/ \;
+          ls -la dist
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          generate_release_notes: true
+          body: |
+            > **下载哪个**：NeoForge 1.21.1 请下结尾为 `-all.jar` 的那个；`-sources.jar` 是源码。
+
+            WAB 版车万女仆（NeoForge 1.21.1）。与上游同 modId、同注册名，可直接顶替官方 jar；
+            不连 WAB 时行为与原版一致。
+
+            本版新增的「动手过日子」能力（都受插件「允许世界操作」开关约束）：
+            - `waypoint` 地点记忆：记住「仓库」「矿洞」，之后自己走回去
+            - `container` 容器存取：`list / store / take / dump`，只碰 6 格内的容器
+            - `craft` 合成与冶炼：按产物 id 查原版配方，材料从背包逐条扣，3×3 要工作台
+            - `build` 建造：`line / wall / box / fill / pillar`，一次最多 512 格，默认不覆盖非空气
+            - `ride` 骑乘：船 / 矿车 / 马
+            - `fight` 战斗策略：`guard / defend / attack / retreat`，换武器按攻击力挑
+            - `crew` 多女仆分工：`miner / farmer / hauler / guard` 一次派给附近所有女仆
+            - `gather action=tunnel` 挖巷道：按朝向挖 2 格高隧道，可间隔插火把
+          files: dist/*.jar
+          draft: false
+          prerelease: false
