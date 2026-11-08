@@ -6,7 +6,9 @@ import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * WAB 插件那一侧设置的只读副本。
@@ -17,7 +19,7 @@ import java.util.List;
 public final class WabRemoteConfig {
     /** 一行 = plugin.json 里的一个设置字段。type 沿用插件的写法：switch / number / text / select / secret。 */
     public record Field(String key, String label, String type, String value, String defaultValue,
-                        String help, List<String> options, boolean locked) {
+                        String help, List<String> options, Map<String, String> optionLabels, boolean locked) {
         public boolean on() {
             return "true".equalsIgnoreCase(value);
         }
@@ -28,6 +30,15 @@ public final class WabRemoteConfig {
             } catch (Exception e) {
                 return fallback;
             }
+        }
+
+        /**
+         * 选项的显示名：宿主描来的 option_labels 映射里有的用中文，没有的退回原键。
+         * 落盘与判断永远用原键（interaction / galgame / main…），这里只管给人看。
+         */
+        public String labelOf(String option) {
+            String name = optionLabels.get(option);
+            return name == null || name.isBlank() ? option : name;
         }
     }
 
@@ -63,9 +74,15 @@ public final class WabRemoteConfig {
                 if (option.isJsonNull()) continue;
                 options.add(option.getAsString());
             }
+            Map<String, String> labels = new LinkedHashMap<>();
+            if (row.get("option_labels") instanceof JsonObject ol) {
+                for (Map.Entry<String, JsonElement> e : ol.entrySet()) {
+                    if (e.getValue().isJsonPrimitive()) labels.put(e.getKey(), e.getValue().getAsString());
+                }
+            }
             next.add(new Field(key, WabJson.str(row, "label", key), WabJson.str(row, "type", "text"),
                     WabJson.str(row, "value"), WabJson.str(row, "default"), WabJson.str(row, "help"),
-                    options, WabJson.bool(row, "locked", false)));
+                    options, Map.copyOf(labels), WabJson.bool(row, "locked", false)));
         }
         fields = List.copyOf(next);
         updatedAt = System.currentTimeMillis();
