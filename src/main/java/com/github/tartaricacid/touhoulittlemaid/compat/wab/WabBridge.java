@@ -132,6 +132,8 @@ public final class WabBridge {
     private long lastStateAt;
     private String lastStateHash = "";
     private boolean ownerWasSleeping;
+    private int lastLoggedMaidCount = -1;
+    private int lastLoggedPhoneCount = -1;
 
     private WabBridge(MinecraftServer server) {
         this.server = server;
@@ -838,11 +840,21 @@ public final class WabBridge {
         msg.addProperty("type", "state");
         msg.add("world", WabSensors.world(this));
         JsonArray list = new JsonArray();
+        int phoneCount = 0;
         for (EntityMaid maid : maids.values()) {
             JsonObject item = WabSensors.snapshot(this, maid);
-            item.addProperty("phone", !maid.getWabPhone().getStackInSlot(0).isEmpty()
-                    && maid.getWabPhone().getStackInSlot(0).getItem() == InitItems.WAB_PHONE.get());
+            boolean wearing = !maid.getWabPhone().getStackInSlot(0).isEmpty()
+                    && maid.getWabPhone().getStackInSlot(0).getItem() == InitItems.WAB_PHONE.get();
+            item.addProperty("phone", wearing);
+            if (wearing) phoneCount++;
             list.add(item);
+        }
+        // 女仆数目只在变化时写一行：通讯录、认主人、强制加载全靠这份名册，
+        // 以前它是不是空的只能靠猜，现在游戏日志里直接看得到。
+        if (list.size() != lastLoggedMaidCount || phoneCount != lastLoggedPhoneCount) {
+            lastLoggedMaidCount = list.size();
+            lastLoggedPhoneCount = phoneCount;
+            TouhouLittleMaid.LOGGER.info("[WAB] state 女仆数: {}（戴手机 {}）", list.size(), phoneCount);
         }
         msg.add("maids", list);
         // 配置也跟着状态一起报：用户在 WAB 里改完插件设置、或在游戏里改了 WAB 配置，

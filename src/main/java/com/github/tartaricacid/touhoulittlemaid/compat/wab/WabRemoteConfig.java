@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.wab;
 
+import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -86,6 +87,7 @@ public final class WabRemoteConfig {
         }
         fields = List.copyOf(next);
         updatedAt = System.currentTimeMillis();
+        TouhouLittleMaid.LOGGER.info("[WAB] 收到插件字段表: {} 项", next.size());
     }
 
     /**
@@ -100,11 +102,40 @@ public final class WabRemoteConfig {
     /**
      * 把改动发给 WAB 落盘。这里必须绕回服务器线程：设置页跑在客户端，
      * 而桥的 socket 只在服务器那一侧，客户端直接写会撞上并发。
+     * 每一步都写日志：以前静默 return，游戏里改了设置没生效，谁也说不清断在哪一环。
      */
     public static void save(String key, String value) {
-        WabBridge bridge = WabBridge.get();
-        if (bridge == null || key == null || key.isEmpty()) return;
+        if (key == null || key.isEmpty()) return;
         String text = value == null ? "" : value;
+        WabBridge bridge = WabBridge.get();
+        if (bridge == null) {
+            TouhouLittleMaid.LOGGER.warn("[WAB] 设置改动 {} 未发送：桥未就绪（存档没在跑）", key);
+            return;
+        }
+        if (bridge.session() == null || bridge.session().isClosed()) {
+            TouhouLittleMaid.LOGGER.warn("[WAB] 设置改动 {} 未发送：桥未连接", key);
+            return;
+        }
+        TouhouLittleMaid.LOGGER.info("[WAB] 设置改动发送: {}={}", key, text);
+        updateLocalValue(key, text);
         bridge.server().execute(() -> bridge.sendConfigSet(key, text));
+    }
+
+    /** 乐观更新本地字段表：界面立刻显示刚改的值；宿主的权威回推随后会覆盖它。 */
+    private static void updateLocalValue(String key, String value) {
+        List<Field> current = fields;
+        if (current.isEmpty()) return;
+        List<Field> next = new ArrayList<>();
+        boolean hit = false;
+        for (Field f : current) {
+            if (f.key().equals(key)) {
+                hit = true;
+                next.add(new Field(f.key(), f.label(), f.type(), value, f.defaultValue(),
+                        f.help(), f.options(), f.optionLabels(), f.locked()));
+            } else {
+                next.add(f);
+            }
+        }
+        if (hit) fields = List.copyOf(next);
     }
 }
