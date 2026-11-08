@@ -949,6 +949,7 @@
   "wab.phone.added": "Added",
   "wab.phone.add_failed": "Add failed",
   "wab.phone.error": "Request failed",
+  "wab.phone.offline": "WAB is not connected, the phone cannot be used right now.",
   "config.touhou_little_maid.global_ai.llm.wab_taken": "WarmAsBefore is connected: bound maids are answered by it, so the entries below no longer apply to them. They come back once the bridge drops.",
   "config.touhou_little_maid.global_ai.tts.wab_taken": "WarmAsBefore is connected and synthesizes speech: bound maids use the character's own voice, so the entries below no longer apply to them.",
   "config.touhou_little_maid.global_ai.stt.wab_taken": "WarmAsBefore is connected and transcribes speech: what bound maids hear is sent to it, so the entries below no longer apply to them.",

@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.compat.wab;
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.api.event.MaidAndItemTransformEvent;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -728,7 +729,10 @@ public final class WabBridge {
         msg.add("world", WabSensors.world(this));
         JsonArray list = new JsonArray();
         for (EntityMaid maid : maids.values()) {
-            list.add(WabSensors.snapshot(this, maid));
+            JsonObject item = WabSensors.snapshot(this, maid);
+            item.addProperty("phone", !maid.getWabPhone().getStackInSlot(0).isEmpty()
+                    && maid.getWabPhone().getStackInSlot(0).getItem() == InitItems.WAB_PHONE.get());
+            list.add(item);
         }
         msg.add("maids", list);
         // 配置也跟着状态一起报：用户在 WAB 里改完插件设置、或在游戏里改了 WAB 配置，

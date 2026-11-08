@@ -949,6 +949,7 @@
   "wab.phone.added": "已添加",
   "wab.phone.add_failed": "添加失败",
   "wab.phone.error": "请求失败",
+  "wab.phone.offline": "WAB 未连接，手机现在不能用。",
   "config.touhou_little_maid.global_ai.llm.wab_taken": "WarmAsBefore 正连着：绑了角色的女仆由它作答，下面这几项对她们不再起作用，断桥之后照旧。",
   "config.touhou_little_maid.global_ai.tts.wab_taken": "WarmAsBefore 正连着，且它那边开了语音合成：绑了角色的女仆改用角色自己的音色，下面这几项对她们不再起作用。",
   "config.touhou_little_maid.global_ai.stt.wab_taken": "WarmAsBefore 正连着，且它那边开了语音识别：绑了角色的女仆说的话直接交给它，下面这几项对她们不再起作用。",
