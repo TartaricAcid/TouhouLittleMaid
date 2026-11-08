@@ -18,7 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 纯客户端手机界面：左联系人、右消息、底部发送、顶部状态/加微信/刷新。
+ * 纯客户端手机界面：左联系人、右消息、底部发送、顶部状态/刷新。
+ * 联系人由宿主按「戴了手机的女仆」自动同步，界面不提供手动加好友的入口。
  * 所有业务数据都来自 WabPhoneData 回执（宿主算），这里只转发请求 + 渲染，不落任何业务逻辑。
  * 布局全部按 width/height 在 init() 里算，避免小窗口越界。
  */
@@ -58,7 +59,6 @@ public class WabPhoneScreen extends Screen {
     private boolean requestedWhoami;
 
     private EditBox input;
-    private EditBox addFriendInput;
 
     // init() 里按窗口算出来的布局
     private int left, top, right, bottom;
@@ -87,7 +87,6 @@ public class WabPhoneScreen extends Screen {
         bottom = Math.min(height, top + ph);
 
         int line1 = top + 2;
-        int line3 = top + 46;
         int mainTop = top + 68;
         int mainBottom = Math.max(mainTop + 8, bottom - 30);
 
@@ -95,15 +94,6 @@ public class WabPhoneScreen extends Screen {
         addRenderableWidget(Button.builder(
                         Component.translatable("wab.phone.refresh"), b -> request("contacts", new JsonObject()))
                 .bounds(btnX, line1, 50, 18).build());
-
-        int addW = Math.max(60, pw / 2 - 60);
-        addFriendInput = new EditBox(font, left + 6, line3, addW, 18,
-                Component.translatable("wab.phone.add_friend_hint"));
-        addFriendInput.setMaxLength(64);
-        addRenderableWidget(addFriendInput);
-        addRenderableWidget(Button.builder(
-                        Component.translatable("wab.phone.add_friend"), b -> doAddFriend())
-                .bounds(left + 6 + addW + 4, line3, 50, 18).build());
 
         int inputW = Math.max(60, pw - 12 - 56);
         input = new EditBox(font, left + 6, bottom - 26, inputW, 20,
@@ -163,18 +153,6 @@ public class WabPhoneScreen extends Screen {
         input.setValue("");
         setStatus(Component.translatable("wab.phone.loading").getString(), false);
         request("send", p);
-    }
-
-    private void doAddFriend() {
-        String v = addFriendInput == null ? "" : addFriendInput.getValue().trim();
-        if (v.isEmpty()) {
-            return;
-        }
-        JsonObject p = new JsonObject();
-        p.addProperty("nameOrId", oneLine(v));
-        addFriendInput.setValue("");
-        setStatus(Component.translatable("wab.phone.loading").getString(), false);
-        request("add_friend", p);
     }
 
     /** 回执到了就原地刷新数据模型；失败把 error 摆在顶部状态行（警示色）。 */
