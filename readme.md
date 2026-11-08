@@ -46,7 +46,7 @@
 ## 安装
 
 1. Minecraft **1.20.1 + Forge 47.x**
-2. 把 `touhoulittlemaid-1.5.3-forge+mc1.20.1-wab.1-all.jar` 放进 `mods/`
+2. 把 `touhoulittlemaid-1.5.3-forge+mc1.20.1-wab.2-all.jar` 放进 `mods/`
    - 如果已有官方车万女仆 jar，**删掉它**：`modId` 相同，两个同时放会冲突
 3. （可选）`cloth-config` —— 用来在游戏内改桥接设置
 4. 启动游戏，进入世界后由 WAB 发起连接
@@ -78,7 +78,7 @@
 ./gradlew build -x test
 ```
 
-产物：`build/libs/touhoulittlemaid-1.5.3-forge+mc1.20.1-wab.1-all.jar`（`-all` 才是可装载的完整包）。
+产物：`build/libs/touhoulittlemaid-1.5.3-forge+mc1.20.1-wab.2-all.jar`（`-all` 才是可装载的完整包）。
 
 CI：推送到 `ci/wab-1.20-testkit` 分支会自动编译并把 jar 传到 Actions artifact。
 
@@ -93,7 +93,7 @@ CI：推送到 `ci/wab-1.20-testkit` 分支会自动编译并把 jar 传到 Acti
 
 ## 已知限制
 
-- **附属模组**：按 `modId = touhou_little_maid` 依赖，所以本分支可以正常被附属加载；但附属若校验上游版本号，带 `-wab.1` 后缀的版本可能不被识别
+- **附属模组**：按 `modId = touhou_little_maid` 依赖，所以本分支可以正常被附属加载；但附属若校验上游版本号，带 `-wab.2` 这类后缀的版本可能不被识别
 - **不支持热切换**：从原版 jar 换到本分支（或反向）请重启游戏
 - **服务端**：桥接只在单人/集成服务器或你自己的服务器上有意义；专用服务器不装 WAB 时行为等于原版
 

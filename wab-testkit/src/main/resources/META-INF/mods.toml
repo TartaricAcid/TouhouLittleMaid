@@ -25,7 +25,7 @@ versionRange = "[1.20.1,1.21)"
 ordering = "NONE"
 side = "SERVER"
 
-# 这里故意不写版本号范围：我们的分支版本是 1.5.3-forge+mc1.20.1-wab.1，
+# 这里故意不写版本号范围：我们的分支版本带 -wab.N 后缀（当前 1.5.3-forge+mc1.20.1-wab.2），
 # Maven 区间对带 -/+ 后缀的判定和上游附属模组并不总是一致，
 # 用 [0,) 只求「必须装了车万女仆」这件事本身。
 [[dependencies.wab_testkit]]
