@@ -12,12 +12,14 @@ import net.minecraft.SharedConstants;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ForcedChunksSavedData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -39,7 +41,10 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -84,6 +89,10 @@ public final class WabBridge {
     private volatile JsonArray beaconMaids = new JsonArray();
     private volatile boolean allowWorldActions = true;
     private volatile boolean allowGestures = true;
+    /** 女仆周围强制加载开关：开=主人名下被 WAB 认领的女仆，其所在区块周围持续强制加载。 */
+    private volatile boolean forceLoadChunks;
+    /** 强制加载半径（区块）：以女仆为中心、向四周各延伸多少区块。2 = 5×5。范围 0–8，0 等于不加载。 */
+    private volatile int forceLoadRadius = 2;
     /** 宿主在 welcome 里宣告的语音能力；断线就归零，模组立刻回到自己的 TTS/STT。 */
     private volatile boolean voiceTts;
     private volatile boolean voiceStt;
@@ -395,7 +404,7 @@ public final class WabBridge {
         return true;
     }
 
-    /** 只认这两个开关，缺省保持当前值。 */
+    /** 只认这几个开关，缺省保持当前值。 */
     private void applySettings(JsonObject settings) {
         boolean changed = false;
         if (settings.has("allowWorldActions")) {
@@ -404,6 +413,26 @@ public final class WabBridge {
         }
         if (settings.has("allowGestures")) {
             allowGestures = WabJson.bool(settings, "allowGestures", allowGestures);
+            changed = true;
+        }
+        if (settings.has("forceLoadChunks")) {
+            boolean want = WabJson.bool(settings, "forceLoadChunks", forceLoadChunks);
+            // 仅在「关→开」的瞬间提醒一次：锚定核心与本功能重叠，开了它就失效。
+            if (want && !forceLoadChunks) {
+                TouhouLittleMaid.LOGGER.warn("[WAB] 女仆周围强制加载已开启；" +
+                        "车万女仆附属「万法皆通·女仆饰品锚定核心」会因功能重叠失效，请勿同时佩戴该饰品。");
+                ServerPlayer p = currentOwner();
+                if (p != null) {
+                    p.sendSystemMessage(Component.literal(
+                            "⚠ WAB 强制加载已开启：「万法皆通·女仆饰品锚定核心」因功能重叠失效，请勿同时佩戴该饰品。")
+                            .withStyle(ChatFormatting.GOLD), false);
+                }
+            }
+            forceLoadChunks = want;
+            changed = true;
+        }
+        if (settings.has("forceLoadRadius")) {
+            forceLoadRadius = Math.max(0, Math.min(8, WabJson.integer(settings, "forceLoadRadius", forceLoadRadius)));
             changed = true;
         }
         if (changed && !allowWorldActions) {
@@ -502,6 +531,7 @@ public final class WabBridge {
 
         dispatcher.tick();
         tickFollow();
+        tickForceLoad();
         autonomy.tick();
         tickPhotos();
         tickPhoneRequests();
@@ -534,6 +564,96 @@ public final class WabBridge {
             else if (distance < 4) maid.getNavigation().stop();
             return false;
         });
+    }
+
+    /**
+     * 女仆周围强制加载：主人名下每个被 WAB 认领的女仆，其所在区块周围按半径持续强制加载，
+     * 她离开（挪窝/死亡/换维度）后把占着的区块交出来。这块功能与「万法皆通·女仆饰品锚定核心」重叠，
+     * applySettings 在开启那一刻已经警告过；这里只管区块的加减，不动饰品本身。
+     */
+    private final Map<UUID, Set<Long>> forcedChunks = new HashMap<>();
+    private final Map<UUID, Long> forcedCenter = new HashMap<>();
+    private final Map<UUID, Integer> forcedRadius = new HashMap<>();
+
+    private void tickForceLoad() {
+        if (tickCounter % 20 != 0) return;
+        if (!forceLoadChunks || forceLoadRadius <= 0) {
+            releaseAllForceLoad();
+            return;
+        }
+        Set<UUID> alive = new HashSet<>(maids.keySet());
+        // 已消失（死了 / 不再是主人名下）的女仆：把她占着的区块交出来，别留着变成永久 forceload。
+        for (Iterator<UUID> it = forcedChunks.keySet().iterator(); it.hasNext();) {
+            UUID id = it.next();
+            if (!alive.contains(id)) {
+                releaseMaidForceLoad(id);
+                it.remove();
+                forcedCenter.remove(id);
+                forcedRadius.remove(id);
+            }
+        }
+        for (EntityMaid maid : maids.values()) {
+            if (!maid.isAlive()) continue;
+            if (!(maid.level() instanceof ServerLevel level)) continue;
+            ChunkPos center = new ChunkPos(maid.blockPosition());
+            long packed = center.asLong();
+            UUID id = maid.getUUID();
+            // 没挪窝、半径也没变：跳过，避免每轮都重排一遍区块表。
+            Integer prevR = forcedRadius.get(id);
+            Long prevC = forcedCenter.get(id);
+            if (prevC != null && prevC == packed && prevR != null && prevR == forceLoadRadius) continue;
+            releaseMaidForceLoad(id);
+            Set<Long> desired = new HashSet<>();
+            ForcedChunksSavedData data = level.getForcedChunksSaveData();
+            for (int dx = -forceLoadRadius; dx <= forceLoadRadius; dx++) {
+                for (int dz = -forceLoadRadius; dz <= forceLoadRadius; dz++) {
+                    ChunkPos pos = new ChunkPos(center.x + dx, center.z + dz);
+                    data.add(pos, id);
+                    desired.add(pos.asLong());
+                }
+            }
+            forcedChunks.put(id, desired);
+            forcedCenter.put(id, packed);
+            forcedRadius.put(id, forceLoadRadius);
+        }
+    }
+
+    /** 摘掉某一只女仆占着的所有区块；她已经不在世界里时兜底扫一遍所有维度，按她的 UUID 摘。 */
+    private void releaseMaidForceLoad(UUID maidId) {
+        Set<Long> set = forcedChunks.get(maidId);
+        if (set == null || set.isEmpty()) return;
+        EntityMaid maid = maids.get(maidId);
+        if (maid != null && maid.level() instanceof ServerLevel level) {
+            ForcedChunksSavedData d = level.getForcedChunksSaveData();
+            for (Long packed : set) d.remove(new ChunkPos(packed), maidId);
+        } else {
+            for (ServerLevel lv : server.getAllLevels()) {
+                ForcedChunksSavedData d = lv.getForcedChunksSaveData();
+                for (Long packed : set) d.remove(new ChunkPos(packed), maidId);
+            }
+        }
+    }
+
+    /** 全部交还：开关被关、或桥断开/换存档时调用。 */
+    private void releaseAllForceLoad() {
+        if (forcedChunks.isEmpty()) return;
+        for (UUID id : new HashSet<>(forcedChunks.keySet())) {
+            Set<Long> set = forcedChunks.get(id);
+            if (set == null) continue;
+            EntityMaid maid = maids.get(id);
+            if (maid != null && maid.level() instanceof ServerLevel level) {
+                ForcedChunksSavedData d = level.getForcedChunksSaveData();
+                for (Long packed : set) d.remove(new ChunkPos(packed), id);
+            } else {
+                for (ServerLevel lv : server.getAllLevels()) {
+                    ForcedChunksSavedData d = lv.getForcedChunksSaveData();
+                    for (Long packed : set) d.remove(new ChunkPos(packed), id);
+                }
+            }
+        }
+        forcedChunks.clear();
+        forcedCenter.clear();
+        forcedRadius.clear();
     }
 
     public void setFollow(EntityMaid maid, ServerPlayer target) {
@@ -1173,6 +1293,7 @@ public final class WabBridge {
         WabSession current = old.session;
         if (current != null) current.close("server stopping");
         old.dispatcher.cancelAll("server stopping");
+        old.releaseAllForceLoad();
         // 换存档/关服都会走到这里：不清的话，下一个世界的设置页会先画出上一个存档那套插件开关
         WabRemoteConfig.clear();
         TouhouLittleMaid.LOGGER.info("[WAB] bridge stopped");
