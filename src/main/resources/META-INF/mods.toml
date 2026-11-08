@@ -7,15 +7,15 @@ modId = "touhou_little_maid"
 # modId 必须跟上游一致：附属模组按 modId 依赖车万女仆，这个 jar 是顶替官方那一份用的。
 # 区分靠版本后缀（${file.jarVersion} = gradle.properties 的 mod_version）和这里的 displayName/description。
 version = "${file.jarVersion}"
-displayName = "Touhou Little Maid (WAB bridge)"
-issueTrackerURL = "https://github.com/TartaricAcid/TouhouLittleMaid/issues"
-displayURL = "https://discord.gg/re4xQtb"
+displayName = "Touhou Little Maid · WAB 版"
+issueTrackerURL = "https://github.com/gongchanwangzilin/TouhouLittleMaid-WAB/issues"
+displayURL = "https://github.com/gongchanwangzilin/TouhouLittleMaid-WAB"
 logoFile = "logo.png"
-credits = "Verclene, ZUN"
+credits = "Verclene, ZUN, WarmAsBefore (WAB bridge)"
 # A text field displayed in the mod UI
 authors = "TartaricAcid, Snownee, Succinum, Pajinyi, Zhi_Ban, CrystalizedSun, Foky, ZeniCrow, Paulzzh, Yuriscat, Lappland162"
 # The description text for the mod (multi line!) (#mandatory)
-description = "Unofficial branch of Touhou Little Maid with the WarmAsBefore (WAB) AI maid bridge. Same modId, registry names and gameplay as upstream, so it is a drop-in replacement for the official jar. Upstream code and assets stay with their original authors under MIT / CC BY-NC-SA 4.0: https://github.com/TartaricAcid/TouhouLittleMaid"
+description = "WAB 版：车万女仆的完全分化分支，为「温暖如初（WarmAsBefore）」提供 AI 桥接——WAB 手机、语音接管、事件感知、11 个 maid_* 工具、场景思考、强制加载。modId 与注册名和上游一致，可直接顶替官方 jar；不连 WAB 时行为与原版一致。Upstream code and assets remain with their original authors under MIT / CC BY-NC-SA 4.0: https://github.com/TartaricAcid/TouhouLittleMaid"
 
 [modproperties.touhou_little_maid]
 catalogueItemIcon = "touhou_little_maid:hakurei_gohei"
