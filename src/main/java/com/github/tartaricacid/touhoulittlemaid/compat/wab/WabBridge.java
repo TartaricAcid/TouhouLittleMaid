@@ -589,7 +589,7 @@ public final class WabBridge {
     }
 
     private void setForced(ServerLevel level, long packed, boolean forced) {
-        level.setChunkForced(new ChunkPos((int) (packed & 0xFFFFFFFFL), (int) (packed >>> 32)), forced);
+        level.setChunkForced((int) (packed & 0xFFFFFFFFL), (int) (packed >>> 32), forced);
     }
 
     private void tickForceLoad() {
