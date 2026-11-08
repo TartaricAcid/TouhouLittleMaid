@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.wab;
 
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -29,6 +30,10 @@ public class ItemWabPhone extends Item {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (level.isClientSide) {
+            if (!WabClientState.connected()) {
+                player.displayClientMessage(Component.translatable("wab.phone.offline"), true);
+                return InteractionResultHolder.pass(stack);
+            }
             openPhone();
             return InteractionResultHolder.sidedSuccess(stack, true);
         }
