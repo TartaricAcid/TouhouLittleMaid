@@ -694,7 +694,7 @@ public class MenuIntegration {
             if (!trimmed.isEmpty()) picked.add(trimmed);
         }
         for (String option : field.options()) {
-            builder.add(entryBuilder.startBooleanToggle(Component.literal("· " + option), picked.contains(option))
+            builder.add(entryBuilder.startBooleanToggle(Component.literal("· " + field.labelOf(option)), picked.contains(option))
                     .setDefaultValue(false)
                     .setTooltip(tooltip)
                     .setSaveConsumer(v -> {
