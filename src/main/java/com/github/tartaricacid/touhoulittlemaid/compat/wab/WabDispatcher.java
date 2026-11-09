@@ -31,7 +31,7 @@ public final class WabDispatcher {
         // 统一在这里收口世界动作权限与「找不到女仆」，业务类只管执行。
         String feature = switch (method) {
             case "item", "farm", "escape", "comfort", "sneak_eat", "mode_switch",
-                    "chat_turn", "plan_flow", "backup_copy" -> method;
+                    "chat_turn", "plan_flow", "backup_copy", "headpat" -> method;
             default -> "";
         };
         if (!feature.isEmpty()) {
@@ -52,6 +52,7 @@ public final class WabDispatcher {
                 case "mode_switch" -> WabFeatures.mode(maid, params);
                 case "chat_turn" -> WabFeatures.chat(maid, params);
                 case "plan_flow" -> WabFeatures.plan(maid, params);
+                case "headpat" -> WabFeatures.headpat(maid, params);
                 default -> WabFeatures.backup(maid, params);
             };
             respond(from, id, result);
