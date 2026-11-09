@@ -1,0 +1,2319 @@
+{
+  "catalogVersion": "wab-next-1",
+  "source": "01-PRD.md §5.1（126 行配置项总表）",
+  "note": "唯一允许声明键名与默认值的地方；保守覆盖规则见 02-DESIGN.md §3.4，本文件不另造默认值。",
+  "rowCount": 126,
+  "rows": [
+    {
+      "no": 1,
+      "group": "一",
+      "name": "1. 自主物品管理总开关",
+      "key": "item_autonomy_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "双端",
+      "aiTag": "可选AI",
+      "conflict": true,
+      "conflictTarget": "附属背包管理模组",
+      "promptText": "⚠ 检测到附属背包管理模组，自主物品管理已默认关闭，避免物品被两边同时搬运",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "⚠ 检测到附属背包管理模组，自主物品管理已默认关闭，避免物品被两边同时搬运"
+    },
+    {
+      "no": 2,
+      "group": "一",
+      "name": "2. 主动丢弃",
+      "key": "item_drop_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "原版丢弃 / 掉落物机制",
+      "promptText": "检测到附属背包 / 容器管理模组，容器写入与主动丢弃已保持关闭，避免物品被重复搬运或在地上生成两份掉落物；装备槽被多个模组读写时可能相互覆盖",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "会改世界，受 allow_world_actions 约束。⚠ 丢弃会生成掉落物实体，与掉落物类附属同开可能重复计数"
+    },
+    {
+      "no": 3,
+      "group": "一",
+      "name": "3. 主动装备",
+      "key": "item_equip_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "饰品 / 装备槽附属",
+      "promptText": "检测到附属背包 / 容器管理模组，容器写入与主动丢弃已保持关闭，避免物品被重复搬运或在地上生成两份掉落物；装备槽被多个模组读写时可能相互覆盖",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "⚠ 装备槽被多个模组读写时可能相互覆盖，本项默认关闭"
+    },
+    {
+      "no": 4,
+      "group": "一",
+      "name": "4. 主动捡起",
+      "key": "item_pickup_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "复用 collectNearby()；开启后仍受筛选条件约束"
+    },
+    {
+      "no": 5,
+      "group": "一",
+      "name": "5. 捡起筛选方式",
+      "key": "item_pickup_filter_mode",
+      "type": "select",
+      "default": "item_id",
+      "defaultValue": "item_id",
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "选项 item_id / name / attribute / durability / enchant"
+    },
+    {
+      "no": 6,
+      "group": "一",
+      "name": "6. 捡起筛选表达式",
+      "key": "item_pickup_filter_expr",
+      "type": "text",
+      "default": "\"\"（空 = 不筛选）",
+      "defaultValue": "",
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "按第 5 项方式解释，如 damage<=50 或 enchant:fortune"
+    },
+    {
+      "no": 7,
+      "group": "一",
+      "name": "7. 容器读取（列出）",
+      "key": "container_read_enabled",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "双端",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "只读，安全；复用 maid_container action=list"
+    },
+    {
+      "no": 8,
+      "group": "一",
+      "name": "8. 容器写入（存 / 取 / 倾倒）",
+      "key": "container_write_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "附属背包 / 容器管理模组",
+      "promptText": "检测到附属背包 / 容器管理模组，容器写入与主动丢弃已保持关闭，避免物品被重复搬运或在地上生成两份掉落物；装备槽被多个模组读写时可能相互覆盖",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "会改世界，默认关。⚠ 检测到附属容器管理模组，容器写入已保持关闭，避免物品重复搬运"
+    },
+    {
+      "no": 9,
+      "group": "一",
+      "name": "9. 物品属性详情（附魔 / NBT）",
+      "key": "container_attr_detail",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "双端",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "在 WabSensors.item() 现有 name / count / damage / maxDamage / block 上补 enchantments 与 nbt；只读"
+    },
+    {
+      "no": 10,
+      "group": "一",
+      "name": "10. 属性数据经 AI 工具接口返回",
+      "key": "container_attr_via_tool",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "属性随 maid_container 回执一并返回，不额外调模型"
+    },
+    {
+      "no": 11,
+      "group": "一",
+      "name": "11. 特殊栏位与背包联动",
+      "key": "special_slot_sync_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "精妙背包 / 饰品槽附属",
+      "promptText": "检测到精妙背包或饰品槽附属，特殊栏位联动默认关闭，避免饰品格被两边同时读写",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "⚠ 检测到精妙背包或饰品槽附属，特殊栏位联动默认关闭，避免饰品格被两边同时读写"
+    },
+    {
+      "no": 12,
+      "group": "一",
+      "name": "12. 农耕指令总开关",
+      "key": "farming_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "双端",
+      "aiTag": "可选AI",
+      "conflict": true,
+      "conflictTarget": "精妙背包农耕扩展",
+      "promptText": "检测到精妙背包的农耕扩展也在接管农活，WAB 农耕指令已关闭；两者同开会重复播种 / 收割，请只保留一个。开垦田地会改变地形，默认不启用",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "⚠ 检测到精妙背包农耕扩展，WAB 农耕指令已关闭；两者同开会重复播种 / 收割，请只保留一个"
+    },
+    {
+      "no": 13,
+      "group": "一",
+      "name": "13. 农耕需显式指定四要素",
+      "key": "farming_require_explicit_spec",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "原版农活 / maid_crew farmer",
+      "promptText": "⚠ 与 maid_crew farmer 的自动农活互斥；关闭需二次确认",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "工具 / 种植物 / 区域 / 是否开垦缺一即拒绝。⚠ 与 maid_crew farmer 的自动农活互斥；关闭需二次确认"
+    },
+    {
+      "no": 14,
+      "group": "一",
+      "name": "14. 允许开垦田地",
+      "key": "farming_allow_tilling",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "原版耕地机制",
+      "promptText": "检测到精妙背包的农耕扩展也在接管农活，WAB 农耕指令已关闭；两者同开会重复播种 / 收割，请只保留一个。开垦田地会改变地形，默认不启用",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "改地形，默认关；仅第 12、13 项均满足时才生效"
+    },
+    {
+      "no": 15,
+      "group": "二",
+      "name": "1. 落地水总开关",
+      "key": "mlg_water_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "其他落地保护 / 逃生类附属",
+      "promptText": "检测到其他落地保护或逃生类附属，高级反应逃生已关闭，避免重复放水或重复寻路；无桶时自行打水会改动世界，默认不启用",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "⚠ 检测到其他落地保护或逃生类附属，高级反应逃生已关闭，避免重复放水或重复寻路"
+    },
+    {
+      "no": 16,
+      "group": "二",
+      "name": "2. 需持水桶 / 铁桶",
+      "key": "mlg_require_bucket",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "持有水桶或铁桶才允许；判定由代码完成，不调模型"
+    },
+    {
+      "no": 17,
+      "group": "二",
+      "name": "3. 无桶时自行打水",
+      "key": "mlg_auto_fetch_water",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "取水类附属",
+      "promptText": "检测到其他落地保护或逃生类附属，高级反应逃生已关闭，避免重复放水或重复寻路；无桶时自行打水会改动世界，默认不启用",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "会改世界（取水），默认关；与 maid_gather action=scoop 复用"
+    },
+    {
+      "no": 18,
+      "group": "二",
+      "name": "4. 落地水成功不触发求安慰",
+      "key": "mlg_success_skip_comfort",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "双端",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "成功事件直接标记抑制位，规则确定；关闭后才走求安慰概率"
+    },
+    {
+      "no": 19,
+      "group": "二",
+      "name": "5. 窒息自动逃生",
+      "key": "suffocation_escape_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "其他逃生类附属",
+      "promptText": "检测到其他落地保护或逃生类附属，高级反应逃生已关闭，避免重复放水或重复寻路；无桶时自行打水会改动世界，默认不启用",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "⚠ 同本组第 1 项；窒息检测与寻路 / 挖掘均为代码规则，不调模型"
+    },
+    {
+      "no": 20,
+      "group": "二",
+      "name": "6. 窒息逃生路径判断",
+      "key": "suffocation_path_mode",
+      "type": "select",
+      "default": "auto",
+      "defaultValue": "auto",
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "选项 auto / air / dig；auto = 先找有空气处，找不到再挖掘"
+    },
+    {
+      "no": 21,
+      "group": "二",
+      "name": "7. 岩浆船（实验性）",
+      "key": "lava_boat_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "原版船 / 骑乘（maid_ride）",
+      "promptText": "岩浆船为实验性功能，默认关闭；与原版船在岩浆中焚毁的规则冲突，仅在濒死时尝试一次，非必要不使用",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "⚠ 岩浆船为实验性功能，默认关闭；与原版船在岩浆中焚毁的规则冲突，仅在濒死时尝试一次"
+    },
+    {
+      "no": 22,
+      "group": "二",
+      "name": "8. 岩浆船仅濒死时使用",
+      "key": "lava_boat_emergency_only",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "仅「差点窒息 / 落地水失败边缘 / 血量低于阈值」触发"
+    },
+    {
+      "no": 23,
+      "group": "二",
+      "name": "9. 求安慰行为",
+      "key": "comfort_seek_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "双端",
+      "aiTag": "可选AI",
+      "conflict": true,
+      "conflictTarget": "摸头 / 情绪类附属",
+      "promptText": "⚠ 求安慰与附属情绪 / 摸头交互可能重复触发，默认关闭；开启前请确认冲突检测已通过",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "⚠ 求安慰与附属情绪 / 摸头交互可能重复触发，默认关闭；开启前请确认冲突检测已通过"
+    },
+    {
+      "no": 24,
+      "group": "二",
+      "name": "10. 求安慰概率",
+      "key": "comfort_seek_probability",
+      "type": "number",
+      "default": "0.05",
+      "defaultValue": 0.05,
+      "scope": "双端",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "范围 0–1，默认 ≤0.1；仅濒死场景参与掷骰"
+    },
+    {
+      "no": 25,
+      "group": "二",
+      "name": "11. 求安慰概率来源",
+      "key": "comfort_probability_source",
+      "type": "select",
+      "default": "config",
+      "defaultValue": "config",
+      "scope": "双端",
+      "aiTag": "可选AI",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "选项 config / ai；ai 才额外调模型（+1 次 / 事件），回落到 config"
+    },
+    {
+      "no": 26,
+      "group": "二",
+      "name": "12. 求安慰排除成功落地水",
+      "key": "comfort_exclude_mlg_success",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "双端",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "与第 4 项同一规则的双端镜像；关闭即允许成功后求安慰"
+    },
+    {
+      "no": 27,
+      "group": "三",
+      "name": "1. 双处备份总开关",
+      "key": "dual_backup_enabled",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "双端",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "现有「游戏侧不留副本」策略",
+      "promptText": "开启双处备份会改变「游戏侧不留副本」的旧策略；旧单处快照仍可读取，恢复时默认以 WAB 侧为准。断桥回落原版的行为不变，模组侧副本只用于恢复",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "⚠ 开启双处备份会改变「游戏侧不留副本」的旧策略；旧单处快照仍可读取，恢复时默认以 WAB 侧为准"
+    },
+    {
+      "no": 28,
+      "group": "三",
+      "name": "2. 模组内保留一份",
+      "key": "backup_mod_side_copy",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "同上",
+      "promptText": "开启双处备份会改变「游戏侧不留副本」的旧策略；旧单处快照仍可读取，恢复时默认以 WAB 侧为准。断桥回落原版的行为不变，模组侧副本只用于恢复",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "仅写模组存档目录供恢复；不参与断桥回落行为"
+    },
+    {
+      "no": 29,
+      "group": "三",
+      "name": "3. WAB 侧保留一份",
+      "key": "backup_wab_side_copy",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "复用现有 maid_backup 与存档目录"
+    },
+    {
+      "no": 30,
+      "group": "三",
+      "name": "4. 快照间隔（分钟）",
+      "key": "backup_minutes",
+      "type": "number",
+      "default": "10",
+      "defaultValue": 10,
+      "scope": "插件",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "复用 plugin.json 现有键，默认值 10 不变；0 = 仅连接时 / 手动"
+    },
+    {
+      "no": 31,
+      "group": "三",
+      "name": "5. 双端不一致时以谁为准",
+      "key": "backup_conflict_policy",
+      "type": "select",
+      "default": "wab_wins",
+      "defaultValue": "wab_wins",
+      "scope": "双端",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "现有单处快照",
+      "promptText": "开启双处备份会改变「游戏侧不留副本」的旧策略；旧单处快照仍可读取，恢复时默认以 WAB 侧为准。断桥回落原版的行为不变，模组侧副本只用于恢复",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "选项 wab_wins / mod_wins / newest；按 savedAt 时间戳比对"
+    },
+    {
+      "no": 32,
+      "group": "三",
+      "name": "6. 恢复前完整性校验",
+      "key": "backup_restore_verify",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "双端",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "校验 NBT 解压与 id / savedAt 一致，失败拒绝恢复并保留两端原数据"
+    },
+    {
+      "no": 33,
+      "group": "四",
+      "name": "1. AI 自主切换守家 / 跟随",
+      "key": "ai_mode_switch_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "双端",
+      "aiTag": "可选AI_AI驱动",
+      "conflict": true,
+      "conflictTarget": "原版日程 / 任务（WabAutonomy 日程）",
+      "promptText": "检测到原版日程 / 任务正在运行，AI 自主切换守家 / 跟随默认关闭，避免覆盖你设定的工作日程；玩家手动指令始终优先",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "回落：按距离 / 时段 / 血量的纯代码规则切换，玩家手动指令始终优先。⚠ 检测到原版日程 / 任务正在运行，AI 自主切换默认关闭，避免覆盖你设定的工作日程"
+    },
+    {
+      "no": 34,
+      "group": "四",
+      "name": "2. 允许切到跟随",
+      "key": "mode_switch_allow_follow",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "复用 maid_go mode=follow"
+    },
+    {
+      "no": 35,
+      "group": "四",
+      "name": "3. 允许切到守家",
+      "key": "mode_switch_allow_home",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "复用 maid_go mode=home"
+    },
+    {
+      "no": 36,
+      "group": "四",
+      "name": "4. 切换冷却（秒）",
+      "key": "mode_switch_cooldown_seconds",
+      "type": "number",
+      "default": "120",
+      "defaultValue": 120,
+      "scope": "双端",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "与 think_cooldown_seconds 独立；防止来回横跳刷工具调用"
+    },
+    {
+      "no": 37,
+      "group": "五",
+      "name": "1. 摸头功能总开关",
+      "key": "headpat_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "双端",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "附属摸头模组",
+      "promptText": "检测到附属模组也在接管摸头交互，WAB 摸头已自动关闭，避免重复触发与动画打架；如需使用请手动只开启其一。三档反应动画会接管模型动作，与附属动作包同开可能覆盖彼此",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "⚠ 检测到附属模组也在接管摸头交互，WAB 摸头已自动关闭，避免重复触发与动画打架；如需使用请手动只开启其一"
+    },
+    {
+      "no": 38,
+      "group": "五",
+      "name": "2. AI 主动请求摸头",
+      "key": "headpat_ai_request_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "双端",
+      "aiTag": "可选AI_AI驱动",
+      "conflict": true,
+      "conflictTarget": "附属摸头",
+      "promptText": "检测到附属模组也在接管摸头交互，WAB 摸头已自动关闭，避免重复触发与动画打架；如需使用请手动只开启其一。三档反应动画会接管模型动作，与附属动作包同开可能覆盖彼此",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "回落：WabHeadPat 现有的「干完活 / 被喂后按概率讨摸」纯代码规则"
+    },
+    {
+      "no": 39,
+      "group": "五",
+      "name": "3. 讨摸概率",
+      "key": "headpat_request_probability",
+      "type": "number",
+      "default": "0.05",
+      "defaultValue": 0.05,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "覆盖现状 CHANCE = 0.30f；默认 0.05 以符合保守原则"
+    },
+    {
+      "no": 40,
+      "group": "五",
+      "name": "4. 允许玩家拒绝",
+      "key": "headpat_player_refuse_enabled",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "双端",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "拒绝走一次交互分支，不额外调模型"
+    },
+    {
+      "no": 41,
+      "group": "五",
+      "name": "5. 拒绝后伤心表情",
+      "key": "headpat_sad_on_refuse",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "表情 / 气泡由客户端渲染，规则确定"
+    },
+    {
+      "no": 42,
+      "group": "五",
+      "name": "6. 反应动画档位",
+      "key": "headpat_reaction_tier",
+      "type": "select",
+      "default": "1",
+      "defaultValue": "1",
+      "scope": "双端",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "附属动作 / 模型包",
+      "promptText": "检测到附属模组也在接管摸头交互，WAB 摸头已自动关闭，避免重复触发与动画打架；如需使用请手动只开启其一。三档反应动画会接管模型动作，与附属动作包同开可能覆盖彼此",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "选项 1 / 2 / 3；1 = 俯身 + 飞机耳 + 眯眼，2 = 加抱尾巴，3 = 抱尾巴缩成团 + 飞机耳 + 眯眼。⚠ 三档动画会接管模型动作，与附属动作包同开可能覆盖彼此"
+    },
+    {
+      "no": 43,
+      "group": "五",
+      "name": "7. 第三档触发概率",
+      "key": "headpat_tier3_probability",
+      "type": "number",
+      "default": "0.05",
+      "defaultValue": 0.05,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "仅档位允许 3 时参与；默认 ≤0.1"
+    },
+    {
+      "no": 44,
+      "group": "五",
+      "name": "8. 小酒壶不俯身",
+      "key": "headpat_sake_no_bend",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "按模型 id 判定的固定规则（跳过一档俯身动作）"
+    },
+    {
+      "no": 45,
+      "group": "五",
+      "name": "9. 摸头冲突检测",
+      "key": "headpat_conflict_guard",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "双端",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "附属摸头模组",
+      "promptText": "检测到附属模组也在接管摸头交互，WAB 摸头已自动关闭，避免重复触发与动画打架；如需使用请手动只开启其一。三档反应动画会接管模型动作，与附属动作包同开可能覆盖彼此",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "运行时探测 + 提示文案；与第 1 项联动"
+    },
+    {
+      "no": 46,
+      "group": "六",
+      "name": "1. 多步流程执行",
+      "key": "plan_execution_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "双端",
+      "aiTag": "可选AI",
+      "conflict": true,
+      "conflictTarget": "WabDispatcher / Job 现有单步任务",
+      "promptText": "⚠ 多步流程会先取消正在进行的单步任务，回执里会说明「原来的活被打断」",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "默认关。⚠ 多步流程会先取消正在进行的单步任务，回执里会说明「原来的活被打断」"
+    },
+    {
+      "no": 47,
+      "group": "六",
+      "name": "2. 单流程最大步数",
+      "key": "plan_max_steps",
+      "type": "number",
+      "default": "8",
+      "defaultValue": 8,
+      "scope": "双端",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "硬上限，防止无限循环烧工具调用"
+    },
+    {
+      "no": 48,
+      "group": "六",
+      "name": "3. 多步结果报告模式",
+      "key": "plan_report_mode",
+      "type": "select",
+      "default": "summary",
+      "defaultValue": "summary",
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "选项 none / stepwise / summary；默认只回一份汇总，不逐条刷屏"
+    },
+    {
+      "no": 49,
+      "group": "六",
+      "name": "4. 执行前需探测 / 拍照",
+      "key": "plan_need_scan_or_photo",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "双端",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "复用 maid_scan / maid_see；关闭则允许直接执行（不推荐）"
+    },
+    {
+      "no": 50,
+      "group": "六",
+      "name": "5. 路线规划者",
+      "key": "plan_planner",
+      "type": "select",
+      "default": "code",
+      "defaultValue": "code",
+      "scope": "双端",
+      "aiTag": "可选AI",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "选项 code / ai；code = 场景图 BFS / 坐标规则，ai 才额外调模型（+1 次 / 流程），回落 code"
+    },
+    {
+      "no": 51,
+      "group": "七",
+      "name": "1. 自主行动总开关",
+      "key": "autonomy_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "插件",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "模组侧 autonomyEnabled 现状默认 true",
+      "promptText": "游戏侧「自主行动」仍是开启状态，插件侧总开关关闭后以插件侧为准；两端不一致时设置页会标黄，建议把两端调到同一状态",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "插件侧显式关闭优先于游戏侧。⚠ 游戏侧 autonomyEnabled 仍为 true，本项关闭后以本项为准，设置页会提示两端不一致"
+    },
+    {
+      "no": 52,
+      "group": "七",
+      "name": "2. 游戏内侧开关",
+      "key": "autonomy_game_side_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "游戏内",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "同上",
+      "promptText": "游戏侧「自主行动」仍是开启状态，插件侧总开关关闭后以插件侧为准；两端不一致时设置页会标黄，建议把两端调到同一状态",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "对应 WabConfig.AUTONOMY_ENABLED，本轮默认值由 true 改为 false"
+    },
+    {
+      "no": 53,
+      "group": "七",
+      "name": "3. 行动间隔模式",
+      "key": "autonomy_interval_mode",
+      "type": "select",
+      "default": "fixed",
+      "defaultValue": "fixed",
+      "scope": "双端",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "选项 fixed / random_range"
+    },
+    {
+      "no": 54,
+      "group": "七",
+      "name": "4. 固定间隔（分钟）",
+      "key": "autonomy_interval_fixed_minutes",
+      "type": "number",
+      "default": "5",
+      "defaultValue": 5,
+      "scope": "双端",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "沿用 WabAutonomy.idleMinutes 现有默认 5"
+    },
+    {
+      "no": 55,
+      "group": "七",
+      "name": "5. 随机区间下限（分钟）",
+      "key": "autonomy_interval_min_minutes",
+      "type": "number",
+      "default": "3",
+      "defaultValue": 3,
+      "scope": "双端",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "仅在 random_range 生效"
+    },
+    {
+      "no": 56,
+      "group": "七",
+      "name": "6. 随机区间上限（分钟）",
+      "key": "autonomy_interval_max_minutes",
+      "type": "number",
+      "default": "8",
+      "defaultValue": 8,
+      "scope": "双端",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "上限必须 ≥ 下限，越界由代码夹取"
+    },
+    {
+      "no": 57,
+      "group": "七",
+      "name": "7. 每小时自发次数上限",
+      "key": "autonomy_max_actions_per_hour",
+      "type": "number",
+      "default": "3",
+      "defaultValue": 3,
+      "scope": "双端",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "复用 maxActionsPerHour（现状默认 0 = 不限），本轮默认 3 以省 Token"
+    },
+    {
+      "no": 58,
+      "group": "八",
+      "name": "1. 偷吃机制总开关",
+      "key": "sneak_eat_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "双端",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "原版偷吃动画 / 附属偷吃逻辑",
+      "promptText": "检测到原版偷吃动画或附属偷吃逻辑，WAB 偷吃已关闭，避免同一动作播两遍；如需彩蛋请手动只开启其一",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "⚠ 检测到原版偷吃动画或附属偷吃逻辑，WAB 偷吃已关闭，避免同一动作播两遍；如需彩蛋请手动只开启其一"
+    },
+    {
+      "no": 59,
+      "group": "八",
+      "name": "2. AI 主动偷吃概率",
+      "key": "sneak_eat_ai_probability",
+      "type": "number",
+      "default": "0.05",
+      "defaultValue": 0.05,
+      "scope": "双端",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "默认 ≤0.1；概率由配置掷骰，不调模型"
+    },
+    {
+      "no": 60,
+      "group": "八",
+      "name": "3. 玩家侧偷吃概率",
+      "key": "sneak_eat_player_probability",
+      "type": "number",
+      "default": "0.05",
+      "defaultValue": 0.05,
+      "scope": "插件",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "玩家可调，与第 2 项独立，取两者较小值生效"
+    },
+    {
+      "no": 61,
+      "group": "八",
+      "name": "4. AI 自行调节概率",
+      "key": "sneak_eat_ai_control",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "WAB 宿主",
+      "aiTag": "可选AI",
+      "conflict": true,
+      "conflictTarget": "口味表（maid_feed_rules / auto_taste）",
+      "promptText": "⚠ 与自动补口味 / 口味表同开可能让人设漂移，默认关",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "开启才额外调模型（+1 次 / 饥饿事件）；回落：沿用第 2、3 项配置值。⚠ 与自动补口味 / 口味表同开可能让人设漂移，默认关"
+    },
+    {
+      "no": 62,
+      "group": "八",
+      "name": "5. 偷吃冲突检测",
+      "key": "sneak_eat_conflict_guard",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "双端",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "原版偷吃动画",
+      "promptText": "检测到原版偷吃动画或附属偷吃逻辑，WAB 偷吃已关闭，避免同一动作播两遍；如需彩蛋请手动只开启其一",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "运行时探测 + 提示文案"
+    },
+    {
+      "no": 63,
+      "group": "九",
+      "name": "1. 聊天轮对话",
+      "key": "chat_round_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "双端",
+      "aiTag": "可选AI",
+      "conflict": true,
+      "conflictTarget": "上游聊天 / 多人可见对话机制",
+      "promptText": "检测到上游聊天或多人可见对话机制，聊天轮与隐形对话已关闭，避免同一句话在聊天栏出现两次或被其他玩家看见；连接 WAB 时原单独对话仍保留",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "⚠ 检测到上游聊天或多人可见对话机制，聊天轮已关闭，避免同一句话在聊天栏出现两次"
+    },
+    {
+      "no": 64,
+      "group": "九",
+      "name": "2. 叫名字唤醒",
+      "key": "chat_wake_by_name_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "原版「面对面」唤醒",
+      "promptText": "⚠ 与原版面对面判定互斥，开启后按称呼语匹配",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "关闭时回落 chatRange（8 格内面对面）。⚠ 与原版面对面判定互斥，开启后按称呼语匹配"
+    },
+    {
+      "no": 65,
+      "group": "九",
+      "name": "3. 称呼语列表",
+      "key": "chat_wake_words",
+      "type": "text",
+      "default": "\"\"（空 = 用角色名）",
+      "defaultValue": "",
+      "scope": "双端",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "逗号分隔，可配多个；空则取角色名"
+    },
+    {
+      "no": 66,
+      "group": "九",
+      "name": "4. 保留原版面对面要求",
+      "key": "chat_require_face_to_face",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "原版面对面唤醒",
+      "promptText": "检测到上游聊天或多人可见对话机制，聊天轮与隐形对话已关闭，避免同一句话在聊天栏出现两次或被其他玩家看见；连接 WAB 时原单独对话仍保留",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "开启时名字唤醒仍需视线 / 距离；关闭才允许跨距离唤醒"
+    },
+    {
+      "no": 67,
+      "group": "九",
+      "name": "5. 上下文每句只保留一次",
+      "key": "chat_context_dedup_enabled",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "按消息内容哈希去重；不调模型"
+    },
+    {
+      "no": 68,
+      "group": "九",
+      "name": "6. 每次只发一遍到 Web",
+      "key": "chat_send_once_per_turn",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "同一回合只提交一次请求，重连 / 重试不重发"
+    },
+    {
+      "no": 69,
+      "group": "九",
+      "name": "7. TCP 开启时保留原单独对话",
+      "key": "chat_keep_solo_on_tcp",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "双端",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "现有 chat_reply 单聊通道",
+      "promptText": "检测到上游聊天或多人可见对话机制，聊天轮与隐形对话已关闭，避免同一句话在聊天栏出现两次或被其他玩家看见；连接 WAB 时原单独对话仍保留",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "⚠ 与现有 chat_reply 单聊通道并存；关闭则连桥后单聊停用"
+    },
+    {
+      "no": 70,
+      "group": "九",
+      "name": "8. 隐形对话",
+      "key": "chat_invisible_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "双端",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "多人可见聊天栏 / 头顶气泡",
+      "promptText": "检测到上游聊天或多人可见对话机制，聊天轮与隐形对话已关闭，避免同一句话在聊天栏出现两次或被其他玩家看见；连接 WAB 时原单独对话仍保留",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "⚠ 检测到聊天栏 / 气泡对玩家与其他女仆可见，隐形对话默认关闭；开启后仅隐藏消息，不隐藏实体（见第 9 节）"
+    },
+    {
+      "no": 71,
+      "group": "九",
+      "name": "9. 女仆与女仆对话",
+      "key": "maid_to_maid_chat_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "双端",
+      "aiTag": "可选AI",
+      "conflict": true,
+      "conflictTarget": "maidChatCooldownSeconds 节流 / maid_chat 场景",
+      "promptText": "检测到同伴搭话冷却与现有小游戏 / 思考场景，女仆互聊与女仆互下默认关闭；同开会重复占用对局并把模型调用量打满",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "⚠ 检测到同伴搭话冷却与 maid_chat 思考场景，女仆互聊默认关闭，避免与 90 秒节流打架、把模型打爆"
+    },
+    {
+      "no": 72,
+      "group": "九",
+      "name": "10. 女仆对话呈现方式",
+      "key": "maid_chat_channel",
+      "type": "select",
+      "default": "bubble",
+      "defaultValue": "bubble",
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "选项 bubble / chat_bar / both；默认面对面气泡"
+    },
+    {
+      "no": 73,
+      "group": "九",
+      "name": "11. 女仆叫女仆",
+      "key": "maid_call_maid_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "双端",
+      "aiTag": "可选AI",
+      "conflict": true,
+      "conflictTarget": "同上",
+      "promptText": "检测到同伴搭话冷却与现有小游戏 / 思考场景，女仆互聊与女仆互下默认关闭；同开会重复占用对局并把模型调用量打满",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "默认由玩家指定发起；开启 AI 自发后才额外调模型（+1 次 / 次）"
+    },
+    {
+      "no": 74,
+      "group": "九",
+      "name": "12. 聊天冲突检测",
+      "key": "chat_conflict_guard",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "双端",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "上游聊天 / QQ / 微信公众号通道",
+      "promptText": "检测到上游聊天或多人可见对话机制，聊天轮与隐形对话已关闭，避免同一句话在聊天栏出现两次或被其他玩家看见；连接 WAB 时原单独对话仍保留",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "运行时探测 + 提示文案；与官方聊天桥外发节流并存"
+    },
+    {
+      "no": 75,
+      "group": "十",
+      "name": "1. 设置页展示对比表",
+      "key": "compare_table_visible",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "三态「原版 / WAB 版·未连接 / WAB 版·连接后」，按 18 大项逐行（第 6 节，主表 compare_table.md）"
+    },
+    {
+      "no": 76,
+      "group": "十",
+      "name": "2. 对比表随发布说明导出",
+      "key": "compare_table_export",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "插件",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "纯文本渲染，不调模型"
+    },
+    {
+      "no": 77,
+      "group": "十一",
+      "name": "1. 自动关闭深度思考",
+      "key": "auto_disable_deep_think",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "复用 Models/Chat.cs 的 DeepThink / DeepModel；每轮请求前按阈值关闭"
+    },
+    {
+      "no": 78,
+      "group": "十一",
+      "name": "2. 自动关闭阈值",
+      "key": "deep_think_disable_threshold",
+      "type": "number",
+      "default": "0",
+      "defaultValue": 0,
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "0 = 始终关闭；>0 表示当日累计 Token 超过该值才关"
+    },
+    {
+      "no": 79,
+      "group": "十一",
+      "name": "3. AI 热度决定方式",
+      "key": "ai_heat_source",
+      "type": "select",
+      "default": "code",
+      "defaultValue": "code",
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "选项 code / ai / manual；code = 由事件密度 + 调用预算 + 冷却算出的机制值，不经模型"
+    },
+    {
+      "no": 80,
+      "group": "十一",
+      "name": "4. 思考模式",
+      "key": "think_mode",
+      "type": "select",
+      "default": "off",
+      "defaultValue": "off",
+      "scope": "双端",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "选项 off / fast / deep / auto；默认 off 最省 Token"
+    },
+    {
+      "no": 81,
+      "group": "十一",
+      "name": "5. 代码可判定处自动判断",
+      "key": "code_auto_decide_enabled",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "双端",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "规则确定即自动执行，不询问、不调模型"
+    },
+    {
+      "no": 82,
+      "group": "十一",
+      "name": "6. 允许关闭自动判断",
+      "key": "code_auto_decide_optional",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "插件",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "玩家可手动关掉第 5 项；不改默认值"
+    },
+    {
+      "no": 83,
+      "group": "十一",
+      "name": "7. 「可选 AI」标注显示",
+      "key": "ai_optional_hint_visible",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "设置页把可用 AI 省 Token 的位置标为「可选」"
+    },
+    {
+      "no": 84,
+      "group": "十一",
+      "name": "8. 爱语",
+      "key": "love_words",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "插件",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "复用 plugin.json 现有键，默认值 true 不变（已实现项，只做收录）"
+    },
+    {
+      "no": 85,
+      "group": "十一",
+      "name": "9. 爱语来源",
+      "key": "love_words_source",
+      "type": "select",
+      "default": "builtin",
+      "defaultValue": "builtin",
+      "scope": "WAB 宿主",
+      "aiTag": "可选AI",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "选项 builtin / ai / both；ai / both 才额外调模型（+1 次 / 陪睡事件），回落内置词条"
+    },
+    {
+      "no": 86,
+      "group": "十一",
+      "name": "10. 内置爱语",
+      "key": "love_words_builtin",
+      "type": "text",
+      "default": "晚安,我一直都在,做个好梦",
+      "defaultValue": "晚安,我一直都在,做个好梦",
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "逗号分隔，至少 1 条；为空时回落到「不出声」"
+    },
+    {
+      "no": 87,
+      "group": "十一",
+      "name": "11. AI 自行判断要干什么",
+      "key": "love_words_ai_decide_action",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "WAB 宿主",
+      "aiTag": "可选AI_AI驱动",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "回落：「靠过去睡下 + 随机取一条内置爱语」的纯代码规则"
+    },
+    {
+      "no": 88,
+      "group": "十一",
+      "name": "12. WAV 玩家可调项",
+      "key": "wav_player_tunable_enabled",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "见第 9 节命名假设：代码库内 WAV 仅为音频格式，本项按「WAB 宿主内同源设置面」落地，键保留 wav_ 前缀"
+    },
+    {
+      "no": 89,
+      "group": "十一",
+      "name": "13. WAV 热度可调",
+      "key": "wav_heat_slider",
+      "type": "number",
+      "default": "0.3",
+      "defaultValue": 0.3,
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "范围 0–1；玩家可调，默认 0.3"
+    },
+    {
+      "no": 90,
+      "group": "十一",
+      "name": "14. WAV 思考模式可选",
+      "key": "wav_think_mode_select",
+      "type": "select",
+      "default": "auto",
+      "defaultValue": "auto",
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "选项 off / fast / deep / auto；与第 4 项独立"
+    },
+    {
+      "no": 91,
+      "group": "十二",
+      "name": "1. JSON 自定义 AI 参数",
+      "key": "custom_ai_params_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "现有角色级 AI 覆写字段",
+      "promptText": "自定义参数会覆盖角色级 AI 覆写（模型 / 温度 / 上下文窗口等）；套用套餐会覆盖当前厂商端点、模型与参数，但不预置任何密钥，密钥始终由你自填；参数校验失败会拒绝下发并提示具体字段",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "⚠ 自定义参数会覆盖角色级 AI 覆写（模型 / 温度 / 上下文窗口等），默认关闭；开启前请确认参数格式与所选 API 一致"
+    },
+    {
+      "no": 92,
+      "group": "十二",
+      "name": "2. 参数格式",
+      "key": "ai_param_format",
+      "type": "select",
+      "default": "openai_flat",
+      "defaultValue": "openai_flat",
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "四种格式见 5.2 设计说明；默认扁平 OpenAI 兼容格式"
+    },
+    {
+      "no": 93,
+      "group": "十二",
+      "name": "3. 自定义参数 JSON",
+      "key": "ai_params_json",
+      "type": "text",
+      "default": "{}",
+      "defaultValue": "{}",
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "特殊 API 的额外字段；空对象 = 不下发额外参数"
+    },
+    {
+      "no": 94,
+      "group": "十二",
+      "name": "4. 控件类型",
+      "key": "ai_param_widget",
+      "type": "select",
+      "default": "auto",
+      "defaultValue": "auto",
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "选项 auto / slider / button / text / select；滑动条 / 按钮等自定义控件"
+    },
+    {
+      "no": 95,
+      "group": "十二",
+      "name": "5. 允许格式切换",
+      "key": "ai_param_format_switch_enabled",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "切换时按 5.2 映射表转换，不丢用户已填值"
+    },
+    {
+      "no": 96,
+      "group": "十二",
+      "name": "6. 下发前参数校验",
+      "key": "ai_params_validate",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "特殊 API 字段约束",
+      "promptText": "自定义参数会覆盖角色级 AI 覆写（模型 / 温度 / 上下文窗口等）；套用套餐会覆盖当前厂商端点、模型与参数，但不预置任何密钥，密钥始终由你自填；参数校验失败会拒绝下发并提示具体字段",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "⚠ 校验失败会拒绝下发并提示具体字段，避免 API 返回 400"
+    },
+    {
+      "no": 97,
+      "group": "十三",
+      "name": "1. 套餐选择",
+      "key": "model_package_enabled",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "在现有「多厂商 × 多模型」上加一层一键预设"
+    },
+    {
+      "no": 98,
+      "group": "十三",
+      "name": "2. 当前套餐",
+      "key": "model_package",
+      "type": "select",
+      "default": "custom",
+      "defaultValue": "custom",
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "选项 custom / gpt / claude / openai_compatible / deepseek；默认 custom = 不改动用户现有配置"
+    },
+    {
+      "no": 99,
+      "group": "十三",
+      "name": "3. 一键套用套餐",
+      "key": "model_package_auto_apply",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "用户已填的端点 / 密钥 / 模型",
+      "promptText": "自定义参数会覆盖角色级 AI 覆写（模型 / 温度 / 上下文窗口等）；套用套餐会覆盖当前厂商端点、模型与参数，但不预置任何密钥，密钥始终由你自填；参数校验失败会拒绝下发并提示具体字段",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "⚠ 套用套餐会覆盖当前厂商端点、模型与参数；不预置任何密钥，密钥始终由用户自填"
+    },
+    {
+      "no": 100,
+      "group": "十四",
+      "name": "1. 深度思考条",
+      "key": "workbuddy_think_bar_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "需模型支持；默认关，避免不支持的模型报错"
+    },
+    {
+      "no": 101,
+      "group": "十四",
+      "name": "2. 快速按钮",
+      "key": "workbuddy_quick_button_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "同上"
+    },
+    {
+      "no": 102,
+      "group": "十四",
+      "name": "3. 思考强度",
+      "key": "workbuddy_effort_level",
+      "type": "select",
+      "default": "low",
+      "defaultValue": "low",
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "选项 low / medium / high；一般 GPT 系列才生效"
+    },
+    {
+      "no": 103,
+      "group": "十四",
+      "name": "4. 模型能力检测联动显隐",
+      "key": "workbuddy_capability_check",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "现有「是否支持工具 / JSON」模型标注",
+      "promptText": "⚠ 检测到当前模型不支持推理强度参数时，思考条与快速按钮自动隐藏，不会发起无效请求",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "⚠ 检测到当前模型不支持推理强度参数时，思考条与快速按钮自动隐藏，不会发起无效请求"
+    },
+    {
+      "no": 104,
+      "group": "十五",
+      "name": "1. 强兼容模式（插件侧）",
+      "key": "small_model_compat_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "插件",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "现有「不支持工具就不带 tools」逻辑",
+      "promptText": "强兼容模式与「不支持工具就不带 tools」的现有逻辑互斥：开启后改走文本格式解析，请确认所选模型确实不支持 function calling；解析出的工具必须命中已注册工具并通过世界动作权限，否则拒绝执行",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "⚠ 强兼容模式与「不支持工具就不带 tools」的现有逻辑互斥：开启后改走文本格式解析，请确认所选模型确实不支持 function calling"
+    },
+    {
+      "no": 105,
+      "group": "十五",
+      "name": "2. 强兼容模式（游戏内侧）",
+      "key": "small_model_compat_game_side",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "游戏内",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "同上",
+      "promptText": "强兼容模式与「不支持工具就不带 tools」的现有逻辑互斥：开启后改走文本格式解析，请确认所选模型确实不支持 function calling；解析出的工具必须命中已注册工具并通过世界动作权限，否则拒绝执行",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "与第 1 项双开关：两端都开才生效"
+    },
+    {
+      "no": 106,
+      "group": "十五",
+      "name": "3. 工具调用格式",
+      "key": "small_model_tool_format",
+      "type": "select",
+      "default": "xml",
+      "defaultValue": "xml",
+      "scope": "双端",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "选项 xml / json_brace（即 {工具名, 参数...}）；默认 XML"
+    },
+    {
+      "no": 107,
+      "group": "十五",
+      "name": "4. 提示词注入引导格式",
+      "key": "small_model_prompt_injection",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "在系统提示词里注入格式说明与示例；纯文本拼接，不额外调模型"
+    },
+    {
+      "no": 108,
+      "group": "十五",
+      "name": "5. 解析失败回落",
+      "key": "small_model_parse_fallback",
+      "type": "select",
+      "default": "plain_chat",
+      "defaultValue": "plain_chat",
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "选项 plain_chat / retry / deny；默认当普通对话处理，不重试烧 Token"
+    },
+    {
+      "no": 109,
+      "group": "十五",
+      "name": "6. 解析结果工具白名单校验",
+      "key": "small_model_tool_whitelist",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "maid_* 工具权限 / allow_world_actions",
+      "promptText": "强兼容模式与「不支持工具就不带 tools」的现有逻辑互斥：开启后改走文本格式解析，请确认所选模型确实不支持 function calling；解析出的工具必须命中已注册工具并通过世界动作权限，否则拒绝执行",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "⚠ 解析出的工具名必须命中已注册工具且通过世界动作权限，否则拒绝执行"
+    },
+    {
+      "no": 110,
+      "group": "十六",
+      "name": "1. 口头禅功能",
+      "key": "catchphrase_enabled",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "角色级字段，随角色包走；功能本身默认开"
+    },
+    {
+      "no": 111,
+      "group": "十六",
+      "name": "2. 口头禅文本",
+      "key": "catchphrase_text",
+      "type": "text",
+      "default": "\"\"（空 = 没有）",
+      "defaultValue": "",
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "空即「也可没有」；多句用 ｜ 分隔，随机取一条"
+    },
+    {
+      "no": 112,
+      "group": "十六",
+      "name": "3. AI 可改可增",
+      "key": "catchphrase_ai_edit_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "WAB 宿主",
+      "aiTag": "可选AI",
+      "conflict": true,
+      "conflictTarget": "角色人设 / 副设定",
+      "promptText": "⚠ AI 改写可能让人设漂移，默认关闭；开启后每次改写需玩家确认才落盘（+1 次 / 改写）",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "⚠ AI 改写可能让人设漂移，默认关闭；开启后每次改写需玩家确认才落盘（+1 次 / 改写）"
+    },
+    {
+      "no": 113,
+      "group": "十六",
+      "name": "4. 玩家可改",
+      "key": "catchphrase_player_edit_enabled",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "设置页直接编辑，不调模型"
+    },
+    {
+      "no": 114,
+      "group": "十六",
+      "name": "5. 允许留空",
+      "key": "catchphrase_allow_empty",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "留空时不注入任何提示词，零开销"
+    },
+    {
+      "no": 115,
+      "group": "十七",
+      "name": "1. 输了会哭",
+      "key": "chess_cry_on_lose_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "现有 ChessBrainService / 小游戏引擎",
+      "promptText": "⚠ 输棋情绪会接管现有小游戏结束流程，默认关闭；开启后仅加表情 / 记忆，不改棋类规则",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "⚠ 输棋情绪会接管现有小游戏结束流程，默认关闭；开启后仅加表情 / 记忆，不改棋类规则"
+    },
+    {
+      "no": 116,
+      "group": "十七",
+      "name": "2. 哭的概率",
+      "key": "chess_cry_probability",
+      "type": "number",
+      "default": "0.1",
+      "defaultValue": 0.1,
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "默认 ≤0.1；按配置掷骰，不调模型"
+    },
+    {
+      "no": 117,
+      "group": "十七",
+      "name": "3. 主人可安慰",
+      "key": "chess_comfort_enabled",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "玩家动作，触发表情回落；不调模型"
+    },
+    {
+      "no": 118,
+      "group": "十七",
+      "name": "4. 女仆互下",
+      "key": "maid_vs_maid_chess_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "双端",
+      "aiTag": "可选AI",
+      "conflict": true,
+      "conflictTarget": "现有小游戏引擎 / 同伴搭话冷却",
+      "promptText": "检测到同伴搭话冷却与现有小游戏 / 思考场景，女仆互聊与女仆互下默认关闭；同开会重复占用对局并把模型调用量打满",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "⚠ 检测到现有小游戏与同伴搭话节流，女仆互下默认关闭；两者同开会重复占用对局与模型调用"
+    },
+    {
+      "no": 119,
+      "group": "十七",
+      "name": "5. 自娱自乐间隔（分钟）",
+      "key": "maid_chess_interval_minutes",
+      "type": "number",
+      "default": "30",
+      "defaultValue": 30,
+      "scope": "双端",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "仅第 4 项开启时生效"
+    },
+    {
+      "no": 120,
+      "group": "十八",
+      "name": "1. 展示位置",
+      "key": "display_target",
+      "type": "select",
+      "default": "main",
+      "defaultValue": "main",
+      "scope": "插件",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "复用 plugin.json 现有键（选项 main / phone，默认 main）；MaidBridgeModels.PhoneWindowTarget 已实现（已实现项，只做收录）"
+    },
+    {
+      "no": 121,
+      "group": "十八",
+      "name": "2. 右下角退出口",
+      "key": "phone_to_main_exit_enabled",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "现有 Shell 导航 / 独立手机窗口",
+      "promptText": "手机页下侧栏三键会接管默认导航栏（NavBarIsVisible=False）；如与其他导航附属冲突请关闭本项。三键为：回退（三角形）、回到桌面（正方形）、设置（三条线），三条线是设置而非任务管理",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "⚠ 转主窗口会关闭手机内 APP 并回到主页；若已有其他导航附属接管返回键，请关闭本项"
+    },
+    {
+      "no": 122,
+      "group": "十八",
+      "name": "3. 转主窗口时 APP 回主页",
+      "key": "phone_app_close_on_transfer",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "与第 2 项同一步：手机侧 APP 关闭，主窗口跳转到该 APP"
+    },
+    {
+      "no": 123,
+      "group": "十八",
+      "name": "4. 主窗口可返回手机显示",
+      "key": "main_return_to_phone_enabled",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "返回时把 display_target 切回 phone 并重新打开手机窗口"
+    },
+    {
+      "no": 124,
+      "group": "十八",
+      "name": "5. 关闭 APP 时手机页不消失",
+      "key": "main_close_keep_phone",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "只关主窗口内的 APP 视图，不销毁手机页实例"
+    },
+    {
+      "no": 125,
+      "group": "十八",
+      "name": "6. 手机页下侧栏三键",
+      "key": "phone_nav_bar_enabled",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": true,
+      "conflictTarget": "PhonePage.xaml 现有 NavBarIsVisible=False",
+      "promptText": "手机页下侧栏三键会接管默认导航栏（NavBarIsVisible=False）；如与其他导航附属冲突请关闭本项。三键为：回退（三角形）、回到桌面（正方形）、设置（三条线），三条线是设置而非任务管理",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "⚠ 三键会接管默认导航栏（NavBarIsVisible=False）；如与其他导航附属冲突请关闭本项。三键为：回退（三角形）、回到桌面（正方形）、设置（三条线）"
+    },
+    {
+      "no": 126,
+      "group": "十八",
+      "name": "7. 第三键动作",
+      "key": "phone_nav_third_action",
+      "type": "select",
+      "default": "settings",
+      "defaultValue": "settings",
+      "scope": "WAB 宿主",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin"
+      ],
+      "note": "固定 settings；因无高级任务机制，三条线为设置而非任务管理。选项保留 tasks 仅作未来扩展"
+    }
+  ]
+}
