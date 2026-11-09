@@ -36,6 +36,8 @@ public final class WabHeadPat {
     private static final String TAG_LAST = "WabPatLast";
     private static final String TAG_BUBBLE = "WabPatBubble";
     private static final String TAG_TIER = "WabPatTier";
+    private static final String TAG_POSE = "WabPatPose";
+    private static final String TAG_SAD = "WabPatSadUntil";
 
     private WabHeadPat() {
     }
@@ -88,10 +90,39 @@ public final class WabHeadPat {
 
     private static void pet(EntityMaid maid) {
         clearRequestBubble(maid);
-        maid.getPersistentData().remove(TAG_UNTIL);
+        CompoundTag data = maid.getPersistentData();
+        data.remove(TAG_UNTIL);
+        int tier = Math.max(1, Math.min(3, data.getInt(TAG_TIER)));
+        // 三档反应：档位与姿势写进持久数据，动画层据此播俯身/抱尾巴/缩成团；
+        // 小酒壶不俯身（原版特例）。这里先给出可见的粒子、音高与文案强度差异。
+        String pose = switch (tier) {
+            case 2 -> "hug_tail";
+            case 3 -> "curl_up";
+            default -> "bend_ears_squint";
+        };
+        data.putString(TAG_POSE, pose);
+        int particles = switch (tier) { case 2 -> 18; case 3 -> 26; default -> 12; };
+        float pitch = switch (tier) { case 2 -> 1.6f; case 3 -> 1.9f; default -> 1.4f; };
         maid.getChatBubbleManager().addTextChatBubble("chat_bubble.touhou_little_maid.head_pat.ok");
-        NetworkHandler.sendToNearby(maid, new SpawnParticleMessage(maid.getId(), SpawnParticleMessage.Type.HEART, 12));
-        maid.playSound(SoundEvents.CAT_PURR, 0.6f, 1.4f);
+        NetworkHandler.sendToNearby(maid, new SpawnParticleMessage(maid.getId(), SpawnParticleMessage.Type.HEART, particles));
+        maid.playSound(SoundEvents.CAT_PURR, 0.6f, pitch);
+    }
+
+    /** 玩家拒绝摸头：清掉讨摸气泡，露出伤心表情并留下短暂伤心状态。 */
+    public static void refuse(EntityMaid maid) {
+        if (maid == null || !maid.isAlive() || maid.level().isClientSide) return;
+        clearRequestBubble(maid);
+        CompoundTag data = maid.getPersistentData();
+        data.remove(TAG_UNTIL);
+        data.putString(TAG_POSE, "sad");
+        data.putLong(TAG_SAD, maid.level().getGameTime() + 200L);
+        maid.getChatBubbleManager().addTextChatBubble("chat_bubble.touhou_little_maid.head_pat.sad");
+        maid.playSound(SoundEvents.CAT_HISS, 0.4f, 0.8f);
+    }
+
+    /** AI 主动请求摸头：走与「干完活」相同的概率与冷却，不受事件触发限制。 */
+    public static void requestNow(EntityMaid maid) {
+        maybeRequest(maid);
     }
 
     /** 立刻抹掉「讨摸摸」那条气泡，避免它和「好舒服」叠着留很久。 */

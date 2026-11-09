@@ -622,6 +622,7 @@
   "chat_bubble.touhou_little_maid.feed.eat": "Yum, thank you!",
   "chat_bubble.touhou_little_maid.head_pat.request": "Master, please pat my head...?",
   "chat_bubble.touhou_little_maid.head_pat.ok": "Mmm... that feels nice.",
+  "chat_bubble.touhou_little_maid.head_pat.sad": "Aw... master said no...",
   "chat_bubble.touhou_little_maid.hungry.beg": "I'm a bit hungry... could you give me something to eat?",
   "chat_bubble.touhou_little_maid.trait.fear_dark.scared": "So dark... I'm a little scared...",
   "chat_bubble.touhou_little_maid.inner.home_meal.two_hand_is_full": "My hands were full of items...\nI couldn't eat!",

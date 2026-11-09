@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.wab.config;
 
+import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabHeadPat;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabJson;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabSensors;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabStorage;
@@ -293,6 +294,25 @@ public final class WabFeatures {
         if (!should) return ok("这次不求安慰。");
         maid.getChatBubbleManager().addTextChatBubble("chat_bubble.touhou_little_maid.head_pat.request");
         return ok("她吓坏了，来找主人求安慰。");
+    }
+
+    /** 摸头：AI 主动请求、玩家拒绝伤心；三档反应由 WabHeadPat.pet() 读持久数据播放。 */
+    public static JsonObject headpat(EntityMaid maid, JsonObject p) {
+        if (!on(WabConfigKeys.HEADPAT_ENABLED)) return fail("disabled", "摸头功能整体关闭。");
+        String action = WabJson.str(p, "action", "request").toLowerCase(Locale.ROOT);
+        return switch (action) {
+            case "request" -> {
+                if (!on(WabConfigKeys.HEADPAT_AI_REQUEST_ENABLED)) yield fail("disabled", "AI 主动请求摸头没开。");
+                WabHeadPat.requestNow(maid);
+                yield ok("她主动来讨摸摸了（概率与冷却沿用讨摸规则）。");
+            }
+            case "refuse" -> {
+                if (!on(WabConfigKeys.HEADPAT_PLAYER_REFUSE_ENABLED)) yield fail("disabled", "玩家拒绝摸头没开。");
+                WabHeadPat.refuse(maid);
+                yield ok(on(WabConfigKeys.HEADPAT_SAD_ON_REFUSE) ? "主人拒绝了，她露出伤心的表情。" : "主人拒绝了。");
+            }
+            default -> fail("unknown_action", "摸头只支持 request / refuse。");
+        };
     }
 
     // ==================== 八、偷吃 ====================
