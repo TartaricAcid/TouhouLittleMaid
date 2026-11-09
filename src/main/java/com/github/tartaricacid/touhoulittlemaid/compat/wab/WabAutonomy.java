@@ -2,6 +2,9 @@ package com.github.tartaricacid.touhoulittlemaid.compat.wab;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.compat.wab.config.WabConfigKeys;
+import com.github.tartaricacid.touhoulittlemaid.compat.wab.config.WabConfigRuntime;
+import com.github.tartaricacid.touhoulittlemaid.compat.wab.config.WabRules;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -164,7 +167,18 @@ public final class WabAutonomy {
         if (bridge.dispatcher().hasJob(maid)) return;
         JsonObject conf = autonomyOf(maid);
         if (!WabJson.bool(conf, "enabled", true)) return;
-        long idleMillis = (long) (Math.max(1, WabJson.number(conf, "idleMinutes", 5)) * 60_000L);
+        // 连上 WAB 后以插件设置为准（第七项：自主行动总开关、固定/随机间隔、每小时上限）；
+        // 断桥时保持原有日程行为，避免「换了改版包女仆就不动了」。
+        boolean connected = WabConfigRuntime.connected();
+        if (connected && !WabConfigRuntime.on(WabConfigKeys.AUTONOMY_ENABLED)) return;
+        long idleMillis = connected
+                ? WabRules.autonomyIntervalMs(
+                        WabConfigRuntime.text(WabConfigKeys.AUTONOMY_INTERVAL_MODE),
+                        WabConfigRuntime.number(WabConfigKeys.AUTONOMY_INTERVAL_FIXED_MINUTES),
+                        WabConfigRuntime.number(WabConfigKeys.AUTONOMY_INTERVAL_MIN_MINUTES),
+                        WabConfigRuntime.number(WabConfigKeys.AUTONOMY_INTERVAL_MAX_MINUTES),
+                        random.nextDouble())
+                : (long) (Math.max(1, WabJson.number(conf, "idleMinutes", 5)) * 60_000L);
         long now = System.currentTimeMillis();
         Long last = lastIdleAt.get(maid.getUUID());
         if (last != null && now - last < idleMillis) return;
@@ -225,14 +239,15 @@ public final class WabAutonomy {
 
     /** 滚动一小时窗口内的自发次数；maxActionsPerHour 不填或填 0 表示不设上限。 */
     private boolean withinHourlyCap(EntityMaid maid, JsonObject conf) {
-        int max = WabJson.integer(conf, "maxActionsPerHour", 0);
-        if (max <= 0) return true;
+        int max = WabConfigRuntime.connected()
+                ? WabConfigRuntime.integer(WabConfigKeys.AUTONOMY_MAX_ACTIONS_PER_HOUR)
+                : WabJson.integer(conf, "maxActionsPerHour", 0);
         Deque<Long> window = idleMoments.computeIfAbsent(maid.getUUID(), k -> new ArrayDeque<>());
         long now = System.currentTimeMillis();
         while (!window.isEmpty() && now - window.peekFirst() > 3_600_000L) {
             window.pollFirst();
         }
-        return window.size() < max;
+        return WabRules.withinHourlyCap(window.size(), max);
     }
 
     public void flush() {
