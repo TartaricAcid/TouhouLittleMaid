@@ -31,7 +31,7 @@ public final class WabPlatform {
     }
 
     public static boolean hasEnchantment(ItemStack stack) {
-        return !net.minecraft.world.item.enchantment.EnchantmentHelper.getEnchantments(stack).isEmpty();
+        return stack.isEnchanted();
     }
 
     /** 把物品塞进女仆背包，返回塞不下的剩余部分。 */
