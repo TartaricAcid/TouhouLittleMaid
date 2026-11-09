@@ -7,8 +7,8 @@
 | 仓库 | 分支 | 生成物 |
 |---|---|---|
 | `WarmAsBefore`（宿主） | `master` | `Services/Core/ConfigCatalog.cs`、`plugins/wab_minecraft/plugin.json` 的 `settings.fields` |
-| `TouhouLittleMaid-WAB` Forge 1.20.1 | `ci/wab-1.20-testkit` | `compat/wab/config/WabConfigKeys.java`、`WabConfigDefaults.java`、`WabConflictPrompts.java` |
-| `TouhouLittleMaid-WAB` NeoForge 1.21.1 | `ci/wab-1.21` | 同上，三份文件与 1.20 线**字节一致** |
+| `TouhouLittleMaid-WAB` Forge 1.20.1 | `ci/wab-1.20-testkit` | `WabConfigKeys/Defaults/ConflictPrompts.java`（生成物）+ `WabConfigRuntime.java`、`WabRules.java`（业务层） |
+| `TouhouLittleMaid-WAB` NeoForge 1.21.1 | `ci/wab-1.21` | 同上，**5 份 Java 与自测文件全部与 1.20 线字节一致** |
 
 模组双线的版本差异只允许留在 `WabPlatform.java`，不进这三个生成文件。
 
@@ -34,7 +34,8 @@ python tools/wab_config/verify_config_catalog.py --root . --peer ../TouhouLittle
 2. **生成一致性**：以 `--check` 重跑生成，diff 必须为空——手改生成物会立刻被抓到。
 3. **保守默认值**：AI 主动类开关必须 `false`、概率类默认 ≤0.1、会改世界的功能默认关闭；8 个保护性开关（农耕强制显式指定、岩浆船仅濒死、冲突让路、能力检测等）**必须保持 `true`**，被误关也报错。
 4. **宿主**：现有 24 项键名与默认值逐字保留，字段无重复，下拉项 `default` 必须落在 `options` 内；当前共 147 项（24 原有 + 123 追加）。
-5. **模组**：126 个键常量、47 条冲突提示；`--peer` 比对两条线的生成物字节一致。
+5. **模组**：126 个键常量、47 条冲突提示、5 份 Java 文件；`--peer` 比对两条线 5 份 Java + 5 份共享脚本/目录的字节一致。
+6. **规则引擎**：`WabRules` 是纯函数，CI 里由 `tools/wab_rules_selftest/RulesSelfTest.java` 跑 51 条边界断言（不依赖 MC、不需要 JUnit）。
 
 ## 下发链路（为什么扩展 plugin.json 就够了）
 

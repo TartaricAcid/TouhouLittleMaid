@@ -22,7 +22,8 @@ import sys
 
 CATALOG_REL = os.path.join("tools", "wab_config", "config_catalog.json")
 PLUGIN_REL = os.path.join("plugins", "wab_minecraft", "plugin.json")
-JAVA_FILES = ["WabConfigKeys.java", "WabConfigDefaults.java", "WabConflictPrompts.java"]
+JAVA_FILES = ["WabConfigKeys.java", "WabConfigDefaults.java", "WabConflictPrompts.java",
+              "WabConfigRuntime.java", "WabRules.java"]
 JAVA_DIR_REL = os.path.join("src", "main", "java", "com", "github", "tartaricacid",
                             "touhoulittlemaid", "compat", "wab", "config")
 
@@ -206,16 +207,18 @@ def main():
     if args.peer:
         peer = os.path.abspath(args.peer)
         stats["peer"] = peer
-        for name in JAVA_FILES + [os.path.basename(CATALOG_REL), "gen_config_sources.py"]:
-            a = os.path.join(root, JAVA_DIR_REL, name) if name.endswith(".java") \
-                else os.path.join(root, "tools", "wab_config", name)
-            b = os.path.join(peer, JAVA_DIR_REL, name) if name.endswith(".java") \
-                else os.path.join(peer, "tools", "wab_config", name)
+        pairs = [(os.path.join(JAVA_DIR_REL, name), name) for name in JAVA_FILES] if kind == "mod" else []
+        shared = ["tools/wab_config/config_catalog.json", "tools/wab_config/gen_config_sources.py",
+                  "tools/wab_config/verify_config_catalog.py", "tools/wab_config/README.md",
+                  "tools/wab_rules_selftest/RulesSelfTest.java"]
+        pairs += [(rel.replace("/", os.sep), rel.replace("/", os.sep)) for rel in shared]
+        for rel, label in pairs:
+            a, b = os.path.join(root, rel), os.path.join(peer, rel)
             if not (os.path.isfile(a) and os.path.isfile(b)):
-                fail(errors, "双线比对缺文件: " + name)
+                fail(errors, "双线比对缺文件: " + label)
                 continue
             if sha256(a) != sha256(b):
-                fail(errors, "双线生成物字节不一致: " + name)
+                fail(errors, "双线生成物字节不一致: " + label)
 
     result = {"status": "passed" if not errors else "failed", "errors": errors, "stats": stats}
     print(json.dumps(result, ensure_ascii=False, indent=2))
