@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.client.event;
 
+import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabClientState;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.AIConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
@@ -23,15 +24,21 @@ import org.lwjgl.glfw.GLFW;
 public class PressAIChatKeyEvent {
     @SubscribeEvent
     public static void onOpenConfig(InputEvent.Key event) {
-        if (isInGame() && AIConfig.LLM_ENABLED.get() && keyIsMatch(event)) {
-            EntityMaid maid = maidCheck();
-            if (maid == null) {
-                return;
-            }
-            Minecraft.getInstance().options.keyChat.consumeClick();
-            // 先通过服务端鉴权，然后发送同步信息后再打开客户端界面
-            NetworkHandler.CHANNEL.sendToServer(new OpenMaidAIChatMessage(maid));
+        if (!isInGame() || !keyIsMatch(event)) {
+            return;
         }
+        EntityMaid maid = maidCheck();
+        if (maid == null) {
+            return;
+        }
+        // 绑了 WAB 角色的女仆由插件答话，玩家常把模组自带的大模型开关关掉；
+        // 那一栏一挡，连聊天框都打不开，WAB 这条路等于没通。
+        if (!AIConfig.LLM_ENABLED.get() && !WabClientState.chatFor(maid)) {
+            return;
+        }
+        Minecraft.getInstance().options.keyChat.consumeClick();
+        // 先通过服务端鉴权，然后发送同步信息后再打开客户端界面
+        NetworkHandler.CHANNEL.sendToServer(new OpenMaidAIChatMessage(maid));
     }
 
     private static boolean keyIsMatch(InputEvent.Key event) {

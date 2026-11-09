@@ -1,12 +1,17 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.cloth;
 
 import com.github.tartaricacid.touhoulittlemaid.api.event.client.AddClothConfigEvent;
+import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabConfig;
+import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabRemoteConfig;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.*;
 import com.github.tartaricacid.touhoulittlemaid.event.MaidMealRegConfigEvent;
 import com.google.common.collect.Lists;
+import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
+import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.common.MinecraftForge;
@@ -14,7 +19,9 @@ import net.minecraftforge.fml.ModLoadingContext;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public class MenuIntegration {
     public static ConfigBuilder getConfigBuilder() {
@@ -27,6 +34,7 @@ public class MenuIntegration {
         miscConfig(root, entryBuilder);
         vanillaConfig(root, entryBuilder);
         renderConfig(root, entryBuilder);
+        wabConfig(root, entryBuilder);
         GlobalAIIntegration.aiChat(root, entryBuilder);
         MinecraftForge.EVENT_BUS.post(new AddClothConfigEvent(root, entryBuilder));
         return root;
@@ -342,6 +350,180 @@ public class MenuIntegration {
 
         render.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.render.enable_shears_tip"), RenderConfig.ENABLE_SHEARS_TIP.get())
                 .setDefaultValue(true).setSaveConsumer(RenderConfig.ENABLE_SHEARS_TIP::set).build());
+    }
+
+    private static void wabConfig(ConfigBuilder root, ConfigEntryBuilder entryBuilder) {
+        ConfigCategory wab = root.getOrCreateCategory(Component.translatable("config.touhou_little_maid.wab"));
+
+        if (!WabConfig.loaded()) {
+            wab.addEntry(entryBuilder.startTextDescription(Component.translatable("config.touhou_little_maid.wab.unloaded")).build());
+            return;
+        }
+
+        wab.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.wab.enabled"), WabConfig.ENABLED.get())
+                .setDefaultValue(WabConfig.ENABLED.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.wab.enabled.tooltip"))
+                .setSaveConsumer(v -> saveWabConfig(() -> WabConfig.ENABLED.set(v))).build());
+
+        wab.addEntry(entryBuilder.startIntField(Component.translatable("config.touhou_little_maid.wab.discovery_port"), WabConfig.DISCOVERY_PORT.get())
+                .setDefaultValue(WabConfig.DISCOVERY_PORT.getDefault()).setMin(1).setMax(65535)
+                .setTooltip(Component.translatable("config.touhou_little_maid.wab.discovery_port.tooltip"))
+                .setSaveConsumer(v -> saveWabConfig(() -> WabConfig.DISCOVERY_PORT.set(v))).build());
+
+        wab.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.wab.lan_discovery"), WabConfig.LAN_DISCOVERY.get())
+                .setDefaultValue(WabConfig.LAN_DISCOVERY.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.wab.lan_discovery.tooltip"))
+                .setSaveConsumer(v -> saveWabConfig(() -> WabConfig.LAN_DISCOVERY.set(v))).build());
+
+        wab.addEntry(entryBuilder.startIntField(Component.translatable("config.touhou_little_maid.wab.beacon_interval"), WabConfig.BEACON_INTERVAL_SECONDS.get())
+                .setDefaultValue(WabConfig.BEACON_INTERVAL_SECONDS.getDefault()).setMin(1).setMax(60)
+                .setTooltip(Component.translatable("config.touhou_little_maid.wab.beacon_interval.tooltip"))
+                .setSaveConsumer(v -> saveWabConfig(() -> WabConfig.BEACON_INTERVAL_SECONDS.set(v))).build());
+
+        wab.addEntry(entryBuilder.startIntSlider(Component.translatable("config.touhou_little_maid.wab.chat_range"), WabConfig.CHAT_RANGE.get(), 1, 64)
+                .setDefaultValue(WabConfig.CHAT_RANGE.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.wab.chat_range.tooltip"))
+                .setSaveConsumer(v -> saveWabConfig(() -> WabConfig.CHAT_RANGE.set(v))).build());
+
+        wab.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.wab.show_hud"), WabConfig.SHOW_HUD.get())
+                .setDefaultValue(WabConfig.SHOW_HUD.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.wab.show_hud.tooltip"))
+                .setSaveConsumer(v -> saveWabConfig(() -> WabConfig.SHOW_HUD.set(v))).build());
+
+        wab.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.wab.autonomy"), WabConfig.AUTONOMY_ENABLED.get())
+                .setDefaultValue(WabConfig.AUTONOMY_ENABLED.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.wab.autonomy.tooltip"))
+                .setSaveConsumer(v -> saveWabConfig(() -> WabConfig.AUTONOMY_ENABLED.set(v))).build());
+
+        wab.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.wab.player_in_maid_bed"), WabConfig.PLAYER_IN_MAID_BED.get())
+                .setDefaultValue(WabConfig.PLAYER_IN_MAID_BED.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.wab.player_in_maid_bed.tooltip"))
+                .setSaveConsumer(v -> saveWabConfig(() -> WabConfig.PLAYER_IN_MAID_BED.set(v))).build());
+
+        wab.addEntry(entryBuilder.startIntField(Component.translatable("config.touhou_little_maid.wab.maid_chat_cooldown"), WabConfig.MAID_CHAT_COOLDOWN.get())
+                .setDefaultValue(WabConfig.MAID_CHAT_COOLDOWN.getDefault()).setMin(10).setMax(3600)
+                .setTooltip(Component.translatable("config.touhou_little_maid.wab.maid_chat_cooldown.tooltip"))
+                .setSaveConsumer(v -> saveWabConfig(() -> WabConfig.MAID_CHAT_COOLDOWN.set(v))).build());
+
+        wab.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.wab.debug"), WabConfig.DEBUG.get())
+                .setDefaultValue(WabConfig.DEBUG.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.wab.debug.tooltip"))
+                .setSaveConsumer(v -> saveWabConfig(() -> WabConfig.DEBUG.set(v))).build());
+
+        ConfigCategory feeding = root.getOrCreateCategory(Component.translatable("config.touhou_little_maid.wab.feeding"));
+        feeding.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.wab.feeding_enabled"), WabConfig.FEEDING_ENABLED.get())
+                .setDefaultValue(WabConfig.FEEDING_ENABLED.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.wab.feeding_enabled.tooltip"))
+                .setSaveConsumer(v -> saveWabConfig(() -> WabConfig.FEEDING_ENABLED.set(v))).build());
+        feeding.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.wab.owner_only_feeding"), WabConfig.OWNER_ONLY_FEEDING.get())
+                .setDefaultValue(WabConfig.OWNER_ONLY_FEEDING.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.wab.owner_only_feeding.tooltip"))
+                .setSaveConsumer(v -> saveWabConfig(() -> WabConfig.OWNER_ONLY_FEEDING.set(v))).build());
+        feeding.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.wab.multiplayer_feeding"), WabConfig.MULTIPLAYER_FEEDING.get())
+                .setDefaultValue(WabConfig.MULTIPLAYER_FEEDING.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.wab.multiplayer_feeding.tooltip"))
+                .setSaveConsumer(v -> saveWabConfig(() -> WabConfig.MULTIPLAYER_FEEDING.set(v))).build());
+        feeding.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.wab.show_above_maid"), WabConfig.HEAD_INFO.get())
+                .setDefaultValue(WabConfig.HEAD_INFO.getDefault())
+                .setTooltip(Component.translatable("config.touhou_little_maid.wab.show_above_maid.tooltip"))
+                .setSaveConsumer(v -> saveWabConfig(() -> WabConfig.HEAD_INFO.set(v))).build());
+
+        pluginConfig(entryBuilder, wab);
+    }
+
+    /**
+     * WarmAsBefore 插件那一侧的设置：字段表由宿主按 plugin.json 现描现发，这里一个键名都不写死。
+     * 插件以后加项、改默认值或换了中文名，游戏里这一栏跟着长出来，不需要再动模组——
+     * 两头各存一份清单迟早漂移，那样「游戏里改的」和「WAB 里生效的」就不是同一件事。
+     */
+    private static void pluginConfig(ConfigEntryBuilder entryBuilder, ConfigCategory wab) {
+        SubCategoryBuilder builder = entryBuilder.startSubCategory(Component.translatable("config.touhou_little_maid.wab.plugin"));
+        builder.setExpanded(false);
+        if (!WabRemoteConfig.present()) {
+            builder.add(entryBuilder.startTextDescription(Component.translatable("config.touhou_little_maid.wab.plugin.empty")).build());
+            wab.addEntry(builder.build());
+            return;
+        }
+        for (WabRemoteConfig.Field field : WabRemoteConfig.fields()) {
+            if ("multiselect".equalsIgnoreCase(field.type()) && !field.options().isEmpty()) {
+                addMultiSelect(builder, entryBuilder, field);
+            } else {
+                builder.add(pluginEntry(entryBuilder, field));
+            }
+        }
+        wab.addEntry(builder.build());
+    }
+
+    /**
+     * 多选：Cloth 没有现成的多选控件，就按选项拆成一排开关，每拨一下把整条逗号串写回去。
+     * 值和「实时面板」页里那些复选框是同一串，不走两套语义。
+     */
+    private static void addMultiSelect(SubCategoryBuilder builder, ConfigEntryBuilder entryBuilder,
+                                       WabRemoteConfig.Field field) {
+        Component tooltip = Component.literal(field.help().isEmpty()
+                ? "勾上的都会触发一次思考；一个都不勾 = 只在有事时被动回应。"
+                : field.help());
+        builder.add(entryBuilder.startTextDescription(Component.literal(field.label()))
+                .setTooltip(tooltip).build());
+        Set<String> picked = new LinkedHashSet<>();
+        for (String token : field.value().split(",")) {
+            String trimmed = token.trim();
+            if (!trimmed.isEmpty()) picked.add(trimmed);
+        }
+        for (String option : field.options()) {
+            builder.add(entryBuilder.startBooleanToggle(Component.literal("· " + field.labelOf(option)), picked.contains(option))
+                    .setDefaultValue(false)
+                    .setTooltip(tooltip)
+                    .setSaveConsumer(v -> {
+                        if (v) picked.add(option);
+                        else picked.remove(option);
+                        WabRemoteConfig.save(field.key(), String.join(",", picked));
+                    }).build());
+        }
+    }
+
+    private static AbstractConfigListEntry<?> pluginEntry(ConfigEntryBuilder entryBuilder, WabRemoteConfig.Field field) {
+        Component title = Component.literal(field.label());
+        Component tooltip = Component.literal(field.help().isEmpty()
+                ? "这一项由 WarmAsBefore 保存，改完在 WAB 那边立刻生效；以 WAB 实际生效的值为准。"
+                : field.help() + "（改完在 WAB 那边立刻生效，以实际生效值为准）");
+        if (field.locked()) {
+            // 只读一行：Cloth 的 setEditable(false) 只把字画灰、点击照样写值，那样看着像锁死其实还能改，比不灰更骗人。
+            return entryBuilder.startTextDescription(Component.literal(field.label()).withStyle(ChatFormatting.GRAY))
+                    .setTooltip(tooltip).build();
+        }
+        switch (field.type()) {
+            case "switch": {
+                boolean def = "true".equalsIgnoreCase(field.defaultValue());
+                return entryBuilder.startBooleanToggle(title, field.on())
+                        .setDefaultValue(def).setTooltip(tooltip)
+                        .setSaveConsumer(v -> WabRemoteConfig.save(field.key(), String.valueOf(v))).build();
+            }
+            case "number": {
+                int def = parseInt(field.defaultValue(), 0);
+                return entryBuilder.startIntField(title, parseInt(field.value(), def))
+                        .setDefaultValue(def).setTooltip(tooltip)
+                        .setSaveConsumer(v -> WabRemoteConfig.save(field.key(), String.valueOf(v))).build();
+            }
+            default:
+                return entryBuilder.startStrField(title, field.value())
+                        .setDefaultValue(field.defaultValue()).setTooltip(tooltip)
+                        .setSaveConsumer(v -> WabRemoteConfig.save(field.key(), v == null ? "" : v)).build();
+        }
+    }
+
+    private static int parseInt(String raw, int fallback) {
+        try {
+            return Integer.parseInt(raw.trim());
+        } catch (Exception e) {
+            return fallback;
+        }
+    }
+
+    /** Cloth 的开关只改内存里的那份配置，得自己落盘；女仆 AI 设置页也是这么写的。 */
+    private static void saveWabConfig(Runnable apply) {
+        apply.run();
+        WabConfig.SPEC.save();
     }
 
     public static void registerModsPage() {

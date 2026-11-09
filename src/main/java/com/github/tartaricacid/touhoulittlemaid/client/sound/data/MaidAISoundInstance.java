@@ -28,6 +28,10 @@ public class MaidAISoundInstance extends EntityBoundSoundInstance {
     public CompletableFuture<AudioStream> getStream(SoundBufferLibrary library, Sound sound, boolean looping) {
         return CompletableFuture.supplyAsync(() -> {
             try {
+                // WAB 合成的语音统一是 WAV：先按文件头认出来，别让 MP3 阅读器先抛一次异常再回头猜。
+                if (isWav(this.data)) {
+                    return new WavAudioStream(this.data);
+                }
                 try {
                     return new Mp3AudioStream(this.data);
                 } catch (UnsupportedAudioFileException e) {
@@ -44,5 +48,11 @@ public class MaidAISoundInstance extends EntityBoundSoundInstance {
             }
             return null;
         }, Util.backgroundExecutor());
+    }
+
+    private static boolean isWav(byte[] data) {
+        return data != null && data.length > 12
+               && data[0] == 'R' && data[1] == 'I' && data[2] == 'F' && data[3] == 'F'
+               && data[8] == 'W' && data[9] == 'A' && data[10] == 'V' && data[11] == 'E';
     }
 }

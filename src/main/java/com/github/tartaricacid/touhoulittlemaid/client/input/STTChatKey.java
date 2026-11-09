@@ -4,6 +4,8 @@ import com.github.tartaricacid.touhoulittlemaid.ai.manager.entity.STTCallback;
 import com.github.tartaricacid.touhoulittlemaid.ai.manager.site.AvailableSites;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.STTConfig;
 import com.github.tartaricacid.touhoulittlemaid.ai.service.stt.STTSite;
+import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabClientState;
+import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabVoiceClient;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.AIConfig;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitSounds;
@@ -24,9 +26,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.glfw.GLFW;
 
+import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
-import java.util.function.Consumer;
 
 @OnlyIn(Dist.CLIENT)
 @Mod.EventBusSubscriber(value = Dist.CLIENT)
@@ -40,29 +42,37 @@ public class STTChatKey {
 
     @SubscribeEvent
     public static void onSttChatPress(InputEvent.Key event) {
-        if (keyIsMatch(event)) {
-            if (!AIConfig.LLM_ENABLED.get()) {
-                return;
+        if (!keyIsMatch(event)) {
+            return;
+        }
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null || player.isSpectator()) {
+            return;
+        }
+        if (!isInGame()) {
+            return;
+        }
+        EntityMaid maid = nearestMaid(player);
+        // 绑了 WAB 角色的女仆：这句听写交给插件，模组自己的大模型/语音识别开关不该再拦按键。
+        boolean viaWab = WabClientState.sttFor(maid);
+        if (!viaWab && (!AIConfig.LLM_ENABLED.get() || !AIConfig.STT_ENABLED.get())) {
+            return;
+        }
+        STT_CHAT_KEY.consumeClick();
+        if (event.getAction() == GLFW.GLFW_PRESS) {
+            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(InitSounds.RECORDING_START.get(), 1f));
+            if (maid != null) {
+                sttStart(maid);
+            } else {
+                player.sendSystemMessage(Component.translatable("ai.touhou_little_maid.chat.stt.no_maid_found",
+                        AIConfig.MAID_CAN_CHAT_DISTANCE.get()));
             }
-            if (!AIConfig.STT_ENABLED.get()) {
-                return;
-            }
-            LocalPlayer player = Minecraft.getInstance().player;
-            if (player == null || player.isSpectator()) {
-                return;
-            }
-            if (!isInGame()) {
-                return;
-            }
-            STT_CHAT_KEY.consumeClick();
-            if (event.getAction() == GLFW.GLFW_PRESS) {
-                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(InitSounds.RECORDING_START.get(), 1f));
-                getNearestMaid(player, STTChatKey::sttStart, true);
-                return;
-            }
-            if (event.getAction() == GLFW.GLFW_RELEASE) {
-                Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(InitSounds.RECORDING_END.get(), 1f));
-                getNearestMaid(player, STTChatKey::sttStop, false);
+            return;
+        }
+        if (event.getAction() == GLFW.GLFW_RELEASE) {
+            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(InitSounds.RECORDING_END.get(), 1f));
+            if (maid != null) {
+                sttStop(maid);
             }
         }
     }
@@ -72,19 +82,15 @@ public class STTChatKey {
                && STT_CHAT_KEY.getKeyModifier().equals(KeyModifier.getActiveModifier());
     }
 
-    private static void getNearestMaid(LocalPlayer player, Consumer<EntityMaid> consumer, boolean isStart) {
+    @Nullable
+    private static EntityMaid nearestMaid(LocalPlayer player) {
         Level level = player.level;
         int range = AIConfig.MAID_CAN_CHAT_DISTANCE.get();
         AABB aabb = player.getBoundingBox().inflate(range);
-        List<EntityMaid> maids = level.getEntitiesOfClass(EntityMaid.class, aabb, maid -> maid.isOwnedBy(player) && maid.isAlive());
+        List<EntityMaid> maids = level.getEntitiesOfClass(EntityMaid.class, aabb,
+                maid -> maid.isOwnedBy(player) && maid.isAlive());
         maids.sort(Comparator.comparingDouble(maid -> maid.distanceToSqr(player)));
-        if (!maids.isEmpty()) {
-            consumer.accept(maids.get(0));
-            return;
-        }
-        if (isStart) {
-            player.sendSystemMessage(Component.translatable("ai.touhou_little_maid.chat.stt.no_maid_found", range));
-        }
+        return maids.isEmpty() ? null : maids.get(0);
     }
 
     private static boolean isInGame() {
@@ -110,6 +116,11 @@ public class STTChatKey {
         if (player == null) {
             return;
         }
+        // 绑了 WAB 角色的女仆：录音仍走这台机器的麦克风，听写交给 WAB（经服务器转发）。
+        if (WabClientState.sttFor(maid)) {
+            WabVoiceClient.start(maid, new STTCallback(player, maid));
+            return;
+        }
         STTSite sttSite = AvailableSites.getSTTSite(AIConfig.STT_TYPE.get().getName());
         if (!sttSite.enabled()) {
             player.sendSystemMessage(Component.translatable("ai.touhou_little_maid.chat.stt.empty"));
@@ -125,6 +136,10 @@ public class STTChatKey {
     }
 
     private static void sttStop(EntityMaid maid) {
+        if (WabVoiceClient.isRecordingFor(maid)) {
+            WabVoiceClient.stop();
+            return;
+        }
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) {
             return;

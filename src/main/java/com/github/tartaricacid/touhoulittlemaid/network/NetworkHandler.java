@@ -145,6 +145,75 @@ public final class NetworkHandler {
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
         CHANNEL.registerMessage(58, SaveTTSSiteMessage.class, SaveTTSSiteMessage::encode, SaveTTSSiteMessage::decode, SaveTTSSiteMessage::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        CHANNEL.registerMessage(59, com.github.tartaricacid.touhoulittlemaid.compat.wab.WabAnimationMessage.class,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabAnimationMessage::encode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabAnimationMessage::decode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabAnimationMessage::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        // 拍照是来回两趟：服务器请客户端截，客户端把 PNG 交回服务器。只有 WAB 开口要才会走这条路。
+        CHANNEL.registerMessage(60, com.github.tartaricacid.touhoulittlemaid.compat.wab.WabPhotoRequest.class,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabPhotoRequest::encode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabPhotoRequest::decode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabPhotoRequest::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        CHANNEL.registerMessage(61, com.github.tartaricacid.touhoulittlemaid.compat.wab.WabPhotoReply.class,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabPhotoReply::encode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabPhotoReply::decode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabPhotoReply::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        // 语音四条：绑定名单（服务器→主人客户端）、录音上传（客户端→服务器）、
+        // 听写结果与合成音频（服务器→主人客户端）。老宿主不宣告 voice 时客户端一次都不会走。
+        CHANNEL.registerMessage(62, com.github.tartaricacid.touhoulittlemaid.compat.wab.WabBindingSync.class,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabBindingSync::encode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabBindingSync::decode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabBindingSync::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        CHANNEL.registerMessage(63, com.github.tartaricacid.touhoulittlemaid.compat.wab.WabVoiceClip.class,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabVoiceClip::encode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabVoiceClip::decode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabVoiceClip::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
+        CHANNEL.registerMessage(64, com.github.tartaricacid.touhoulittlemaid.compat.wab.WabVoiceText.class,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabVoiceText::encode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabVoiceText::decode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabVoiceText::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        CHANNEL.registerMessage(65, com.github.tartaricacid.touhoulittlemaid.compat.wab.WabVoiceAudio.class,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabVoiceAudio::encode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabVoiceAudio::decode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabVoiceAudio::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+
+        CHANNEL.registerMessage(66, com.github.tartaricacid.touhoulittlemaid.compat.wab.WabDetailsRequest.class,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabDetailsRequest::encode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabDetailsRequest::decode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabDetailsRequest::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
+
+        CHANNEL.registerMessage(67, com.github.tartaricacid.touhoulittlemaid.compat.wab.WabDetailsReply.class,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabDetailsReply::encode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabDetailsReply::decode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabDetailsReply::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+
+        CHANNEL.registerMessage(68, com.github.tartaricacid.touhoulittlemaid.compat.wab.WabHeadInfo.class,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabHeadInfo::encode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabHeadInfo::decode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabHeadInfo::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+
+        // 手机界面一对通用转发包：动作（客户端→服务器）、回执（服务器→客户端）。
+        CHANNEL.registerMessage(69, com.github.tartaricacid.touhoulittlemaid.compat.wab.WabPhoneAction.class,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabPhoneAction::encode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabPhoneAction::decode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabPhoneAction::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
+
+        CHANNEL.registerMessage(70, com.github.tartaricacid.touhoulittlemaid.compat.wab.WabPhoneData.class,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabPhoneData::encode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabPhoneData::decode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabPhoneData::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 
     public static void sendToClientPlayer(Object message, Player player) {

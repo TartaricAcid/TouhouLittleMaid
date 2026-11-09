@@ -1,0 +1,87 @@
+name: WAB Build Artifact (no release)
+
+# 只做「构建 + 存成 artifact」，不打 tag、不发 Release。
+# 手工触发（fork 的 workflow_dispatch 只能在默认分支上用），另外给 ci/** 分支自动跑一次，
+# 方便本地改完直接推上去验证。
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'ci/**'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          java-version: '17'
+          distribution: 'microsoft'
+          cache: 'gradle'
+
+      # T01 门禁：配置目录 ↔ 三份 Java 生成物必须逐字节一致，默认值与保守规则不能被手改破坏。
+      - name: Verify config catalog
+        run: python3 tools/wab_config/verify_config_catalog.py --root .
+
+      # 纯代码规则引擎不依赖 MC，单独跑边界自测：51 条断言不过就不进编译。
+      - name: Rules self test
+        run: |
+          mkdir -p /tmp/wab-rules
+          javac -encoding UTF-8 -d /tmp/wab-rules \
+            src/main/java/com/github/tartaricacid/touhoulittlemaid/compat/wab/config/WabRules.java \
+            tools/wab_rules_selftest/RulesSelfTest.java
+          java -cp /tmp/wab-rules RulesSelfTest
+
+      - name: Build jar
+        run: |
+          chmod +x ./gradlew
+          ./gradlew build -x test --no-daemon --stacktrace
+
+      # 临时测试模组：假 WAB 宿主 + /wtest 用例表，单独一个 Gradle 工程，只依赖上面编出来的 class
+      - name: Build testkit jar
+        run: |
+          cd wab-testkit
+          ../gradlew build -x test --no-daemon --stacktrace
+
+      - name: Game test server (drop-in check)
+        continue-on-error: true
+        # 服务器启动失败时 gradle/FML 可能不退出（1.20 线实测干等 40 分钟），必须设上限，
+        # 否则后面的 jar 上传全部饿死。
+        timeout-minutes: 10
+        run: |
+          ./gradlew runGameTestServer --no-daemon --stacktrace
+
+      - name: Upload game test log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: game-test-log
+          path: |
+            build/gameTestOutput/**
+            run/logs/latest.log
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Upload mod jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: wab-maid-bridge-jar
+          path: build/libs/*.jar
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload testkit jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: wab-testkit-jar
+          path: wab-testkit/build/libs/*.jar
+          if-no-files-found: error
+          retention-days: 30

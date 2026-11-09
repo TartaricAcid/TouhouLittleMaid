@@ -1,0 +1,61 @@
+// 临时测试模组（wab-testkit）的独立构建。
+// 和主工程分开成一个小 Gradle 项目，跑法是在这个目录里执行 ../gradlew build，
+// 这样既不用改主工程的 build.gradle（那条分支是要出货的），也能复用同一个 ForgeGradle 环境。
+//
+// 为什么必须在 CI/Gradle 里编，而不是拿 javac 手编一个 jar：
+// 生产环境跑的 MC 是 SRG 命名的，模组类要经过 ForgeGradle 的 reobf 才换得过去。
+// javac 出来的类留着 Mojang 名字，装进 mods/ 只会 NoSuchMethodError。
+buildscript {
+    repositories {
+        maven { url = 'https://maven.minecraftforge.net' }
+        maven { url = 'https://maven.parchmentmc.org' }
+        maven { url = 'https://maven.aliyun.com/repository/public/' }
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '[6.0.16,6.2)', changing: true
+        classpath 'org.parchmentmc:librarian:1.+'
+    }
+}
+
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+
+version = testkit_version
+group = 'com.wab'
+archivesBaseName = 'wab-testkit'
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+minecraft {
+    mappings channel: 'parchment', version: mappings_version
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${forge_version}"
+
+    // 直接拿主工程编译出来的、还是 Mojang 名字的那批 class 当编译期依赖。
+    // 只 compileOnly：测试模组不打包车万女仆，运行时由 mods/ 里那个 -all.jar 提供。
+    compileOnly files("${projectDir}/../build/classes/java/main")
+}
+
+jar {
+    manifest {
+        attributes([
+                "Implementation-Title"  : 'wab-testkit',
+                "Implementation-Version": "${version}"
+        ])
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}

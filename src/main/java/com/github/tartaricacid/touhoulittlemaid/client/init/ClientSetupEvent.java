@@ -7,6 +7,7 @@ import com.github.tartaricacid.touhoulittlemaid.client.animation.gecko.magic.Mag
 import com.github.tartaricacid.touhoulittlemaid.client.event.ShowOptifineScreen;
 import com.github.tartaricacid.touhoulittlemaid.client.input.DismountBroomKey;
 import com.github.tartaricacid.touhoulittlemaid.client.input.STTChatKey;
+import com.github.tartaricacid.touhoulittlemaid.client.input.WabDetailsKey;
 import com.github.tartaricacid.touhoulittlemaid.client.overlay.BroomTipsOverlay;
 import com.github.tartaricacid.touhoulittlemaid.client.overlay.MaidTipsOverlay;
 import com.github.tartaricacid.touhoulittlemaid.client.resource.LegacyPackRepositorySource;
@@ -58,6 +59,7 @@ public class ClientSetupEvent {
     public static void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
         event.register(STTChatKey.STT_CHAT_KEY);
         event.register(DismountBroomKey.DISMOUNT_KEY);
+        event.register(WabDetailsKey.DETAILS_KEY);
     }
 
     @SubscribeEvent
