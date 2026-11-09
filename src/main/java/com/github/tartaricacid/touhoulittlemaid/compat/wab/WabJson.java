@@ -8,11 +8,11 @@ import com.google.gson.JsonPrimitive;
 /**
  * 协议字段可能来自不同版本的 WAB，类型不符时一律退回默认值，避免一帧坏数据打断整个会话。
  */
-final class WabJson {
+public final class WabJson {
     private WabJson() {
     }
 
-    static JsonObject obj(JsonObject src, String key) {
+    public static JsonObject obj(JsonObject src, String key) {
         if (src == null) {
             return new JsonObject();
         }
@@ -20,7 +20,7 @@ final class WabJson {
         return element != null && element.isJsonObject() ? element.getAsJsonObject() : new JsonObject();
     }
 
-    static JsonArray arr(JsonObject src, String key) {
+    public static JsonArray arr(JsonObject src, String key) {
         if (src == null) {
             return new JsonArray();
         }
@@ -28,11 +28,11 @@ final class WabJson {
         return element != null && element.isJsonArray() ? element.getAsJsonArray() : new JsonArray();
     }
 
-    static String str(JsonObject src, String key) {
+    public static String str(JsonObject src, String key) {
         return str(src, key, "");
     }
 
-    static String str(JsonObject src, String key, String fallback) {
+    public static String str(JsonObject src, String key, String fallback) {
         if (src == null) {
             return fallback;
         }
@@ -53,7 +53,7 @@ final class WabJson {
         return fallback;
     }
 
-    static int integer(JsonObject src, String key, int fallback) {
+    public static int integer(JsonObject src, String key, int fallback) {
         double value = number(src, key, fallback);
         if (Double.isNaN(value) || Double.isInfinite(value)) {
             return fallback;
@@ -61,7 +61,7 @@ final class WabJson {
         return (int) Math.max(Integer.MIN_VALUE, Math.min(Integer.MAX_VALUE, value));
     }
 
-    static double number(JsonObject src, String key, double fallback) {
+    public static double number(JsonObject src, String key, double fallback) {
         if (src == null) {
             return fallback;
         }
@@ -77,7 +77,7 @@ final class WabJson {
         }
     }
 
-    static boolean bool(JsonObject src, String key, boolean fallback) {
+    public static boolean bool(JsonObject src, String key, boolean fallback) {
         if (src == null) {
             return fallback;
         }
@@ -102,7 +102,7 @@ final class WabJson {
         return fallback;
     }
 
-    static String round(double value, int digits) {
+    public static String round(double value, int digits) {
         if (Double.isNaN(value) || Double.isInfinite(value)) {
             return "0";
         }

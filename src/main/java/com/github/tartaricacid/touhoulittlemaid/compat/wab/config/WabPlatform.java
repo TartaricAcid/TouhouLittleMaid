@@ -14,27 +14,15 @@ public final class WabPlatform {
     private WabPlatform() {
     }
 
-    /** 把附魔、NBT 有无等属性补进 AI 工具回执。 */
+    /** 把附魔、NBT 有无等属性补进 AI 工具回执。1.21 的附魔组件是 Holder 键，这里只报有无，避免绑定具体泛型。 */
     public static void appendAttributes(ItemStack stack, JsonObject out) {
-        JsonArray enchants = new JsonArray();
-        net.minecraft.world.item.enchantment.ItemEnchantments data = stack.getOrDefault(
-                net.minecraft.core.component.DataComponents.ENCHANTMENTS,
-                net.minecraft.world.item.enchantment.ItemEnchantments.EMPTY);
-        for (java.util.Map.Entry<net.minecraft.core.Holder<net.minecraft.world.item.enchantment.Enchantment>, Integer> e
-             : data.entrySet()) {
-            JsonObject one = new JsonObject();
-            ResourceLocation key = net.minecraft.core.registries.BuiltInRegistries.ENCHANTMENT.getKey(e.getKey().value());
-            one.addProperty("id", key == null ? "" : key.toString());
-            one.addProperty("level", e.getValue());
-            enchants.add(one);
-        }
-        out.add("enchantments", enchants);
+        out.add("enchantments", new JsonArray());
+        out.addProperty("enchanted", stack.isEnchanted());
         out.addProperty("hasNbt", stack.get(net.minecraft.core.component.DataComponents.CUSTOM_DATA) != null);
     }
 
     public static boolean hasEnchantment(ItemStack stack) {
-        return !stack.getOrDefault(net.minecraft.core.component.DataComponents.ENCHANTMENTS,
-                net.minecraft.world.item.enchantment.ItemEnchantments.EMPTY).entrySet().isEmpty();
+        return stack.isEnchanted();
     }
 
     /** 把物品塞进女仆背包，返回塞不下的剩余部分。 */
