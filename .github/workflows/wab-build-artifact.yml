@@ -27,6 +27,10 @@ jobs:
           distribution: 'microsoft'
           cache: 'gradle'
 
+      # T01 门禁：配置目录 ↔ 三份 Java 生成物必须逐字节一致，默认值与保守规则不能被手改破坏。
+      - name: Verify config catalog
+        run: python3 tools/wab_config/verify_config_catalog.py --root .
+
       - name: Build jar
         run: |
           chmod +x ./gradlew
