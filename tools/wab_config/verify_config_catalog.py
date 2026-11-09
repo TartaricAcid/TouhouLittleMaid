@@ -23,7 +23,7 @@ import sys
 CATALOG_REL = os.path.join("tools", "wab_config", "config_catalog.json")
 PLUGIN_REL = os.path.join("plugins", "wab_minecraft", "plugin.json")
 JAVA_FILES = ["WabConfigKeys.java", "WabConfigDefaults.java", "WabConflictPrompts.java",
-              "WabConfigRuntime.java", "WabRules.java"]
+              "WabConfigRuntime.java", "WabRules.java", "WabFeatures.java"]
 JAVA_DIR_REL = os.path.join("src", "main", "java", "com", "github", "tartaricacid",
                             "touhoulittlemaid", "compat", "wab", "config")
 
@@ -209,9 +209,11 @@ def main():
         stats["peer"] = peer
         pairs = [(os.path.join(JAVA_DIR_REL, name), name) for name in JAVA_FILES] if kind == "mod" else []
         shared = ["tools/wab_config/config_catalog.json", "tools/wab_config/gen_config_sources.py",
-                  "tools/wab_config/verify_config_catalog.py", "tools/wab_config/README.md",
-                  "tools/wab_rules_selftest/RulesSelfTest.java"]
+                  "tools/wab_config/verify_config_catalog.py", "tools/wab_config/README.md"]
         pairs += [(rel.replace("/", os.sep), rel.replace("/", os.sep)) for rel in shared]
+        if kind == "mod":
+            rel = os.path.join("tools", "wab_rules_selftest", "RulesSelfTest.java")
+            pairs.append((rel, rel))
         for rel, label in pairs:
             a, b = os.path.join(root, rel), os.path.join(peer, rel)
             if not (os.path.isfile(a) and os.path.isfile(b)):

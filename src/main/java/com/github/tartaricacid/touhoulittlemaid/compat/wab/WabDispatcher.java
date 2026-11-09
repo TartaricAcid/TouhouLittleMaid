@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.wab;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.compat.wab.config.WabFeatures;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.google.gson.JsonObject;
 import net.minecraft.server.level.ServerPlayer;
@@ -25,6 +26,38 @@ public final class WabDispatcher {
 
     public void dispatch(WabSession from, String id, String method, JsonObject params) {
         EntityMaid maid = bridge.resolveMaid(WabJson.str(params, "maid"));
+
+        // B2 玩法入口：物品/农耕/逃生/求安慰/偷吃/模式/聊天/多步流程/双写备份。
+        // 统一在这里收口世界动作权限与「找不到女仆」，业务类只管执行。
+        String feature = switch (method) {
+            case "item", "farm", "escape", "comfort", "sneak_eat", "mode_switch",
+                    "chat_turn", "plan_flow", "backup_copy" -> method;
+            default -> "";
+        };
+        if (!feature.isEmpty()) {
+            if (!bridge.allowWorldActions()) {
+                from.sendResult(id, false, null, "world_actions_disabled", "游戏端没有开放世界操作权限。");
+                return;
+            }
+            if (maid == null) {
+                from.sendResult(id, false, null, "maid_not_found", "找不到这个女仆。");
+                return;
+            }
+            JsonObject result = switch (feature) {
+                case "item" -> WabFeatures.item(maid, params);
+                case "farm" -> WabFeatures.farm(maid, params);
+                case "escape" -> WabFeatures.escape(maid, params);
+                case "comfort" -> WabFeatures.comfort(maid, params);
+                case "sneak_eat" -> WabFeatures.sneakEat(maid, params);
+                case "mode_switch" -> WabFeatures.mode(maid, params);
+                case "chat_turn" -> WabFeatures.chat(maid, params);
+                case "plan_flow" -> WabFeatures.plan(maid, params);
+                default -> WabFeatures.backup(maid, params);
+            };
+            respond(from, id, result);
+            return;
+        }
+
         if (method.equals("status") || method.equals("scan")) {
             if (method.equals("status") && maid != null) {
                 JsonObject data = WabSensors.status(bridge, maid);
