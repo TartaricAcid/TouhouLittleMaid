@@ -2,6 +2,9 @@ package com.github.tartaricacid.touhoulittlemaid.compat.wab;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
+import com.github.tartaricacid.touhoulittlemaid.compat.wab.config.WabConfigKeys;
+import com.github.tartaricacid.touhoulittlemaid.compat.wab.config.WabConfigRuntime;
+import com.github.tartaricacid.touhoulittlemaid.compat.wab.config.WabRules;
 import com.github.tartaricacid.touhoulittlemaid.network.NetworkHandler;
 import com.github.tartaricacid.touhoulittlemaid.network.message.SpawnParticleMessage;
 import net.minecraft.nbt.CompoundTag;
@@ -32,6 +35,7 @@ public final class WabHeadPat {
     private static final String TAG_UNTIL = "WabPatUntil";
     private static final String TAG_LAST = "WabPatLast";
     private static final String TAG_BUBBLE = "WabPatBubble";
+    private static final String TAG_TIER = "WabPatTier";
 
     private WabHeadPat() {
     }
@@ -45,7 +49,17 @@ public final class WabHeadPat {
         long now = maid.level().getGameTime();
         CompoundTag data = maid.getPersistentData();
         if (now - data.getLong(TAG_LAST) < COOLDOWN_TICKS) return;
-        if (maid.getRandom().nextFloat() >= CHANCE) return;
+        // 断桥时保持原版 30% 讨摸；连上 WAB 后一律听配置（保守默认 0.05）。
+        double probability = WabConfigRuntime.connected()
+                ? WabConfigRuntime.number(WabConfigKeys.HEADPAT_REQUEST_PROBABILITY) : CHANCE;
+        boolean enabled = !WabConfigRuntime.connected()
+                || WabConfigRuntime.on(WabConfigKeys.HEADPAT_ENABLED);
+        if (!WabRules.shouldRequestHeadpat(enabled, probability, maid.getRandom().nextFloat())) return;
+        int tier = WabRules.headpatTier(
+                WabConfigRuntime.integer(WabConfigKeys.HEADPAT_REACTION_TIER),
+                WabConfigRuntime.number(WabConfigKeys.HEADPAT_TIER3_PROBABILITY),
+                maid.getRandom().nextFloat());
+        data.putInt(TAG_TIER, tier);
         data.putLong(TAG_LAST, now);
         data.putLong(TAG_UNTIL, now + WINDOW_TICKS);
         data.putLong(TAG_BUBBLE,

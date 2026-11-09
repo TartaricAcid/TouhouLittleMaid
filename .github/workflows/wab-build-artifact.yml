@@ -31,6 +31,15 @@ jobs:
       - name: Verify config catalog
         run: python3 tools/wab_config/verify_config_catalog.py --root .
 
+      # 纯代码规则引擎不依赖 MC，单独跑边界自测：51 条断言不过就不进编译。
+      - name: Rules self test
+        run: |
+          mkdir -p /tmp/wab-rules
+          javac -encoding UTF-8 -d /tmp/wab-rules \
+            src/main/java/com/github/tartaricacid/touhoulittlemaid/compat/wab/config/WabRules.java \
+            tools/wab_rules_selftest/RulesSelfTest.java
+          java -cp /tmp/wab-rules RulesSelfTest
+
       - name: Build jar
         run: |
           chmod +x ./gradlew
