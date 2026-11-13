@@ -133,6 +133,24 @@ public final class WabConfigDefaults {
     public static final boolean PHONE_NAV_BAR_ENABLED = true;
     public static final String PHONE_NAV_THIRD_ACTION = "settings";
     public static final int HEADPAT_ON_FEED_PROBABILITY = 0;
+    public static final boolean SLEEP_CONSENT_ENABLED = false;
+    public static final double SLEEP_CONSENT_CLOSENESS_MIN = 0.5;
+    public static final boolean AUTONOMOUS_SIT_ENABLED = false;
+    public static final double AUTONOMOUS_SIT_PROBABILITY = 0.1;
+    public static final boolean STEAL_FOOD_ENABLED = false;
+    public static final double STEAL_FOOD_PROBABILITY = 0.1;
+    public static final int STEAL_FOOD_PERIOD_MINUTES = 5;
+    public static final int STEAL_FOOD_BEG_TIMEOUT_MS = 3000;
+    public static final boolean SELF_EAT_ENABLED = false;
+    public static final boolean POISON_MILK_ENABLED = false;
+    public static final boolean FIRE_ESCAPE_ENABLED = false;
+    public static final boolean MLG_WATER_RETRIEVE_ENABLED = false;
+    public static final boolean TAME_PROTECT_ENABLED = false;
+    public static final boolean BUILD_WHITELIST_ENABLED = false;
+    public static final boolean COLLECT_MILK_ENABLED = false;
+    public static final boolean COLLECT_WATER_ENABLED = false;
+    public static final boolean COLLECT_BOARD_ENABLED = false;
+    public static final int SELF_EAT_HUNGRY_THRESHOLD = 14;
 
     private static final Map<String, Object> DEFAULTS = new HashMap<>();
 
@@ -262,6 +280,24 @@ public final class WabConfigDefaults {
         DEFAULTS.put("phone_nav_bar_enabled", true);
         DEFAULTS.put("phone_nav_third_action", "settings");
         DEFAULTS.put("headpat_on_feed_probability", 0);
+        DEFAULTS.put("sleep_consent_enabled", false);
+        DEFAULTS.put("sleep_consent_closeness_min", 0.5);
+        DEFAULTS.put("autonomous_sit_enabled", false);
+        DEFAULTS.put("autonomous_sit_probability", 0.1);
+        DEFAULTS.put("steal_food_enabled", false);
+        DEFAULTS.put("steal_food_probability", 0.1);
+        DEFAULTS.put("steal_food_period_minutes", 5);
+        DEFAULTS.put("steal_food_beg_timeout_ms", 3000);
+        DEFAULTS.put("self_eat_enabled", false);
+        DEFAULTS.put("poison_milk_enabled", false);
+        DEFAULTS.put("fire_escape_enabled", false);
+        DEFAULTS.put("mlg_water_retrieve_enabled", false);
+        DEFAULTS.put("tame_protect_enabled", false);
+        DEFAULTS.put("build_whitelist_enabled", false);
+        DEFAULTS.put("collect_milk_enabled", false);
+        DEFAULTS.put("collect_water_enabled", false);
+        DEFAULTS.put("collect_board_enabled", false);
+        DEFAULTS.put("self_eat_hungry_threshold", 14);
     }
 
     /** 按 key 取默认值；未知键返回 null，调用方必须自己判断，不给隐式兜底。 */

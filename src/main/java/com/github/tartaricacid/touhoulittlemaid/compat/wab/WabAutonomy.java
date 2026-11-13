@@ -4,6 +4,7 @@ import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.config.WabConfigKeys;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.config.WabConfigRuntime;
+import com.github.tartaricacid.touhoulittlemaid.compat.wab.config.WabFeatures;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.config.WabRules;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -35,6 +36,8 @@ public final class WabAutonomy {
     private final Map<UUID, String> autonomyRaw = new HashMap<>();
     private final Map<UUID, JsonObject> autonomyConf = new HashMap<>();
     private final Map<UUID, Deque<Long>> idleMoments = new HashMap<>();
+    private final Map<UUID, Long> idleSitSince = new HashMap<>();
+    private final Map<UUID, Long> lastStealAt = new HashMap<>();
     private int tickCounter;
 
     public WabAutonomy(WabBridge bridge) {
@@ -47,6 +50,8 @@ public final class WabAutonomy {
         autonomyRaw.remove(id);
         autonomyConf.remove(id);
         idleMoments.remove(id);
+        idleSitSince.remove(id);
+        lastStealAt.remove(id);
     }
 
     public void tick() {
@@ -60,7 +65,52 @@ public final class WabAutonomy {
             if (bridge.dispatcher().hasJob(maid) || !maid.level().isLoaded(maid.blockPosition())) continue;
             runPlan(maid);
             maybeIdle(maid);
+            maybeAutoSit(maid);
+            maybeStealFood(maid);
         }
+    }
+
+    /**
+     * F07 自主偷吃节拍：按「偷吃周期（分钟）」定时触发一次 sneak_eat，实际要不要吃、先讨食还是自吃
+     * 由 WabFeatures.sneakEat 的融合优先级决定。周期 <=0 或总开关没开就不跑；会动背包，需世界操作权限。
+     */
+    private void maybeStealFood(EntityMaid maid) {
+        if (!WabConfigRuntime.connected()) return;
+        if (!WabConfigRuntime.on(WabConfigKeys.STEAL_FOOD_ENABLED)) return;
+        if (!bridge.allowWorldActions() || bridge.dispatcher().hasJob(maid)) return;
+        double period = WabConfigRuntime.number(WabConfigKeys.STEAL_FOOD_PERIOD_MINUTES);
+        if (period <= 0) return;
+        long now = System.currentTimeMillis();
+        Long last = lastStealAt.get(maid.getUUID());
+        if (last != null && now - last < (long) (period * 60_000.0)) return;
+        lastStealAt.put(maid.getUUID(), now);
+        JsonObject params = new JsonObject();
+        params.addProperty("maid", maid.getUUID().toString());
+        WabFeatures.sneakEat(maid, params);
+    }
+
+    /**
+     * F06 自主坐下：空闲达到阈值才按概率坐下，坐下时导航由 WabActions.act("sit") 停掉。
+     * 有任务、已经坐着、或断桥时都不打扰；坐过一次就重新计时，避免每 40 tick 重复触发。
+     */
+    private void maybeAutoSit(EntityMaid maid) {
+        if (!WabConfigRuntime.connected()) return;
+        if (!WabConfigRuntime.on(WabConfigKeys.AUTONOMOUS_SIT_ENABLED)) return;
+        if (bridge.dispatcher().hasJob(maid) || maid.isInSittingPose()) {
+            idleSitSince.remove(maid.getUUID());
+            return;
+        }
+        long now = System.currentTimeMillis();
+        long since = idleSitSince.computeIfAbsent(maid.getUUID(), k -> now);
+        double idleMinutes = (now - since) / 60_000.0;
+        double threshold = WabConfigRuntime.number(WabConfigKeys.AUTONOMY_INTERVAL_FIXED_MINUTES);
+        double probability = WabConfigRuntime.number(WabConfigKeys.AUTONOMOUS_SIT_PROBABILITY);
+        if (!WabRules.mayAutoSit(true, idleMinutes, threshold, probability, random.nextDouble())) return;
+        idleSitSince.put(maid.getUUID(), now);
+        JsonObject params = new JsonObject();
+        params.addProperty("maid", maid.getUUID().toString());
+        params.addProperty("action", "sit");
+        WabActions.act(bridge, maid, params);
     }
 
     private void runPlan(EntityMaid maid) {
@@ -256,5 +306,7 @@ public final class WabAutonomy {
         autonomyRaw.clear();
         autonomyConf.clear();
         idleMoments.clear();
+        idleSitSince.clear();
+        lastStealAt.clear();
     }
 }
