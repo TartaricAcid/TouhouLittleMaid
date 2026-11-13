@@ -227,6 +227,86 @@ public final class WabRules {
         return tool != null && !tool.isBlank() && whitelist != null && whitelist.contains(tool);
     }
 
+    // ===================== B5 行为决策（F05/F06/F07/F10/F11/F12/F17/F18）=====================
+
+    /**
+     * F05 玩家抱睡同意判定（纯代码回落，AI 在线时由 AI 用人设决定，离线按此阈值）。
+     * 返回 0=拒绝 / 1=同意 / 2=勉强同意（语气用，对应略带害羞的措辞）。
+     * {@code fav} 好感度∈[0,1]；{@code moodIndex}=血清素−皮质醇∈[-1,1]；{@code closenessMin} 同意所需最低好感。
+     * 心情明显偏低时，按好感给一个小概率「勉强同意」，避免永远拒绝显得冷漠。
+     */
+    public static int sleepConsent(boolean enabled, double fav, double closenessMin, double moodIndex, double roll) {
+        if (!enabled) return 0;
+        double c = clamp01(closenessMin);
+        if (fav < c) return 0;
+        if (moodIndex >= -0.2) return 1;
+        return roll < clamp01(0.15 + 0.1 * clamp01(fav)) ? 2 : 0;
+    }
+
+    /** F06 自主坐下节奏：空闲达到阈值才考虑，命中掷骰。坐下时导航/Job 由调用方暂停。 */
+    public static boolean mayAutoSit(boolean enabled, double idleMinutes, double idleThreshold, double prob, double roll) {
+        if (!enabled || idleMinutes < Math.max(0, idleThreshold)) return false;
+        return roll < clamp01(prob);
+    }
+
+    /**
+     * F07 偷吃融合优先级（唯一入口 {@code sneak_eat}）：
+     * 0=不动 / 1=先找主人投喂 / 2=自吃（背包或放置类食物）/ 3=不饿也按概率自吃。
+     * 饿了且主人在 20×20 内 → 先投喂（等待 {@code begTimeoutMs} 超时后才自吃）；
+     * 饿了但主人不在 → 直接自吃；不饿 → 按 {@code notHungryProb} 概率自吃。
+     */
+    public static int stealFoodPlan(boolean enabled, boolean hungry, boolean ownerNear,
+                                    double begElapsedMs, double begTimeoutMs, double notHungryProb, double roll) {
+        if (!enabled) return 0;
+        if (hungry) {
+            if (ownerNear) return begElapsedMs >= Math.max(0, begTimeoutMs) ? 2 : 1;
+            return 2;
+        }
+        return roll < clamp01(notHungryProb) ? 3 : 0;
+    }
+
+    /** F10 饿了自吃背包食物：与 F07 同一循环，这里只判「是否该自吃」（主人不在范围才自吃）。 */
+    public static boolean shouldSelfEat(boolean hungry, boolean ownerNear) {
+        return hungry && !ownerNear;
+    }
+
+    /** F10 中毒自救：0=无需 / 1=喝背包或箱内牛奶 / 2=无牛奶→向主人求助。 */
+    public static int poisonResponse(boolean poisoned, boolean hasMilk) {
+        if (!poisoned) return 0;
+        return hasMilk ? 1 : 2;
+    }
+
+    /**
+     * F12 火逃生决策：0=无 / 1=跳入 3×3 内水域 / 2=落地水（mlgWater 放水）。
+     * 着火优先找身边水域跳水；无水域才用落地水；两者皆无则维持原版行为（调用方决定）。
+     */
+    public static int fireEscapePlan(boolean onFire, boolean waterNearby, boolean mlgAvailable) {
+        if (!onFire) return 0;
+        if (waterNearby) return 1;
+        return mlgAvailable ? 2 : 0;
+    }
+
+    /** F12 落地水收回：放水灭火后必须进入「舀回水 + 归还桶」的两阶段 Job，避免永久改世界。 */
+    public static boolean shouldRetrieveMlg(boolean mlgUsed, boolean fireOut) {
+        return mlgUsed && fireOut;
+    }
+
+    /**
+     * F17 驯服生物保护优先级：被本女仆驯服(3) > 玩家(2) > 其余女仆(1) > 无主(0)。
+     * 纯代码，目标选择规则据此取最高者。
+     */
+    public static int tameProtectPriority(boolean tamedByMaid, boolean tamedByOwner, boolean tamedByOther) {
+        if (tamedByMaid) return 3;
+        if (tamedByOwner) return 2;
+        if (tamedByOther) return 1;
+        return 0;
+    }
+
+    /** F18 建造原点：AI 显式给了原点就用它，否则默认女仆当前 XYZ（由 F19 注入）。 */
+    public static boolean useAiProvidedOrigin(boolean aiProvided) {
+        return aiProvided;
+    }
+
     private static double clamp01(double value) {
         if (Double.isNaN(value)) return 0;
         return Math.max(0, Math.min(1, value));

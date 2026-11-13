@@ -30,8 +30,9 @@ public final class WabDispatcher {
         // B2 玩法入口：物品/农耕/逃生/求安慰/偷吃/模式/聊天/多步流程/双写备份。
         // 统一在这里收口世界动作权限与「找不到女仆」，业务类只管执行。
         String feature = switch (method) {
-            case "item", "farm", "escape", "comfort", "sneak_eat", "mode_switch",
-                    "chat_turn", "plan_flow", "backup_copy", "headpat" -> method;
+            case "item", "farm", "escape", "comfort", "sneak_eat", "self_eat", "fire_escape",
+                    "tame_protect", "sleep_consent", "collect_supplies", "build_origin",
+                    "mode_switch", "chat_turn", "plan_flow", "backup_copy", "headpat" -> method;
             default -> "";
         };
         if (!feature.isEmpty()) {
@@ -49,6 +50,12 @@ public final class WabDispatcher {
                 case "escape" -> WabFeatures.escape(maid, params);
                 case "comfort" -> WabFeatures.comfort(maid, params);
                 case "sneak_eat" -> WabFeatures.sneakEat(maid, params);
+                case "self_eat" -> WabFeatures.selfEat(maid, params);
+                case "fire_escape" -> WabFeatures.fireEscape(maid, params);
+                case "tame_protect" -> WabFeatures.tameProtect(maid, params);
+                case "sleep_consent" -> WabFeatures.sleepConsent(maid, params);
+                case "collect_supplies" -> WabFeatures.collectSupplies(maid, params);
+                case "build_origin" -> WabFeatures.buildOrigin(maid, params);
                 case "mode_switch" -> WabFeatures.mode(maid, params);
                 case "chat_turn" -> WabFeatures.chat(maid, params);
                 case "plan_flow" -> WabFeatures.plan(maid, params);
@@ -94,6 +101,30 @@ public final class WabDispatcher {
                 }
             }
             from.sendResult(id, true, data, null, null);
+            return;
+        }
+
+        // B5：宿主侧三个新工具。maid_pos 只读；另两个是会动世界的意图，需世界操作权限。
+        if (method.equals("maid_pos")) {
+            if (maid == null) {
+                from.sendResult(id, false, null, "maid_not_found", "找不到这个女仆。");
+                return;
+            }
+            respond(from, id, WabFeatures.maidPos(maid, params));
+            return;
+        }
+        if (method.equals("maid_collect") || method.equals("maid_construct")) {
+            if (!bridge.allowWorldActions()) {
+                from.sendResult(id, false, null, "world_actions_disabled", "游戏端没有开放世界操作权限。");
+                return;
+            }
+            if (maid == null) {
+                from.sendResult(id, false, null, "maid_not_found", "找不到这个女仆。");
+                return;
+            }
+            respond(from, id, method.equals("maid_collect")
+                    ? WabFeatures.collectSupplies(maid, params)
+                    : WabFeatures.buildOrigin(maid, params));
             return;
         }
 

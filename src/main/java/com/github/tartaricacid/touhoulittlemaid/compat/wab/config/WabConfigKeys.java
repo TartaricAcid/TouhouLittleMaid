@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.wab.config;
 
-/** 由 config_catalog.json 生成，禁止手改。版本 wab-next-1，共 125 个键。 */
+/** 由 config_catalog.json 生成，禁止手改。版本 wab-next-1，共 143 个键。 */
 public final class WabConfigKeys {
     private WabConfigKeys() {
     }
@@ -130,4 +130,22 @@ public final class WabConfigKeys {
     public static final String PHONE_NAV_BAR_ENABLED = "phone_nav_bar_enabled";
     public static final String PHONE_NAV_THIRD_ACTION = "phone_nav_third_action";
     public static final String HEADPAT_ON_FEED_PROBABILITY = "headpat_on_feed_probability";
+    public static final String SLEEP_CONSENT_ENABLED = "sleep_consent_enabled";
+    public static final String SLEEP_CONSENT_CLOSENESS_MIN = "sleep_consent_closeness_min";
+    public static final String AUTONOMOUS_SIT_ENABLED = "autonomous_sit_enabled";
+    public static final String AUTONOMOUS_SIT_PROBABILITY = "autonomous_sit_probability";
+    public static final String STEAL_FOOD_ENABLED = "steal_food_enabled";
+    public static final String STEAL_FOOD_PROBABILITY = "steal_food_probability";
+    public static final String STEAL_FOOD_PERIOD_MINUTES = "steal_food_period_minutes";
+    public static final String STEAL_FOOD_BEG_TIMEOUT_MS = "steal_food_beg_timeout_ms";
+    public static final String SELF_EAT_ENABLED = "self_eat_enabled";
+    public static final String POISON_MILK_ENABLED = "poison_milk_enabled";
+    public static final String FIRE_ESCAPE_ENABLED = "fire_escape_enabled";
+    public static final String MLG_WATER_RETRIEVE_ENABLED = "mlg_water_retrieve_enabled";
+    public static final String TAME_PROTECT_ENABLED = "tame_protect_enabled";
+    public static final String BUILD_WHITELIST_ENABLED = "build_whitelist_enabled";
+    public static final String COLLECT_MILK_ENABLED = "collect_milk_enabled";
+    public static final String COLLECT_WATER_ENABLED = "collect_water_enabled";
+    public static final String COLLECT_BOARD_ENABLED = "collect_board_enabled";
+    public static final String SELF_EAT_HUNGRY_THRESHOLD = "self_eat_hungry_threshold";
 }

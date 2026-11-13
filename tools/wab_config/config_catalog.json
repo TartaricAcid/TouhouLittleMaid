@@ -2,7 +2,7 @@
   "catalogVersion": "wab-next-1",
   "source": "01-PRD.md §5.1（配置项总表；移除岩浆船实验项、追加投喂讨摸概率后 125 行）",
   "note": "唯一允许声明键名与默认值的地方；保守覆盖规则见 02-DESIGN.md §3.4，本文件不另造默认值。",
-  "rowCount": 125,
+  "rowCount": 143,
   "rows": [
     {
       "no": 1,
@@ -2297,6 +2297,330 @@
         "cloth"
       ],
       "note": "0 = 关闭（投喂后不讨摸）；>0 才有概率发起，与「干完活 / 击杀」共用冷却与窗口。⚠ 战斗中或未掉血时一律不请求，见 WabRules.headpatContextAllowed"
+    },
+    {
+      "no": 128,
+      "group": "十九",
+      "name": "1. 玩家抱睡同意（纯代码阈值回落）",
+      "key": "sleep_consent_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "F05：玩家主动抱睡，女仆按好感/心情阈值纯代码同意，AI 在线时用人设决定，离线按此阈值；拒绝只走语气不改状态"
+    },
+    {
+      "no": 129,
+      "group": "十九",
+      "name": "2. 抱睡同意所需最低好感度",
+      "key": "sleep_consent_closeness_min",
+      "type": "number",
+      "default": "0.5",
+      "defaultValue": 0.5,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "F05：好感度低于此值直接拒绝抱睡（0~1）"
+    },
+    {
+      "no": 130,
+      "group": "十九",
+      "name": "3. 女仆自主坐下",
+      "key": "autonomous_sit_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "F06：空闲达阈值后女仆可自行坐下；坐下时暂停 Job 与导航"
+    },
+    {
+      "no": 131,
+      "group": "十九",
+      "name": "4. 自主坐下触发概率",
+      "key": "autonomous_sit_probability",
+      "type": "number",
+      "default": "0.1",
+      "defaultValue": 0.1,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "F06：空闲达标后的掷骰概率，≤0.1"
+    },
+    {
+      "no": 132,
+      "group": "十九",
+      "name": "5. 融合偷吃（背包+放置类食物）",
+      "key": "steal_food_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "F07：唯一偷吃入口，饿了先找主人投喂、超时自吃，不饿按概率自吃；餐具优先"
+    },
+    {
+      "no": 133,
+      "group": "十九",
+      "name": "6. 不饿时偷吃概率",
+      "key": "steal_food_probability",
+      "type": "number",
+      "default": "0.1",
+      "defaultValue": 0.1,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "F07：不饿时自吃概率，≤0.1"
+    },
+    {
+      "no": 134,
+      "group": "十九",
+      "name": "7. 偷吃检测周期（分钟）",
+      "key": "steal_food_period_minutes",
+      "type": "number",
+      "default": "5",
+      "defaultValue": 5,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "F07：检测周期默认 5 分钟"
+    },
+    {
+      "no": 135,
+      "group": "十九",
+      "name": "8. 找主人投喂等待超时（毫秒）",
+      "key": "steal_food_beg_timeout_ms",
+      "type": "number",
+      "default": "3000",
+      "defaultValue": 3000,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "F07：主人超时未喂则女仆自己吃"
+    },
+    {
+      "no": 136,
+      "group": "十九",
+      "name": "9. 饿了自吃背包食物",
+      "key": "self_eat_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "F10：与 F07 同一循环，饿了且主人不在范围时自吃并结算饥饿/回血"
+    },
+    {
+      "no": 137,
+      "group": "十九",
+      "name": "10. 中毒自动喝牛奶自救",
+      "key": "poison_milk_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "F10：背包/箱内牛奶可自动饮用解毒并归还空桶，无牛奶则向主人求助"
+    },
+    {
+      "no": 138,
+      "group": "十九",
+      "name": "11. 着火逃生（跳水/落地水）",
+      "key": "fire_escape_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "F12：着火优先跳 3x3 水域，无水域走落地水"
+    },
+    {
+      "no": 139,
+      "group": "十九",
+      "name": "12. 落地水收回（灭火后舀回+还桶）",
+      "key": "mlg_water_retrieve_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "F12：落地水改成两阶段 Job，灭火后必须舀回水并归还桶，避免永久改世界"
+    },
+    {
+      "no": 140,
+      "group": "十九",
+      "name": "13. 驯服生物保护优先级",
+      "key": "tame_protect_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "F17：驯服它的女仆 > 玩家 > 其余女仆，纯代码目标选择"
+    },
+    {
+      "no": 141,
+      "group": "十九",
+      "name": "14. 建造白名单（模组端接管）",
+      "key": "build_whitelist_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "F18：AI 建造与放置权限由模组端白名单接管，减少 WAB↔MC 来回切设置"
+    },
+    {
+      "no": 142,
+      "group": "十九",
+      "name": "15. todo：接牛奶",
+      "key": "collect_milk_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "F11：maid_collect 的 milk 子动作（对牛用桶）"
+    },
+    {
+      "no": 143,
+      "group": "十九",
+      "name": "16. todo：打水/放水/收水",
+      "key": "collect_water_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "F11：maid_collect 的 water 子动作"
+    },
+    {
+      "no": 144,
+      "group": "十九",
+      "name": "17. todo：上船/上马",
+      "key": "collect_board_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "F11：maid_collect 的 board 子动作"
+    },
+    {
+      "no": 145,
+      "group": "十九",
+      "name": "18. 自吃饥饿阈值",
+      "key": "self_eat_hungry_threshold",
+      "type": "number",
+      "default": "14",
+      "defaultValue": 14,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "cloth"
+      ],
+      "note": "F10：饥饿值高于此（越高越饿）才触发自吃"
     }
   ]
 }

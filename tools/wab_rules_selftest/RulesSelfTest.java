@@ -122,6 +122,54 @@ public final class RulesSelfTest {
         eq(WabRules.chopstickBurnTicks(false), 200, "F09 空筷子可烧 200 tick");
         eq(WabRules.chopstickBurnTicks(true), 0, "F09 盛着食物的筷子不作燃料");
 
+        // ===== B5 行为决策 =====
+
+        // F05 玩家抱睡同意：好感足够 + 心情不差 → 同意；好感不足 → 拒绝；低心情小概率勉强同意
+        eq(WabRules.sleepConsent(false, 0.9, 0.5, 0.3, 0.0), 0, "F05 关闭则拒绝");
+        eq(WabRules.sleepConsent(true, 0.3, 0.5, 0.3, 0.0), 0, "F05 好感不足拒绝");
+        eq(WabRules.sleepConsent(true, 0.9, 0.5, 0.4, 0.0), 1, "F05 好感高且心情好同意");
+        eq(WabRules.sleepConsent(true, 0.9, 0.5, -0.9, 0.99), 0, "F05 低心情且不掷中拒绝");
+        eq(WabRules.sleepConsent(true, 0.9, 0.5, -0.9, 0.01), 2, "F05 低心情小概率勉强同意");
+        eq(WabRules.sleepConsent(true, 1.0, 1.0, 0.5, 0.0), 1, "F05 满分好感通过高阈值");
+
+        // F06 自主坐下：空闲未达阈值不坐；达阈值命中掷骰
+        check(!WabRules.mayAutoSit(true, 1.0, 5.0, 0.1, 0.0), "F06 空闲不足不坐");
+        check(WabRules.mayAutoSit(true, 9.0, 5.0, 0.1, 0.01), "F06 空闲足够且命中");
+        check(!WabRules.mayAutoSit(false, 9.0, 5.0, 1.0, 0.0), "F06 关闭不坐");
+
+        // F07 偷吃融合优先级
+        eq(WabRules.stealFoodPlan(false, true, true, 0, 3000, 0.1, 0.0), 0, "F07 关闭不动");
+        eq(WabRules.stealFoodPlan(true, true, true, 0, 3000, 0.1, 0.0), 1, "F07 饿+主人在→先投喂");
+        eq(WabRules.stealFoodPlan(true, true, true, 4000, 3000, 0.1, 0.0), 2, "F07 投喂超时→自吃");
+        eq(WabRules.stealFoodPlan(true, true, false, 0, 3000, 0.1, 0.0), 2, "F07 饿+主人不在→自吃");
+        eq(WabRules.stealFoodPlan(true, false, true, 0, 3000, 0.5, 0.01), 3, "F07 不饿按概率自吃命中");
+        eq(WabRules.stealFoodPlan(true, false, true, 0, 3000, 0.5, 0.9), 0, "F07 不饿概率未命中");
+
+        // F10 自吃 / 中毒自救
+        check(WabRules.shouldSelfEat(true, false), "F10 饿且主人不在→自吃");
+        check(!WabRules.shouldSelfEat(true, true), "F10 饿但主人在→不自吃（先投喂）");
+        eq(WabRules.poisonResponse(false, true), 0, "F10 没中毒无需");
+        eq(WabRules.poisonResponse(true, true), 1, "F10 中毒且有牛奶→喝");
+        eq(WabRules.poisonResponse(true, false), 2, "F10 中毒无牛奶→求助主人");
+
+        // F12 火逃生：身边有水跳、无水面落地水、皆无不动（维持原版）
+        eq(WabRules.fireEscapePlan(false, true, true), 0, "F12 没着火不动");
+        eq(WabRules.fireEscapePlan(true, true, true), 1, "F12 着火且身边有水→跳水");
+        eq(WabRules.fireEscapePlan(true, false, true), 2, "F12 着火无水面→落地水");
+        eq(WabRules.fireEscapePlan(true, false, false), 0, "F12 着火无水无桶→维持原版");
+        check(WabRules.shouldRetrieveMlg(true, true), "F12 落地水后灭火→收回");
+        check(!WabRules.shouldRetrieveMlg(true, false), "F12 火未灭不提前收回");
+
+        // F17 驯服生物保护优先级
+        eq(WabRules.tameProtectPriority(true, false, false), 3, "F17 本女仆驯服最高");
+        eq(WabRules.tameProtectPriority(false, true, false), 2, "F17 玩家其次");
+        eq(WabRules.tameProtectPriority(false, false, true), 1, "F17 其余女仆再次");
+        eq(WabRules.tameProtectPriority(false, false, false), 0, "F17 无主最低");
+
+        // F18 建造原点：AI 显式给原点才用
+        check(WabRules.useAiProvidedOrigin(true), "F18 用 AI 给的原点");
+        check(!WabRules.useAiProvidedOrigin(false), "F18 否则用女仆当前坐标");
+
         System.out.println("WabRules 边界自测通过: " + passed + " 条断言");
     }
 }

@@ -275,6 +275,12 @@ public final class WabFeatures {
             return fail("occupied", "脚下不是空气格，放不了水。");
         }
         maid.level().setBlockAndUpdate(pos, Blocks.WATER.defaultBlockState());
+        // F12：放出去的水是临时的，开了「放完水收回来」就登记，60 tick 后由 tickDescentWater 自动收。
+        if (on(WabConfigKeys.MLG_WATER_RETRIEVE_ENABLED)
+                && maid.level() instanceof net.minecraft.server.level.ServerLevel level) {
+            String key = level.dimension().location() + ":" + pos.getX() + "," + pos.getY() + "," + pos.getZ();
+            PENDING_WATER.put(key, new PendingWater(level, pos.immutable(), level.getGameTime() + 60L));
+        }
         JsonObject out = ok("落地水放好了，这次不找主人求安慰。");
         out.addProperty("mlgSuccess", true);
         out.addProperty("suppressComfort", on(WabConfigKeys.MLG_SUCCESS_SKIP_COMFORT));
@@ -358,25 +364,94 @@ public final class WabFeatures {
         };
     }
 
-    // ==================== 八、偷吃 ====================
+    // ==================== 八、偷吃 / 自吃 / 中毒自救（F07 + F10）====================
 
+    /**
+     * F07 偷吃融合优先级：饿了且主人在附近 → 先讨食（超时才自吃）；饿了但主人不在 → 直接自吃；
+     * 不饿 → 按保守概率偷吃。世界状态由 WAB 侧从 status 注入，未注入时用女仆真实饥饿度与主人距离回落。
+     */
     public static JsonObject sneakEat(EntityMaid maid, JsonObject p) {
-        double ai = WabConfigRuntime.number(WabConfigKeys.SNEAK_EAT_AI_PROBABILITY);
-        double player = WabConfigRuntime.number(WabConfigKeys.SNEAK_EAT_PLAYER_PROBABILITY);
-        boolean should = WabRules.shouldStealFood(on(WabConfigKeys.SNEAK_EAT_ENABLED), ai, player,
-                WabJson.number(p, "roll", 0.5));
-        if (!should) return ok("这回没偷吃。");
+        boolean enabled = on(WabConfigKeys.STEAL_FOOD_ENABLED) || on(WabConfigKeys.SNEAK_EAT_ENABLED);
+        boolean hungry = WabJson.bool(p, "hungry",
+                maid.getHunger() <= WabConfigRuntime.integer(WabConfigKeys.SELF_EAT_HUNGRY_THRESHOLD));
+        boolean ownerNear = WabJson.bool(p, "ownerNear", ownerWithin(maid, 20));
+        int plan = WabRules.stealFoodPlan(enabled, hungry, ownerNear,
+                WabJson.number(p, "begElapsedMs", 0),
+                WabConfigRuntime.number(WabConfigKeys.STEAL_FOOD_BEG_TIMEOUT_MS),
+                WabConfigRuntime.number(WabConfigKeys.STEAL_FOOD_PROBABILITY),
+                WabJson.number(p, "roll", maid.getRandom().nextDouble()));
+        JsonObject out = switch (plan) {
+            case 1 -> ok("她饿了，先去找主人讨吃的，等一会儿没人喂再自己吃。");
+            case 2 -> eatFromInventory(maid, "自己吃了一口 ");
+            case 3 -> eatFromInventory(maid, "不饿也偷偷吃了一口 ");
+            default -> ok("这回没偷吃。");
+        };
+        out.addProperty("plan", plan);
+        return out;
+    }
+
+    /** F10 自吃与中毒自救：与偷吃同一循环，由饥饿与状态效果驱动，默认全关。 */
+    public static JsonObject selfEat(EntityMaid maid, JsonObject p) {
+        int response = WabRules.poisonResponse(WabJson.bool(p, "poisoned", false),
+                on(WabConfigKeys.POISON_MILK_ENABLED) && hasMilk(maid));
+        if (response == 2) {
+            JsonObject ask = ok("她中毒了，但背包里没有牛奶，向主人求助。");
+            ask.addProperty("needMilk", true);
+            return ask;
+        }
+        if (response == 1) {
+            drinkMilk(maid);
+            JsonObject cured = ok("中毒了，她自己喝了一桶牛奶解毒。");
+            cured.addProperty("cured", true);
+            return cured;
+        }
+        if (!on(WabConfigKeys.SELF_EAT_ENABLED)) return fail("disabled", "自吃开关没开。");
+        boolean hungry = WabJson.bool(p, "hungry",
+                maid.getHunger() <= WabConfigRuntime.integer(WabConfigKeys.SELF_EAT_HUNGRY_THRESHOLD));
+        boolean ownerNear = WabJson.bool(p, "ownerNear", ownerWithin(maid, 20));
+        if (!WabRules.shouldSelfEat(hungry, ownerNear)) return ok("主人就在旁边，等投喂就好。");
+        JsonObject out = eatFromInventory(maid, "饿了，自己吃了一口 ");
+        out.addProperty("selfEat", true);
+        return out;
+    }
+
+    private static JsonObject eatFromInventory(EntityMaid maid, String prefix) {
         var inv = maid.getAvailableInv(false);
         for (int i = 0; i < inv.getSlots(); i++) {
             ItemStack s = inv.getStackInSlot(i);
             if (s.isEmpty()) continue;
             if (s.getItem().getFoodProperties(s, maid) == null) continue;
             inv.extractItem(i, 1, false);
-            JsonObject out = ok("她偷偷吃了一口 " + s.getHoverName().getString() + "。");
+            JsonObject out = ok(prefix + s.getHoverName().getString() + "。");
             out.addProperty("item", WabPlatform.itemId(s));
             return out;
         }
-        return ok("想偷吃，但背包里没有能吃的东西。");
+        return ok("想吃，但背包里没有能吃的东西。");
+    }
+
+    private static boolean hasMilk(EntityMaid maid) {
+        var inv = maid.getAvailableInv(false);
+        for (int i = 0; i < inv.getSlots(); i++) {
+            if (inv.getStackInSlot(i).is(net.minecraft.world.item.Items.MILK_BUCKET)) return true;
+        }
+        return false;
+    }
+
+    private static void drinkMilk(EntityMaid maid) {
+        var inv = maid.getAvailableInv(false);
+        for (int i = 0; i < inv.getSlots(); i++) {
+            if (inv.getStackInSlot(i).is(net.minecraft.world.item.Items.MILK_BUCKET)) {
+                inv.extractItem(i, 1, false);
+                return;
+            }
+        }
+    }
+
+    /** 主人在不在 20×20 内：WAB 侧可从 status.distanceToOwner 注入，离线时按真实距离算。 */
+    private static boolean ownerWithin(EntityMaid maid, double radius) {
+        var owner = maid.getOwner();
+        return owner != null && owner.level() == maid.level()
+                && maid.distanceToSqr(owner) <= radius * radius;
     }
 
     // ==================== 四、模式切换 / 九、聊天 / 六、多步流程 / 三、备份 ====================
@@ -457,6 +532,134 @@ public final class WabFeatures {
         out.addProperty("policy", policy);
         out.addProperty("restoreFrom", winner);
         out.addProperty("snapshot", snapshot.toString());
+        return out;
+    }
+
+    // ==================== B5：抱睡同意 / 火逃生 / 保护 / 建造 / 采集 / 坐标 ====================
+
+    /**
+     * F05 玩家抱睡同意（纯代码回落）：AI 在线时由 AI 按人设决定，离线按好感度与心情阈值判定。
+     * 返回 consent 0=拒绝 / 1=同意 / 2=勉强同意（语气用）。好感度由 WAB 侧注入 [0,1]，
+     * 未注入时按女仆好感度折算；moodIndex 由 AI/宿主算好注入，缺省按中性处理。
+     */
+    public static JsonObject sleepConsent(EntityMaid maid, JsonObject p) {
+        boolean enabled = on(WabConfigKeys.SLEEP_CONSENT_ENABLED);
+        double fav = WabJson.number(p, "favorability",
+                Math.min(1.0, Math.max(0.0, maid.getFavorability() / 100.0)));
+        int decision = WabRules.sleepConsent(enabled, fav,
+                WabConfigRuntime.number(WabConfigKeys.SLEEP_CONSENT_CLOSENESS_MIN),
+                WabJson.number(p, "moodIndex", 0.0),
+                WabJson.number(p, "roll", maid.getRandom().nextDouble()));
+        JsonObject out = switch (decision) {
+            case 1 -> ok("她轻轻点了点头，愿意一起睡。");
+            case 2 -> ok("她有点害羞，还是勉强答应了。");
+            default -> ok("她摇了摇头，这会儿不想被抱着睡。");
+        };
+        out.addProperty("consent", decision);
+        out.addProperty("enabled", enabled);
+        return out;
+    }
+
+    /**
+     * F12 火逃生：着火优先跳进身边 3×3 水域；没水才用落地水；都没有就维持原版行为。
+     * 落地水放完后是否进入「舀回水 + 归还桶」由 shouldRetrieveMlg 判定并回报给 WAB 侧。
+     */
+    public static JsonObject fireEscape(EntityMaid maid, JsonObject p) {
+        boolean onFire = WabJson.bool(p, "onFire", false);
+        boolean waterNearby = WabJson.bool(p, "waterNearby", false);
+        boolean mlgAvailable = WabRules.mayUseMlgWater(on(WabConfigKeys.MLG_WATER_ENABLED), hasBucket(maid),
+                on(WabConfigKeys.MLG_AUTO_FETCH_WATER));
+        int plan = WabRules.fireEscapePlan(on(WabConfigKeys.FIRE_ESCAPE_ENABLED) && onFire,
+                waterNearby, mlgAvailable);
+        if (plan == 1) {
+            JsonArray water = WabJson.arr(p, "waterPos");
+            if (water.size() < 3) return fail("bad_pos", "跳水逃生要给水域坐标 waterPos。");
+            maid.teleportTo(water.get(0).getAsDouble() + 0.5, water.get(1).getAsDouble(),
+                    water.get(2).getAsDouble() + 0.5);
+            JsonObject out = ok("着火了，跳进旁边的水里灭火。");
+            out.addProperty("plan", plan);
+            return out;
+        }
+        if (plan == 2) {
+            JsonObject out = mlgWater(maid, p);
+            out.addProperty("plan", plan);
+            out.addProperty("retrieve", WabRules.shouldRetrieveMlg(true, WabJson.bool(p, "fireOut", false))
+                    && on(WabConfigKeys.MLG_WATER_RETRIEVE_ENABLED));
+            return out;
+        }
+        JsonObject out = ok(onFire
+                ? "着火了，但身边没水也没有落地水，维持原版行为。" : "没着火，不需要火逃生。");
+        out.addProperty("plan", 0);
+        return out;
+    }
+
+    /** F17 驯服生物保护：按「本女仆 > 玩家 > 其余女仆 > 无主」给优先级，无主不纳入保护。 */
+    public static JsonObject tameProtect(EntityMaid maid, JsonObject p) {
+        if (!on(WabConfigKeys.TAME_PROTECT_ENABLED)) return fail("disabled", "驯服生物保护没开。");
+        int priority = WabRules.tameProtectPriority(
+                WabJson.bool(p, "tamedByMaid", false),
+                WabJson.bool(p, "tamedByOwner", false),
+                WabJson.bool(p, "tamedByOther", false));
+        JsonObject out = ok(priority > 0
+                ? "纳入保护范围，优先级 " + priority + "。" : "无主生物，不纳入保护范围。");
+        out.addProperty("priority", priority);
+        out.addProperty("protect", priority > 0);
+        return out;
+    }
+
+    /**
+     * F18 建造原点：AI 显式给了 origin 就用它，否则默认女仆当前 XYZ（可由 F19 maid_pos 注入）。
+     * 建造白名单开启时必须显式给原点，避免 AI 在没确认位置的情况下误建。
+     */
+    public static JsonObject buildOrigin(EntityMaid maid, JsonObject p) {
+        JsonArray aiOrigin = WabJson.arr(p, "origin");
+        boolean useAi = WabRules.useAiProvidedOrigin(aiOrigin.size() >= 3);
+        boolean whitelist = on(WabConfigKeys.BUILD_WHITELIST_ENABLED);
+        if (whitelist && !useAi) return fail("whitelist", "建造白名单已开启，必须显式给 origin 原点。");
+        BlockPos origin = useAi
+                ? new BlockPos((int) aiOrigin.get(0).getAsDouble(), (int) aiOrigin.get(1).getAsDouble(),
+                        (int) aiOrigin.get(2).getAsDouble())
+                : maid.blockPosition();
+        JsonArray xyz = new JsonArray();
+        xyz.add(origin.getX());
+        xyz.add(origin.getY());
+        xyz.add(origin.getZ());
+        JsonObject out = ok(useAi ? "用 AI 给的原点建造。" : "没给原点，按女仆当前位置建造。");
+        out.add("origin", xyz);
+        out.addProperty("fromAi", useAi);
+        out.addProperty("whitelist", whitelist);
+        return out;
+    }
+
+    /** F11 牛奶 / 水 / 木板采集：三个开关各自独立，没开的直接拒绝，绝不偷偷改世界。 */
+    public static JsonObject collectSupplies(EntityMaid maid, JsonObject p) {
+        String kind = WabJson.str(p, "kind", "water").toLowerCase(Locale.ROOT);
+        boolean enabled = switch (kind) {
+            case "milk" -> on(WabConfigKeys.COLLECT_MILK_ENABLED);
+            case "water" -> on(WabConfigKeys.COLLECT_WATER_ENABLED);
+            case "board" -> on(WabConfigKeys.COLLECT_BOARD_ENABLED);
+            default -> false;
+        };
+        if (!enabled) return fail("disabled", "「" + kind + "」采集开关没开，或不是 milk/water/board。");
+        JsonObject out = ok("按开关放行了「" + kind + "」采集。");
+        out.addProperty("kind", kind);
+        out.addProperty("origin", maid.blockPosition().toShortString());
+        return out;
+    }
+
+    /** F19 女仆坐标：只读，供 AI 在建造 / 采集 / 规划路线前取真实原点，不用猜坐标。 */
+    public static JsonObject maidPos(EntityMaid maid, JsonObject p) {
+        BlockPos pos = maid.blockPosition();
+        JsonArray xyz = new JsonArray();
+        xyz.add(pos.getX());
+        xyz.add(pos.getY());
+        xyz.add(pos.getZ());
+        JsonObject out = ok("她在 " + pos.toShortString() + "。");
+        out.add("pos", xyz);
+        out.addProperty("dimension", maid.level().dimension().location().toString());
+        out.addProperty("sitting", maid.isInSittingPose());
+        out.addProperty("favorability", maid.getFavorability());
+        out.addProperty("hunger", maid.getHunger());
         return out;
     }
 
