@@ -299,6 +299,8 @@ public final class WabDispatcher {
     }
 
     public void tick() {
+        // F14：落地水是临时放的，到点收回，别把世界改坏。
+        com.github.tartaricacid.touhoulittlemaid.compat.wab.config.WabFeatures.tickDescentWater();
         for (java.util.UUID key : new java.util.ArrayList<>(jobs.keySet())) {
             WabActions.Job job = jobs.get(key);
             if (job == null || !job.isActive()) {

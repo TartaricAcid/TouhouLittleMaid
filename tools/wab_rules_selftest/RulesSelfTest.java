@@ -117,6 +117,11 @@ public final class RulesSelfTest {
         eq(WabRules.descentPlan(false, 6, 4, true), 1, "R21 掉血且可用落地水优先落地水");
         eq(WabRules.descentPlan(false, 6, 4, false), 2, "R21 无落地水才回落瞬移");
 
+        // F09 筷子燃料：空筷子 = 木棍 100 tick 的两倍；盛着一口食物时不可作燃料
+        eq(WabRules.CHOPSTICK_BURN_TICKS, 200, "F09 筷子燃料是木棍两倍");
+        eq(WabRules.chopstickBurnTicks(false), 200, "F09 空筷子可烧 200 tick");
+        eq(WabRules.chopstickBurnTicks(true), 0, "F09 盛着食物的筷子不作燃料");
+
         System.out.println("WabRules 边界自测通过: " + passed + " 条断言");
     }
 }

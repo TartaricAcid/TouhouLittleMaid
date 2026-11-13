@@ -206,6 +206,62 @@ public final class WabFeatures {
         };
     }
 
+    /** F14 待收回的落地水：放水后到点收回，避免永久改世界（「放完水之后收回来」）。 */
+    private static final class PendingWater {
+        final net.minecraft.server.level.ServerLevel level;
+        final BlockPos pos;
+        final long expireTick;
+
+        PendingWater(net.minecraft.server.level.ServerLevel level, BlockPos pos, long expireTick) {
+            this.level = level;
+            this.pos = pos;
+            this.expireTick = expireTick;
+        }
+    }
+
+    /** 按「维度 + 坐标」记，不用女仆 UUID：同一女仆连续触发两次会覆盖，前一格水就永远收不回来。 */
+    private static final java.util.concurrent.ConcurrentHashMap<String, PendingWater> PENDING_WATER =
+            new java.util.concurrent.ConcurrentHashMap<>();
+
+    /**
+     * F14：跟随主人时，若因垂直落差过大（走下去会掉血）而不得不瞬移，先尝试落地水。
+     * 返回 true = 本轮不瞬移，让原版寻路继续走下去；false = 照旧瞬移。
+     * 断桥时恒为 false（保持原版）。判定走 R21 {@code descentPlan} 与 {@code mayUseMlgWater}。
+     */
+    public static boolean tryMlgDescent(EntityMaid maid, net.minecraft.world.entity.LivingEntity owner) {
+        if (maid == null || owner == null || maid.level().isClientSide) return false;
+        if (!WabConfigRuntime.connected()) return false;
+        if (!(maid.level() instanceof net.minecraft.server.level.ServerLevel level)) return false;
+        if (!on(WabConfigKeys.MLG_WATER_ENABLED)) return false;
+
+        double drop = maid.getY() - owner.getY();
+        if (drop < 4) return false;
+        boolean mlgAvailable = WabRules.mayUseMlgWater(true, hasBucket(maid),
+                on(WabConfigKeys.MLG_AUTO_FETCH_WATER));
+        if (WabRules.descentPlan(false, (int) drop, 4, mlgAvailable) != 1) return false;
+
+        BlockPos pos = maid.blockPosition();
+        if (!level.isLoaded(pos) || !level.getBlockState(pos).isAir()) return false;
+        level.setBlockAndUpdate(pos, Blocks.WATER.defaultBlockState());
+        String key = level.dimension().location() + ":" + pos.getX() + "," + pos.getY() + "," + pos.getZ();
+        PENDING_WATER.put(key, new PendingWater(level, pos.immutable(),
+                level.getGameTime() + 60L));
+        return true;
+    }
+
+    /** F14：每帧检查，到点把临时放的水收回（只收自己放的、且仍是水的那一格）。 */
+    public static void tickDescentWater() {
+        if (PENDING_WATER.isEmpty()) return;
+        for (java.util.Map.Entry<String, PendingWater> e : PENDING_WATER.entrySet()) {
+            PendingWater w = e.getValue();
+            if (w.level.getGameTime() < w.expireTick) continue;
+            PENDING_WATER.remove(e.getKey());
+            if (w.level.isLoaded(w.pos) && w.level.getBlockState(w.pos).is(Blocks.WATER)) {
+                w.level.setBlockAndUpdate(w.pos, Blocks.AIR.defaultBlockState());
+            }
+        }
+    }
+
     private static JsonObject mlgWater(EntityMaid maid, JsonObject p) {
         boolean requireBucket = on(WabConfigKeys.MLG_REQUIRE_BUCKET);
         boolean autoFetch = on(WabConfigKeys.MLG_AUTO_FETCH_WATER);
