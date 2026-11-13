@@ -61,8 +61,15 @@ public class MaidFollowOwnerTask extends Behavior<EntityMaid> {
         int minTeleportDistance = startDistance + 4;
         if (ownerStateConditions(owner, maid) && maidStateConditions(maid) && !maid.closerThan(owner, startDistance)) {
             if (!maid.closerThan(owner, minTeleportDistance)) {
-                maid.teleportToOwner(owner);
-                maid.getNavigationManager().resetNavigation();
+                // F14：陡坡落差会掉血时先试落地水，成功就不瞬移，让她自己走下去。
+                if (com.github.tartaricacid.touhoulittlemaid.compat.wab.config.WabFeatures
+                        .tryMlgDescent(maid, owner)) {
+                    // 落地水放好了，不瞬移，让她顺着坡自己走下去。
+                    BehaviorUtils.setWalkAndLookTargetMemories(maid, owner, speedModifier, stopDistance);
+                } else {
+                    maid.teleportToOwner(owner);
+                    maid.getNavigationManager().resetNavigation();
+                }
             } else if (!ownerIsWalkTarget(maid, owner)) {
                 BehaviorUtils.setWalkAndLookTargetMemories(maid, owner, speedModifier, stopDistance);
             }

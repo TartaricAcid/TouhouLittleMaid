@@ -17,6 +17,14 @@ public final class WabRules {
     private WabRules() {
     }
 
+    /** F09：原版木棍燃料 100 tick，筷子为其两倍。事件订阅类在 wab 根包（双线包名不同）。 */
+    public static final int CHOPSTICK_BURN_TICKS = 200;
+
+    /** F09：空的筷子才能作燃料；盛着一口食物时返回 0（由调用方跳过，不覆盖原值）。 */
+    public static int chopstickBurnTicks(boolean hasPortion) {
+        return hasPortion ? 0 : CHOPSTICK_BURN_TICKS;
+    }
+
     /** R01 深度思考自动关闭：热度低于阈值就别开深度思考，省 Token。 */
     public static boolean autoDisableDeepThink(double heat, double threshold) {
         return heat < threshold;
