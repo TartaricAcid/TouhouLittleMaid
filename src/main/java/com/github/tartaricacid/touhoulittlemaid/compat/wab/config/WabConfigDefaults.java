@@ -28,8 +28,6 @@ public final class WabConfigDefaults {
     public static final boolean MLG_SUCCESS_SKIP_COMFORT = true;
     public static final boolean SUFFOCATION_ESCAPE_ENABLED = false;
     public static final String SUFFOCATION_PATH_MODE = "auto";
-    public static final boolean LAVA_BOAT_ENABLED = false;
-    public static final boolean LAVA_BOAT_EMERGENCY_ONLY = true;
     public static final boolean COMFORT_SEEK_ENABLED = false;
     public static final double COMFORT_SEEK_PROBABILITY = 0.05;
     public static final String COMFORT_PROBABILITY_SOURCE = "config";
@@ -134,6 +132,7 @@ public final class WabConfigDefaults {
     public static final boolean MAIN_CLOSE_KEEP_PHONE = true;
     public static final boolean PHONE_NAV_BAR_ENABLED = true;
     public static final String PHONE_NAV_THIRD_ACTION = "settings";
+    public static final int HEADPAT_ON_FEED_PROBABILITY = 0;
 
     private static final Map<String, Object> DEFAULTS = new HashMap<>();
 
@@ -158,8 +157,6 @@ public final class WabConfigDefaults {
         DEFAULTS.put("mlg_success_skip_comfort", true);
         DEFAULTS.put("suffocation_escape_enabled", false);
         DEFAULTS.put("suffocation_path_mode", "auto");
-        DEFAULTS.put("lava_boat_enabled", false);
-        DEFAULTS.put("lava_boat_emergency_only", true);
         DEFAULTS.put("comfort_seek_enabled", false);
         DEFAULTS.put("comfort_seek_probability", 0.05);
         DEFAULTS.put("comfort_probability_source", "config");
@@ -264,6 +261,7 @@ public final class WabConfigDefaults {
         DEFAULTS.put("main_close_keep_phone", true);
         DEFAULTS.put("phone_nav_bar_enabled", true);
         DEFAULTS.put("phone_nav_third_action", "settings");
+        DEFAULTS.put("headpat_on_feed_probability", 0);
     }
 
     /** 按 key 取默认值；未知键返回 null，调用方必须自己判断，不给隐式兜底。 */

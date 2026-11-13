@@ -84,11 +84,38 @@ public final class RulesSelfTest {
         // 逃生与兼容补充规则
         check(WabRules.shouldEscapeSuffocation(true, 0), "窒息空气耗尽触发");
         check(!WabRules.shouldEscapeSuffocation(false, 0), "窒息开关关闭");
-        check(!WabRules.mayUseLavaBoat(true, true, false), "岩浆船仅濒死");
         check(WabRules.mayUseMlgWater(true, false, true), "落地水无桶可自动打水");
         check(!WabRules.mayUseMlgWater(true, false, false), "落地水无桶且不许打水");
         check(WabRules.toolAllowed("maid_status", Set.of("maid_status")), "工具白名单放行");
         check(!WabRules.toolAllowed("maid_drop_all", Set.of("maid_status")), "工具白名单拒绝");
+
+        // R18（F01）讨摸上下文硬闸门：战斗中 / 未掉血一律不请求
+        check(WabRules.headpatContextAllowed(false, true), "R18 未战斗且掉过血才允许");
+        check(!WabRules.headpatContextAllowed(true, true), "R18 战斗中即使掉血也不请求");
+        check(!WabRules.headpatContextAllowed(false, false), "R18 没掉血不请求");
+        check(!WabRules.headpatContextAllowed(true, false), "R18 战斗且没掉血");
+        check(!WabRules.shouldRequestHeadpat(WabRules.headpatContextAllowed(true, false), 1.0, 0.0),
+                "R18 闸门不过时概率再高也不发起");
+
+        // R19（F02）投喂后讨摸：0 = 关闭，独立概率
+        check(!WabRules.headpatOnFeed(0.0, 0.0), "R19 概率 0 表示关闭");
+        check(WabRules.headpatOnFeed(0.05, 0.01), "R19 低概率命中");
+        check(!WabRules.headpatOnFeed(0.05, 0.5), "R19 概率未命中");
+        check(!WabRules.headpatOnFeed(-1, 0.0), "R19 负值钳到 0");
+        check(!WabRules.headpatOnFeed(Double.NaN, 0.0), "R19 NaN 视为关闭");
+
+        // R20（F13）岩浆规避：不主动进入岩浆
+        check(!WabRules.mayStepInto(true, false, false), "R20 目标格是岩浆一律不进");
+        check(!WabRules.mayStepInto(true, true, true), "R20 玩家显式指路也不进岩浆");
+        check(!WabRules.mayStepInto(false, true, false), "R20 紧邻岩浆且非玩家指令时绕开");
+        check(WabRules.mayStepInto(false, true, true), "R20 玩家显式指路可邻近");
+        check(WabRules.mayStepInto(false, false, false), "R20 周围安全正常走");
+
+        // R21（F14）陡坡下降：能走就走，掉血落差优先落地水，失败才瞬移
+        eq(WabRules.descentPlan(true, 20, 4, true), 0, "R21 能走下去就照常走");
+        eq(WabRules.descentPlan(false, 2, 4, true), 0, "R21 落差不足不掉血照常走");
+        eq(WabRules.descentPlan(false, 6, 4, true), 1, "R21 掉血且可用落地水优先落地水");
+        eq(WabRules.descentPlan(false, 6, 4, false), 2, "R21 无落地水才回落瞬移");
 
         System.out.println("WabRules 边界自测通过: " + passed + " 条断言");
     }

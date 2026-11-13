@@ -335,8 +335,8 @@ public final class WabFeeding {
                     ? "chat_bubble.touhou_little_maid.feed.favorite" : "chat_bubble.touhou_little_maid.feed.eat").getString());
         }
         report(feeder, maid, portion, utensil, verdict.name().toLowerCase(Locale.ROOT), count);
-        // 被喂过一口也算「干完事」：可能向主人讨摸摸。
-        WabHeadPat.maybeRequest(maid);
+        // F02：投喂有独立概率请求摸摸，0 即关闭；与「干完活 / 击杀」那条概率互不影响。
+        WabHeadPat.maybeRequest(maid, true);
         return true;
     }
 

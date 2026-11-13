@@ -44,19 +44,41 @@ public final class WabHeadPat {
 
     /** 一次「干完事」之后调这个：满足条件就按 30% 概率发起讨摸摸。 */
     public static void maybeRequest(EntityMaid maid) {
+        maybeRequest(maid, false);
+    }
+
+    /**
+     * @param fromFeed 是否由「被投喂」触发（F02）。投喂走独立概率 0=关闭，
+     *                 干完活 / 击杀仍走原来的 R11 概率。
+     */
+    public static void maybeRequest(EntityMaid maid, boolean fromFeed) {
         if (maid == null || !maid.isAlive() || !maid.isTame()) return;
         if (maid.level().isClientSide) return;
         if (!(maid.getOwner() instanceof ServerPlayer owner)) return;
         if (!withinReach(owner, maid)) return;
+
+        // F01 硬闸门：战斗中、或没掉过血，一律不请求摸摸。断桥时也生效（这是安全约束，不是 WAB 下发功能）。
+        // hurtTime 是双线共有的 public 字段（IMaid 也用它判断 isHurt），比版本相关的时间戳 API 稳。
+        boolean inCombat = maid.getTarget() != null || maid.hurtTime > 0;
+        boolean hasLostHealth = maid.getHealth() < maid.getMaxHealth() - 0.01f;
+        if (!WabRules.headpatContextAllowed(inCombat, hasLostHealth)) return;
+
         long now = maid.level().getGameTime();
         CompoundTag data = maid.getPersistentData();
         if (now - data.getLong(TAG_LAST) < COOLDOWN_TICKS) return;
-        // 断桥时保持原版 30% 讨摸；连上 WAB 后一律听配置（保守默认 0.05）。
-        double probability = WabConfigRuntime.connected()
-                ? WabConfigRuntime.number(WabConfigKeys.HEADPAT_REQUEST_PROBABILITY) : CHANCE;
-        boolean enabled = !WabConfigRuntime.connected()
-                || WabConfigRuntime.on(WabConfigKeys.HEADPAT_ENABLED);
-        if (!WabRules.shouldRequestHeadpat(enabled, probability, maid.getRandom().nextFloat())) return;
+        if (fromFeed) {
+            // F02：投喂后独立概率，0 即关闭；不再借用「干完活」那条概率。
+            double feedProbability = WabConfigRuntime.connected()
+                    ? WabConfigRuntime.number(WabConfigKeys.HEADPAT_ON_FEED_PROBABILITY) : 0;
+            if (!WabRules.headpatOnFeed(feedProbability, maid.getRandom().nextFloat())) return;
+        } else {
+            // 断桥时保持原版 30% 讨摸；连上 WAB 后一律听配置（保守默认 0.05）。
+            double probability = WabConfigRuntime.connected()
+                    ? WabConfigRuntime.number(WabConfigKeys.HEADPAT_REQUEST_PROBABILITY) : CHANCE;
+            boolean enabled = !WabConfigRuntime.connected()
+                    || WabConfigRuntime.on(WabConfigKeys.HEADPAT_ENABLED);
+            if (!WabRules.shouldRequestHeadpat(enabled, probability, maid.getRandom().nextFloat())) return;
+        }
         int tier = WabRules.headpatTier(
                 WabConfigRuntime.integer(WabConfigKeys.HEADPAT_REACTION_TIER),
                 WabConfigRuntime.number(WabConfigKeys.HEADPAT_TIER3_PROBABILITY),

@@ -42,7 +42,7 @@ BASELINE_DEFAULTS = {
 # 用户点名要保守的功能（默认关闭）。
 WORLD_RISK_PREFIXES = (
     "item_drop", "item_equip", "item_pickup", "container_write", "farming",
-    "mlg_water", "suffocation", "lava_boat", "comfort_seek", "sneak_eat",
+    "mlg_water", "suffocation", "comfort_seek", "sneak_eat",
     "headpat", "autonomy", "chat_round", "chat_invisible", "plan_execution",
     "small_model_compat", "chess_cry", "catchphrase_ai", "love_words_ai",
     "ai_heat", "workbuddy_", "think_mode",
@@ -53,7 +53,6 @@ WORLD_RISK_PREFIXES = (
 # 双向校验：它们必须保持 true，被误改成 false 同样报错，避免把「保护」当成「功能」关掉。
 PROTECTIVE_TRUE = {
     "farming_require_explicit_spec": "农耕必须显式指定四要素，true 是强制校验",
-    "lava_boat_emergency_only": "岩浆船仅濒死可用，true 收窄触发条件",
     "headpat_player_refuse_enabled": "玩家可拒绝摸头，true 把控制权交给玩家",
     "headpat_sad_on_refuse": "拒绝后的伤心表情，纯表现不改世界",
     "headpat_sake_no_bend": "小酒壶不俯身，表现例外",

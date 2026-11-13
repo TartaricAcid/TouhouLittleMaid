@@ -118,6 +118,25 @@ public final class WabRules {
         return enabled && roll < clamp01(probability);
     }
 
+    /**
+     * R18（F01）讨摸的上下文硬闸门：战斗中一律不请求；没掉过血也不请求。
+     * 用户口径 ——「女仆不会在战斗中请求摸摸，没有掉血的时候也不会请求摸摸」。
+     * 这条是安全约束，与 R11 的概率无关：闸门不过，概率再高也不发起。
+     * {@code inCombat} 由调用方按「有攻击目标 / 处于战斗任务 / 最近受伤」注入，本类不碰实体。
+     */
+    public static boolean headpatContextAllowed(boolean inCombat, boolean hasLostHealth) {
+        return !inCombat && hasLostHealth;
+    }
+
+    /**
+     * R19（F02）投喂后讨摸：独立概率，0 表示关闭（「可在设置里关闭」）。
+     * 与「干完活 / 击杀」共用的是 R11 那条概率，这里单独一条，互不影响。
+     */
+    public static boolean headpatOnFeed(double probability, double roll) {
+        double p = clamp01(probability);
+        return p > 0 && roll < p;
+    }
+
     /** R12 摸头档位：配置档位 1/2；第三档要另过一次低概率掷骰。 */
     public static int headpatTier(int configuredTier, double tier3Probability, double roll) {
         int tier = Math.max(1, Math.min(3, configuredTier));
@@ -169,14 +188,30 @@ public final class WabRules {
         return enabled && airTicks <= 0;
     }
 
-    /** 岩浆船：实验性、默认关；仅濒死模式时还必须真的濒死。 */
-    public static boolean mayUseLavaBoat(boolean enabled, boolean emergencyOnly, boolean nearDeath) {
-        return enabled && (!emergencyOnly || nearDeath);
-    }
-
     /** 落地水：须持桶；允许自动打水时无桶也放行让女仆自己去取。 */
     public static boolean mayUseMlgWater(boolean enabled, boolean hasBucket, boolean allowFetchWater) {
         return enabled && (hasBucket || allowFetchWater);
+    }
+
+    /**
+     * R20（F13）岩浆规避：目标格是岩浆，或紧邻岩浆，都不主动进入。
+     * 「不主动进入」是硬约束，但玩家显式指路时由调用方决定（本函数只判路径代价）。
+     * 返回 true 表示这一格可以踩；false 表示必须绕。
+     */
+    public static boolean mayStepInto(boolean targetLava, boolean adjacentLava, boolean playerOrdered) {
+        if (targetLava) return false;
+        return playerOrdered || !adjacentLava;
+    }
+
+    /**
+     * R21（F14）陡坡下降：原本「不能走下去就瞬移」，现在若跌落会掉血，
+     * 先尝试落地水（须持桶 / 允许打水），失败才回落到瞬移。
+     * 返回 0=照常走下去，1=落地水，2=瞬移。
+     */
+    public static int descentPlan(boolean walkable, int fallDistance, int damagingFallDistance,
+                                  boolean mlgAvailable) {
+        if (walkable || fallDistance < damagingFallDistance) return 0;
+        return mlgAvailable ? 1 : 2;
     }
 
     /** 小模型工具白名单：解析出来的工具名必须过白名单，未列出的直接拒绝。 */

@@ -196,14 +196,13 @@ public final class WabFeatures {
 
     // ==================== 二、高级反应逃生 ====================
 
-    /** escape：mlg / suffocation / lava_boat；求安慰单独走 comfort。 */
+    /** escape：mlg / suffocation；求安慰单独走 comfort。岩浆船实验项已移除（不主动进入岩浆，见 F13）。 */
     public static JsonObject escape(EntityMaid maid, JsonObject p) {
         String action = WabJson.str(p, "action", "mlg").toLowerCase(Locale.ROOT);
         return switch (action) {
             case "mlg" -> mlgWater(maid, p);
             case "suffocation" -> suffocation(maid, p);
-            case "lava_boat" -> lavaBoat(maid, p);
-            default -> fail("unknown_action", "逃生只支持 mlg / suffocation / lava_boat。");
+            default -> fail("unknown_action", "逃生只支持 mlg / suffocation。");
         };
     }
 
@@ -265,18 +264,6 @@ public final class WabFeatures {
             }
         }
         return null;
-    }
-
-    private static JsonObject lavaBoat(EntityMaid maid, JsonObject p) {
-        boolean nearDeath = WabJson.bool(p, "nearDeath", false);
-        if (!WabRules.mayUseLavaBoat(on(WabConfigKeys.LAVA_BOAT_ENABLED),
-                on(WabConfigKeys.LAVA_BOAT_EMERGENCY_ONLY), nearDeath)) {
-            return fail("not_allowed", "岩浆船是实验功能，默认关；仅濒死且开启时才考虑。");
-        }
-        if (!WabPlatform.sameItem(maid.getMainHandItem(), new ItemStack(net.minecraft.world.item.Items.OAK_BOAT))) {
-            return fail("no_boat", "手上没有船。");
-        }
-        return ok("岩浆船条件满足（实验性），未执行世界改动以免烧毁存档。");
     }
 
     /** comfort：落地水成功必须抑制；概率取 config/ai 两来源里更保守的那个。 */

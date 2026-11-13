@@ -144,7 +144,16 @@ public final class WabActions {
      * 停在距目标 stopDistance 的位置，而不是挤到目标方块上。距离已经够近时直接停。
      */
     private static boolean navigateTo(EntityMaid maid, double x, double y, double z, double stopDistance) {
-        if (!(maid.level() instanceof ServerLevel)) return false;
+        if (!(maid.level() instanceof ServerLevel level)) return false;
+        // F13 硬约束：远端坐标落在岩浆里就拒绝，不主动进入岩浆（「绕」由原版寻路完成）。
+        // 用全限定名引用 FluidTags，避免双线 import 差异；getBlockState/isLoaded 都是双线共有 API。
+        BlockPos dest = BlockPos.containing(x, y, z);
+        if (level.isLoaded(dest)
+                && level.getBlockState(dest).getFluidState().is(net.minecraft.tags.FluidTags.LAVA)
+                && !com.github.tartaricacid.touhoulittlemaid.compat.wab.config.WabRules
+                        .mayStepInto(true, false, false)) {
+            return false;
+        }
         double stop = clampStopDistance(stopDistance);
         double dx = x - maid.getX();
         double dz = z - maid.getZ();
@@ -612,7 +621,7 @@ public final class WabActions {
 
         private void executeAction(BlockPos pos) {
             switch (action) {
-                case "mine", "chop", "harvest" -> {
+                case "mine", "chop", "harvest", "dig" -> {
                     // 保护区/工具不对时 destroyBlock 会返回 false：不能照样记一次「挖到」，
                     // 否则 AI 以为拿到了资源，背包里其实什么都没有。
                     if (maid.destroyBlock(pos, true)) got++;
@@ -656,6 +665,8 @@ public final class WabActions {
                     return state.is(BlockTags.LOGS);
                 case "harvest":
                     return WabSensors.isMatureCrop(state);
+                case "dig":
+                    return state.is(BlockTags.MINEABLE_WITH_SHOVEL);
                 case "collect", "scoop", "fill":
                     return true;
                 default:
@@ -735,6 +746,8 @@ public final class WabActions {
                         : WabSensors.blockId((ServerLevel) maid.level(), pos).equals(filter);
                 case "chop" -> state.is(BlockTags.LOGS);
                 case "harvest" -> WabSensors.isMatureCrop(state);
+                // F20：挖土（泥/沙/砾等可被铲子高效挖掘的方块），与采矿区分开。
+                case "dig" -> state.is(BlockTags.MINEABLE_WITH_SHOVEL);
                 case "scoop" -> state.getFluidState().isSource()
                         && (state.is(Blocks.WATER) || state.is(Blocks.LAVA));
                 default -> false;

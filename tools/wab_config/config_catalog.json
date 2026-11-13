@@ -1,8 +1,8 @@
 {
   "catalogVersion": "wab-next-1",
-  "source": "01-PRD.md §5.1（126 行配置项总表）",
+  "source": "01-PRD.md §5.1（配置项总表；移除岩浆船实验项、追加投喂讨摸概率后 125 行）",
   "note": "唯一允许声明键名与默认值的地方；保守覆盖规则见 02-DESIGN.md §3.4，本文件不另造默认值。",
-  "rowCount": 126,
+  "rowCount": 125,
   "rows": [
     {
       "no": 1,
@@ -368,42 +368,6 @@
         "cloth"
       ],
       "note": "选项 auto / air / dig；auto = 先找有空气处，找不到再挖掘"
-    },
-    {
-      "no": 21,
-      "group": "二",
-      "name": "7. 岩浆船（实验性）",
-      "key": "lava_boat_enabled",
-      "type": "switch",
-      "default": "false",
-      "defaultValue": false,
-      "scope": "模组",
-      "aiTag": "纯代码",
-      "conflict": true,
-      "conflictTarget": "原版船 / 骑乘（maid_ride）",
-      "promptText": "岩浆船为实验性功能，默认关闭；与原版船在岩浆中焚毁的规则冲突，仅在濒死时尝试一次，非必要不使用",
-      "visibleIn": [
-        "cloth"
-      ],
-      "note": "⚠ 岩浆船为实验性功能，默认关闭；与原版船在岩浆中焚毁的规则冲突，仅在濒死时尝试一次"
-    },
-    {
-      "no": 22,
-      "group": "二",
-      "name": "8. 岩浆船仅濒死时使用",
-      "key": "lava_boat_emergency_only",
-      "type": "switch",
-      "default": "true",
-      "defaultValue": true,
-      "scope": "模组",
-      "aiTag": "纯代码",
-      "conflict": false,
-      "conflictTarget": "",
-      "promptText": "",
-      "visibleIn": [
-        "cloth"
-      ],
-      "note": "仅「差点窒息 / 落地水失败边缘 / 血量低于阈值」触发"
     },
     {
       "no": 23,
@@ -2314,6 +2278,25 @@
         "plugin"
       ],
       "note": "固定 settings；因无高级任务机制，三条线为设置而非任务管理。选项保留 tasks 仅作未来扩展"
+    },
+    {
+      "no": 127,
+      "group": "十八",
+      "name": "8. 投喂后讨摸概率",
+      "key": "headpat_on_feed_probability",
+      "type": "number",
+      "default": "0",
+      "defaultValue": 0,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "0 = 关闭（投喂后不讨摸）；>0 才有概率发起，与「干完活 / 击杀」共用冷却与窗口。⚠ 战斗中或未掉血时一律不请求，见 WabRules.headpatContextAllowed"
     }
   ]
 }

@@ -121,6 +121,18 @@ public final class WabSensors {
         out.add("maid", snapshot(bridge, maid));
         out.addProperty("uuid", maid.getUUID().toString());
         out.addProperty("healthDetail", round(maid.getHealth()) + "/" + round(maid.getMaxHealth()));
+        // F15：她自己也能看清自己的防御与状态效果。防御值/韧性是 LivingEntity 通用 API；
+        // Buff 用 MobEffectInstance.toString() 描述，避开 1.20/1.21 的 MobEffect 取值 API 差异。
+        out.addProperty("armorValue", round(maid.getArmorValue()));
+        JsonArray activeEffects = new JsonArray();
+        for (net.minecraft.world.effect.MobEffectInstance effect : maid.getActiveEffects()) {
+            JsonObject e = new JsonObject();
+            e.addProperty("effect", effect.toString());
+            e.addProperty("duration", effect.getDuration());
+            e.addProperty("amplifier", effect.getAmplifier());
+            activeEffects.add(e);
+        }
+        out.add("activeEffects", activeEffects);
         out.addProperty("favorability", maid.getFavorability());
         out.addProperty("experience", maid.getExperience());
         out.addProperty("hunger", maid.getHunger());
