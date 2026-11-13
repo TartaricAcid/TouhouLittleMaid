@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.wab.config;
 
-/** 由 config_catalog.json 生成，禁止手改。版本 wab-next-1，共 126 个键。 */
+/** 由 config_catalog.json 生成，禁止手改。版本 wab-next-1，共 125 个键。 */
 public final class WabConfigKeys {
     private WabConfigKeys() {
     }
@@ -25,8 +25,6 @@ public final class WabConfigKeys {
     public static final String MLG_SUCCESS_SKIP_COMFORT = "mlg_success_skip_comfort";
     public static final String SUFFOCATION_ESCAPE_ENABLED = "suffocation_escape_enabled";
     public static final String SUFFOCATION_PATH_MODE = "suffocation_path_mode";
-    public static final String LAVA_BOAT_ENABLED = "lava_boat_enabled";
-    public static final String LAVA_BOAT_EMERGENCY_ONLY = "lava_boat_emergency_only";
     public static final String COMFORT_SEEK_ENABLED = "comfort_seek_enabled";
     public static final String COMFORT_SEEK_PROBABILITY = "comfort_seek_probability";
     public static final String COMFORT_PROBABILITY_SOURCE = "comfort_probability_source";
@@ -131,4 +129,5 @@ public final class WabConfigKeys {
     public static final String MAIN_CLOSE_KEEP_PHONE = "main_close_keep_phone";
     public static final String PHONE_NAV_BAR_ENABLED = "phone_nav_bar_enabled";
     public static final String PHONE_NAV_THIRD_ACTION = "phone_nav_third_action";
+    public static final String HEADPAT_ON_FEED_PROBABILITY = "headpat_on_feed_probability";
 }
