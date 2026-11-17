@@ -17,7 +17,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
@@ -89,6 +91,14 @@ public class ItemSmartSlab extends AbstractStoreMaidItem {
         if (player == null) {
             return super.useOn(context);
         }
+        // 空魂符：右键任意方块（含没有女仆的空地）直接打开女仆工作设置面板。
+        // 只在客户端开面板；服务端照常消费这次交互，INIT/HAS_MAID 分支不受影响。
+        if (this.type == Type.EMPTY) {
+            if (worldIn.isClientSide) {
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabWorkScreen.open();
+            }
+            return InteractionResult.sidedSuccess(worldIn.isClientSide);
+        }
         if (clickedFace == Direction.UP && !PlaceHelper.notSuitableForPlaceMaid(worldIn, clickedPos)) {
             EntityMaid maid = InitEntities.MAID.get().create(worldIn);
             if (maid == null) {
@@ -116,6 +126,19 @@ public class ItemSmartSlab extends AbstractStoreMaidItem {
             }
         }
         return super.useOn(context);
+    }
+
+    /** 右键空气（非方块面）时 EMPTY 魂符也开面板，覆盖「对着没有女仆的地方使用」。 */
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
+        if (this.type == Type.EMPTY) {
+            if (level.isClientSide) {
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabWorkScreen.open();
+            }
+            return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
+        }
+        return super.use(level, player, hand);
     }
 
     private InteractionResult spawnFromStore(UseOnContext context, Player player, Level worldIn, EntityMaid maid) {

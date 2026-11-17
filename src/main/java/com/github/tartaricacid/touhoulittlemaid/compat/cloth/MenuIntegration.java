@@ -360,6 +360,18 @@ public class MenuIntegration {
             return;
         }
 
+        // 第一位：打开女仆工作设置面板。cloth 11.1.106 没有 startButton，
+        // 用可点击的开关做入口：拨一下再按保存即打开（builder 每次重建，开关不会残留）。
+        wab.addEntry(entryBuilder.startBooleanToggle(
+                        Component.translatable("config.touhou_little_maid.wab.open_work_screen"), false)
+                .setDefaultValue(false)
+                .setTooltip(Component.translatable("config.touhou_little_maid.wab.open_work_screen.tooltip"))
+                .setSaveConsumer(v -> {
+                    if (v) {
+                        com.github.tartaricacid.touhoulittlemaid.compat.wab.WabWorkScreen.open();
+                    }
+                }).build());
+
         wab.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.wab.enabled"), WabConfig.ENABLED.get())
                 .setDefaultValue(WabConfig.ENABLED.getDefault())
                 .setTooltip(Component.translatable("config.touhou_little_maid.wab.enabled.tooltip"))

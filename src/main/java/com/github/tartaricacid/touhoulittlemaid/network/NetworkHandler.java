@@ -214,6 +214,12 @@ public final class NetworkHandler {
                 com.github.tartaricacid.touhoulittlemaid.compat.wab.WabPhoneData::decode,
                 com.github.tartaricacid.touhoulittlemaid.compat.wab.WabPhoneData::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+
+        CHANNEL.registerMessage(71, com.github.tartaricacid.touhoulittlemaid.compat.wab.WabWorkSync.class,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabWorkSync::encode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabWorkSync::decode,
+                com.github.tartaricacid.touhoulittlemaid.compat.wab.WabWorkSync::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
     }
 
     public static void sendToClientPlayer(Object message, Player player) {

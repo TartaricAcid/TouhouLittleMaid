@@ -532,6 +532,7 @@ public final class WabBridge {
         }
 
         dispatcher.tick();
+        WabWorkJobs.tick();
         tickFollow();
         tickForceLoad();
         autonomy.tick();

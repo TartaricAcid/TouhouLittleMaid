@@ -730,7 +730,7 @@ public final class WabActions {
         String action = WabJson.str(params, "action", "mine").toLowerCase(Locale.ROOT);
         int want = WabJson.integer(params, "count", 16);
         double radius = WabJson.number(params, "radius", 16.0);
-        radius = Math.max(4, Math.min(24, radius));
+        radius = Math.max(4, Math.min(96, radius));
         String filter = WabJson.str(params, "filter");
 
         Job job = new Job(bridge, maid, action, want, budgetTicks, autonomous, responder);
