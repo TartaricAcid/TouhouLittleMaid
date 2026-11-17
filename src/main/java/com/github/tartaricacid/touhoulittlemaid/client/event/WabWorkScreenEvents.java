@@ -19,7 +19,7 @@ public final class WabWorkScreenEvents {
             return;
         }
         try {
-            event.add(Button.builder(Component.translatable("wab.work.pause_button"),
+            event.addListener(Button.builder(Component.translatable("wab.work.pause_button"),
                     b -> WabWorkScreen.open()).bounds(4, 4, 96, 20).build());
         } catch (Exception ignored) {
             // 注入失败不影响暂停菜单本身
