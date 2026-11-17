@@ -56,6 +56,8 @@ public final class TaskManager {
         manager.add(new TaskFishing());
         manager.add(new TaskExtinguishing());
         manager.add(new TaskBoardGames());
+        manager.add(new TaskWabMine());
+        manager.add(new TaskWabChop());
         for (ILittleMaid littleMaid : TouhouLittleMaid.EXTENSIONS) {
             littleMaid.addMaidTask(manager);
         }

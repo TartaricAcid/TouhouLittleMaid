@@ -1,5 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.item;
 
+import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabWorkScreen;
 import com.github.tartaricacid.touhoulittlemaid.data.MaidNumAttachment;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.init.InitDataComponent;
@@ -8,6 +9,7 @@ import com.github.tartaricacid.touhoulittlemaid.init.InitItems;
 import com.github.tartaricacid.touhoulittlemaid.util.PlaceHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -15,6 +17,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
@@ -27,6 +30,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.fml.loading.FMLEnvironment;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -72,6 +76,14 @@ public class ItemSmartSlab extends AbstractStoreMaidItem {
         if (player == null) {
             return super.useOn(context);
         }
+        if (this.type == Type.EMPTY) {
+            // 空魂符右键任意方块（任意面）打开女仆工作设置面板。
+            // 只在逻辑客户端开屏；服务端 / 集成服的服务器线程什么都不做。
+            if (worldIn.isClientSide && FMLEnvironment.dist == Dist.CLIENT) {
+                openWabWorkScreen();
+            }
+            return InteractionResult.sidedSuccess(worldIn.isClientSide);
+        }
         if (clickedFace == Direction.UP && !PlaceHelper.notSuitableForPlaceMaid(worldIn, clickedPos)) {
             EntityMaid maid = InitEntities.MAID.get().create(worldIn);
             if (maid == null) {
@@ -97,11 +109,28 @@ public class ItemSmartSlab extends AbstractStoreMaidItem {
                 });
             }
         } else {
-            if (this.type != Type.EMPTY && worldIn.isClientSide) {
+            if (worldIn.isClientSide) {
                 player.sendSystemMessage(Component.translatable("message.touhou_little_maid.photo.not_suitable_for_place_maid"));
             }
         }
         return super.useOn(context);
+    }
+
+    /** 右键空气：空魂符也打开工作设置面板（右键方块面走 useOn）。INIT/HAS_MAID 保持原样。 */
+    @Override
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
+        if (this.type == Type.EMPTY) {
+            if (level.isClientSide && FMLEnvironment.dist == Dist.CLIENT) {
+                openWabWorkScreen();
+            }
+            return InteractionResult.sidedSuccess(level.isClientSide);
+        }
+        return super.use(level, player, hand);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void openWabWorkScreen() {
+        Minecraft.getInstance().setScreen(new WabWorkScreen());
     }
 
     private InteractionResult spawnNewMaid(UseOnContext context, Player player, Level worldIn, EntityMaid maid) {

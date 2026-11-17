@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.compat.cloth;
 import com.github.tartaricacid.touhoulittlemaid.api.event.client.AddClothConfigEvent;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabConfig;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabRemoteConfig;
+import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabWorkScreen;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.*;
 import com.github.tartaricacid.touhoulittlemaid.event.MaidMealRegConfigEvent;
 import com.google.common.collect.Lists;
@@ -12,6 +13,7 @@ import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
@@ -540,6 +542,19 @@ public class MenuIntegration {
             wab.addEntry(entryBuilder.startTextDescription(Component.translatable("config.touhou_little_maid.wab.unloaded")).build());
             return;
         }
+
+        // 第一位：打开女仆工作设置面板。cloth-config 15 没有 startButton，
+        // 用 BooleanToggle 当「伪按钮」：点一下拨到 true，保存（完成）时打开面板。
+        // 默认值恒为 false 且不持久化，打开后面板的开关状态不影响任何功能。
+        wab.addEntry(entryBuilder.startBooleanToggle(
+                        Component.translatable("config.touhou_little_maid.wab.open_work_screen"), false)
+                .setDefaultValue(false)
+                .setTooltip(Component.translatable("config.touhou_little_maid.wab.open_work_screen.tooltip"))
+                .setSaveConsumer(v -> {
+                    if (v) {
+                        Minecraft.getInstance().setScreen(new WabWorkScreen());
+                    }
+                }).build());
 
         wab.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.touhou_little_maid.wab.enabled"), WabConfig.ENABLED.get())
                 .setDefaultValue(WabConfig.ENABLED.getDefault())

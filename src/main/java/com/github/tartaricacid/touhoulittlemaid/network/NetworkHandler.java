@@ -12,6 +12,7 @@ import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabPhotoRequest;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabVoiceAudio;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabVoiceClip;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabVoiceText;
+import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabWorkSync;
 import com.github.tartaricacid.touhoulittlemaid.network.message.*;
 import com.github.tartaricacid.touhoulittlemaid.network.message.ai.*;
 import net.minecraft.core.BlockPos;
@@ -115,6 +116,9 @@ public class NetworkHandler {
         // 手机界面一对通用转发包：动作（客户端→服务器）、回执（服务器→客户端）。
         registrar.playToServer(WabPhoneAction.TYPE, WabPhoneAction.STREAM_CODEC, WabPhoneAction::handle);
         registrar.playToClient(WabPhoneData.TYPE, WabPhoneData.STREAM_CODEC, WabPhoneData::handle);
+
+        // 女仆工作设置面板保存（客户端→服务器写 NBT / 全局模板）。
+        registrar.playToServer(WabWorkSync.TYPE, WabWorkSync.STREAM_CODEC, WabWorkSync::handle);
     }
 
     public static void sendToClientPlayer(CustomPacketPayload payload, ServerPlayer player) {
