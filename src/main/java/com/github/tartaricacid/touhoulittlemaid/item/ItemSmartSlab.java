@@ -19,6 +19,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
@@ -118,12 +119,13 @@ public class ItemSmartSlab extends AbstractStoreMaidItem {
 
     /** 右键空气：空魂符也打开工作设置面板（右键方块面走 useOn）。INIT/HAS_MAID 保持原样。 */
     @Override
-    public InteractionResult use(Level level, Player player, InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
         if (this.type == Type.EMPTY) {
             if (level.isClientSide && FMLEnvironment.dist == Dist.CLIENT) {
                 openWabWorkScreen();
             }
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
         }
         return super.use(level, player, hand);
     }
