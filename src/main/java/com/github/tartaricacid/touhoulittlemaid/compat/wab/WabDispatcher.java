@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Locale;
 
@@ -17,11 +18,29 @@ import java.util.Locale;
  * 每个女仆同一时间只挂一个 job，新任务会先取消旧任务。
  */
 public final class WabDispatcher {
+    /**
+     * 线上放行的方法名，随 hello 的 capabilities 原样报给宿主，宿主据此决定哪些 maid_* 工具给模型看。
+     * 漏写一个：那个工具在模型那边直接消失；多写一个：模型会调用一个必然 unknown_method 的方法。
+     * 增删 dispatch 分支时同步改这里（tools/wab_rules_selftest 只测纯规则，不管这份表）。
+     */
+    private static final List<String> METHODS = List.of(
+            "status", "scan", "see", "go", "act", "attack", "gather", "hold",
+            "plan", "chat", "bind", "backup", "waypoint", "container", "craft", "build",
+            "ride", "fight", "crew", "maid_pos", "maid_collect", "maid_construct",
+            "item", "farm", "escape", "comfort", "sneak_eat", "self_eat", "fire_escape",
+            "tame_protect", "sleep_consent", "collect_supplies", "build_origin",
+            "mode_switch", "chat_turn", "plan_flow", "backup_copy", "headpat", "hug");
+
     private final WabBridge bridge;
     private final Map<java.util.UUID, WabActions.Job> jobs = new HashMap<>();
 
     public WabDispatcher(WabBridge bridge) {
         this.bridge = bridge;
+    }
+
+    /** 这一版桥放行的方法名（不含顺序承诺），只给能力握手用。 */
+    public static List<String> methods() {
+        return METHODS;
     }
 
     public void dispatch(WabSession from, String id, String method, JsonObject params) {

@@ -60,7 +60,7 @@ public final class WabBridge {
      * 否则宿主拿到的是「车万女仆的版本」，永远看不出用户装的桥是上个月那一份还是今天这一份。
      * 加协议无关的新字段、新事件时 +0.1；改线上帧的语义才动 PROTOCOL。
      */
-    private static final String BRIDGE_BUILD = "1.6.0";
+    private static final String BRIDGE_BUILD = "1.6.1";
     private static final String MAGIC = "WAB-MAID";
     /** 协议承诺的上限：单次会话的女仆数、事件冷却缓存、世界绑定。 */
     private static final int MAX_MAIDS = 256;
@@ -773,6 +773,9 @@ public final class WabBridge {
         out.addProperty("world", worldName);
         out.addProperty("player", ownerName);
         out.add("maids", beaconMaids);
+        // 能力握手：把这一版认哪些方法/特性一起报上去，宿主据此收起用不了的工具。
+        // 旧宿主不认识这一块，多一个字段直接忽略，不影响现网；旧模组不发，新宿主按不支持处理。
+        out.add("capabilities", WabCapabilities.json());
         // 握手就把这台游戏的配置报上去：宿主拿它跟插件设置对账，两边打架时当场说破。
         // 不带这一份的话，宿主那个「模组侧配置」镜像永远是空的。
         out.add("config", WabConfig.snapshot());
