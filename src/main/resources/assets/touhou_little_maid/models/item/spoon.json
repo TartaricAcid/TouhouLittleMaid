@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "touhou_little_maid:item/spoon"
+  }
+}

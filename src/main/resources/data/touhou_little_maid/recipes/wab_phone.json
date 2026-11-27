@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " I ",
+    "CRC",
+    " I "
+  ],
+  "key": {
+    "I": { "item": "minecraft:iron_ingot" },
+    "C": { "item": "minecraft:raw_copper" },
+    "R": { "item": "minecraft:redstone" }
+  },
+  "result": {
+    "item": "touhou_little_maid:wab_phone"
+  }
+}

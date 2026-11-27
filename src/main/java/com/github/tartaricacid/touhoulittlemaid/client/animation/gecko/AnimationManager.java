@@ -246,6 +246,13 @@ public final class AnimationManager {
         if (maid == null) {
             return PlayState.STOP;
         }
+        // WAB 主动触发的预设动画，到时自动让位给常规状态机
+        if (maid instanceof EntityMaid wabMaid && !wabMaid.wabAnimation.isEmpty()) {
+            if (System.currentTimeMillis() < wabMaid.wabAnimationUntil) {
+                return playAnimation(event, wabMaid.wabAnimation, ILoopType.EDefaultLoopTypes.LOOP);
+            }
+            wabMaid.wabAnimation = "";
+        }
         // 赢棋输棋优先
         if (maid instanceof EntityMaid entityMaid && entityMaid.getVehicle() instanceof EntitySit) {
             MaidGameRecordManager manager = entityMaid.getGameRecordManager();

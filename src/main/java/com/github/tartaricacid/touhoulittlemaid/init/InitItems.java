@@ -2,6 +2,7 @@ package com.github.tartaricacid.touhoulittlemaid.init;
 
 import com.github.tartaricacid.touhoulittlemaid.TouhouLittleMaid;
 import com.github.tartaricacid.touhoulittlemaid.entity.monster.EntityFairy;
+import com.github.tartaricacid.touhoulittlemaid.compat.wab.ItemWabPhone;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.github.tartaricacid.touhoulittlemaid.item.*;
 import net.minecraft.world.item.BlockItem;
@@ -37,6 +38,7 @@ public final class InitItems {
     public static RegistryObject<Item> NIMBLE_FABRIC = ITEMS.register("nimble_fabric", () -> new ItemDamageableBauble(64));
     public static RegistryObject<Item> ITEM_MAGNET_BAUBLE = ITEMS.register("item_magnet_bauble", ItemNormalBauble::new);
     public static RegistryObject<Item> MUTE_BAUBLE = ITEMS.register("mute_bauble", ItemNormalBauble::new);
+    public static RegistryObject<Item> WAB_PHONE = ITEMS.register("wab_phone", ItemWabPhone::new);
     public static RegistryObject<Item> ENTITY_PLACEHOLDER = ITEMS.register("entity_placeholder", ItemEntityPlaceholder::new);
     public static RegistryObject<Item> SUBSTITUTE_JIZO = ITEMS.register("substitute_jizo", ItemSubstituteJizo::new);
     public static RegistryObject<Item> POWER_POINT = ITEMS.register("power_point", ItemPowerPoint::new);
@@ -76,6 +78,9 @@ public final class InitItems {
     public static RegistryObject<Item> CCHESS_BOARD_STATE = ITEMS.register("cchess_board_state", ItemBoardState::new);
     public static RegistryObject<Item> WCHESS_BOARD_STATE = ITEMS.register("wchess_board_state", ItemBoardState::new);
     public static RegistryObject<Item> SNACK_CABINET = ITEMS.register("snack_cabinet", () -> new BlockItem(InitBlocks.SNACK_CABINET.get(), new Item.Properties()));
+    public static RegistryObject<Item> SPOON = ITEMS.register("spoon", () -> new ItemMaidUtensil("spoon"));
+    public static RegistryObject<Item> FORK_KNIFE = ITEMS.register("fork_knife", () -> new ItemMaidUtensil("fork_knife"));
+    public static RegistryObject<Item> CHOPSTICKS = ITEMS.register("chopsticks", () -> new ItemMaidUtensil("chopsticks"));
     @SuppressWarnings("deprecation")
     public static RegistryObject<Item> MONSTER_LIST = ITEMS.register("monster_list", ItemMonsterList::new);
 

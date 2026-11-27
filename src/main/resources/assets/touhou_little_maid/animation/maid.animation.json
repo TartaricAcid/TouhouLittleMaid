@@ -808,6 +808,30 @@
 				}
 			}
 		},
+		"hug": {
+			"loop": true,
+			"animation_length": 2.0,
+			"bones": {
+				"UpBody": {
+					"rotation": [6, 0, 0]
+				},
+				"Head": {
+					"rotation": [-8, 0, 0]
+				},
+				"LeftArm": {
+					"rotation": [-60, 12, -10]
+				},
+				"LeftForeArm": {
+					"rotation": [-55, 0, 8]
+				},
+				"RightArm": {
+					"rotation": [-60, -12, 10]
+				},
+				"RightForeArm": {
+					"rotation": [-55, 0, -8]
+				}
+			}
+		},
 		"jump": {
 			"loop": true,
 			"animation_length": 0.75,
