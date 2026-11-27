@@ -1,6 +1,7 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.wab.config;
 
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabHeadPat;
+import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabHug;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabJson;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabSensors;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabStorage;
@@ -361,6 +362,26 @@ public final class WabFeatures {
                 yield ok(on(WabConfigKeys.HEADPAT_SAD_ON_REFUSE) ? "主人拒绝了，她露出伤心的表情。" : "主人拒绝了。");
             }
             default -> fail("unknown_action", "摸头只支持 request / refuse。");
+        };
+    }
+
+    // ==================== 抱抱（F20–F23，双向 + 走过去）====================
+
+    /**
+     * 抱抱入口。三种玩法共用一个入口，靠 action 分清：
+     * request（from=maid 她主动求抱 / from=owner 主人求抱，她按好感与安全感决定）、
+     * refuse（主人拒绝）、hug_back（回抱）、status（只读，给 AI 判断用）。
+     * 真正的走路、面对面、松手都在 {@link WabHug} 的状态机里，这里只做开关与参数收口。
+     */
+    public static JsonObject hug(EntityMaid maid, JsonObject p) {
+        if (!on(WabConfigKeys.HUG_ENABLED)) return fail("disabled", "抱抱总开关没开（hug_enabled）。");
+        String action = WabJson.str(p, "action", "request").toLowerCase(Locale.ROOT);
+        return switch (action) {
+            case "request", "hug" -> WabHug.request(WabHug.bridge(), maid, p);
+            case "refuse" -> WabHug.refuse(WabHug.bridge(), maid, p);
+            case "hug_back", "back" -> WabHug.hugBack(WabHug.bridge(), maid);
+            case "status" -> WabHug.status(maid);
+            default -> fail("unknown_action", "抱抱只支持 request / refuse / hug_back / status。");
         };
     }
 

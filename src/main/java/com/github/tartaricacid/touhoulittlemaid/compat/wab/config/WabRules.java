@@ -307,6 +307,63 @@ public final class WabRules {
         return aiProvided;
     }
 
+    // ===================== 抱抱（F20–F23，双向 + 走过去）=====================
+
+    /** 走到多近才张开手：超过这个距离一律先寻路，绝不隔墙、隔空抱。 */
+    public static final double HUG_REACH = 1.5;
+
+    /** 抱住之后主人挪开多远就算抱空了（格）。主人一动就松手，不留悬空姿势。 */
+    public static final double HUG_HOLD_SLACK = 0.75;
+
+    /**
+     * F20 抱抱发起闸门：开关、距离、双方战斗状态、刚被拒绝过，任一不过就不发起。
+     * 这条是硬约束，与 F21 的概率无关——闸门不过，概率再高也不走过来。
+     * {@code distance} 是主人与她的直线距离（格），{@code maxDistance} 是「主动求抱最远距离」。
+     */
+    public static boolean hugContextAllowed(boolean enabled, boolean maidInCombat, boolean ownerInCombat,
+                                            boolean ownerRefusedRecently, double distance, double maxDistance) {
+        if (!enabled || maidInCombat || ownerInCombat || ownerRefusedRecently) return false;
+        if (Double.isNaN(distance) || distance < 0) return false;
+        return distance <= Math.max(0, maxDistance);
+    }
+
+    /**
+     * F21 抱抱频率：基础概率 × 黏人系数，并受冷却约束。
+     * {@code safety}、{@code mood} 都在 [0,1]；低于 0.5 的那部分算「需要安慰」，
+     * 两项加起来最多把概率抬到 3 倍——心情越差、安全感越低越黏人，但仍要掷骰子。
+     */
+    public static boolean shouldRequestHug(boolean gateOpen, long elapsedMs, long cooldownMs,
+                                           double probability, double safety, double mood, double roll) {
+        if (!gateOpen || elapsedMs < Math.max(0, cooldownMs)) return false;
+        double neediness = clamp01(0.5 - safety) + clamp01(0.5 - mood);
+        double chance = clamp01(probability) * (1.0 + 2.0 * neediness);
+        return roll < clamp01(chance);
+    }
+
+    /**
+     * F22 主人求抱时她的接受度：0=拒绝 / 1=同意 / 2=勉强同意（语气）。
+     * 好感低于阈值直接拒绝；安全感够就痛快答应，安全感低时只剩小概率勉强点头，免得永远冷脸。
+     */
+    public static int hugConsent(boolean enabled, double affection, double safety, double closenessMin,
+                                 double roll) {
+        if (!enabled) return 0;
+        double fav = clamp01(affection);
+        if (fav < clamp01(closenessMin)) return 0;
+        if (clamp01(safety) >= 0.3) return 1;
+        return roll < clamp01(0.2 + 0.2 * fav) ? 2 : 0;
+    }
+
+    /** F23 抱抱中断：主人挪窝、任一方受伤、她进入战斗，立刻松手结束，别把状态机卡在动作里。 */
+    public static boolean hugInterrupted(double ownerMoved, boolean maidHurt, boolean ownerHurt,
+                                         boolean maidInCombat) {
+        return ownerMoved > HUG_HOLD_SLACK || maidHurt || ownerHurt || maidInCombat;
+    }
+
+    /** 走到位没有：贴到 {@link #HUG_REACH} 之内才算可以抱。 */
+    public static boolean hugInReach(double distance) {
+        return !Double.isNaN(distance) && distance >= 0 && distance <= HUG_REACH;
+    }
+
     private static double clamp01(double value) {
         if (Double.isNaN(value)) return 0;
         return Math.max(0, Math.min(1, value));

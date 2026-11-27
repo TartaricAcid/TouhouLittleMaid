@@ -41,7 +41,7 @@ final class WabGate {
         return switch (action) {
             case "mine", "chop", "harvest", "scoop", "collect", "fill",
                     "place", "drop", "give", "equip", "feed_player", "take",
-                    "use", "attack", "interact_addon" -> true;
+                    "use", "attack", "interact_addon", "hug" -> true;
             default -> false;
         };
     }

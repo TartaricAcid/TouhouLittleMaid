@@ -2,7 +2,7 @@
   "catalogVersion": "wab-next-1",
   "source": "01-PRD.md §5.1（配置项总表；移除岩浆船实验项、追加投喂讨摸概率后 125 行）",
   "note": "唯一允许声明键名与默认值的地方；保守覆盖规则见 02-DESIGN.md §3.4，本文件不另造默认值。",
-  "rowCount": 143,
+  "rowCount": 153,
   "rows": [
     {
       "no": 1,
@@ -2621,6 +2621,196 @@
         "cloth"
       ],
       "note": "F10：饥饿值高于此（越高越饿）才触发自吃"
+    },
+    {
+      "no": 146,
+      "group": "二十",
+      "name": "1. 抱抱（双向）总开关",
+      "key": "hug_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "女仆可以主动走过来抱主人，主人也能抱她、回抱；两边都要先走过去、面对面才抱。默认关。"
+    },
+    {
+      "no": 147,
+      "group": "二十",
+      "name": "2. 允许 AI 主动求抱",
+      "key": "hug_ai_request_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "模组",
+      "aiTag": "可选AI",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "AI 按人设和当下情境决定要不要过来抱；关掉只剩主人发起。"
+    },
+    {
+      "no": 148,
+      "group": "二十",
+      "name": "3. 游戏侧按规则求抱",
+      "key": "hug_game_side_enabled",
+      "type": "switch",
+      "default": "false",
+      "defaultValue": false,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "不靠 AI：按好感、安全感、心情和主人位置自己判断要不要来抱；心情低时更黏人。"
+    },
+    {
+      "no": 149,
+      "group": "二十",
+      "name": "4. 求抱概率（每次评估）",
+      "key": "hug_request_probability",
+      "type": "number",
+      "default": "0.05",
+      "defaultValue": 0.05,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "每次评估掷一次骰子；安全感或心情偏低时按规则上浮，最多 3 倍。"
+    },
+    {
+      "no": 150,
+      "group": "二十",
+      "name": "5. 抱抱冷却（秒）",
+      "key": "hug_cooldown_seconds",
+      "type": "number",
+      "default": "300",
+      "defaultValue": 300,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "两次求抱之间的最小间隔，避开刷屏；被拒绝后也按这个时长退让。"
+    },
+    {
+      "no": 151,
+      "group": "二十",
+      "name": "6. 主动求抱最远距离（格）",
+      "key": "hug_max_distance",
+      "type": "number",
+      "default": "16",
+      "defaultValue": 16,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "主人超过这个距离她就不主动过去抱了；太远只冒个气泡，不会追。"
+    },
+    {
+      "no": 152,
+      "group": "二十",
+      "name": "7. 抱抱时长（秒）",
+      "key": "hug_duration_seconds",
+      "type": "number",
+      "default": "4",
+      "defaultValue": 4,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "抱住之后保持多久；主人移动、受伤，或她被打断都会立刻结束。"
+    },
+    {
+      "no": 153,
+      "group": "二十",
+      "name": "8. 主人求抱时的接受阈值",
+      "key": "hug_closeness_min",
+      "type": "number",
+      "default": "0.4",
+      "defaultValue": 0.4,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "好感（0~1）低于这个值她会拒绝；安全感越高越容易答应。"
+    },
+    {
+      "no": 154,
+      "group": "二十",
+      "name": "9. 允许主人拒绝抱抱",
+      "key": "hug_player_refuse_enabled",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "主人可以拒绝她的求抱；被拒绝后一段时间内她不会再来。"
+    },
+    {
+      "no": 155,
+      "group": "二十",
+      "name": "10. 被拒绝后伤心",
+      "key": "hug_sad_on_refuse",
+      "type": "switch",
+      "default": "true",
+      "defaultValue": true,
+      "scope": "模组",
+      "aiTag": "纯代码",
+      "conflict": false,
+      "conflictTarget": "",
+      "promptText": "",
+      "visibleIn": [
+        "plugin",
+        "cloth"
+      ],
+      "note": "纯表现：拒绝后露伤心表情、冒一句话，不改世界。"
     }
   ]
 }

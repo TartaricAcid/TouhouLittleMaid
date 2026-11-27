@@ -32,7 +32,7 @@ public final class WabDispatcher {
         String feature = switch (method) {
             case "item", "farm", "escape", "comfort", "sneak_eat", "self_eat", "fire_escape",
                     "tame_protect", "sleep_consent", "collect_supplies", "build_origin",
-                    "mode_switch", "chat_turn", "plan_flow", "backup_copy", "headpat" -> method;
+                    "mode_switch", "chat_turn", "plan_flow", "backup_copy", "headpat", "hug" -> method;
             default -> "";
         };
         if (!feature.isEmpty()) {
@@ -60,6 +60,7 @@ public final class WabDispatcher {
                 case "chat_turn" -> WabFeatures.chat(maid, params);
                 case "plan_flow" -> WabFeatures.plan(maid, params);
                 case "headpat" -> WabFeatures.headpat(maid, params);
+                case "hug" -> WabFeatures.hug(maid, params);
                 default -> WabFeatures.backup(maid, params);
             };
             respond(from, id, result);
@@ -313,6 +314,8 @@ public final class WabDispatcher {
     }
 
     public void noteJob(WabActions.Job job) {
+        // 她要开始干活了：先松手，别让抱抱和采集任务抢同一根导航线。
+        WabHug.cancel(job.maid, "她开始干活了");
         jobs.put(job.maid.getUUID(), job);
     }
 

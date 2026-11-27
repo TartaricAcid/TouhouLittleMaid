@@ -337,6 +337,7 @@ public final class WabActions {
                 }
                 yield ok(maid, "看向那边。");
             }
+            case "hug" -> com.github.tartaricacid.touhoulittlemaid.compat.wab.config.WabFeatures.hug(maid, p);
             case "interact_addon" -> {
                 String arg = WabJson.str(p, "arg");
                 String trait = WabTraits.handleAct(maid, arg);

@@ -151,6 +151,16 @@ public final class WabConfigDefaults {
     public static final boolean COLLECT_WATER_ENABLED = false;
     public static final boolean COLLECT_BOARD_ENABLED = false;
     public static final int SELF_EAT_HUNGRY_THRESHOLD = 14;
+    public static final boolean HUG_ENABLED = false;
+    public static final boolean HUG_AI_REQUEST_ENABLED = false;
+    public static final boolean HUG_GAME_SIDE_ENABLED = false;
+    public static final double HUG_REQUEST_PROBABILITY = 0.05;
+    public static final int HUG_COOLDOWN_SECONDS = 300;
+    public static final int HUG_MAX_DISTANCE = 16;
+    public static final int HUG_DURATION_SECONDS = 4;
+    public static final double HUG_CLOSENESS_MIN = 0.4;
+    public static final boolean HUG_PLAYER_REFUSE_ENABLED = true;
+    public static final boolean HUG_SAD_ON_REFUSE = true;
 
     private static final Map<String, Object> DEFAULTS = new HashMap<>();
 
@@ -298,6 +308,16 @@ public final class WabConfigDefaults {
         DEFAULTS.put("collect_water_enabled", false);
         DEFAULTS.put("collect_board_enabled", false);
         DEFAULTS.put("self_eat_hungry_threshold", 14);
+        DEFAULTS.put("hug_enabled", false);
+        DEFAULTS.put("hug_ai_request_enabled", false);
+        DEFAULTS.put("hug_game_side_enabled", false);
+        DEFAULTS.put("hug_request_probability", 0.05);
+        DEFAULTS.put("hug_cooldown_seconds", 300);
+        DEFAULTS.put("hug_max_distance", 16);
+        DEFAULTS.put("hug_duration_seconds", 4);
+        DEFAULTS.put("hug_closeness_min", 0.4);
+        DEFAULTS.put("hug_player_refuse_enabled", true);
+        DEFAULTS.put("hug_sad_on_refuse", true);
     }
 
     /** 按 key 取默认值；未知键返回 null，调用方必须自己判断，不给隐式兜底。 */

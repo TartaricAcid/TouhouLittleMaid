@@ -3,6 +3,7 @@ package com.github.tartaricacid.touhoulittlemaid.compat.cloth;
 import com.github.tartaricacid.touhoulittlemaid.api.event.client.AddClothConfigEvent;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabConfig;
 import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabRemoteConfig;
+import com.github.tartaricacid.touhoulittlemaid.compat.wab.WabTips;
 import com.github.tartaricacid.touhoulittlemaid.config.subconfig.*;
 import com.github.tartaricacid.touhoulittlemaid.event.MaidMealRegConfigEvent;
 import com.google.common.collect.Lists;
@@ -24,6 +25,30 @@ import java.util.List;
 import java.util.Set;
 
 public class MenuIntegration {
+    /**
+     * 本地 WAB 设置项的「详细说明」：悬停只留一句话，放不下的原文挪到这里。
+     * 每一项是 {设置项名, 详细说明} 两个语言键，渲染在设置页底部的 {@code (?) 详细说明} 栏。
+     */
+    private static final String[][] WAB_HELP = {
+            {"config.touhou_little_maid.wab.enabled",
+                    "config.touhou_little_maid.wab.enabled.tooltip.detail"},
+            {"config.touhou_little_maid.wab.discovery_port",
+                    "config.touhou_little_maid.wab.discovery_port.tooltip.detail"},
+            {"config.touhou_little_maid.wab.lan_discovery",
+                    "config.touhou_little_maid.wab.lan_discovery.tooltip.detail"},
+            {"config.touhou_little_maid.wab.player_in_maid_bed",
+                    "config.touhou_little_maid.wab.player_in_maid_bed.tooltip.detail"},
+            {"config.touhou_little_maid.wab.show_above_maid",
+                    "config.touhou_little_maid.wab.show_above_maid.tooltip.detail"},
+            {"config.touhou_little_maid.wab.feeding_enabled",
+                    "config.touhou_little_maid.wab.feeding_enabled.tooltip.detail"},
+            {"config.touhou_little_maid.wab.open_work_screen",
+                    "config.touhou_little_maid.wab.open_work_screen.tooltip.detail"},
+    };
+
+    /** 悬停被裁过的项在名字后面挂这个标记，和下面的详细说明栏对得上。 */
+    private static final String HELP_MARK = " (?)";
+
     public static ConfigBuilder getConfigBuilder() {
         ConfigBuilder root = ConfigBuilder.create().setTitle(Component.literal("Touhou Little Maid"));
         root.setGlobalized(true);
@@ -464,6 +489,36 @@ public class MenuIntegration {
             }
         }
         wab.addEntry(builder.build());
+        helpConfig(entryBuilder, wab);
+    }
+
+    /**
+     * 「(?) 详细说明」一栏：本地长说明 + 插件字段里被裁过的原文，默认收起。
+     * 悬停只给一句，想深究的读者再点开这里——半屏解释不该长在鼠标指针上。
+     */
+    private static void helpConfig(ConfigEntryBuilder entryBuilder, ConfigCategory wab) {
+        SubCategoryBuilder builder = entryBuilder.startSubCategory(
+                Component.translatable("config.touhou_little_maid.wab.help"));
+        builder.setExpanded(false);
+        for (String[] row : WAB_HELP) {
+            builder.add(entryBuilder.startTextDescription(
+                    Component.translatable(row[0]).withStyle(ChatFormatting.YELLOW)
+                            .append(Component.translatable("config.touhou_little_maid.wab.value_separator"))
+                            .append(Component.translatable(row[1]).withStyle(ChatFormatting.GRAY))).build());
+        }
+        for (WabRemoteConfig.Field field : WabRemoteConfig.fields()) {
+            if (!WabTips.truncated(field.help())) continue;
+            builder.add(entryBuilder.startTextDescription(
+                    Component.literal(field.label()).withStyle(ChatFormatting.YELLOW)
+                            .append(Component.translatable("config.touhou_little_maid.wab.value_separator"))
+                            .append(Component.literal(field.help()).withStyle(ChatFormatting.GRAY))).build());
+        }
+        wab.addEntry(builder.build());
+    }
+
+    /** 设置项名：说明被裁过就补 {@code (?)}，读者一眼知道细节在哪一栏。 */
+    private static Component helpMarked(WabRemoteConfig.Field field) {
+        return Component.literal(field.label() + (WabTips.truncated(field.help()) ? HELP_MARK : ""));
     }
 
     /**
@@ -474,8 +529,8 @@ public class MenuIntegration {
                                        WabRemoteConfig.Field field) {
         Component tooltip = Component.literal(field.help().isEmpty()
                 ? "勾上的都会触发一次思考；一个都不勾 = 只在有事时被动回应。"
-                : field.help());
-        builder.add(entryBuilder.startTextDescription(Component.literal(field.label()))
+                : WabTips.brief(field.help()));
+        builder.add(entryBuilder.startTextDescription(helpMarked(field))
                 .setTooltip(tooltip).build());
         Set<String> picked = new LinkedHashSet<>();
         for (String token : field.value().split(",")) {
@@ -495,13 +550,13 @@ public class MenuIntegration {
     }
 
     private static AbstractConfigListEntry<?> pluginEntry(ConfigEntryBuilder entryBuilder, WabRemoteConfig.Field field) {
-        Component title = Component.literal(field.label());
+        Component title = helpMarked(field);
         Component tooltip = Component.literal(field.help().isEmpty()
-                ? "这一项由 WarmAsBefore 保存，改完在 WAB 那边立刻生效；以 WAB 实际生效的值为准。"
-                : field.help() + "（改完在 WAB 那边立刻生效，以实际生效值为准）");
+                ? "这一项由 WarmAsBefore 保存，改完立刻生效。"
+                : WabTips.brief(field.help()) + "（改完立刻生效）");
         if (field.locked()) {
             // 只读一行：Cloth 的 setEditable(false) 只把字画灰、点击照样写值，那样看着像锁死其实还能改，比不灰更骗人。
-            return entryBuilder.startTextDescription(Component.literal(field.label()).withStyle(ChatFormatting.GRAY))
+            return entryBuilder.startTextDescription(helpMarked(field).copy().withStyle(ChatFormatting.GRAY))
                     .setTooltip(tooltip).build();
         }
         switch (field.type()) {

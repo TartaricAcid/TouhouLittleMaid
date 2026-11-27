@@ -1,6 +1,6 @@
 package com.github.tartaricacid.touhoulittlemaid.compat.wab.config;
 
-/** 由 config_catalog.json 生成，禁止手改。版本 wab-next-1，共 143 个键。 */
+/** 由 config_catalog.json 生成，禁止手改。版本 wab-next-1，共 153 个键。 */
 public final class WabConfigKeys {
     private WabConfigKeys() {
     }
@@ -148,4 +148,14 @@ public final class WabConfigKeys {
     public static final String COLLECT_WATER_ENABLED = "collect_water_enabled";
     public static final String COLLECT_BOARD_ENABLED = "collect_board_enabled";
     public static final String SELF_EAT_HUNGRY_THRESHOLD = "self_eat_hungry_threshold";
+    public static final String HUG_ENABLED = "hug_enabled";
+    public static final String HUG_AI_REQUEST_ENABLED = "hug_ai_request_enabled";
+    public static final String HUG_GAME_SIDE_ENABLED = "hug_game_side_enabled";
+    public static final String HUG_REQUEST_PROBABILITY = "hug_request_probability";
+    public static final String HUG_COOLDOWN_SECONDS = "hug_cooldown_seconds";
+    public static final String HUG_MAX_DISTANCE = "hug_max_distance";
+    public static final String HUG_DURATION_SECONDS = "hug_duration_seconds";
+    public static final String HUG_CLOSENESS_MIN = "hug_closeness_min";
+    public static final String HUG_PLAYER_REFUSE_ENABLED = "hug_player_refuse_enabled";
+    public static final String HUG_SAD_ON_REFUSE = "hug_sad_on_refuse";
 }

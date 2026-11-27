@@ -536,6 +536,7 @@ public final class WabBridge {
         tickFollow();
         tickForceLoad();
         autonomy.tick();
+        WabHug.tick(this);
         tickPhotos();
         tickPhoneRequests();
         WabVoice.tick(this);
@@ -1296,6 +1297,7 @@ public final class WabBridge {
         WabSession current = old.session;
         if (current != null) current.close("server stopping");
         old.dispatcher.cancelAll("server stopping");
+        WabHug.clear();
         old.releaseAllForceLoad();
         // 换存档/关服都会走到这里：不清的话，下一个世界的设置页会先画出上一个存档那套插件开关
         WabRemoteConfig.clear();

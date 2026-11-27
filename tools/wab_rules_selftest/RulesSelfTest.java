@@ -170,6 +170,38 @@ public final class RulesSelfTest {
         check(WabRules.useAiProvidedOrigin(true), "F18 用 AI 给的原点");
         check(!WabRules.useAiProvidedOrigin(false), "F18 否则用女仆当前坐标");
 
+        // F20 抱抱闸门：开关、战斗、被拒绝、距离
+        check(WabRules.hugContextAllowed(true, false, false, false, 4, 16), "F20 正常情境可发起");
+        check(!WabRules.hugContextAllowed(false, false, false, false, 4, 16), "F20 总开关关");
+        check(!WabRules.hugContextAllowed(true, true, false, false, 4, 16), "F20 她在战斗不抱");
+        check(!WabRules.hugContextAllowed(true, false, true, false, 4, 16), "F20 主人战斗不抱");
+        check(!WabRules.hugContextAllowed(true, false, false, true, 4, 16), "F20 刚被拒绝不抱");
+        check(!WabRules.hugContextAllowed(true, false, false, false, 20, 16), "F20 太远不抱");
+        check(!WabRules.hugContextAllowed(true, false, false, false, Double.NaN, 16), "F20 距离未知不抱");
+
+        // F21 抱抱频率：冷却 + 黏人系数封顶 3 倍
+        check(!WabRules.shouldRequestHug(true, 1000, 300000, 0.05, 0.9, 0.9, 0.0), "F21 冷却未过");
+        check(WabRules.shouldRequestHug(true, 300000, 300000, 0.05, 0.9, 0.9, 0.01), "F21 冷却已过命中");
+        check(!WabRules.shouldRequestHug(false, 300000, 300000, 0.05, 0.1, 0.1, 0.0), "F21 闸门关闭");
+        // 安全感/心情 0 时黏人系数 2.0 → 0.05×3=0.15，0.14 该命中，0.16 不该
+        check(WabRules.shouldRequestHug(true, 300000, 300000, 0.05, 0.0, 0.0, 0.14), "F21 低落时更黏人");
+        check(!WabRules.shouldRequestHug(true, 300000, 300000, 0.05, 0.0, 0.0, 0.16), "F21 黏人仍要掷骰");
+
+        // F22 主人求抱的接受度
+        eq(WabRules.hugConsent(false, 1.0, 1.0, 0.4, 0.0), 0, "F22 开关关→拒绝");
+        eq(WabRules.hugConsent(true, 0.2, 1.0, 0.4, 0.0), 0, "F22 好感不足→拒绝");
+        eq(WabRules.hugConsent(true, 0.8, 0.6, 0.4, 0.99), 1, "F22 好感够且安心→同意");
+        eq(WabRules.hugConsent(true, 0.8, 0.1, 0.4, 0.0), 2, "F22 不安时小概率勉强同意");
+
+        // F23 抱抱中断 + 到位判定
+        check(WabRules.hugInterrupted(0.2, false, false, false) == false, "F23 都没动不中断");
+        check(WabRules.hugInterrupted(1.0, false, false, false), "F23 主人挪开立刻中断");
+        check(WabRules.hugInterrupted(0.0, true, false, false), "F23 她受伤立刻中断");
+        check(WabRules.hugInterrupted(0.0, false, true, false), "F23 主人受伤立刻中断");
+        check(WabRules.hugInterrupted(0.0, false, false, true), "F23 进入战斗立刻中断");
+        check(WabRules.hugInReach(1.4), "F23 1.4 格算到位");
+        check(!WabRules.hugInReach(1.6), "F23 1.6 格还没到位");
+
         System.out.println("WabRules 边界自测通过: " + passed + " 条断言");
     }
 }
